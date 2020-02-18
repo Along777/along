@@ -292,9 +292,10 @@ footer {
     margin-top: 7.5em;
   }
 
-  #youtubeIntro{
+.longTitle{
     margin-top: 10.25em;
   }
+
 }
 
 /***********************************  Desktop Version ***********************************/
@@ -428,6 +429,10 @@ footer {
 
   #projectPage .projectLink{
     font-size: 30px;
+  }
+
+  #about:hover{
+    cursor: pointer;
   }
 }
 /***********************************  Larger Desktop Version ***********************************/
