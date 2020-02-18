@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- this will not be seen: don't change anything here -->
+
+<head>
+  <meta charset="utf-8">
+  <title>Aaron Long's Data Analysis Portfolio</title> <!-- Website Title-->
+  <link href="https://necolas.github.io/normalize.css/8.0.1/normalize.css" rel="stylesheet" /> <!-- Removes all default styling -->
+  <link href="styles.css" rel="stylesheet"> <!-- CSS Link to all your styles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Allows Mobile Design -->
+</head>
+
+<!-- this is all of your homepage's content -->
+
+<body>
+  <header>
+    <!-- Portfolio Name and Small Info -->
+    <section id="intro">
+      <a href="index.html"><h1>AARON LONG</h1></a> <!-- Header Name -->
+      <p>Data Analyst and Programmer <br> Located in Orlando, Florida</p><!-- Job and Location -->
+    </section>
+
+    <!-- Navigation and Links-->
+    <section>
+      <nav>
+        <ul>
+          <li><a href="index.html">HOME</a></li> <!-- Home Link  -->
+          <li id="about">ABOUT</li> <!-- About Link (uses js to show) -->
+          <li><a href="https://www.linkedin.com/in/aaron-long-403644a7/">LINKEDIN</a></li> <!-- Linkedin Link-->
+          <li><a href="mailto:&#097;&#108;&#111;&#110;&#103;&#049;&#057;&#050;&#057;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">CONTACT</a></li>
+          <!--Email Link. I encoded your email to prevent spam and so people can't look at your code and be like this is your email -->
+        </ul>
+      </nav>
+    </section>
+  </header>
+
+  <!-- About Page Section-->
+  <section id="AboutPage">
+    <!-- <img> -->
+    <h2>About Me</h2>
+    <section id="aboutFlex">
+    <section>
+      <img src="images/portrait.JPG" alt="Aaron Long" width="300" height="397">
+    </section>
+
+<section id="aboutInfo">
+    <p>Hello, my name is Aaron Long and welcome to my portfolio website. My portfolio contains data analytics projects that I've worked on throughout the years. Some of my projects include data analysis, advance plotting on maps, and machine learning. I enjoy creating projects on topics that interest or is relevant to me, such as finance, healthcare, current events, and any random data that interests me.</p>
+
+      <p>I recently moved to Florida in October 2019, and am  currently living in Orlando. I graduated in 2016 at University of California, Davis with a Bachelor's of Arts and Science in Economics and Statistics. I'm extremely interested and passionate about data analysis, finance, and the blockchain.</p>
+
+    <p>More personal details about me is that I have a cute dog named Clover and she is a four year old Papillon, who looks like a border collie puppy. Also I vlog with my girlfriend on a YouTube channel called the happybaabes! </p>
+  </section>
+  </section>
+</section>
+
+  <!-- Projects and Work -->
+  <main>
+    <!-- Featured Project-->
+    <section id="homeFeaturedProject">
+      <section id="featuredText">
+        <!-- Section within section is for flexbox purposes (helps turn it into two columns in tablet and desktop version)-->
+        <h2>FEATURED PROJECT</h2> <!-- Featured Project Heading-->
+        <h3><a href="projects/wildfire-02052020.html" class="projectTitle">Wildfire Analysis</a></h3> <!-- Project Title-->
+        <p class="date">February 5, 2020</p> <!-- Date -->
+        <p>For this report, I am exploring a dataset on the 1.88 million wildfires that occurred in the US from 1992-2015. I will briefly look at all the data then dive into large fires only. This means fires in class size F (1000-5000)acres burned and size G with is wildfires burning over 5000+ acres. </p>
+        <!-- Brief Summary -->
+      </section>
+
+      <section>
+        <a href="projects/wildfire-02052020.html" id="wildfireIMG"><img src="images/wildfire2.png" alt="Wildfire Analysis" width="300" height="214"></a>
+        <!-- Project Image-->
+      </section>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="Projects">
+      <h2>PROJECTS</h2> <!-- Projects Title-->
+
+      <!-- Project One-->
+      <article id="ProjectOne">
+        <section class="special">
+          <a href="projects/projectOne.html"><img src="images/youtube1.PNG" alt="Project One" width="300" height="200"></a> <!-- Project Image-->
+        </section>
+
+        <section id="ProjectOneText">   <!-- Project One Text-->
+          <h3><a href="projects/youtube-01192019.html" class="projectTitle">Exploratory Analysis on Trending Videos</a></h3> <!-- Project Title-->
+          <p class="date">January 19, 2019</p> <!-- Date-->
+          <p class="projectP">As a new vlogger and content creator with my girlfriend on Youtube, I took upon interest on doing an exploratory data analysis (EDA) project on Youtube's Trending videos. </p>
+          <!-- Brief Summary-->
+        </section>
+      </article>
+
+      <!-- Project Two-->
+      <!-- <article id="ProjectTwo">
+        <section>
+          <a href="projects/projectTwo.html"><img src="images/projectPlaceholder.png" alt="Project One" width="350" height="250"></a>
+        </section>
+        <section id="ProjectTwoText">
+          <h3><a href="projects/projectTwo.html" class="projectTitle">Project Title</a></h3>
+          <p class="date">Date</p>
+          <p class="projectP">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.</p>
+        </section>
+      </article> -->
+
+      <!-- Project Three-->
+      <!-- <article id="ProjectThree">
+        <section>
+          <a href="projects/projectThree.html"><img src="images/projectPlaceholder.png" alt="Project One" width="350" height="250"></a>
+        </section>
+        <section id="ProjectThreeText">
+          <h3><a href="projects/projectThree.html" class="projectTitle">Project Title</a></h3>
+          <p class="date">Date</p>
+          <p class="projectP">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu.</p>
+        </section>
+      </article> -->
+    </section>
+  </main>
+
+  <!-- Footer-->
+  <footer>
+  </footer>
+  <script src="script.js"></script>
+</body>
+
+</html>

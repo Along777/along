@@ -1,0 +1,488 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:300,400,500,700&display=swap');
+
+/***********************************  Mobile Version ***********************************/
+/* Applies to Whole Website */
+body {
+  margin: auto;
+  font-family: 'Open Sans';
+  font-weight: 300;
+}
+
+/* Next Link (on project pages) and second heading font thickness */
+.nextProject, h2 {
+  font-weight: 700;
+}
+
+/* Text Color */
+h1, header p, a, #about {
+  color: #fff;
+}
+
+/* this applies to home page */
+main {
+  padding-bottom: 3em;
+}
+
+/* Other Pages are Hidden and will be clickable through Javascript */
+#AboutPage {
+  display: none;
+}
+
+/************ Wesbite Header ************/
+/* Header Background Styles */
+header {
+  margin-top: -2.25em;
+  background-color: #000;
+  text-align: center;
+}
+
+/* Name */
+h1 {
+  font-size: 35pt;
+  font-family: 'Montserrat';
+  padding-top: 0.5em;
+}
+
+/* Job Title and Location */
+header p {
+  font-size: 13pt;
+  line-height: 1.25em;
+  margin-top: -1.80em;
+  padding-bottom: 0.75em;
+}
+
+/************ Navigation and Links ************/
+nav {
+  padding-bottom: 0.1em;
+  font-weight: 400;
+}
+
+nav ul li {
+  display: inline;
+  font-size: 13.5pt;
+  padding-right: 0.5em;
+}
+
+/* removes bullet point and spacing between links*/
+ul {
+  list-style-type: none;
+  margin-left: -1.75em;
+}
+
+/* removes underline */
+a, #about {
+  text-decoration: none;
+}
+
+/************ About Me Section ************/
+#AboutPage{
+  padding-bottom: 2em;
+}
+
+#AboutPage img{
+  padding-left: 1.5em;
+}
+
+/************ Featured Project Section ************/
+#homeFeaturedProject {
+  background-color: #e5e5e5;
+  padding-top: 0.1em;
+}
+
+/* Project Title Color (applies to all projects not just featured project)*/
+.projectTitle {
+  color: #494949;
+}
+
+/* "Featured Header" Title (applies to all projects not just featured project)*/
+h2 {
+  font-size: 20pt;
+  padding-left: 0.75em;
+}
+
+/* Project Title (applies to all projects not just featured project)*/
+h3 {
+  font-weight: 500;
+  font-size: 16pt;
+  margin-top: -0.25em;
+  padding-left: 1em;
+}
+
+/* Date positioning (applies to all projects not just featured project)*/
+.date {
+  margin-top: -1em;
+}
+
+/* Paragraphs font styles and positioning (applies to all projects not just featured project)*/
+p {
+  font-size: 11.25pt;
+  line-height: 1.5em;
+  padding: 0 1.5em 0 1.5em;
+}
+
+/* Featured Project Image */
+#homeFeaturedProject img {
+  padding: 0 0 1.5em 1.5em;
+}
+
+/************ Projects Section ************/
+/* Project Image */
+#Projects img {
+  padding: 1.5em 0 1.25em 1.25em;
+  width: 90%;
+}
+
+/* positioning for project image */
+.special {
+  margin-top: -1.5em;
+}
+
+/************ Footer ************/
+footer {
+  background-color: #b2b2b2;
+  padding: 1em;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+
+/************ Project Pages ************/
+/* Project Image Size and Position */
+#projectPage img {
+  width: 80%;
+  height: 60%;
+  padding-left: 1.4em
+}
+
+/* Project Page Position */
+#projectPage {
+  padding-bottom: 3em;
+}
+
+/* Next Project Link Styles and Position */
+.nextProject {
+  color: #000;
+  font-size: 22px;
+}
+
+.next {
+  padding-top: 1em;
+  text-align: right;
+}
+
+#projectPage .projectLink{
+  color: #5c90e6;
+  font-size: 20px;
+}
+
+/***********************************  Tablet Version ***********************************/
+@media only screen and (min-width: 600px) {
+
+  /************ Header ************/
+  /* Header Name */
+  h1 {
+    font-size: 40pt;
+  }
+
+  /* Job Title and Location */
+  header p {
+    font-size: 15pt;
+    margin-top: -1.60em;
+  }
+
+  /************ Navigation ************/
+  nav ul li {
+    font-size: 15.5pt;
+  }
+
+  nav {
+    margin-top: -0.5em;
+    padding-bottom: 2em;
+  }
+
+  /**************** About Me Section ****************/
+
+  #aboutInfo{
+    margin-top: -1.5em;
+  }
+
+  #AboutPage p{
+    width:375px;
+  }
+
+  /************ Featured and All Projects Text Styles************/
+  /* Heading Two: Featured Title and Projects */
+  h2 {
+    font-size: 25pt;
+    padding-top: 0.5em;
+  }
+
+  /* Project Titles */
+  h3 {
+    font-size: 20pt;
+    padding-right: 2em;
+    line-height: 1.2em;
+  }
+
+  /* Brief Summary and Paragraphs */
+  p {
+    font-size: 12.5pt;
+    line-height: 1.5em;
+    padding: 0 1.75em 0 1.75em;
+  }
+
+  /************ Featured Projects Section************/
+  /* Featured Projects Text and Image into two columns */
+  /* Project Pages into two columns */
+  #homeFeaturedProject, #projectPage, #Projects article, #aboutFlex {
+    display: flex;
+  }
+
+  /* text positioning */
+  #featuredText {
+    margin-top: -1.5em;
+    width: 425px;
+  }
+
+  /* image positioning */
+  #homeFeaturedProject img {
+    margin-top: 6em;
+    padding: 0 1.75em 2em 1.75em;
+  }
+
+  /************ All Projects Section ************/
+  /* Project Images */
+  #Projects img {
+    width: 300px;
+    padding-left: 1.75em;
+  }
+
+  /* Project Text */
+  #ProjectOneText, #ProjectTwoText, #ProjectThreeText {
+    background-color: #fff;
+    padding: 0.25em 0 0 0;
+    margin-left: -2em;
+  }
+
+  #ProjectTwoText, #ProjectThreeText {
+    margin-top: 1.5em;
+  }
+
+  /* Project Brief Summary */
+  .projectP {
+    margin-top: -0.5em;
+  }
+
+  /************ Project Pages ************/
+  /* Project Date Positioning */
+  #projectPage .date {
+    margin-top: -1em;
+    padding-bottom: 0.5em;
+  }
+
+  /* featured image positioning */
+  #projectPage img {
+    width: 350px;
+    height: 250px;
+  }
+
+  /* paragraph positioning */
+  .projectParagraph {
+    margin-top: 7.5em;
+  }
+
+  #youtubeIntro{
+    margin-top: 10.25em;
+  }
+}
+
+/***********************************  Desktop Version ***********************************/
+@media only screen and (min-width: 1200px) {
+
+  /************ Header ************/
+/* two columns for header text and projects */
+#intro, main  {
+    display: flex;
+  }
+
+  /* Job Title and Location */
+  #intro p {
+    margin-top: 4.35em;
+    text-align: left;
+    margin-left: -1em;
+    font-size: 19pt;
+  }
+
+/* header name (Aaron Long) size */
+  h1 {
+    font-size: 60pt;
+  }
+
+/* header size */
+  header {
+    padding-left: 12.5em;
+  }
+
+  /************ Navigation ************/
+  /* font styles */
+  nav ul li {
+    font-size: 25pt;
+    font-weight: 300;
+  }
+
+/* navigation positioning */
+  nav {
+    margin-top: -3em;
+    position: absolute;
+    right: 0;
+    top: 11.5em;
+  }
+
+  /**************** About Me Section ****************/
+
+#AboutPage{
+    padding-bottom: 5em;
+  }
+
+  #AboutPage img{
+    padding-left: 12em;
+  }
+
+  #AboutPage img{
+    width: 40%;
+    height: 100%;
+  }
+  #AboutPage p{
+    width:500px;
+  }
+
+  #AboutPage h2{
+    padding-left: 5.75em;
+  }
+
+  #aboutInfo{
+    position: absolute;
+    left: 850px;
+  }
+
+
+
+  /************ Featured Project ************/
+  /* Featured Project and Image Positioning  */
+  #homeFeaturedProject, #homeFeaturedProject img {
+    margin-top: 0;
+  }
+
+  #homeFeaturedProject {
+    display: block;
+    padding: 0 4em 20em 0em;
+  }
+
+  #homeFeaturedProject img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /************ All Projects ************/
+  /* project image size */
+  #Projects img {
+    width: 400px;
+    height: 266px;
+  }
+
+/* project text */
+  #ProjectOneText, #ProjectTwoText, #ProjectThreeText {
+    margin-left: -2em;
+  }
+
+  /************ Project Page ************/
+  /* Project Page width/size */
+  #projectPage {
+    width: 1100px;
+    padding-left: 9em;
+  }
+
+  /* project image */
+  #projectPage img {
+    width: 500px;
+    height: 375px;
+  }
+
+/* Next Project Link */
+  .nextProject {
+    font-size: 30px;
+  }
+
+  .nextProject:hover, .projectTitle:hover,   #projectPage a:hover{
+    color: #095070;
+  }
+
+  .next {
+    padding-top: 5em;
+  }
+
+  footer {
+    padding: 1.5em;
+  }
+
+  #projectPage .projectLink{
+    font-size: 30px;
+  }
+}
+/***********************************  Larger Desktop Version ***********************************/
+@media only screen and (min-width: 1600px) {
+
+
+  #AboutPage{
+      padding-bottom: 5em;
+    }
+
+    #AboutPage img{
+      padding-left: 15em;
+    }
+
+    #AboutPage img{
+      width: 30%;
+      height: 100%;
+    }
+    #AboutPage p{
+      font-size: 20px;
+      width:600px;
+    }
+
+    #AboutPage h2{
+      padding-left: 4.85em;
+    }
+
+  /************ Project Page ************/
+  /* Project Page width/size */
+  #projectPage {
+    width: 1600px;
+    padding-left: 9em;
+  }
+
+  /* project image */
+  #projectPage img {
+    width: 750px;
+    height: 536px;
+    margin-left: 1em;
+  }
+
+  #projectPage h2, #AboutPage h2{
+    font-size: 50px;
+  }
+
+  #projectPage p{
+    font-size: 20px;
+  }
+  /* Next Project Link */
+  .nextProject {
+    font-size: 40px;
+  }
+
+  .projectParagraph{
+    margin-top: 11em;
+  }
+
+}
