@@ -259,13 +259,13 @@ footer {
   }
 
   /* Project Text */
-  #ProjectOneText, #ProjectTwoText, #ProjectThreeText {
+  #ProjectOneText, #ProjectTwoText, #ProjectThreeText, #ProjectFourText {
     background-color: #fff;
     padding: 0.25em 0 0 0;
     margin-left: -2em;
   }
 
-  #ProjectTwoText, #ProjectThreeText {
+  #ProjectTwoText, #ProjectThreeText, #ProjectFourText {
     margin-top: 1.5em;
   }
 
