@@ -1,493 +1,480 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:300,400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 
-/***********************************  Mobile Version ***********************************/
-/* Applies to Whole Website */
-body {
-  margin: auto;
-  font-family: 'Open Sans';
-  font-weight: 300;
-}
 
-/* Next Link (on project pages) and second heading font thickness */
-.nextProject, h2 {
-  font-weight: 700;
-}
-
-/* Text Color */
-h1, header p, a, #about {
-  color: #fff;
-}
-
-/* this applies to home page */
-main {
-  padding-bottom: 3em;
-}
-
-/* Other Pages are Hidden and will be clickable through Javascript */
-#AboutPage {
+/* ****************** START: DESKTOP STYLES ****************** */
+/* BODY / APPLIED TO MULTIPLE */
+#mobile-tablet{
   display: none;
 }
 
-/************ Wesbite Header ************/
-/* Header Background Styles */
-header {
-  margin-top: -2.25em;
-  background-color: #000;
+body{
+  font-family: "Montserrat"!important;
+  margin: auto;
+}
+
+.nav, footer p {
   text-align: center;
 }
 
-/* Name */
-h1 {
-  font-size: 35pt;
-  font-family: 'Montserrat';
-  padding-top: 0.5em;
+a:hover{
+  color: #04b9b4;
 }
 
-/* Job Title and Location */
-header p {
-  font-size: 13pt;
-  line-height: 1.25em;
-  margin-top: -1.80em;
-  padding-bottom: 0.75em;
+#banner, footer, .projectTitle, .projectIMG {
+  background-image: linear-gradient(to right, #00c0ff , #2ad8a6);
 }
 
-/************ Navigation and Links ************/
-nav {
-  padding-bottom: 0.1em;
-  font-weight: 400;
+#stockAnalysis a{
+  color: #00c0ff;
 }
 
-nav ul li {
-  display: inline;
-  font-size: 13.5pt;
-  padding-right: 0.5em;
+/* DISPLAY VIEWS */
+#aboutPage, #stockAnalysis, #projectbckgrnd, #pdfEx, #pivotTable, #flexDash, #randomForest, #wildfireOne, #wildfireTwo, #youtube, #bitcoinRegression{
+  display: none;
 }
 
-/* removes bullet point and spacing between links*/
-ul {
-  list-style-type: none;
-  margin-left: -1.75em;
+/* .flex, #work{
+  display: flex;
+} */
+
+.flex{
+  display: flex;
 }
 
-/* removes underline */
-a, #about {
-  text-decoration: none;
+/* COLORS */
+a, .navbar-toggler, ul li a, #featured h2, footer, button:hover, .projectTitle, h2{
+  color: #fff;
 }
 
-/************ About Me Section ************/
-#AboutPage{
-  padding-bottom: 2em;
-}
-
-#AboutPage img{
-  padding-left: 1.5em;
-}
-
-/************ Featured Project Section ************/
-#homeFeaturedProject {
-  background-color: #e5e5e5;
-  padding-top: 0.1em;
-}
-
-/* Project Title Color (applies to all projects not just featured project)*/
-.projectTitle {
-  color: #494949;
-}
-
-/* "Featured Header" Title (applies to all projects not just featured project)*/
-h2 {
-  font-size: 20pt;
-  padding-left: 0.75em;
-}
-
-/* Project Title (applies to all projects not just featured project)*/
-h3 {
-  font-weight: 500;
-  font-size: 16pt;
-  margin-top: -0.25em;
-  padding-left: 1em;
-}
-
-/* Date positioning (applies to all projects not just featured project)*/
-.date {
-  margin-top: -1em;
-}
-
-/* Paragraphs font styles and positioning (applies to all projects not just featured project)*/
-p {
-  font-size: 11.25pt;
-  line-height: 1.5em;
-  padding: 0 1.5em 0 1.5em;
-}
-
-/* Featured Project Image */
-#homeFeaturedProject img {
-  padding: 0 0 1.5em 1.5em;
-}
-
-/************ Projects Section ************/
-/* Project Image */
-#Projects img {
-  padding: 1.5em 0 1.25em 1.25em;
-  width: 90%;
-}
-
-/* positioning for project image */
-.special {
-  margin-top: -1.5em;
-}
-
-/************ Footer ************/
-footer {
-  background-color: #b2b2b2;
-  padding: 1em;
-  width: 100%;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-}
-
-/************ Project Pages ************/
-/* Project Image Size and Position */
-#projectPage img {
-  width: 80%;
-  height: 60%;
-  padding-left: 1.4em
-}
-
-/* Project Page Position */
-#projectPage {
-  padding-bottom: 3em;
-}
-
-/* Next Project Link Styles and Position */
-.nextProject {
+.fa-chevron-left, .fa-chevron-right{
   color: #000;
-  font-size: 22px;
 }
 
-.next {
-  padding-top: 1em;
-  text-align: right;
+/* FONT STYLES */
+.projectTitle, .projectProg, .projectLib, .view{
+  font-weight: 600;
 }
 
-#projectPage .projectLink{
-  color: #5c90e6;
+/* ***** HOMEPAGE ***** */
+/* NAVIGATION + LINKS */
+#logo-small a{
+  background: -webkit-linear-gradient(#00c0ff, #2ad8a6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight:500;
+}
+
+#navigation, h2, #banner{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#navigation, h2 {
+    background: #000;
+}
+
+ul li a, .view, #banner p{
+  font-size: 1.5em;
+}
+
+/* LOGO - TITLE - JUMBOTRON */
+h1{
+  font-weight:600;
+  font-size: 5em;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+#banner {
+  padding: 2em;
+}
+
+/* ***** ABOUT PAGE ***** */
+#aboutPage p{
+  font-size: 16px;
+  width: 100%;
+}
+
+#aboutPage p, .projectSection p{
+  margin-bottom: 0.5em;
+}
+
+#aboutPage br, #all{
+  padding-bottom: 1em;
+}
+
+#aboutPage h1{
+  font-size: 3em;
+}
+
+#aboutPage img{
+  margin-top: 0.25em;
+}
+
+button, .card{
+  background: none;
+  border: none;
   font-size: 20px;
 }
 
-/***********************************  Tablet Version ***********************************/
-@media only screen and (min-width: 600px) {
-
-  /************ Header ************/
-  /* Header Name */
-  h1 {
-    font-size: 40pt;
-  }
-
-  /* Job Title and Location */
-  header p {
-    font-size: 15pt;
-    margin-top: -1.60em;
-  }
-
-  /************ Navigation ************/
-  nav ul li {
-    font-size: 15.5pt;
-  }
-
-  nav {
-    margin-top: -0.5em;
-    padding-bottom: 2em;
-  }
-
-  /**************** About Me Section ****************/
-
-  #aboutInfo{
-    margin-top: -1.5em;
-  }
-
-  #AboutPage p{
-    width:375px;
-  }
-
-  /************ Featured and All Projects Text Styles************/
-  /* Heading Two: Featured Title and Projects */
-  h2 {
-    font-size: 25pt;
-    padding-top: 0.5em;
-  }
-
-  /* Project Titles */
-  h3 {
-    font-size: 20pt;
-    padding-right: 2em;
-    line-height: 1.2em;
-  }
-
-  /* Brief Summary and Paragraphs */
-  p {
-    font-size: 12.5pt;
-    line-height: 1.5em;
-    padding: 0 1.75em 0 1.75em;
-  }
-
-  /************ Featured Projects Section************/
-  /* Featured Projects Text and Image into two columns */
-  /* Project Pages into two columns */
-  #homeFeaturedProject, #projectPage, #Projects article, #aboutFlex {
-    display: flex;
-  }
-
-  /* text positioning */
-  #featuredText {
-    margin-top: -1.5em;
-    width: 425px;
-  }
-
-  /* image positioning */
-  #homeFeaturedProject img {
-    margin-top: 6em;
-    padding: 0 1.75em 2em 1.75em;
-  }
-
-  /************ All Projects Section ************/
-  /* Project Images */
-  #Projects img {
-    width: 300px;
-    padding-left: 1.75em;
-  }
-
-  /* Project Text */
-  #ProjectOneText, #ProjectTwoText, #ProjectThreeText, #ProjectFourText, #ProjectFiveText {
-    background-color: #fff;
-    padding: 0.25em 0 0 0;
-    margin-left: -2em;
-  }
-
-  #ProjectTwoText, #ProjectThreeText, #ProjectFourText, #ProjectOneText {
-    margin-top: 1.5em;
-  }
-
-  /* Project Brief Summary */
-  .projectP {
-    margin-top: -0.5em;
-  }
-
-  /************ Project Pages ************/
-  /* Project Date Positioning */
-  #projectPage .date {
-    margin-top: -1em;
-    padding-bottom: 0.5em;
-  }
-
-  /* featured image positioning */
-  #projectPage img {
-    width: 350px;
-    height: 250px;
-  }
-
-  /* paragraph positioning */
-  .projectParagraph {
-    margin-top: 7.5em;
-  }
-
-.longTitle{
-    margin-top: 10.25em;
-  }
-
+button:focus {
+    outline: none;
 }
 
-/***********************************  Desktop Version ***********************************/
-@media only screen and (min-width: 1200px) {
+/* ***** HOME PAGE: PROJECTS ***** */
 
-  /************ Header ************/
-/* two columns for header text and projects */
-#intro, main  {
-    display: flex;
+/* FEATURED SECTION */
+/* .featured {
+  margin-top: -2em;
+	border-bottom: 24.8em solid #000;
+	border-right: 10em solid transparent;
+	width: 40%;
+  height: 100%;
+  transform: scaleY(-1);
+}
+ h5{
+   color: #0d9d81;
+ }
+
+#featured h2{
+  margin-top: -12em;
+  padding-left: 13em;
+}
+
+#featuredSection{
+  margin-top: -2.1em;
+  z-index: -1000;
+  margin-left: -0.15em;
+} */
+
+/* CAROUSEL - ALL WORK SECTION */
+.ml-5 {
+    margin: auto!important;
+    padding-top: 1em;
+}
+
+h2 {
+    padding: 0.4em 2em;
+    margin-top: -0.4em;
+    font-weight: 600;
+    font-size: 40px;
+}
+
+h3, h5{
+  color: #0d9e82;
+}
+
+.carousel-width{
+  width: 800px;
+}
+
+.sr-only{
+  color: #000 !important;
+}
+
+.fa-chevron-left, .fa-chevron-right{
+  font-size: 50px;
+}
+
+.fa-chevron-left{
+  margin-left: -1.75em;
+}
+
+.fa-chevron-right{
+  margin-right: -1.75em;
+}
+
+.carousel-control-prev, .carousel-control-next{
+  width: 0 !important;
+}
+
+/* PROJECT (WHEN CLICKED) */
+#stockAnalysis h1, #pdfEx h1, #pivotTable h1, #flexDash h1, #randomForest h1, #wildfireOne h1, #wildfireTwo h1, #youtube h1, #bitcoinRegression h1{
+  font-size: 2.5em;
+}
+
+.images{
+   border: 10px solid;
+   border-image-source: linear-gradient(to right, #00c0ff , #2ad8a6);
+  border-image-slice: 1;
+}
+
+.projectIMG{
+  padding: 1em 1em 1em 7em;
+  margin-left: -2em;
+}
+
+.projectProg, .projectLib, .view{
+  color: #0cc4a1;
+}
+
+.projectTitle{
+  padding: 0.35em;
+}
+
+.projectSection p{
+  font-size: 16px !important;
+}
+
+.view:hover{
+  text-decoration: none;
+  color: #01c1fc;
+}
+
+.projectLink{
+  text-align: right;
+}
+
+/* FOOTER  */
+footer{
+  padding: 0.05em;
+  margin-top: 0.75em;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+footer p{
+  font-size: 18px;
+}
+
+/* ****************** END: DESKTOP STYLES ****************** */
+
+/* ***** DESKTOP - LARGE SCREENS ***** */
+@media only screen and (min-width: 1700px) {
+  /* ***** HOMEPAGE ***** */
+  /* NAVIGATION + LINKS */
+  #navigation a {
+      font-size: 1.75em;
+      padding: 0.2em 0.5em;
+  }
+   .location{
+    font-size: 2.5em!important;
   }
 
-  /* Job Title and Location */
-  #intro p {
-    margin-top: 4.35em;
-    text-align: left;
-    margin-left: -1em;
-    font-size: 19pt;
+  /* LOGO - TITLE - JUMBOTRON */
+  h1{
+    font-size: 7.5em;
   }
 
-/* header name (Aaron Long) size */
-  h1 {
-    font-size: 60pt;
-  }
-
-/* header size */
-  header {
-    padding-left: 12.5em;
-  }
-
-  /************ Navigation ************/
-  /* font styles */
-  nav ul li {
-    font-size: 25pt;
-    font-weight: 300;
-  }
-
-/* navigation positioning */
-  nav {
-    margin-top: -3em;
-    position: absolute;
-    right: 0;
-    top: 11.5em;
-  }
-
-  /**************** About Me Section ****************/
-
-#AboutPage{
-    padding-bottom: 5em;
-  }
-
-  #AboutPage img{
-    padding-left: 12em;
-  }
-
-  #AboutPage img{
-    width: 40%;
-    height: 100%;
-  }
-  #AboutPage p{
-    width:500px;
-  }
-
-  #AboutPage h2{
-    padding-left: 5.75em;
-  }
-
-  #aboutInfo{
-    position: absolute;
-    left: 850px;
-  }
-
-
-
-  /************ Featured Project ************/
-  /* Featured Project and Image Positioning  */
-  #homeFeaturedProject, #homeFeaturedProject img {
-    margin-top: 0;
-  }
-
-  #homeFeaturedProject {
-    display: block;
-    padding: 0 4em 20em 0em;
-  }
-
-  #homeFeaturedProject img {
-    width: 100%;
-    height: 100%;
-  }
-
-  /************ All Projects ************/
-  /* project image size */
-  #Projects img {
-    width: 400px;
-    height: 266px;
-  }
-
-/* project text */
-  #ProjectOneText, #ProjectTwoText, #ProjectThreeText, #ProjectFiveText {
-    margin-left: -2em;
-  }
-
-  /************ Project Page ************/
-  /* Project Page width/size */
-  #projectPage {
-    width: 1100px;
-    padding-left: 9em;
-  }
-
-  /* project image */
-  #projectPage img {
-    width: 500px;
-    height: 375px;
-  }
-
-/* Next Project Link */
-  .nextProject {
-    font-size: 30px;
-  }
-
-  .nextProject:hover, .projectTitle:hover,   #projectPage a:hover{
-    color: #095070;
-  }
-
-  .next {
-    padding-top: 5em;
-  }
-
-  footer {
+  #banner {
     padding: 1.5em;
   }
 
-  #projectPage .projectLink{
+  #homepage img{
+    width: 475px;
+  }
+
+  #aboutPage p{
+    font-size: 1.15em;
+  }
+
+.images{
+  width: 400px;
+}
+
+h3{
+  font-size: 2em;
+}
+
+#carouselExampleControls{
+  width: 1500px;
+}
+
+h5{
+  font-size: 22px;
+}
+
+.projectSection p {
+    font-size: 20px !important;
+}
+
+.view{
+    font-size: 2em;
+}
+}
+/* ***** DESKTOP - MEDIUM SCREENS ***** */
+@media only screen and (max-width: 1699px) {
+  /* ***** HOMEPAGE ***** */
+  /* NAVIGATION + LINKS */
+  #navigation a {
+      font-size: 1.5em;
+      padding: 0.1em 0.4em;
+  }
+   .location{
+    font-size: 2em!important;
+  }
+
+  /* LOGO - TITLE - JUMBOTRON */
+  h1{
+    font-size: 5.5em;
+  }
+
+  #homepage img{
+    width: 350px;
+  }
+
+  #aboutPage p{
+    font-size: 1.15em;
+  }
+
+.images{
+  width: 350px;
+}
+
+h3{
+  font-size: 2em;
+}
+
+.ml-5 {
+    padding-top: 0;
+}
+
+#carouselExampleControls{
+  width: 1200px;
+}
+
+h5{
+  font-size: 20px;
+}
+
+h2 {
+    padding: 0.35em 2em;
     font-size: 30px;
-  }
-
-  #about:hover{
-    cursor: pointer;
-  }
 }
-/***********************************  Larger Desktop Version ***********************************/
-@media only screen and (min-width: 1600px) {
 
+.projectSection p {
+    font-size: 20px !important;
+}
 
-  #AboutPage{
-      padding-bottom: 5em;
-    }
+.view{
+    font-size: 2em;
+}
+}
 
-    #AboutPage img{
-      padding-left: 15em;
-    }
-
-    #AboutPage img{
-      width: 30%;
-      height: 100%;
-    }
-    #AboutPage p{
-      font-size: 20px;
-      width:600px;
-    }
-
-    #AboutPage h2{
-      padding-left: 4.85em;
-    }
-
-  /************ Project Page ************/
-  /* Project Page width/size */
-  #projectPage {
-    width: 1600px;
-    padding-left: 9em;
+/* ***** DESKTOP - STANDARD SCREENS ***** */
+@media only screen and (max-width: 1399px) {
+  /* ***** HOMEPAGE ***** */
+  /* NAVIGATION + LINKS */
+  #navigation a {
+      font-size: 1.25em;
+      padding: 0.1em 0.4em;
   }
 
-  /* project image */
-  #projectPage img {
-    width: 750px;
-    height: 536px;
-    margin-left: 1em;
+  /* LOGO - TITLE - JUMBOTRON */
+  h1{
+    font-size: 4em;
   }
 
-  #projectPage h2, #AboutPage h2{
-    font-size: 50px;
+  #homepage img{
+    width: 300px;
   }
 
-  #projectPage p{
-    font-size: 20px;
-  }
-  /* Next Project Link */
-  .nextProject {
-    font-size: 40px;
+  #aboutPage p{
+    font-size: 1em;
   }
 
-  .projectParagraph{
-    margin-top: 11em;
+.images{
+  width: 275px;
+}
+
+h3{
+  font-size: 2em;
+}
+
+#carouselExampleControls{
+  width: 1000px;
+}
+
+h5{
+  font-size: 16px;
+}
+
+h2 {
+  margin-top: -0.75em;
+    font-size: 25px;
+}
+
+.projectSection p {
+    font-size: 17px !important;
+}
+
+.view{
+    font-size: 1.5em;
+}
+}
+
+/* ***** TABLET - BIG SCREENS ***** */
+@media only screen and (max-width: 1149px) {
+  #mobile-tablet{
+    display: block;
   }
+  /* ***** HOMEPAGE ***** */
+  /* NAVIGATION + LINKS */
+  #navigation a {
+      font-size: 1.25em;
+      padding: 0.1em 0.4em;
+  }
+
+  /* LOGO - TITLE - JUMBOTRON */
+  h1{
+    font-size: 4em;
+  }
+
+  #homepage img{
+    width: 300px;
+  }
+
+  #aboutPage p{
+    font-size: 1em;
+  }
+
+.images{
+  width: 275px;
+}
+
+h3{
+  font-size: 2em;
+}
+
+#carouselExampleControls{
+  display: none;
+}
+
+h5{
+  font-size: 16px;
+}
+
+h2 {
+  margin-top: -0.75em;
+    font-size: 25px;
+}
+
+.projectSection p {
+    font-size: 17px !important;
+}
+
+.view{
+    font-size: 1.5em;
+}
+}
+
+/* ***** TABLET - SMALL SCREENS ***** */
+
+/* ***** MOBILE - BIG SCREENS ***** */
+@media only screen and (max-width: 600px) {
+.flex{
+  display: block;
+}
+
+#work{
+  display: none;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 3.75em;
+}
 
 }
+
+/* ***** MOBILE - SMALL SCREENS ***** */

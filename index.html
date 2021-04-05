@@ -1,181 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- this will not be seen: don't change anything here -->
 <head>
   <meta charset="utf-8">
-  <title>Aaron Long's Data Analysis Portfolio</title> <!-- Website Title-->
-  <link href="https://necolas.github.io/normalize.css/8.0.1/normalize.css" rel="stylesheet" /> <!-- Removes all default styling -->
-  <link href="styles.css" rel="stylesheet"> <!-- CSS Link to all your styles -->
+  <title>Aaron Long Portfolio</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" /> <!-- Bootstrap css -->
+  <link href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet" /> <!-- Font Awesome-->
+  <link href="styles.css" rel="stylesheet"> <!-- My custom styles -->
   <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Allows Mobile Design -->
 </head>
 
-<!-- this is all of your homepage's content -->
-
 <body>
-  <header>
-    <!-- Portfolio Name and Small Info -->
-    <section id="intro">
-      <a href="index.html"><h1>AARON LONG</h1></a> <!-- Header Name -->
-      <p>Data Analyst and Programmer <br> Located in Orlando, Florida</p><!-- Job and Location -->
-    </section>
 
-    <!-- Navigation and Links-->
-    <section>
-      <nav>
-        <ul>
-          <li><a href="index.html">HOME</a></li> <!-- Home Link  -->
-          <li id="about">ABOUT</li> <!-- About Link (uses js to show) -->
-          <li><a href="https://www.linkedin.com/in/aaron-long-403644a7/">LINKEDIN</a></li> <!-- Linkedin Link-->
-          <li><a href="mailto:&#097;&#108;&#111;&#110;&#103;&#049;&#057;&#050;&#057;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">CONTACT</a></li>
-          <!--Email Link. I encoded your email to prevent spam and so people can't look at your code and be like this is your email -->
-        </ul>
-      </nav>
-    </section>
-  </header>
+  <!-- ************* START: DESKTOP NAVIGATION/LINKS ************* -->
+  <nav class="nav navbar navbar-expand-lg p-1" id="navigation">
+  <a class="navbar-brand" href="index.html"><img src="images/logo-small.png" alt="Aaron Long Data Scientist Logo" width="45" id="logo-small"> AARON LONG</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="#" id="about">ABOUT</a>
+      <a class="nav-item nav-link" href="https://www.linkedin.com/in/aaron-long-403644a7/" target="_blank">LINKEDIN</a>
+      <a class="nav-item nav-link" href="mailto:&#097;&#108;&#111;&#110;&#103;&#049;&#057;&#050;&#057;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;" target="_blank">CONTACT</a>
+    </div>
+  </div>
+</nav>
+  <!-- ************* END: DESKTOP NAVIGATION/LINKS ************* -->
 
-  <!-- About Page Section-->
-  <section id="AboutPage">
-    <!-- <img> -->
-    <h2>About Me</h2>
-    <section id="aboutFlex">
-    <section>
-      <img src="images/portrait.JPG" alt="Aaron Long" width="300" height="397">
-    </section>
+  <!-- ************* START: DESKTOP MAIN PAGE ************* -->
+  <div class="jumbotron jumbotron-fluid" id="banner">
+    <!-- <img src="images/project.png" alt="Stock Analysis" width="650" id="projectbckgrnd"> -->
 
-<section id="aboutInfo">
-    <p>Hello, my name is Aaron Long and welcome to my portfolio website. My portfolio contains data analytics projects that I've worked on throughout the years. Some of my projects include data analysis, advance plotting on maps, and machine learning. I enjoy creating projects on topics that interest or is relevant to me, such as finance, healthcare, current events, and any random data that interests me.</p>
+    <!-- START: DESKTOP HOME PAGE -->
+    <div class="container" id="homepage">
+      <div class="flex">
+        <div>
+          <img src="images/logo-big.png" alt="Aaron Long Data Scientist Logo" width="350">
+        </div>
+        <div class="pl-3 mt-4">
+          <h1>DATA<br>ANALYST</h1>
+          <p class="lead location">Located in Orlando, Florida</p>
+        </div>
+      </div>
+    </div>
+    <!-- END: DESKTOP HOME PAGE -->
 
-      <p>I recently moved to Florida in October 2019, and am  currently living in Orlando. I graduated in 2016 at University of California, Davis with a Bachelor's of Arts and Science in Economics and Statistics. I'm extremely interested and passionate about data analysis, finance, and the blockchain.</p>
+    <!-- START: DESKTOP ABOUT PAGE -->
+    <div class="container" id="aboutPage">
+      <div class="flex">
+        <div>
+          <button>x CLOSE </button>
+          <img src="images/IMG_8086.JPG" alt="Meet Aaron Long" width="350">
+        </div>
+        <div class="pl-3 mt-4">
+          <h1>Meet Aaron Long</h1>
+          <p class="lead">Hello, my name is Aaron Long and welcome to my portfolio website. My portfolio contains data analytics projects that I &apos;ve worked on throughout the years. Some of my projects include data analysis, advance plotting on
+            maps, and machine learning. I enjoy creating projects on topics that interest or is relevant to me, such as finance, healthcare, current events, and any random data that interests me.</p>
+          <p class="lead">I recently moved to Florida in October 2019, and am currently living in Orlando. I graduated in 2016 at University of California, Davis with a Bachelor&apos;s of Arts and Science in Economics and Statistics. I'm extremely
+            interested and passionate about data analysis, finance, and the blockchain.</p>
+          <p class="lead">More personal details about me is that I have a cute dog named Clover and she is a four year old Papillon, who looks like a border collie puppy. Also I vlog with my girlfriend on a YouTube channel called the happybaabes!</p>
+        </div>
+      </div>
+    </div>
+    <!-- END: DESKTOP ABOUT PAGE -->
 
-    <p>More personal details about me is that I have a cute dog named Clover and she is a four year old Papillon, who looks like a border collie puppy. Also I vlog with my girlfriend on a YouTube channel called the happybaabes! </p>
-  </section>
-  </section>
-</section>
+    <!-- START: DESKTOP ALL PROJECTS (CLICKED THROUGH JS) -->
+    <!-- STOCK ANALYSIS PROJECT-->
+    <div id="bitcoinRegression">
+      <div class="flex">
+        <div>
+          <img src="images/projects/bitcoin.png" alt="Bitcoin Regression Image" width="600" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Bitcoin Regression</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>February 28, 2021</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>numpy, pandas, sklearn, statsmodel</p>
+            <p class="projectSum">This project illustrates quantitative machine learning regression for bitcoin prices. </p>
+            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/BitcoinRegression.ipynb?fbclid=IwAR0i8l7L0H6w5Pv7Ean9y6Zhz7Btw9e3gxbDxbmYIUvje7v1Aum2xf62cN0" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Projects and Work -->
-  <main>
-    <!-- Featured Project-->
-    <section id="homeFeaturedProject">
-      <section id="featuredText">
-        <!-- Section within section is for flexbox purposes (helps turn it into two columns in tablet and desktop version)-->
-        <h2>FEATURED PROJECT</h2> <!-- Featured Project Heading-->
-        <h3><a href="projects/highstocks-02172020.html" class="projectTitle">Stock Analysis with Highcharter</a></h3> <!-- Project Title-->
-        <p class="date">February 17, 2020</p> <!-- Date -->
-        <p>Highcharter is a R wrapper for Highcharts javascript library and its modules. I wanted to demonstrate the power highcharter has with stocks and cryptocurrencies. </p>
-        <!-- Brief Summary -->
+
+    <!-- STOCK ANALYSIS PROJECT-->
+    <div id="stockAnalysis">
+      <div class="flex">
+        <div>
+          <img src="images/icons/stockAnalysis.png" alt="Stock Analysis" width="600" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Stock Analysis with Highcharter</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>February 17, 2020</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>highcharter, quantmod, ttr</p>
+            <p class="projectSum">Highcharter is a R wrapper for Highcharts javascript library and its modules. Highcharts is a mature and flexible javascript charting library and it has a powerful API [<a href="http://www.highcharts.com/demo"
+                target="_blank">http://www.highcharts.com/demo</a>]. I wanted to demonstrate the power highcharter has with stocks and cryptocurrencies. Along with highcharter, I applied quantmod and TTR package to create powerful and interactive
+              technical charts.</p>
+            <p class="projectLink"><a href="projects/highstocks.html" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF EXPRESSIONS PROJECT -->
+    <div id="pdfEx">
+      <div class="flex">
+        <div>
+          <img src="images/projects/pdfEx.png" alt="PDF Expressions" width="500" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Parsing PDF's with Regular Expressions</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>February 3, 2021</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>pandas, re, pdfplumber, requests, pyodbc</p>
+            <p class="projectSum">This project goes over parsing Pdfs with regular expressions, also know as regex. Data stored in pdfs can be difficult to import into a database, but since pdfs are actually text, regex patterns can be used to
+              collect data. This project will go over using regex on a pdf to turn the pdf into a dataframe, and then insert it into a SQL server.</p>
+            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Regex.ipynb?fbclid=IwAR3d-QVOZMm-PrrzZo4jNxWRXjsTDTU5lY3FgLyS0mImCzc2Z1WVz5yVnAc" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIVOT TABLES PROJECT -->
+    <div id="pivotTable">
+      <div class="flex">
+        <div>
+          <img src="images/projects/pivottable.png" alt="Pivot Tables" width="500" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Blog Update and Python for Pivot Tables</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>September 27, 2020</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python, Excel</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>pandas, numpy, matplotlib</p>
+            <p class="projectSum">This projects demonstrates how to use Python for Microsoft Excel's pivot tables. It also contains an awesome blog update on my personal and professional life.</p>
+            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/PivotTables.ipynb?fbclid=IwAR35ZNa7lRqT3P8HPhUcQ8UgCpIR2vTWPjLhKS2p60rvrqYVwjh5h2NRlsU" class="view" target="_blank">VIEW
+                PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLEX DASHBOARD PROJECT -->
+    <div id="flexDash">
+      <div class="flex">
+        <div>
+          <img src="images/projects/dashboard.png" alt="Flex Dashboard" width="650" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Flex Dashboard</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>February 22, 2020</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>flexdashboard, highcharter</p>
+            <p class="projectSum">This is an example of an interactive flex dashboard, which is a library in R. The data includes US Accidents between 2016 to 2019 with a focus on Orange County, Florida. The dashboard consists of three different
+              graphs: tree map, pie chart, and bar chart. The charts are created with highcharter.</p>
+            <p class="projectLink"><a href="projects/flexdashboard.html" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RANDOM FOREST PROJECT -->
+    <div id="randomForest">
+      <div class="flex">
+        <div>
+          <img src="images/projects/randomForest.png" alt="Flex Dashboard" width="550" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Machine Learning with Random Forest on Wildfire Data</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>March 2, 2020</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>numpy, pandas, sqlite3, sklearn</p>
+            <p class="projectSum">For this report, I will further my research on wildfire data that I explored with ggplot. This notebook will demonstrate using the machine learning tool called Random Forest.</p>
+            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/randomforest.ipynb" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WILDFIRE ANALYSIS II PROJECT -->
+    <div id="wildfireTwo">
+      <div class="flex">
+        <div>
+          <img src="images/projects/leaflet.png" alt="Wildfire Analysis Part II" width="650" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Wildfire Analysis Part II</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>February 5, 2020</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>leaflet</p>
+            <p class="projectSum">For the second part of the Wildfire Analysis report, I implemented leaflet maps. Leaflet provides an interactive google map that provides the name of the fire, acres burned, cause, years, and days burned. Feel free
+              to explore each map by scrolling and hovering for more details and interesting information. I encourage you to look for your county or state and see if you can remember any of the fires that happened there.</p>
+            <p class="projectLink"><a href="projects/wildfiresp2.html" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WILDFIRE ANALYSIS I PROJECT -->
+    <div id="wildfireOne">
+      <div class="flex">
+        <div>
+          <img src="images/projects/wildfire2.png" alt="Wildfire Analysis Part I" width="650" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Wildfire Analysis Part I</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>February 5, 2020</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>gglot, dbplyr, mapdata, ggthemes, maps</p>
+            <p class="projectSum">Back in 2017, the Tubbs Fire in Santa Rosa had not only destroyed my family’s home, but also completely destroyed our neighborhood. With losing 95% of our belongings including irreplaceable photographs and mementos,
+              it was a truly devastating event that traumatized me and my family.</p>
+
+            <p class="projectSum">For this report, I am exploring a dataset on the 1.88 million wildfires that occurred in the US from 1992-2015.This dataset can be found in Kaggle: https://www.kaggle.com/rtatman/188-million-us-wildfires. I will
+              briefly look at all the data then dive into large fires only. This means fires in class size F (1000-5000) acres burned and size G with is wildfires burning over 5000+ acres. Some of the largest fires in CA for example burned hundreds
+              of thousands of acres. I want to focus on California and Florida as this is where I live now and where the data would be most relevant to me.</p>
+            <p class="projectLink"><a href="projects/wildfiresp1.html" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- YOUTUBE ANALYSIS PROJECT -->
+    <div id="youtube">
+      <div class="flex">
+        <div>
+          <img src="images/projects/youtube.png" alt="Wildfire Analysis Part I" width="650" class="projectIMG">
+        </div>
+        <div class="projectSection ml-4">
+          <h1 class="projectTitle pl-4">Exploratory Analysis on Trending Videos</h1>
+          <div class="p-2 pl-4 pr-5">
+            <p class="lead"><strong class="projectProg">Date - </strong>January 19, 2019</p>
+            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
+            <p class="lead"><strong class="projectLib">Libraries - </strong>pandas, numpy, matplotlib, seaborn</p>
+            <p class="projectSum">As a new vlogger and content creator with my girlfriend on Youtube, I took upon interest on doing an exploratory data analysis (EDA) project on Youtube's Trending videos.</p>
+            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Youtube.ipynb" class="view" target="_blank">VIEW PROJECT</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- END: DESKTOP ALL PROJECTS (CLICKED THROUGH JS) -->
+
+  <!-- START: DESKTOP WORK NAVIGATION SECTION -->
+  <!-- FEATURED SECTION -->
+  <div id="work">
+    <!-- <div id="featured">
+      <img src="images/featured.png" alt="Featured" width="648" id="featuredSection">
+      <h2>FEATURED</h2>
+      <section class="pl-5 pt-2">
+        <img src="images/icons/stockAnalysis.png" alt="Stock Analysis with Highcharter Image" width="325" class="images">
+        <h3 class="pt-3">Stock Analysis with Highcharter</h3>
       </section>
+    </div> -->
 
-      <section>
-        <a href="projects/highstocks-02172020.html" id="wildfireIMG"><img src="images/stocks1.png" alt="Stock Analysis" width="300" height="156"></a>
-        <!-- Project Image-->
-      </section>
-    </section>
+    <!-- ALL WORK CAROUSEL -->
 
-    <!-- Projects Section -->
-    <section id="Projects">
-      <h2>PROJECTS</h2> <!-- Projects Title-->
+    <!-- <img src="images/project-heading.png" width="500" alt="projects heading"> -->
+    <div id="all">
 
-      <!-- Flex Dashboard Example-->
-      <article id="ProjectSeven">
-        <section class="special">
-          <a href="projects/pdf-02032021.html"><img src="images/pdf-image-icon.PNG" alt="Project Seven" width="300" height="247"></a> <!-- Project Image-->
-        </section>
+        <h2>PROJECTS</h2>
 
-        <section id="ProjectSevenText">   <!-- Project One Text-->
-          <h3><a href="projects/pdf-02032021.html" class="projectTitle">Parsing PDF's with Regular Expressions</a></h3> <!-- Project Title-->
-          <p class="date">February 3, 2021</p> <!-- Date-->
-          <p class="projectP">This project goes over parsing PDFs with regular expressions, also known as regex.</p>
-          <!-- Brief Summary-->
-        </section>
-      </article>
+      <div id="carouselExampleControls" class="carousel slide carousel-width ml-5 mt-n2" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
 
-      <!-- Flex Dashboard Example-->
-      <article id="ProjectSix">
-        <section class="special">
-          <a href="projects/pivottables-09272020.html"><img src="images/pivottable.png" alt="Project Six" width="300" height="247"></a> <!-- Project Image-->
-        </section>
+            <div class="row">
 
-        <section id="ProjectSixText">   <!-- Project One Text-->
-          <h3><a href="projects/pivottables-09272020.html" class="projectTitle">Blog Update and Python for Pivot Tables</a></h3> <!-- Project Title-->
-          <p class="date">September 27, 2020</p> <!-- Date-->
-          <p class="projectP">Personal blog update and illustrating how to use Python for Excel's pivot tables.</p>
-          <!-- Brief Summary-->
-        </section>
-      </article>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body bitcoinProj">
+                    <img src="images/icons/bitcoin.png" alt="Bitcoin Regression Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Bitcoin Regression</h5>
+                  </div>
+                </div>
+              </div>
 
-      <!-- Flex Dashboard Example-->
-      <article id="ProjectFive">
-        <section class="special">
-          <a href="projects/flexDashboard-03242020.html"><img src="images/Dashboard.PNG" alt="Project Five" width="300" height="247"></a> <!-- Project Image-->
-        </section>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body stockProj">
+                    <img src="images/icons/stockAnalysis.png" alt="Stock Analysis with Highcharter Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Stock Analysis with Highcharter</h5>
+                  </div>
+                </div>
+              </div>
 
-        <section id="ProjectFiveText">   <!-- Project One Text-->
-          <h3><a href="projects/flexDashboard-03242020.html" class="projectTitle">Flex Dashboard</a></h3> <!-- Project Title-->
-          <p class="date">March 24, 2020</p> <!-- Date-->
-          <p class="projectP">This is reports illustrates an example of a flex dashboard on US Accident data, with an emphasis on Orange County, Florida.</p>
-          <!-- Brief Summary-->
-        </section>
-      </article>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body pdfExProj">
+                    <img src="images/icons/pdfEx.png" alt="Parsing PDF's with Regular Expressions Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Parsing PDF's with Regular Expressions</h5>
+                  </div>
+                </div>
+              </div>
 
-      <!-- Machine Learning with Random Forest on Wildfire Data-->
-      <article id="ProjectOne">
-        <section class="special">
-          <a href="projects/machineLearning-03022020.html"><img src="images/randomForest.PNG" alt="Project One" width="300" height="247"></a> <!-- Project Image-->
-        </section>
+            </div>
+          </div>
+          <div class="carousel-item">
 
-        <section id="ProjectOneText">   <!-- Project One Text-->
-          <h3><a href="projects/machineLearning-03022020.html" class="projectTitle">Machine Learning with Random Forest on Wildfire Data</a></h3> <!-- Project Title-->
-          <p class="date">March 2, 2020</p> <!-- Date-->
-          <p class="projectP">For this report, I will further my research on wildfire data that I explored with ggplot. This notebook will demonstrate using the machine learning tool called Random Forest. </p>
-          <!-- Brief Summary-->
-        </section>
-      </article>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body ptProj">
+                    <img src="images/icons/pivotTable.png" alt="Python for Pivot Tables Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Blog Update and Python for Pivot Tables</h5>
+                  </div>
+                </div>
+              </div>
 
-      <!-- Wildfire Analysis Part 2-->
-      <article id="ProjectTwo">
-        <section>
-          <a href="projects/wildfirePart2-02052020.html"><img src="images/leaflet.png" alt="Project One" width="300" height="171"></a>
-        </section>
-        <section id="ProjectTwoText">
-          <h3><a href="projects/wildfirePart2-02052020.html" class="projectTitle">Wildfire Analysis Part II</a></h3>
-          <p class="date">February 5, 2020</p>
-          <p class="projectP">For the second part of the Wildfire Analysis report, I implemented leaflet maps. Leaflet provides an interactive google map that provides the name of the fire, acres burned, cause, years, and days burned. </p>
-        </section>
-      </article>
-
-      <!-- Wildfire Analysis Part 1-->
-      <article id="ProjectThree">
-        <section>
-          <a href="projects/wildfirePart1-02052020.html"><img src="images/wildfire2.png" alt="Project One" width="300" height="214"></a>
-        </section>
-        <section id="ProjectThreeText">
-          <h3><a href="projects/wildfirePart1-02052020.html" class="projectTitle">Wildfire Analysis Part I</a></h3>
-          <p class="date">February 5, 2020</p>
-          <p class="projectP">For this first part of the report, I am exploring a dataset on the 1.88 million wildfires that occurred in the US from 1992-2015. I will briefly look at all the data then dive into large fires only. This means fires in class size F (1000-5000)acres burned and size G with is wildfires burning over 5000+ acres.</p>
-        </section>
-      </article>
-
-      <!-- Exploratory Analysis on Trending Videos-->
-      <article id="ProjectFour">
-        <section>
-          <a href="projects/youtube-01072019.html"><img src="images/youtube1.PNG" alt="Project One" width="300" height="200"></a>
-        </section>
-        <section id="ProjectFourText">
-          <h3><a href="projects/youtube-01072019.html" class="projectTitle">Exploratory Analysis on Trending Videos</a></h3>
-          <p class="date">January 7, 2019</p>
-          <p class="projectP">As a new vlogger and content creator with my girlfriend on Youtube, I took upon interest on doing an exploratory data analysis (EDA) project on Youtube's Trending videos.</p>
-        </section>
-      </article>
+              <div class="col-md-4">
+                <div class="card allProjects-work">
+                  <div class="card-body flexDashProj">
+                    <img src="images/icons/flexDash.png" alt="Flex Dashboard Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Flex Dashboard</h5>
+                  </div>
+                </div>
+              </div>
 
 
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body randomForestProj">
+                    <img src="images/icons/randomForest.png" alt="Machine Learning with Random Forest on Wildfire Data Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Machine Learning with Random Forest on Wildfire Data</h5>
+                  </div>
+                </div>
+              </div>
 
-    </section>
-  </main>
 
-  <!-- Footer-->
+            </div>
+          </div>
+
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body wf2Proj">
+                    <img src="images/icons/leaflet.png" alt="Wildfire Analysis Part II Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Wildfire Analysis Part II</h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body wf1Proj">
+                    <img src="images/icons/wildfire2.png" alt="Wildfire Analysis Part I Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Wildfire Analysis Part I</h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body ytProj">
+                    <img src="images/icons/youtube.png" alt="Exploratory Analysis on Trending Videos Image" width="325" class="images">
+                    <h5 class="card-title pt-2">Exploratory Analysis on Trending Videos</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- LEFT AND RIGHT ARROW BUTTONS -->
+        <a class="carousel-control-prev mt-n5" href="#carouselExampleControls" role="button" data-slide="prev">
+          <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next mt-n5" href="#carouselExampleControls" role="button" data-slide="next">
+          <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+    <!-- END: DESKTOP WORK NAVIGATION SECTION -->
+  </div>
+
+<!-- START: TABLET & MOBILE PROJECTS ICONS-->
+<div id="mobile-tablet">
+  <div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body bitcoinProj">
+        <img src="images/icons/bitcoin.png" alt="Bitcoin Regression Image" width="325" class="images">
+        <h5 class="card-title pt-2">Bitcoin Regression</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body stockProj">
+        <img src="images/icons/stockAnalysis.png" alt="Stock Analysis with Highcharter Image" width="325" class="images">
+        <h5 class="card-title pt-2">Stock Analysis with Highcharter</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body pdfExProj">
+      <img src="images/icons/pdfEx.png" alt="Parsing PDF's with Regular Expressions Image" width="325" class="images">
+      <h5 class="card-title pt-2">Parsing PDF's with Regular Expressions</h5>
+    </div>
+  </div>
+</div>
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body ptProj">
+      <img src="images/icons/pivotTable.png" alt="Python for Pivot Tables Image" width="325" class="images">
+      <h5 class="card-title pt-2">Blog Update and Python for Pivot Tables</h5>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body flexDashProj">
+      <img src="images/icons/flexDash.png" alt="Flex Dashboard Image" width="325" class="images">
+      <h5 class="card-title pt-2">Flex Dashboard</h5>
+    </div>
+  </div>
+</div>
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body randomForestProj">
+      <img src="images/icons/randomForest.png" alt="Machine Learning with Random Forest on Wildfire Data Image" width="325" class="images">
+      <h5 class="card-title pt-2">Machine Learning with Random Forest on Wildfire Data</h5>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body wf2Proj">
+      <img src="images/icons/leaflet.png" alt="Wildfire Analysis Part II Image" width="325" class="images">
+      <h5 class="card-title pt-2">Wildfire Analysis Part II</h5>
+    </div>
+  </div>
+</div>
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body wf1Proj">
+      <img src="images/icons/wildfire2.png" alt="Wildfire Analysis Part I Image" width="325" class="images">
+      <h5 class="card-title pt-2">Wildfire Analysis Part I</h5>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body ytProj">
+      <img src="images/icons/youtube.png" alt="Exploratory Analysis on Trending Videos Image" width="325" class="images">
+      <h5 class="card-title pt-2">Exploratory Analysis on Trending Videos</h5>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!-- END: TABLET & MOBILE PROJECTS ICONS-->
+
+  <!-- ************* END: DESKTOP MAIN PAGE ************* -->
+
+  <!-- ************* FOOTER ************* -->
   <footer>
+    <p class="m-2">WEBSITE MADE BY <a href="https://angcim.github.io/acportfolio/">ANGELIKA CIMENE ©</a></p>
   </footer>
+
+  <!-- ************* JS FILES ************* -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
 </body>
 
