@@ -1,7 +1,7 @@
-# World panel — EDA report
+# World panel â€” EDA report
 
 - Countries (N): **217**
-- Years: **1995–2024**
+- Years: **1995â€“2024**
 - Indicators: **38**
 - Cross-sectional snapshot year (best coverage): **2023**
 - Panel structure (T = years observed per country): min **30**, median **30**, max **30** (balanced panel)
