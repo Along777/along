@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local RAG over a 148-Book Library — Project Portfolio</title>
+<style>
+  :root {
+    --bg:        #0d1117;
+    --panel:     #161b22;
+    --panel-2:   #1c2330;
+    --border:    #2b3444;
+    --text:      #e6edf3;
+    --muted:     #9aa7b4;
+    --accent:    #58a6ff;
+    --accent-2:  #7ee787;
+    --violet:    #d2a8ff;
+    --warn:      #f0b866;
+    --red:       #ff7b72;
+    --code-bg:   #0b1020;
+    --radius:    14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 20% -10%, #16263f 0%, var(--bg) 55%) fixed;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* Hero */
+  header.hero { padding: 66px 0 24px; text-align: center; }
+  .badge {
+    display: inline-block; font-size: 12px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent-2);
+    border: 1px solid var(--border); background: var(--panel);
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 0 0 16px;
+    background: linear-gradient(90deg, #e6edf3, #58a6ff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { font-size: 19px; color: var(--muted); max-width: 760px; margin: 0 auto; }
+  .pills { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .pill {
+    font-size: 13px; color: var(--text); background: var(--panel-2);
+    border: 1px solid var(--border); padding: 7px 13px; border-radius: 999px;
+  }
+  .pill b { color: var(--accent-2); font-weight: 600; }
+
+  /* Skills band */
+  .skills-band {
+    margin-top: 34px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px;
+  }
+  .skills-band h4 { margin: 0 0 12px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: center; }
+  .tags { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; }
+  .tag-chip {
+    font-size: 13px; font-weight: 600; padding: 6px 13px; border-radius: 8px;
+    background: rgba(88,166,255,.10); border: 1px solid rgba(88,166,255,.28); color: #bcd9ff;
+  }
+
+  /* TOC */
+  .toc { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 24px; margin-top: 22px; }
+  .toc h4 { margin: 0 0 10px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  .toc li { margin: 5px 0; }
+  .toc a { color: var(--text); text-decoration: none; }
+  .toc a:hover { color: var(--accent); }
+
+  /* Sections */
+  section { margin-top: 60px; }
+  h2 { font-size: 26px; margin: 0 0 6px; display: flex; align-items: center; gap: 12px; scroll-margin-top: 20px; }
+  h2 .num {
+    font-size: 15px; color: var(--bg); background: var(--accent);
+    width: 30px; height: 30px; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 700; flex: 0 0 auto;
+  }
+  h3 { font-size: 18px; margin: 30px 0 6px; color: var(--text); }
+  .lead { color: var(--muted); margin: 0 0 20px; font-size: 16px; }
+  p { margin: 12px 0; }
+  a { color: var(--accent); }
+
+  /* Problem/approach/result strip */
+  .par { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0 6px; }
+  .par .box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; }
+  .par .k { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 5px; }
+  .par .problem .k { color: var(--red); }
+  .par .approach .k { color: var(--accent); }
+  .par .result .k { color: var(--accent-2); }
+  .par .box p { margin: 0; font-size: 13.5px; }
+  @media (max-width: 720px){ .par { grid-template-columns: 1fr; } }
+
+  /* Callouts */
+  .why, .learn, .gotcha, .plain {
+    padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 14px 0;
+  }
+  .why { border-left: 3px solid var(--accent-2); background: rgba(126,231,135,.06); }
+  .why b { color: var(--accent-2); }
+  .learn { border-left: 3px solid var(--accent); background: rgba(88,166,255,.07); }
+  .learn b { color: var(--accent); }
+  .gotcha { border-left: 3px solid var(--warn); background: rgba(240,184,102,.07); }
+  .gotcha b { color: var(--warn); }
+  .plain { border-left: 3px solid var(--violet); background: rgba(210,168,255,.08); }
+  .plain b { color: var(--violet); }
+  .plain .ico { font-weight: 700; }
+
+  /* Figure / SVG containers */
+  figure { margin: 22px 0 8px; }
+  .figbox {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px; overflow-x: auto;
+  }
+  .figbox svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  figcaption { color: var(--muted); font-size: 13px; text-align: center; margin-top: 12px; }
+
+  /* Stack cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .card .tool { font-weight: 700; color: var(--accent); font-size: 15px; }
+  .card .role { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .card .why-mini { font-size: 13.5px; margin-top: 10px; color: var(--text); }
+
+  /* Code */
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.6;
+  }
+  code { font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace; }
+  pre code { color: #c9d5e3; }
+  .cmt { color: #6b7683; font-style: italic; }
+  .kw  { color: #ff7b72; }
+  .str { color: #a5d6ff; }
+  .fn  { color: #d2a8ff; }
+  .num2{ color: #79c0ff; }
+  .hl-good { color: #7ee787; }
+  .hl-bad  { color: #ff7b72; }
+  p code, li code, td code { background: var(--panel-2); padding: 2px 6px; border-radius: 5px; font-size: 12.5px; color: var(--accent-2); }
+
+  /* Log excerpt styling */
+  .logbox { position: relative; }
+  .logbox .logtag {
+    position: absolute; top: -10px; left: 16px; font-size: 11px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; padding: 2px 10px; border-radius: 6px;
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--accent-2);
+  }
+  .logbox pre { margin-top: 10px; }
+
+  ul.steps { padding-left: 0; list-style: none; margin: 16px 0; }
+  ul.steps li { position: relative; padding-left: 26px; margin: 9px 0; }
+  ul.steps li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* Before/after */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .ba .col { border-radius: 10px; padding: 14px 16px; font-size: 13.5px; }
+  .ba .bad  { background: rgba(255,123,114,.08); border: 1px solid rgba(255,123,114,.3); }
+  .ba .good { background: rgba(126,231,135,.07); border: 1px solid rgba(126,231,135,.3); }
+  .ba .tag { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 8px; }
+  .ba .bad .tag { color: var(--red); }
+  .ba .good .tag { color: var(--accent-2); }
+  @media (max-width: 680px){ .ba { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+
+  /* Footer / about */
+  hr.div { border: none; border-top: 1px solid var(--border); margin: 60px 0 0; }
+  .about { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px 28px; margin-top: 40px; }
+  .about h3 { margin: 0 0 8px; }
+  .about .contact { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .about .contact a, .about .contact span {
+    font-size: 13.5px; padding: 8px 14px; border-radius: 8px; text-decoration: none;
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+  }
+  footer { color: var(--muted); font-size: 13.5px; text-align: center; padding-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">Local RAG · Portfolio Project</span>
+    <h1>Teaching a Laptop-Scale AI to Read My Technical Library</h1>
+    <p class="sub">
+      I own 148 technical books from years of Humble Bundles — Python, data science, machine
+      learning, AI. This project turns those <b>~48,800 pages of PDFs</b> into a chatbot that
+      answers questions <b>from my actual books</b>, with citations, running <b>entirely on my
+      own laptop</b> — no cloud, no API bills, no data leaving the machine.
+    </p>
+    <div class="pills">
+      <span class="pill"><b>148</b> books · <b>48.8k</b> pages</span>
+      <span class="pill"><b>96,546</b> searchable chunks</span>
+      <span class="pill"><b>100%</b> local &amp; private</span>
+      <span class="pill"><b>$0</b> running cost</span>
+      <span class="pill"><b>3B</b> parameter model</span>
+    </div>
+
+    <div class="skills-band">
+      <h4>Skills &amp; Technologies Demonstrated</h4>
+      <div class="tags">
+        <span class="tag-chip">Python</span>
+        <span class="tag-chip">RAG Architecture</span>
+        <span class="tag-chip">LangGraph</span>
+        <span class="tag-chip">Vector Databases</span>
+        <span class="tag-chip">Hybrid Search (BM25 + Embeddings)</span>
+        <span class="tag-chip">Prompt Engineering</span>
+        <span class="tag-chip">Local LLMs (Ollama)</span>
+        <span class="tag-chip">ChromaDB</span>
+        <span class="tag-chip">Observability &amp; Debugging</span>
+        <span class="tag-chip">Gradio</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#overview">The big picture</a></li>
+      <li><a href="#rag">What RAG is &amp; why</a></li>
+      <li><a href="#stack">The stack, justified</a></li>
+      <li><a href="#pipeline">The request pipeline</a></li>
+      <li><a href="#ingest">Ingestion internals</a></li>
+      <li><a href="#retrieval">Hybrid retrieval &amp; RRF</a></li>
+      <li><a href="#grounding">Grounding &amp; guardrails</a></li>
+      <li><a href="#ui">The product (UI)</a></li>
+      <li><a href="#logs">Real session logs</a></li>
+      <li><a href="#debug">Debugging journal</a></li>
+      <li><a href="#run">Running it</a></li>
+      <li><a href="#learnings">Key learnings</a></li>
+    </ol>
+  </nav>
+
+  <!-- ===================== OVERVIEW + ARCHITECTURE DIAGRAM ===================== -->
+  <section id="overview">
+    <h2>The big picture</h2>
+    <p class="lead">The whole system, end to end — from a folder of PDFs to a chatbot answering
+      questions in the browser.</p>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 920 340" role="img" aria-label="End-to-end architecture diagram">
+          <defs>
+            <marker id="ah" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L8,3 L0,6 Z" fill="#58a6ff"/>
+            </marker>
+            <marker id="ah2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L8,3 L0,6 Z" fill="#7ee787"/>
+            </marker>
+            <style>
+              .bx{fill:#1c2330;stroke:#2b3444;stroke-width:1.5;}
+              .lbl{fill:#e6edf3;font:600 14px -apple-system,Segoe UI,sans-serif;}
+              .sub{fill:#9aa7b4;font:12px -apple-system,Segoe UI,sans-serif;}
+              .cap{fill:#7ee787;font:700 11px -apple-system,Segoe UI,sans-serif;letter-spacing:.06em;}
+              .ln{stroke:#58a6ff;stroke-width:2;fill:none;}
+            </style>
+          </defs>
+
+          <!-- Stage 1: Books -->
+          <text x="70" y="30" class="cap">SOURCE</text>
+          <rect class="bx" x="20" y="42" width="140" height="86" rx="10"/>
+          <text x="90" y="78" text-anchor="middle" class="lbl">books/</text>
+          <text x="90" y="98" text-anchor="middle" class="sub">148 PDFs</text>
+          <text x="90" y="114" text-anchor="middle" class="sub">10 bundles · 48.8k pages</text>
+
+          <!-- Stage 2: Ingest -->
+          <text x="235" y="30" class="cap">INGEST (one-time)</text>
+          <rect class="bx" x="200" y="42" width="150" height="86" rx="10"/>
+          <text x="275" y="72" text-anchor="middle" class="lbl">ingest_books.py</text>
+          <text x="275" y="92" text-anchor="middle" class="sub">PyMuPDF → chunk</text>
+          <text x="275" y="108" text-anchor="middle" class="sub">1200/300 + metadata</text>
+
+          <!-- Stage 3: two indexes -->
+          <text x="470" y="30" class="cap">INDEXES</text>
+          <rect class="bx" x="400" y="42" width="150" height="40" rx="8"/>
+          <text x="475" y="60" text-anchor="middle" class="lbl">ChromaDB · vectors</text>
+          <text x="475" y="76" text-anchor="middle" class="sub">96,546 chunks · 2.3 GB</text>
+          <rect class="bx" x="400" y="90" width="150" height="38" rx="8"/>
+          <text x="475" y="114" text-anchor="middle" class="lbl">BM25 · keywords</text>
+
+          <!-- Stage 4: pipeline -->
+          <text x="640" y="30" class="cap">LANGGRAPH PIPELINE</text>
+          <rect class="bx" x="600" y="42" width="300" height="86" rx="10"/>
+          <text x="750" y="70" text-anchor="middle" class="lbl">rewrite → retrieve → generate → verify</text>
+          <text x="750" y="92" text-anchor="middle" class="sub">qwen2.5:3b · hybrid search · citation guard</text>
+          <text x="750" y="110" text-anchor="middle" class="sub">persistent memory (SQLite)</text>
+
+          <!-- Stage 5: UI -->
+          <text x="360" y="210" class="cap">INTERFACES</text>
+          <rect class="bx" x="330" y="222" width="120" height="60" rx="10"/>
+          <text x="390" y="250" text-anchor="middle" class="lbl">CLI chat</text>
+          <text x="390" y="268" text-anchor="middle" class="sub">terminal</text>
+          <rect class="bx" x="470" y="222" width="150" height="60" rx="10"/>
+          <text x="545" y="250" text-anchor="middle" class="lbl">Gradio web UI</text>
+          <text x="545" y="268" text-anchor="middle" class="sub">localhost:7860</text>
+
+          <!-- Arrows -->
+          <path class="ln" d="M160,85 L198,85" marker-end="url(#ah)"/>
+          <path class="ln" d="M350,85 L398,85" marker-end="url(#ah)"/>
+          <path class="ln" d="M550,85 L598,85" marker-end="url(#ah)"/>
+          <path class="ln" d="M750,128 L750,180 L545,180 L545,220" marker-end="url(#ah)"/>
+          <path class="ln" d="M700,150 L390,150 L390,220" marker-end="url(#ah)"/>
+        </svg>
+      </div>
+      <figcaption>Figure 1 — Data flows left to right: 148 PDFs are ingested once into two search indexes (96,546 chunks), then every question runs through the LangGraph pipeline and back to the user.</figcaption>
+    </figure>
+
+    <div class="plain">
+      <span class="ico">🧭 In plain English:</span> Think of it like a research assistant who has
+      read all my books. When I ask a question, it first <b>finds the relevant pages</b>, then
+      <b>writes an answer using only those pages</b> — and tells me which book each fact came from,
+      so it can't just make things up.
+    </div>
+  </section>
+
+  <!-- ===================== WHAT IS RAG ===================== -->
+  <section id="rag">
+    <h2>What RAG is, and why it beats a bigger model here</h2>
+    <p class="lead">
+      Retrieval-Augmented Generation: instead of trusting a small model's memory, we <em>look up</em>
+      the exact pages from my own books, put them in front of the model, and let it answer only from
+      that supplied text — with citations.
+    </p>
+
+    <div class="par">
+      <div class="box problem"><div class="k">Problem</div><p>A small local model doesn't "know" much and invents confident, wrong answers.</p></div>
+      <div class="box approach"><div class="k">Approach</div><p>Split the job: a retriever finds facts, the model only rewords them fluently.</p></div>
+      <div class="box result"><div class="k">Result</div><p>A 3B model punches far above its weight, and every claim is traceable to a page.</p></div>
+    </div>
+
+    <p>The core idea is a separation of concerns. The <b>retriever</b> owns <em>facts</em>; the
+      <b>LLM</b> owns <em>fluency</em>. Because the model never has to recall anything — it just
+      paraphrases text placed directly in front of it — a tiny model becomes genuinely useful.</p>
+
+    <div class="why">
+      <b>Why not fine-tune, or run a 70B model?</b> Fine-tuning bakes knowledge into weights
+      (expensive, static, painful to update when I add books). A 70B model won't fit comfortably on a
+      laptop. RAG keeps knowledge as swappable data on disk, runs on hardware I own, updates instantly
+      on re-ingest, and gives a provenance trail for every answer.
+    </div>
+  </section>
+
+  <!-- ===================== STACK ===================== -->
+  <section id="stack">
+    <h2>The stack — and the reasoning behind each choice</h2>
+    <p class="lead">Everything open-source, everything local through <a href="https://ollama.com">Ollama</a>.</p>
+    <div class="grid">
+      <div class="card"><div class="tool">qwen2.5:3b</div><div class="role">Chat / reasoning LLM · ~1.9 GB</div>
+        <div class="why-mini"><b>Why:</b> the sweet spot of the Qwen2.5 family for a laptop — strong
+          instruction-following at a size that stays resident in memory and answers in seconds.</div></div>
+      <div class="card"><div class="tool">nomic-embed-text</div><div class="role">Embedding model</div>
+        <div class="why-mini"><b>Why:</b> an open, locally-runnable embedder with a long context window,
+          well-suited to dense technical prose and code.</div></div>
+      <div class="card"><div class="tool">ChromaDB</div><div class="role">Persistent vector store</div>
+        <div class="why-mini"><b>Why:</b> embedded, file-backed, no server to run. Embed once, query
+          forever. Metadata travels with every vector.</div></div>
+      <div class="card"><div class="tool">rank_bm25</div><div class="role">Lexical (keyword) search</div>
+        <div class="why-mini"><b>Why:</b> pure-Python, in-memory BM25. Vectors miss literal tokens
+          (<code>sklearn</code>, <code>argmax</code>); BM25 scores them exactly.</div></div>
+      <div class="card"><div class="tool">LangGraph</div><div class="role">Pipeline orchestration</div>
+        <div class="why-mini"><b>Why:</b> models the flow as an explicit graph over a typed state. Trivial
+          to insert a new step and attach a persistent checkpointer.</div></div>
+      <div class="card"><div class="tool">PyMuPDF</div><div class="role">PDF text extraction</div>
+        <div class="why-mini"><b>Why:</b> fast, accurate, page-level extraction with page numbers
+          preserved — the metadata that later powers citations.</div></div>
+      <div class="card"><div class="tool">Gradio</div><div class="role">Browser chat UI</div>
+        <div class="why-mini"><b>Why:</b> a production-feeling web chat in ~90 lines, session state and
+          streaming baked in. No frontend build step.</div></div>
+      <div class="card"><div class="tool">SqliteSaver + logs</div><div class="role">Memory &amp; observability</div>
+        <div class="why-mini"><b>Why:</b> conversation survives restarts, and every turn is logged as a
+          full trace so answer quality is debuggable from evidence.</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PIPELINE (SVG) ===================== -->
+  <section id="pipeline">
+    <h2>How one question flows through the system</h2>
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 900 200" role="img" aria-label="Four-node pipeline diagram">
+          <!-- nodes -->
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- 1 -->
+            <rect x="18" y="60" width="190" height="80" rx="12" fill="#161b22" stroke="#2b3444"/>
+            <circle cx="48" cy="90" r="15" fill="rgba(88,166,255,.15)" stroke="#58a6ff"/>
+            <text x="48" y="95" text-anchor="middle" fill="#58a6ff" font-weight="700" font-size="14">1</text>
+            <text x="72" y="88" fill="#e6edf3" font-weight="700" font-size="14">rewrite_query</text>
+            <text x="72" y="108" fill="#9aa7b4" font-size="11.5">make follow-ups</text>
+            <text x="72" y="123" fill="#9aa7b4" font-size="11.5">standalone</text>
+            <!-- 2 -->
+            <rect x="238" y="60" width="190" height="80" rx="12" fill="#161b22" stroke="#2b3444"/>
+            <circle cx="268" cy="90" r="15" fill="rgba(88,166,255,.15)" stroke="#58a6ff"/>
+            <text x="268" y="95" text-anchor="middle" fill="#58a6ff" font-weight="700" font-size="14">2</text>
+            <text x="292" y="88" fill="#e6edf3" font-weight="700" font-size="14">retrieve</text>
+            <text x="292" y="108" fill="#9aa7b4" font-size="11.5">vector + BM25</text>
+            <text x="292" y="123" fill="#9aa7b4" font-size="11.5">fused by RRF</text>
+            <!-- 3 -->
+            <rect x="458" y="60" width="190" height="80" rx="12" fill="#161b22" stroke="#2b3444"/>
+            <circle cx="488" cy="90" r="15" fill="rgba(88,166,255,.15)" stroke="#58a6ff"/>
+            <text x="488" y="95" text-anchor="middle" fill="#58a6ff" font-weight="700" font-size="14">3</text>
+            <text x="512" y="88" fill="#e6edf3" font-weight="700" font-size="14">generate</text>
+            <text x="512" y="108" fill="#9aa7b4" font-size="11.5">answer from</text>
+            <text x="512" y="123" fill="#9aa7b4" font-size="11.5">retrieved pages</text>
+            <!-- 4 -->
+            <rect x="678" y="60" width="204" height="80" rx="12" fill="#161b22" stroke="#2b3444"/>
+            <circle cx="708" cy="90" r="15" fill="rgba(126,231,135,.15)" stroke="#7ee787"/>
+            <text x="708" y="95" text-anchor="middle" fill="#7ee787" font-weight="700" font-size="14">4</text>
+            <text x="732" y="88" fill="#e6edf3" font-weight="700" font-size="14">verify_citations</text>
+            <text x="732" y="108" fill="#9aa7b4" font-size="11.5">redact unverified</text>
+            <text x="732" y="123" fill="#9aa7b4" font-size="11.5">book titles</text>
+          </g>
+          <path d="M208,100 L236,100" stroke="#7ee787" stroke-width="2" marker-end="url(#ah2)"/>
+          <path d="M428,100 L456,100" stroke="#7ee787" stroke-width="2" marker-end="url(#ah2)"/>
+          <path d="M648,100 L676,100" stroke="#7ee787" stroke-width="2" marker-end="url(#ah2)"/>
+        </svg>
+      </div>
+      <figcaption>Figure 2 — Each stage neutralises a specific failure mode of a small local model.</figcaption>
+    </figure>
+    <pre><code><span class="cmt"># the whole graph, wired in a line and compiled with persistent memory</span>
+workflow.<span class="fn">add_edge</span>(START, <span class="str">"rewrite_query"</span>)
+workflow.<span class="fn">add_edge</span>(<span class="str">"rewrite_query"</span>, <span class="str">"retrieve"</span>)
+workflow.<span class="fn">add_edge</span>(<span class="str">"retrieve"</span>, <span class="str">"generate"</span>)
+workflow.<span class="fn">add_edge</span>(<span class="str">"generate"</span>, <span class="str">"verify_citations"</span>)
+app = workflow.<span class="fn">compile</span>(checkpointer=SqliteSaver.<span class="fn">from_conn_string</span>(DB).<span class="fn">__enter__</span>())</code></pre>
+  </section>
+
+  <!-- ===================== INGEST ===================== -->
+  <section id="ingest">
+    <h2><span class="num">1</span> Ingestion internals</h2>
+    <p class="lead"><code>ingest_books.py</code> — run once, and again whenever books are added.
+      On my library: 148 PDFs → 48,779 pages → <b>96,546 chunks</b>.</p>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 860 250" role="img" aria-label="Chunking and metadata diagram">
+          <!-- page -->
+          <rect x="20" y="40" width="150" height="180" rx="8" fill="#161b22" stroke="#2b3444"/>
+          <text x="95" y="30" text-anchor="middle" fill="#9aa7b4" font-size="12" font-family="sans-serif">1 PDF page</text>
+          <g stroke="#2b3444"><line x1="38" y1="66" x2="152" y2="66"/><line x1="38" y1="84" x2="152" y2="84"/>
+          <line x1="38" y1="102" x2="152" y2="102"/><line x1="38" y1="120" x2="152" y2="120"/>
+          <line x1="38" y1="138" x2="152" y2="138"/><line x1="38" y1="156" x2="152" y2="156"/>
+          <line x1="38" y1="174" x2="152" y2="174"/><line x1="38" y1="192" x2="152" y2="192"/></g>
+
+          <path d="M176,130 L214,130" stroke="#58a6ff" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="195" y="120" text-anchor="middle" fill="#9aa7b4" font-size="10" font-family="sans-serif">split</text>
+
+          <!-- chunks with overlap -->
+          <g font-family="sans-serif">
+            <rect x="230" y="46" width="250" height="52" rx="7" fill="rgba(88,166,255,.10)" stroke="#58a6ff"/>
+            <text x="244" y="76" fill="#bcd9ff" font-size="12" font-weight="600">chunk 1  ·  ~1200 chars</text>
+            <rect x="230" y="92" width="250" height="52" rx="7" fill="rgba(126,231,135,.09)" stroke="#7ee787"/>
+            <text x="244" y="122" fill="#9be6a8" font-size="12" font-weight="600">chunk 2  (300-char overlap)</text>
+            <rect x="230" y="138" width="250" height="52" rx="7" fill="rgba(88,166,255,.10)" stroke="#58a6ff"/>
+            <text x="244" y="168" fill="#bcd9ff" font-size="12" font-weight="600">chunk 3</text>
+          </g>
+          <!-- overlap brace -->
+          <rect x="230" y="92" width="250" height="6" fill="#7ee787" opacity=".35"/>
+
+          <path d="M486,118 L524,118" stroke="#58a6ff" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="505" y="108" text-anchor="middle" fill="#9aa7b4" font-size="10" font-family="sans-serif">tag</text>
+
+          <!-- metadata card -->
+          <g font-family="sans-serif">
+            <rect x="540" y="60" width="300" height="130" rx="8" fill="#161b22" stroke="#2b3444"/>
+            <text x="560" y="84" fill="#e6edf3" font-size="13" font-weight="700">metadata attached to each chunk</text>
+            <text x="560" y="108" fill="#7ee787" font-size="12" font-family="monospace">book_title</text>
+            <text x="700" y="108" fill="#9aa7b4" font-size="12" font-family="monospace">"practicaldeeplearning"</text>
+            <text x="560" y="130" fill="#7ee787" font-size="12" font-family="monospace">category</text>
+            <text x="700" y="130" fill="#9aa7b4" font-size="12" font-family="monospace">"No Starch"</text>
+            <text x="560" y="152" fill="#7ee787" font-size="12" font-family="monospace">page</text>
+            <text x="700" y="152" fill="#9aa7b4" font-size="12" font-family="monospace">163</text>
+            <text x="560" y="174" fill="#7ee787" font-size="12" font-family="monospace">chunk_index</text>
+            <text x="700" y="174" fill="#9aa7b4" font-size="12" font-family="monospace">398 / 1442</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Figure 3 — Pages are split into overlapping chunks; every one of the 96,546 chunks carries the metadata that powers citations like "practicaldeeplearning (p. 163)".</figcaption>
+    </figure>
+
+    <div class="plain">
+      <span class="ico">🧭 In plain English:</span> Books are too big to hand to the AI whole, so they're
+      sliced into page-sized snippets. Each snippet keeps a little label saying which book and page it
+      came from — that's what lets every answer cite its source.
+    </div>
+
+    <h3>Chunking — the part that decides quality</h3>
+    <pre><code>splitter = <span class="fn">RecursiveCharacterTextSplitter</span>(
+    chunk_size=<span class="num2">1200</span>, chunk_overlap=<span class="num2">300</span>,
+    separators=[
+        <span class="str">"\n```"</span>, <span class="str">"```\n"</span>,   <span class="cmt"># prefer breaking AT code-fence edges</span>
+        <span class="str">"\n\n\n"</span>, <span class="str">"\n\n"</span>,   <span class="cmt"># then paragraph boundaries</span>
+        <span class="str">"\n"</span>, <span class="str">". "</span>, <span class="str">" "</span>, <span class="str">""</span>,  <span class="cmt"># then lines, sentences, words</span>
+    ],
+)</code></pre>
+    <div class="why">
+      <b>Why the code-fence separators?</b> The splitter tries separators in order and only drops to a
+      lower one when a chunk is still too big. Putting <code>```</code> boundaries first means it
+      prefers to cut at the edge of a code block rather than slice a Python example in half — critical
+      when the whole library is programming books.
+    </div>
+  </section>
+
+  <!-- ===================== RETRIEVAL ===================== -->
+  <section id="retrieval">
+    <h2><span class="num">2</span> Hybrid retrieval &amp; Reciprocal Rank Fusion</h2>
+    <p class="lead"><code>rag_chatbot.py</code> — the heart of retrieval quality.</p>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 860 280" role="img" aria-label="Reciprocal Rank Fusion diagram">
+          <g font-family="sans-serif">
+            <!-- Vector list -->
+            <text x="120" y="30" text-anchor="middle" fill="#58a6ff" font-weight="700" font-size="13">Vector search</text>
+            <text x="120" y="46" text-anchor="middle" fill="#9aa7b4" font-size="11">(meaning)</text>
+            <rect x="40" y="58" width="160" height="30" rx="6" fill="rgba(88,166,255,.14)" stroke="#58a6ff"/><text x="52" y="78" fill="#bcd9ff" font-size="12">1 · doc A</text>
+            <rect x="40" y="92" width="160" height="30" rx="6" fill="rgba(88,166,255,.10)" stroke="#2b3444"/><text x="52" y="112" fill="#c9d5e3" font-size="12">2 · doc B</text>
+            <rect x="40" y="126" width="160" height="30" rx="6" fill="rgba(88,166,255,.07)" stroke="#2b3444"/><text x="52" y="146" fill="#c9d5e3" font-size="12">3 · doc C</text>
+
+            <!-- BM25 list -->
+            <text x="120" y="188" text-anchor="middle" fill="#f0b866" font-weight="700" font-size="13">BM25 search</text>
+            <text x="120" y="204" text-anchor="middle" fill="#9aa7b4" font-size="11">(exact keywords)</text>
+            <rect x="40" y="214" width="160" height="30" rx="6" fill="rgba(240,184,102,.14)" stroke="#f0b866"/><text x="52" y="234" fill="#f4cf97" font-size="12">1 · doc B</text>
+            <rect x="40" y="248" width="160" height="26" rx="6" fill="rgba(240,184,102,.08)" stroke="#2b3444"/><text x="52" y="266" fill="#c9d5e3" font-size="12">2 · doc D</text>
+
+            <!-- fusion box -->
+            <rect x="300" y="120" width="200" height="70" rx="10" fill="#1c2330" stroke="#7ee787"/>
+            <text x="400" y="150" text-anchor="middle" fill="#7ee787" font-weight="700" font-size="14">RRF merge</text>
+            <text x="400" y="172" text-anchor="middle" fill="#9aa7b4" font-size="11" font-family="monospace">score += 1/(k+rank)</text>
+
+            <!-- arrows in -->
+            <path d="M200,100 C260,100 250,150 298,150" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+            <path d="M200,232 C260,232 250,165 298,162" stroke="#f0b866" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+
+            <!-- fused list -->
+            <text x="660" y="90" text-anchor="middle" fill="#7ee787" font-weight="700" font-size="13">Fused result</text>
+            <rect x="580" y="102" width="170" height="32" rx="6" fill="rgba(126,231,135,.18)" stroke="#7ee787"/><text x="594" y="123" fill="#9be6a8" font-size="12" font-weight="700">doc B  (top of both)</text>
+            <rect x="580" y="138" width="170" height="30" rx="6" fill="rgba(126,231,135,.10)" stroke="#2b3444"/><text x="594" y="158" fill="#c9d5e3" font-size="12">doc A</text>
+            <rect x="580" y="172" width="170" height="30" rx="6" fill="rgba(126,231,135,.08)" stroke="#2b3444"/><text x="594" y="192" fill="#c9d5e3" font-size="12">doc C</text>
+            <rect x="580" y="206" width="170" height="28" rx="6" fill="rgba(126,231,135,.06)" stroke="#2b3444"/><text x="594" y="225" fill="#c9d5e3" font-size="12">doc D</text>
+
+            <path d="M500,155 C540,155 545,150 578,140" stroke="#7ee787" stroke-width="2" fill="none" marker-end="url(#ah2)"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Figure 4 — Two searches run in parallel over the 96,546-chunk corpus. "doc B" ranks highly in <em>both</em>, so fusion floats it to the top.</figcaption>
+    </figure>
+
+    <div class="plain">
+      <span class="ico">🧭 In plain English:</span> One search understands <em>meaning</em> ("plotting a
+      distribution" ≈ "drawing a histogram"). The other matches <em>exact words</em> (a library name
+      like <code>sklearn</code>). Running both and combining them catches results either one alone
+      would miss.
+    </div>
+
+    <h3>The RRF formula</h3>
+    <pre><code><span class="kw">def</span> <span class="fn">reciprocal_rank_fusion</span>(list1, list2, k=<span class="num2">60</span>):
+    scores, doc_map = {}, {}
+    <span class="kw">for</span> ranked <span class="kw">in</span> (list1, list2):
+        <span class="kw">for</span> rank, doc <span class="kw">in</span> <span class="fn">enumerate</span>(ranked):
+            key = doc.page_content[:<span class="num2">120</span>]          <span class="cmt"># dedup key: content prefix</span>
+            scores[key] = scores.<span class="fn">get</span>(key, <span class="num2">0</span>) + <span class="num2">1</span> / (k + rank + <span class="num2">1</span>)
+            doc_map[key] = doc
+    <span class="kw">return</span> [doc_map[k] <span class="kw">for</span> k <span class="kw">in</span> <span class="fn">sorted</span>(scores, key=<span class="kw">lambda</span> x: scores[x], reverse=<span class="kw">True</span>)]</code></pre>
+    <div class="why">
+      <b>Why RRF instead of blending raw scores?</b> Cosine similarity and BM25 scores live on totally
+      different scales — you can't just add them. RRF discards the magnitudes and keeps only the
+      <em>ranks</em>, so no normalisation or hand-tuned weight is needed. <code>k=60</code> (from the
+      original RRF paper) softens the gap between ranks so one index can't wholly dominate.
+    </div>
+  </section>
+
+  <!-- ===================== GROUNDING ===================== -->
+  <section id="grounding">
+    <h2><span class="num">3</span> Grounding &amp; guardrails</h2>
+    <div class="par">
+      <div class="box problem"><div class="k">Problem</div><p>Small models invent book titles and answer from training data, not my library.</p></div>
+      <div class="box approach"><div class="k">Approach</div><p>An explicit source allow-list in the prompt, plus a deterministic post-check.</p></div>
+      <div class="box result"><div class="k">Result</div><p>Answers cite only books actually retrieved; anything else is redacted in code.</p></div>
+    </div>
+
+    <h3>The anti-hallucination context header</h3>
+    <p>Retrieved chunks are formatted with an explicit list of titles the model may cite — the single
+      source of truth for what "exists":</p>
+    <pre><code>sources_header = (
+    <span class="str">"Available Sources (ONLY cite titles from this exact list):\n"</span>
+    + <span class="str">"\n"</span>.<span class="fn">join</span>(<span class="str">f"- {t}"</span> <span class="kw">for</span> t <span class="kw">in</span> <span class="fn">sorted</span>(book_titles))
+)</code></pre>
+
+    <h3>The deterministic citation verifier</h3>
+    <p>After generation, a non-LLM node checks the answer. A quoted string only counts as a book
+      citation when it appears in <em>citation context</em> (after words like <em>book, titled,
+      guide</em>) — and when one fails the check, only the title is redacted; the answer survives:</p>
+    <pre><code><span class="cmt"># Ignore code first — string literals in code are never citations</span>
+prose_only = re.<span class="fn">sub</span>(<span class="str">r'```.*?```'</span>, <span class="str">' '</span>, answer, flags=re.DOTALL)
+
+<span class="cmt"># A quote is a citation ONLY in citation context ('the book "X"', 'titled "Y"')</span>
+cite_pattern = <span class="str">r'(?:book|titled|guide|primer|reference)\s+["“]([^"”]{10,100})["”]'</span>
+candidates = re.<span class="fn">findall</span>(cite_pattern, prose_only, flags=re.IGNORECASE)
+
+<span class="cmt"># Redact unverified titles — never nuke the whole answer</span>
+<span class="kw">for</span> bad <span class="kw">in</span> hallucinated:
+    answer = answer.<span class="fn">replace</span>(<span class="str">f'"{bad}"'</span>, <span class="str">"[title removed — not in retrieved sources]"</span>)</code></pre>
+    <div class="why">
+      <b>Why so surgical?</b> This design was earned the hard way. Earlier versions flagged <em>any</em>
+      quoted string and replaced the whole answer with a refusal — and the trace logs proved every
+      single flag was a false positive (see the debugging journal below). Prompts nudge; code enforces;
+      and the enforcement itself has to be tested against real transcripts.
+    </div>
+  </section>
+
+  <!-- ===================== UI MOCKUP ===================== -->
+  <section id="ui">
+    <h2><span class="num">4</span> The product — what the user sees</h2>
+    <p class="lead"><code>rag_ui.py</code> wraps the whole pipeline in a Gradio browser chat.</p>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 720 430" role="img" aria-label="Mockup of the Gradio chat interface">
+          <!-- window -->
+          <rect x="10" y="10" width="700" height="410" rx="12" fill="#0f141c" stroke="#2b3444"/>
+          <rect x="10" y="10" width="700" height="40" rx="12" fill="#161b22" stroke="#2b3444"/>
+          <circle cx="34" cy="30" r="6" fill="#ff5f56"/><circle cx="54" cy="30" r="6" fill="#ffbd2e"/><circle cx="74" cy="30" r="6" fill="#27c93f"/>
+          <text x="360" y="35" text-anchor="middle" fill="#9aa7b4" font-size="12" font-family="sans-serif">Technical Books RAG — localhost:7860</text>
+
+          <g font-family="sans-serif">
+            <!-- user bubble -->
+            <rect x="330" y="66" width="360" height="40" rx="10" fill="rgba(88,166,255,.16)" stroke="#58a6ff"/>
+            <text x="350" y="90" fill="#dcecff" font-size="13">How do I do a logistic regression in Python?</text>
+
+            <!-- assistant bubble -->
+            <rect x="30" y="120" width="500" height="150" rx="10" fill="#161b22" stroke="#2b3444"/>
+            <text x="48" y="146" fill="#e6edf3" font-size="13">Use <tspan font-family="monospace" fill="#7ee787">LogisticRegression</tspan> from</text>
+            <text x="48" y="166" fill="#e6edf3" font-size="13"><tspan font-family="monospace" fill="#7ee787">sklearn.linear_model</tspan>. Fit it on your feature</text>
+            <text x="48" y="186" fill="#e6edf3" font-size="13">matrix X and labels y, then call .predict():</text>
+            <rect x="48" y="198" width="440" height="58" rx="6" fill="#0b1020" stroke="#2b3444"/>
+            <text x="62" y="218" font-family="monospace" font-size="12" fill="#ff7b72">from <tspan fill="#c9d5e3">sklearn.linear_model </tspan><tspan fill="#ff7b72">import</tspan><tspan fill="#c9d5e3"> LogisticRegression</tspan></text>
+            <text x="62" y="236" font-family="monospace" font-size="12" fill="#c9d5e3">model = LogisticRegression().fit(X, y)</text>
+            <text x="62" y="250" font-family="monospace" font-size="12" fill="#c9d5e3">preds = model.predict(X)</text>
+
+            <!-- sources panel -->
+            <rect x="30" y="284" width="660" height="120" rx="10" fill="rgba(126,231,135,.05)" stroke="#2b3444"/>
+            <text x="48" y="308" fill="#7ee787" font-size="12" font-weight="700">SOURCES RETRIEVED</text>
+            <text x="48" y="332" fill="#c9d5e3" font-size="12.5">• practicalstatisticsfordatascientists (p. 225) [O'Reilly] chunk 481/776</text>
+            <text x="48" y="354" fill="#c9d5e3" font-size="12.5">• python3formachinelearning (p. 222) [Mercury] chunk 393/665</text>
+            <text x="48" y="376" fill="#c9d5e3" font-size="12.5">• machinelearningpocketreference (p. 121) [O'Reilly] chunk 152/388</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Figure 5 — The Gradio UI: a grounded answer with a working code snippet, and every book that was consulted listed underneath for full transparency.</figcaption>
+    </figure>
+
+    <ul class="steps">
+      <li>Clean browser chat at <code>localhost:7860</code> — no terminal needed.</li>
+      <li>Each browser session gets its own memory thread (a UUID), so conversations stay isolated.</li>
+      <li>The books used to answer are shown under every reply.</li>
+      <li>Every exchange is written to a per-session trace log.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== REAL LOGS ===================== -->
+  <section id="logs">
+    <h2>Real session logs</h2>
+    <p class="lead">Every turn writes a full trace: the rewritten query, every retrieved chunk with
+      book/page/position, the raw answer, and the verifier's decision. These are unedited excerpts
+      from my own sessions.</p>
+
+    <h3>A healthy turn, end to end</h3>
+    <p>Note the rewriter expanding "EDA" and the retrieval spanning four different books:</p>
+    <div class="logbox">
+      <span class="logtag">chat_logs/·····.log</span>
+      <pre><code>[2026-07-08 11:54:38] ==== Turn ====
+Question: Can you teach me how to do python with pandas for EDA
+Rewritten query: <span class="hl-good">How to use Python Pandas for Exploratory Data Analysis (EDA)</span>
+Retrieved (10 chunks):
+  - pythonforexcelusers (p. 36) [2026 - Python The Good Stuff by No Starch] chunk 112/818
+  - practicalstatisticsfordatascientists (p. 35) [2019 - Data Analysis &amp; ML by O'Reilly] chunk 92/776
+  - machinelearningpocketreference (p. 26) [2021 - Pocket Reference Guides by O'Reilly] chunk 38/388
+  - python3formachinelearning (p. 160) [2021 - Data Science &amp; Analytics by Mercury] chunk 265/665
+  ... (6 more)
+Citation check: no titles redacted
+Final answer: Certainly! Here's a step-by-step guide on how to use Python with
+Pandas for Exploratory Data Analysis (EDA)... [full 8-step tutorial with code]</code></pre>
+    </div>
+
+    <h3>The trace that caught a real bug</h3>
+    <p>This excerpt is why observability matters. The model gave a good, grounded answer about Claude —
+      quoting the phrase <em>"You're absolutely right"</em> directly from one of my Claude Code books.
+      The old verifier mistook that quoted phrase for a fabricated book title and destroyed the answer:</p>
+    <div class="logbox">
+      <span class="logtag">chat_logs/·····.log · before the fix</span>
+      <pre><code>[2026-07-08 11:53:22] ==== Turn ====
+Question: can you give me tips on using Claude
+Retrieved (10 chunks):
+  - 101claudecodetips abattle testedfieldguideforagenticcoding (p. 81) chunk 158/166
+  - claudecodeautomation mcpskillsandproductionagenticworkflows (p. 90) chunk 133/152
+  ... (8 more)
+Raw answer: Certainly! Here are some tips for using Claude based on the provided
+excerpts: 1. **Be precise**: Claude loves clear questions. ...
+4. **Check the diff when you see "You're absolutely right"**: Claude might be
+matching the conversational shape of agreement rather than agreeing...
+<span class="hl-bad">Citation check: stripped hallucinated title(s): ['You're absolutely right']</span>
+<span class="hl-bad">Final answer: I don't have information about that in the books I have access to.</span></code></pre>
+    </div>
+    <p>A good answer, wiped by an over-eager guardrail. The trace made the root cause obvious in
+      seconds: the verifier treated <em>every</em> quoted string as a book title. After the fix
+      (citation-context detection + redaction), the same question:</p>
+    <div class="logbox">
+      <span class="logtag">same question · after the fix</span>
+      <pre><code>Question: can you give me tips on using Claude
+Citation check: no titles redacted
+<span class="hl-good">Final answer:</span> Certainly! Here are some tips for using Claude based on the
+provided excerpts:
+1. **Be precise**: Claude performs better when it receives clear and specific questions.
+2. **Talk to it like a friend**: Claude likes context, so use a conversational tone.
+3. **Recognize patterns of failure**: The book mentions five common pitfalls that
+   teams often encounter while using Claude Code...</code></pre>
+    </div>
+
+    <div class="plain">
+      <span class="ico">🧭 In plain English:</span> Because the system keeps a detailed diary of every
+      step it takes, I could see <em>exactly</em> where a good answer was being destroyed — and prove
+      the fix worked by replaying the same question.
+    </div>
+  </section>
+
+  <!-- ===================== DEBUG JOURNAL ===================== -->
+  <section id="debug">
+    <h2>Debugging journal — the bugs that shaped the design</h2>
+    <p class="lead">Most of the real engineering wasn't features — it was containing a small model's
+      failure modes. Every fix below was found by reading the trace logs, not by guessing.</p>
+
+    <h3>① The verifier kept eating valid answers</h3>
+    <div class="ba">
+      <div class="col bad"><div class="tag">Before</div>
+        The verifier treated ANY quoted string as a potential book title and replaced the whole answer
+        with a refusal. First it flagged code strings like <code>print("Predicted labels:", preds)</code>;
+        after excluding code, it still flagged quoted <em>phrases</em> — including a tip quoted from my
+        own book ("You're absolutely right"). Audit result: every flag it ever raised was a false positive.</div>
+      <div class="col good"><div class="tag">After</div>
+        Two-part redesign: a quote only counts as a citation in citation context (after
+        <em>book / titled / guide</em>…), and a failed check redacts just the title —
+        <code>[title removed — not in retrieved sources]</code> — instead of destroying the answer.</div>
+    </div>
+
+    <h3>② The rewriter sabotaged retrieval</h3>
+    <div class="ba">
+      <div class="col bad"><div class="tag">Before</div>
+        Two failure modes from the logs: hyphen-glued garbage
+        (<code>how-to-use-claude-and-seem-like-a-hacker</code>) that neither index could match, and
+        <em>topic injection</em> — "tips on using Claude" became "…for Python programming", pulling
+        grep and PyTorch chunks instead of my five Claude books.</div>
+      <div class="col good"><div class="tag">After</div>
+        The prompt forbids adding topics the user didn't mention and forbids hyphen-joining; a code
+        guard rejects any rewrite with &gt;3 hyphens or &gt;200 chars and falls back to the user's
+        original wording.</div>
+    </div>
+
+    <h3>③ Over-refusal vs. hallucination — the prompt see-saw</h3>
+    <div class="ba">
+      <div class="col bad"><div class="tag">Before</div>
+        A refusal-first prompt made the model bail on answerable questions. Loosening it brought
+        hallucinations back — and sometimes the model glued the refusal sentence onto the END of a
+        complete, correct tutorial.</div>
+      <div class="col good"><div class="tag">After</div>
+        The prompt asserts the context <em>is</em> relevant, tells the model to ignore irrelevant
+        excerpts rather than force them in, and keeps one tight, exact-wording refusal. A deterministic
+        post-step strips any refusal sentence glued onto a substantive answer.</div>
+    </div>
+    <div class="learn">
+      <b>Meta-lesson:</b> with a small model, the prompt, the retrieval, and the deterministic post-check
+      are three dials that must be tuned <em>together</em> — tightening anti-hallucination loosened
+      over-refusal, and vice versa. The trace log was what made this tractable: you cannot tune what
+      you cannot see.
+    </div>
+  </section>
+
+  <!-- ===================== RUN ===================== -->
+  <section id="run">
+    <h2>Running it yourself</h2>
+    <p class="lead">The repo ships only code — you bring your own PDFs. My library, vectorstore, and
+      chat logs never leave my machine.</p>
+    <pre><code><span class="cmt"># 0. Prerequisites</span>
+ollama pull qwen2.5:3b
+ollama pull nomic-embed-text
+pip install -r requirements.txt
+
+<span class="cmt"># 1. Add your PDFs to ./books (sub-folders become categories), then ingest</span>
+python ingest_books.py --clear
+
+<span class="cmt"># 2a. Chat in the terminal</span>
+python rag_chatbot.py
+
+<span class="cmt"># 2b. …or launch the web UI at http://localhost:7860</span>
+python rag_ui.py</code></pre>
+  </section>
+
+  <!-- ===================== LEARNINGS ===================== -->
+  <section id="learnings">
+    <h2>Key learnings</h2>
+    <ul class="steps">
+      <li><b>Retrieval &gt; model size.</b> A well-fed 3B model beats a bigger, ungrounded one for
+        library Q&amp;A. Effort on chunking and hybrid search paid off more than any model swap would.</li>
+      <li><b>Hybrid search is not optional</b> for technical content — vectors and BM25 fail on
+        <em>opposite</em> query types, and RRF gets both for free without score normalisation.</li>
+      <li><b>Guardrails need guardrails.</b> My anti-hallucination check destroyed more answers than
+        hallucination ever did, until real transcripts proved it and drove a surgical redesign.</li>
+      <li><b>Chunk boundaries decide answer quality</b> — code-fence-aware splitting was the difference
+        between whole and mangled code examples.</li>
+      <li><b>Observability is a feature.</b> Full per-turn trace logs turned "the bot feels worse today"
+        into specific, fixable root causes — every bug in the journal above was found in the logs.</li>
+      <li><b>Local is genuinely viable</b> — 148 books, 96k chunks, ingestion, embeddings, LLM, memory,
+        and UI all run on a laptop, offline, for free, with data never leaving disk.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== ABOUT / CONTACT ===================== -->
+  <div class="about">
+    <h3>About this project</h3>
+    <p style="color:var(--muted); margin-top:0">
+      A personal project exploring how far a fully-local RAG system can go on consumer hardware —
+      combining retrieval engineering, prompt design, and evidence-driven debugging to make a small
+      model reliable. Built end-to-end in Python: ingestion, hybrid retrieval, the LangGraph pipeline,
+      and the web UI. All source code is in this repo.
+    </p>
+    <div class="contact">
+      <span>👤 <b>Aaron Long</b></span>
+      <a href="https://github.com/Along777" target="_blank" rel="noopener">GitHub → Along777</a>
+      <a href="https://www.linkedin.com/in/aaron-long-403644a7/" target="_blank" rel="noopener">LinkedIn → Aaron Long</a>
+      <a href="mailto:along1929@gmail.com">✉ along1929@gmail.com</a>
+    </div>
+  </div>
+
+  <hr class="div">
+  <footer>
+    Built with Ollama · LangGraph · ChromaDB · BM25 · Gradio — a fully local, fully private RAG project.
+  </footer>
+
+</div>
+</body>
+</html>

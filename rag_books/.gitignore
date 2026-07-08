@@ -1,0 +1,13 @@
+# Your personal library and generated artifacts — never commit these
+books/
+vectorstore/
+vectorstore_clean/
+chat_logs/
+bm25_corpus.json
+chat_memory.sqlite
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

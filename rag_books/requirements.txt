@@ -1,0 +1,10 @@
+langchain
+langchain-chroma
+langchain-ollama
+langchain-community
+langchain-text-splitters
+langgraph
+langgraph-checkpoint-sqlite
+rank-bm25
+gradio
+pymupdf

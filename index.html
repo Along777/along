@@ -1,489 +1,876 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <title>Aaron Long Portfolio</title>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" /> <!-- Bootstrap css -->
-  <link href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet" /> <!-- Font Awesome-->
-  <link href="styles.css" rel="stylesheet"> <!-- My custom styles -->
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Allows Mobile Design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aaron Long | Data Scientist Portfolio. Healthcare analytics, machine learning, AI agents, and data-driven insights. Orlando, Florida.">
+    <title>Aaron Long | Data Scientist Portfolio | Orlando, FL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+
+        :root {
+            --primary: #0ea5e9;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-header {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .project-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .tech-badge {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.625rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #0ea5e9;
+        }
+
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background-color: #0ea5e9;
+            color: white;
+            border-color: #0ea5e9;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #0ea5e9, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .portfolio-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .modern-shadow {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .legacy-accent {
+            border-left: 4px solid #64748b;
+        }
+
+        .ai-accent {
+            border-left: 4px solid #6366f1;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .skill-pill {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .skill-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.1);
+        }
+    </style>
 </head>
-
-<body>
-
-  <!-- ************* START: DESKTOP NAVIGATION/LINKS ************* -->
-  <nav class="nav navbar navbar-expand-lg p-1" id="navigation">
-  <a class="navbar-brand" href="index.html"><img src="images/logo-small.png" alt="Aaron Long Data Scientist Logo" width="45" id="logo-small"> AARON LONG</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="#" id="about">ABOUT</a>
-      <a class="nav-item nav-link" href="https://www.linkedin.com/in/aaron-long-403644a7/" target="_blank">LINKEDIN</a>
-      <a class="nav-item nav-link" href="mailto:&#097;&#108;&#111;&#110;&#103;&#049;&#057;&#050;&#057;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;" target="_blank">CONTACT</a>
-    </div>
-  </div>
-</nav>
-  <!-- ************* END: DESKTOP NAVIGATION/LINKS ************* -->
-
-  <!-- ************* START: DESKTOP MAIN PAGE ************* -->
-  <div class="jumbotron jumbotron-fluid" id="banner">
-    <!-- <img src="images/project.png" alt="Stock Analysis" width="650" id="projectbckgrnd"> -->
-
-    <!-- START: DESKTOP HOME PAGE -->
-    <div class="container" id="homepage">
-      <div class="flex">
-        <div>
-          <img src="images/logo-big.png" alt="Aaron Long Data Scientist Logo" width="350">
-        </div>
-        <div class="pl-3 mt-4">
-          <h1>DATA<br>SCIENTIST</h1>
-          <p class="lead location">Located in Orlando, Florida</p>
-        </div>
-      </div>
-    </div>
-    <!-- END: DESKTOP HOME PAGE -->
-
-    <!-- START: DESKTOP ABOUT PAGE -->
-    <div class="container" id="aboutPage">
-      <div class="flex">
-        <div class="pl-3 mt-4">
-          <h1>Meet Aaron Long</h1>
-          <p class="lead">Hello, my name is Aaron Long and welcome to my portfolio website. My portfolio contains data analytics projects that I &apos;ve worked on throughout the years. Some of my projects include data analysis, advance plotting on
-            maps, and machine learning. I enjoy creating projects on topics that interest or are relevant to me, such as finance, healthcare, crypto.</p>
-          <p class="lead">I recently moved to Florida in October 2019, and am currently living in Orlando. I graduated in 2016 at University of California, Davis with a Bachelor&apos;s of Arts and Science in Economics and Statistics. I'm extremely
-            interested and passionate about data science, ai, and the blockchain.</p>
-          <p class="lead">More personal details about me is that I have a cute dog named Clover and she is a four year old Papillon, who looks like a border collie puppy. Also I love trading cryptos, playing magic the gathering, and staying active with sports such as muay thai!</p>
-        </div>
-      </div>
-    </div>
-    <!-- END: DESKTOP ABOUT PAGE -->
-
-    <!-- START: DESKTOP ALL PROJECTS (CLICKED THROUGH JS) -->
-    <!-- STOCK ANALYSIS PROJECT-->
-    <div id="bitcoinRegression">
-      <div class="flex">
-        <div>
-          <img src="images/projects/bitcoin.png" alt="Bitcoin Regression Image" width="600" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Bitcoin Regression</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>February 28, 2021</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>numpy, pandas, sklearn, statsmodel</p>
-            <p class="projectSum">This project illustrates quantitative machine learning regression for bitcoin prices. </p>
-            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/BitcoinRegression.ipynb?fbclid=IwAR0i8l7L0H6w5Pv7Ean9y6Zhz7Btw9e3gxbDxbmYIUvje7v1Aum2xf62cN0" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- STOCK ANALYSIS PROJECT-->
-    <div id="stockAnalysis">
-      <div class="flex">
-        <div>
-          <img src="images/icons/stockAnalysis.png" alt="Stock Analysis" width="600" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Stock Analysis with Highcharter</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>February 17, 2020</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>highcharter, quantmod, ttr</p>
-            <p class="projectSum">Highcharter is a R wrapper for Highcharts javascript library and its modules. Highcharts is a mature and flexible javascript charting library and it has a powerful API [<a href="http://www.highcharts.com/demo"
-                target="_blank">http://www.highcharts.com/demo</a>]. I wanted to demonstrate the power highcharter has with stocks and cryptocurrencies. Along with highcharter, I applied quantmod and TTR package to create powerful and interactive
-              technical charts.</p>
-            <p class="projectLink"><a href="projects/highstocks.html" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PDF EXPRESSIONS PROJECT -->
-    <div id="pdfEx">
-      <div class="flex">
-        <div>
-          <img src="images/projects/pdfEx.png" alt="PDF Expressions" width="500" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Parsing PDF's with Regular Expressions</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>February 3, 2021</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>pandas, re, pdfplumber, requests, pyodbc</p>
-            <p class="projectSum">This project goes over parsing Pdfs with regular expressions, also know as regex. Data stored in pdfs can be difficult to import into a database, but since pdfs are actually text, regex patterns can be used to
-              collect data. This project will go over using regex on a pdf to turn the pdf into a dataframe, and then insert it into a SQL server.</p>
-            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Regex.ipynb?fbclid=IwAR3d-QVOZMm-PrrzZo4jNxWRXjsTDTU5lY3FgLyS0mImCzc2Z1WVz5yVnAc" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PIVOT TABLES PROJECT -->
-    <div id="pivotTable">
-      <div class="flex">
-        <div>
-          <img src="images/projects/pivottable.png" alt="Pivot Tables" width="500" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Blog Update and Python for Pivot Tables</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>September 27, 2020</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python, Excel</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>pandas, numpy, matplotlib</p>
-            <p class="projectSum">This projects demonstrates how to use Python for Microsoft Excel's pivot tables. It also contains an awesome blog update on my personal and professional life.</p>
-            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/PivotTables.ipynb?fbclid=IwAR35ZNa7lRqT3P8HPhUcQ8UgCpIR2vTWPjLhKS2p60rvrqYVwjh5h2NRlsU" class="view" target="_blank">VIEW
-                PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FLEX DASHBOARD PROJECT -->
-    <div id="flexDash">
-      <div class="flex">
-        <div>
-          <img src="images/projects/dashboard.png" alt="Flex Dashboard" width="650" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Flex Dashboard</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>February 22, 2020</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>flexdashboard, highcharter</p>
-            <p class="projectSum">This is an example of an interactive flex dashboard, which is a library in R. The data includes US Accidents between 2016 to 2019 with a focus on Orange County, Florida. The dashboard consists of three different
-              graphs: tree map, pie chart, and bar chart. The charts are created with highcharter.</p>
-            <p class="projectLink"><a href="projects/flexdashboard.html" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RANDOM FOREST PROJECT -->
-    <div id="randomForest">
-      <div class="flex">
-        <div>
-          <img src="images/projects/randomForest.png" alt="Flex Dashboard" width="550" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Machine Learning with Random Forest on Wildfire Data</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>March 2, 2020</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>numpy, pandas, sqlite3, sklearn</p>
-            <p class="projectSum">For this report, I will further my research on wildfire data that I explored with ggplot. This notebook will demonstrate using the machine learning tool called Random Forest.</p>
-            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/randomforest.ipynb" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WILDFIRE ANALYSIS II PROJECT -->
-    <div id="wildfireTwo">
-      <div class="flex">
-        <div>
-          <img src="images/projects/leaflet.png" alt="Wildfire Analysis Part II" width="650" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Wildfire Analysis Part II</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>February 5, 2020</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>leaflet</p>
-            <p class="projectSum">For the second part of the Wildfire Analysis report, I implemented leaflet maps. Leaflet provides an interactive google map that provides the name of the fire, acres burned, cause, years, and days burned. Feel free
-              to explore each map by scrolling and hovering for more details and interesting information. I encourage you to look for your county or state and see if you can remember any of the fires that happened there.</p>
-            <p class="projectLink"><a href="projects/wildfiresp2.html" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WILDFIRE ANALYSIS I PROJECT -->
-    <div id="wildfireOne">
-      <div class="flex">
-        <div>
-          <img src="images/projects/wildfire2.png" alt="Wildfire Analysis Part I" width="650" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Wildfire Analysis Part I</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>February 5, 2020</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>R</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>gglot, dbplyr, mapdata, ggthemes, maps</p>
-            <p class="projectSum">Back in 2017, the Tubbs Fire in Santa Rosa had not only destroyed my family’s home, but also completely destroyed our neighborhood. With losing 95% of our belongings including irreplaceable photographs and mementos,
-              it was a truly devastating event that traumatized me and my family.</p>
-
-            <p class="projectSum">For this report, I am exploring a dataset on the 1.88 million wildfires that occurred in the US from 1992-2015.This dataset can be found in Kaggle: https://www.kaggle.com/rtatman/188-million-us-wildfires. I will
-              briefly look at all the data then dive into large fires only. This means fires in class size F (1000-5000) acres burned and size G with is wildfires burning over 5000+ acres. Some of the largest fires in CA for example burned hundreds
-              of thousands of acres. I want to focus on California and Florida as this is where I live now and where the data would be most relevant to me.</p>
-            <p class="projectLink"><a href="projects/wildfiresp1.html" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- YOUTUBE ANALYSIS PROJECT -->
-    <div id="youtube">
-      <div class="flex">
-        <div>
-          <img src="images/projects/youtube.png" alt="Wildfire Analysis Part I" width="650" class="projectIMG">
-        </div>
-        <div class="projectSection ml-4">
-          <h1 class="projectTitle pl-4">Exploratory Analysis on Trending Videos</h1>
-          <div class="p-2 pl-4 pr-5">
-            <p class="lead"><strong class="projectProg">Date - </strong>January 19, 2019</p>
-            <p class="lead"><strong class="projectProg">Program(s) - </strong>Python</p>
-            <p class="lead"><strong class="projectLib">Libraries - </strong>pandas, numpy, matplotlib, seaborn</p>
-            <p class="projectSum">As a new vlogger and content creator with my girlfriend on Youtube, I took upon interest on doing an exploratory data analysis (EDA) project on Youtube's Trending videos.</p>
-            <p class="projectLink"><a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Youtube.ipynb" class="view" target="_blank">VIEW PROJECT</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <!-- END: DESKTOP ALL PROJECTS (CLICKED THROUGH JS) -->
-
-  <!-- START: DESKTOP WORK NAVIGATION SECTION -->
-  <!-- FEATURED SECTION -->
-  <div id="work">
-    <!-- <div id="featured">
-      <img src="images/featured.png" alt="Featured" width="648" id="featuredSection">
-      <h2>FEATURED</h2>
-      <section class="pl-5 pt-2">
-        <img src="images/icons/stockAnalysis.png" alt="Stock Analysis with Highcharter Image" width="325" class="images">
-        <h3 class="pt-3">Stock Analysis with Highcharter</h3>
-      </section>
-    </div> -->
-
-    <!-- ALL WORK CAROUSEL -->
-
-    <!-- <img src="images/project-heading.png" width="500" alt="projects heading"> -->
-    <div id="all">
-
-        <h2>PROJECTS</h2>
-
-      <div id="carouselExampleControls" class="carousel slide carousel-width ml-5 mt-n2" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-
-            <div class="row">
-
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body bitcoinProj">
-                    <img src="images/icons/bitcoin.png" alt="Bitcoin Regression Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Bitcoin Regression</h5>
-                  </div>
+<body class="bg-slate-950 text-slate-200">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-lg border-b border-slate-800">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center">
+                        <span class="text-white font-bold text-xl tracking-tighter">AL</span>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-xl tracking-tight">Aaron Long</div>
+                        <div class="text-[10px] text-slate-500 -mt-1">DATA SCIENTIST</div>
+                    </div>
                 </div>
-              </div>
 
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body stockProj">
-                    <img src="images/icons/stockAnalysis.png" alt="Stock Analysis with Highcharter Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Stock Analysis with Highcharter</h5>
-                  </div>
+                <div class="hidden md:flex items-center gap-x-8 text-sm">
+                    <a href="#about" class="nav-link text-slate-300 hover:text-white font-medium">About</a>
+                    <a href="#skills" class="nav-link text-slate-300 hover:text-white font-medium">Skills</a>
+                    <a href="#projects" class="nav-link text-slate-300 hover:text-white font-medium">Projects</a>
+                    <a href="#contact" class="nav-link text-slate-300 hover:text-white font-medium">Contact</a>
                 </div>
-              </div>
 
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body pdfExProj">
-                    <img src="images/icons/pdfEx.png" alt="Parsing PDF's with Regular Expressions Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Parsing PDF's with Regular Expressions</h5>
-                  </div>
+                <div class="flex items-center gap-x-3">
+                    <a href="https://www.linkedin.com/in/aaron-long-403644a7/" target="_blank" rel="noopener"
+                       class="hidden sm:flex w-10 h-10 items-center justify-center rounded-3xl border border-slate-700 hover:bg-slate-900 transition-colors text-slate-300"
+                       aria-label="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/Along777" target="_blank" rel="noopener"
+                       class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium rounded-3xl border border-slate-700 hover:bg-slate-900 transition-colors">
+                        <i class="fa-brands fa-github"></i>
+                        <span class="hidden sm:inline">GitHub</span>
+                    </a>
+                    <a href="#contact"
+                       class="px-5 py-2 text-sm font-semibold bg-white text-slate-950 rounded-3xl hover:bg-slate-100 transition-colors flex items-center gap-x-2">
+                        <span>Get in touch</span>
+                    </a>
+
+                    <!-- Mobile menu -->
+                    <button class="md:hidden w-10 h-10 flex items-center justify-center text-slate-400 hover:text-white" id="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
                 </div>
-              </div>
-
             </div>
-          </div>
-          <div class="carousel-item">
 
-            <div class="row">
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body ptProj">
-                    <img src="images/icons/pivotTable.png" alt="Python for Pivot Tables Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Blog Update and Python for Pivot Tables</h5>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="card allProjects-work">
-                  <div class="card-body flexDashProj">
-                    <img src="images/icons/flexDash.png" alt="Flex Dashboard Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Flex Dashboard</h5>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body randomForestProj">
-                    <img src="images/icons/randomForest.png" alt="Machine Learning with Random Forest on Wildfire Data Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Machine Learning with Random Forest on Wildfire Data</h5>
-                  </div>
-                </div>
-              </div>
-
-
+            <!-- Mobile nav panel (toggled by the hamburger button) -->
+            <div id="mobile-menu" class="hidden md:hidden flex-col gap-y-1 px-8 pb-6 border-t border-slate-800 bg-slate-950">
+                <a href="#about" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">About</a>
+                <a href="#skills" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">Skills</a>
+                <a href="#projects" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">Projects</a>
+                <a href="#contact" class="nav-link py-3 text-slate-300 hover:text-white font-medium">Contact</a>
             </div>
-          </div>
+        </div>
+    </nav>
 
-          <div class="carousel-item">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body wf2Proj">
-                    <img src="images/icons/leaflet.png" alt="Wildfire Analysis Part II Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Wildfire Analysis Part II</h5>
-                  </div>
-                </div>
-              </div>
+    <!-- Hero -->
+    <header class="pt-16 pb-20 border-b border-slate-800 bg-slate-950">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid md:grid-cols-12 gap-12 items-center">
+                <div class="md:col-span-7">
+                    <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-3xl bg-slate-900 border border-slate-800 mb-6">
+                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <span class="text-emerald-400 text-sm font-medium tracking-wide">Open to opportunities &amp; collaborations</span>
+                    </div>
 
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body wf1Proj">
-                    <img src="images/icons/wildfire2.png" alt="Wildfire Analysis Part I Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Wildfire Analysis Part I</h5>
-                  </div>
-                </div>
-              </div>
+                    <h1 class="font-display text-6xl md:text-7xl tracking-tighter leading-none mb-4">
+                        Aaron Long.<br>
+                        <span class="gradient-text">Data Scientist.</span>
+                    </h1>
 
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body ytProj">
-                    <img src="images/icons/youtube.png" alt="Exploratory Analysis on Trending Videos Image" width="325" class="images">
-                    <h5 class="card-title pt-2">Exploratory Analysis on Trending Videos</h5>
-                  </div>
+                    <p class="max-w-lg text-xl text-slate-400 mb-8">
+                        Building rigorous analytics and AI-powered systems that turn complex data into clear decisions — especially in healthcare.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="#projects"
+                           class="inline-flex items-center justify-center gap-x-3 bg-white hover:bg-slate-100 transition-all text-slate-950 font-semibold px-8 h-14 rounded-3xl text-base">
+                            <span>Explore Projects</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                        <!-- TODO: add resume PDF (e.g. href="aaron-long-resume.pdf") -->
+                        <a href="#"
+                           class="inline-flex items-center justify-center gap-x-3 border border-slate-700 hover:bg-slate-900 transition-all font-medium px-8 h-14 rounded-3xl text-base">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download Résumé</span>
+                        </a>
+                    </div>
+
+                    <div class="flex items-center gap-x-6 mt-8 text-sm">
+                        <div class="flex items-center gap-x-2 text-slate-400">
+                            <i class="fa-solid fa-map-marker-alt"></i>
+                            <span>Orlando, Florida</span>
+                        </div>
+                        <div class="h-1 w-1 bg-slate-700 rounded-full"></div>
+                        <div class="text-slate-400">UC Davis • Economics &amp; Statistics</div>
+                    </div>
                 </div>
-              </div>
+
+                <!-- Hero visual / photo placeholder -->
+                <div class="md:col-span-5">
+                    <div class="relative">
+                        <div class="aspect-[4/3] rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl">
+                            <!-- Replace this with your professional photo -->
+                            <div class="w-full h-full bg-gradient-to-br from-slate-800 via-slate-900 to-black flex items-center justify-center relative">
+                                <div class="text-center">
+                                    <div class="mx-auto w-24 h-24 rounded-2xl bg-gradient-to-br from-sky-400/20 to-indigo-500/20 flex items-center justify-center mb-4 border border-slate-700">
+                                        <i class="fa-solid fa-user text-5xl text-slate-600"></i>
+                                    </div>
+                                    <p class="text-slate-500 text-sm">Your professional photo here</p>
+                                    <p class="text-[10px] text-slate-600 mt-1">(Recommended: headshot or casual workspace shot)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Subtle badge -->
+                        <div class="absolute -bottom-3 -right-3 bg-slate-900 border border-slate-700 rounded-2xl px-4 py-2 text-xs flex items-center gap-x-2 shadow-xl">
+                            <div class="flex -space-x-1">
+                                <div class="w-5 h-5 bg-emerald-400 rounded-full border border-slate-900"></div>
+                                <div class="w-5 h-5 bg-indigo-400 rounded-full border border-slate-900"></div>
+                            </div>
+                            <span class="font-medium text-emerald-400 text-xs tracking-wider">AI + Analytics</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="max-w-screen-2xl mx-auto px-8 pt-20 pb-16">
+        <div class="max-w-3xl">
+            <div class="uppercase tracking-[3px] text-xs font-semibold text-sky-400 mb-3">CHAPTER 01 • THE JOURNEY</div>
+            <h2 class="section-header tracking-tighter mb-6">From statistical foundations<br>to AI-augmented impact.</h2>
+
+            <div class="prose prose-invert text-slate-300 max-w-none text-[15px] leading-relaxed">
+                <p class="mb-5">I'm a data scientist with several years of experience in healthcare analytics. My work focuses on building machine learning models, interactive dashboards (Power BI), and intelligent automation agents using the Microsoft Power Platform (Copilot Studio, Power Automate, Power Apps).</p>
+
+                <p class="mb-5">I hold a B.A./B.S. in Economics and Statistics from UC Davis (2016) and relocated to Central Florida in 2019. What drives me is the evolution of our field: combining the rigor of classical statistics and experimental design with the power of modern machine learning, generative AI, and agentic systems.</p>
+
+                <p>My approach blends deep technical execution with clear communication — translating complex findings into actionable strategies for stakeholders. I'm currently exploring advanced applications of AI in healthcare operations, predictive modeling, and building low-code/high-impact automation solutions.</p>
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+                <div class="inline-flex items-center gap-x-2 text-sm px-4 h-9 rounded-3xl border border-slate-700 bg-slate-900">
+                    <i class="fa-solid fa-heart text-rose-400"></i>
+                    <span class="font-medium">Married • Dog dad to Clover</span>
+                </div>
+                <div class="inline-flex items-center gap-x-2 text-sm px-4 h-9 rounded-3xl border border-slate-700 bg-slate-900">
+                    <i class="fa-solid fa-palette text-violet-400"></i>
+                    <span class="font-medium">Generative AI artist &amp; NFT creator</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="bg-slate-900 border-y border-slate-800 py-16">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <div class="uppercase tracking-[3px] text-xs font-semibold text-sky-400 mb-2">CHAPTER 02 • TOOLKIT</div>
+                    <h2 class="section-header tracking-tighter">Skills &amp; Technologies</h2>
+                </div>
+                <div class="hidden md:block text-sm text-slate-400 max-w-xs text-right">
+                    Continuously evolving with the rapid pace of AI tooling while grounding new techniques in statistical fundamentals.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <!-- Core Data Science -->
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <i class="fa-solid fa-chart-line text-sky-400 text-xl"></i>
+                        <h3 class="font-semibold text-lg">Core Data Science</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Python</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">pandas • numpy</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">scikit-learn</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">XGBoost • SHAP</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">SQL</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Statistics &amp; Inference</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Feature Engineering</span>
+                    </div>
+                </div>
+
+                <!-- Modern AI & Agents -->
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <i class="fa-solid fa-robot text-indigo-400 text-xl"></i>
+                        <h3 class="font-semibold text-lg">AI &amp; Intelligent Systems</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">LLMs &amp; Prompt Engineering</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Generative AI Workflows</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Microsoft Copilot Studio</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Power Automate</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">AI Agents</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">RAG Prototyping</span>
+                    </div>
+                </div>
+
+                <!-- Visualization & BI -->
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <i class="fa-solid fa-chart-bar text-emerald-400 text-xl"></i>
+                        <h3 class="font-semibold text-lg">Visualization &amp; BI</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Power BI</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Plotly • Dash</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Streamlit / Gradio</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">R (ggplot2, highcharter, leaflet)</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Interactive Dashboards</span>
+                    </div>
+                </div>
+
+                <!-- Tools & Platforms -->
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <i class="fa-solid fa-tools text-amber-400 text-xl"></i>
+                        <h3 class="font-semibold text-lg">Tools &amp; Platforms</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Git &amp; GitHub</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Jupyter • VS Code</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Microsoft Power Platform</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Excel / Power Query</span>
+                        <span class="skill-pill bg-slate-900 text-slate-300 px-3 py-1 text-xs rounded-2xl border border-slate-700">Healthcare Data Systems</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="max-w-screen-2xl mx-auto px-8 py-20">
+        <div class="mb-12">
+            <div class="uppercase tracking-[3px] text-xs font-semibold text-sky-400 mb-3">CHAPTER 03 • SELECT WORK</div>
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-y-4">
+                <div>
+                    <h2 class="section-header tracking-tighter">Featured Projects</h2>
+                    <p class="text-slate-400 mt-2 max-w-md">A deliberate split between foundational work that built my core skills and newer projects that leverage modern AI and automation.</p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-2" id="filter-buttons">
+                    <button onclick="filterProjects('all')"
+                            class="filter-btn active px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"
+                            data-filter="all">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>All</span>
+                    </button>
+                    <button onclick="filterProjects('legacy')"
+                            class="filter-btn px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 hover:bg-slate-800 flex items-center gap-x-2"
+                            data-filter="legacy">
+                        <i class="fa-solid fa-history"></i>
+                        <span>Foundational</span>
+                    </button>
+                    <button onclick="filterProjects('ai')"
+                            class="filter-btn px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 hover:bg-slate-800 flex items-center gap-x-2"
+                            data-filter="ai">
+                        <i class="fa-solid fa-magic"></i>
+                        <span>AI-Powered</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Grid -->
+        <div class="project-grid" id="projects-grid">
+
+            <!-- ============ AI-POWERED PROJECTS ============ -->
+
+            <!-- AI PROJECT: Local RAG over a 148-book library -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
+                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">2026 • LOCAL LLM / RAG</div>
+                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
+                            </div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Local RAG over a 148-Book Library</h3>
+                        </div>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">A fully local, private RAG system that turns 148 technical PDFs (~48,800 pages → 96,546 searchable chunks) into a citation-grounded chatbot — running entirely on a laptop with no cloud and no API cost. Hybrid retrieval (vector + BM25 fused with Reciprocal Rank Fusion), a LangGraph pipeline with query rewriting and deterministic citation guardrails, and a Gradio web UI.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">LangGraph</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">ChromaDB</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Ollama</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">BM25 + RRF</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Gradio</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-indigo-400 font-medium">Fully local &amp; private • $0 cost</div>
+                        <a href="https://along777.github.io/along/rag_books/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--
+            TEMPLATE: copy this block to add a new AI project card, then fill in the [BRACKETED] parts.
+
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
+                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">[YEAR] • [STATUS]</div>
+                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
+                            </div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">[PROJECT TITLE]</h3>
+                        </div>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">[PRIMARY TECH]</span>
+                    </div>
+                    <p class="text-slate-400 text-sm flex-1">[2–3 sentence description of the problem, approach, and result.]</p>
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">[BADGE]</span>
+                    </div>
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-indigo-400 font-medium">[SHORT TAGLINE]</div>
+                        <a href="[LINK]" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View project <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            -->
+
+            <!-- ============ FOUNDATIONAL / LEGACY PROJECTS ============ -->
+
+            <!-- LEGACY: Wildfire Random Forest -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • CLASSIC ML</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Wildfire Prediction with Random Forest</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Built Random Forest classifiers on the 1.88M US Wildfires dataset to predict fire cause and severity. Covers SQL extraction from SQLite, feature importance analysis, and model validation — the ML capstone of a three-part wildfire series.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">scikit-learn</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">SQLite</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Traditional ML • No generative AI</div>
+                        <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/randomforest.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: Wildfire Analysis Part I -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • EDA &amp; MAPPING</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Wildfire Analysis Part I</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">A personal project born from losing my family's home in the 2017 Tubbs Fire. Explored 1.88 million US wildfires (1992–2015) with ggplot2 map visualizations, focusing on the largest fire classes in California and Florida.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">ggplot2</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">dbplyr</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">maps</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">ggthemes</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Exploratory analysis with a story</div>
+                        <a href="https://along777.github.io/along/projects/wildfiresp1.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View report <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: Wildfire Analysis Part II -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • GEOSPATIAL VIZ</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Wildfire Analysis Part II</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Interactive leaflet maps of US wildfires — hover any fire to see its name, acres burned, cause, and duration. Turned a static analysis into an explorable geospatial experience.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">leaflet</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">R Markdown</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Interactive mapping</div>
+                        <a href="https://along777.github.io/along/projects/wildfiresp2.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View report <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: Bitcoin Regression -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2021 • REGRESSION</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Bitcoin Price Regression Analysis</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Quantitative machine learning regression on Bitcoin prices — feature selection, residual diagnostics, and comparison of statsmodels and scikit-learn approaches against baseline models.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">statsmodels</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">scikit-learn</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Foundational econometrics + ML</div>
+                        <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/BitcoinRegression.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: PDF Parsing with Regex -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2021 • DATA ENGINEERING</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">PDF Parsing with Regex → SQL Server</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">An extraction pipeline that turns unstructured PDFs into clean dataframes using regular expressions, then loads them into SQL Server — the kind of unglamorous data plumbing that real analytics depends on.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pdfplumber</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">re</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pyodbc</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">ETL fundamentals</div>
+                        <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Regex.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: YouTube EDA -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2019 • EDA</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">YouTube Trending Videos Analysis</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Comprehensive exploratory data analysis on trending YouTube videos. Uncovered patterns in engagement, category performance, publishing timing, and title characteristics using visualization and statistical summaries.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">seaborn</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">matplotlib</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Strong EDA &amp; visualization foundation</div>
+                        <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Youtube.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: Python for Pivot Tables -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • ANALYTICS</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Python for Pivot Tables</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Recreated Excel's pivot table workflows in Python with pandas — showing how programmatic aggregation scales past spreadsheet limits while staying familiar to Excel users.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">matplotlib</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">Excel</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Excel-to-Python bridge</div>
+                        <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/PivotTables.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: Flex Dashboard -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • DASHBOARD</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Flex Dashboard — US Accidents</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Interactive flexdashboard analyzing US traffic accidents (2016–2019) with a focus on Orange County, Florida. Combines tree map, pie, and bar charts built with highcharter into a single shareable page.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">flexdashboard</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">highcharter</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Dashboarding before Power BI</div>
+                        <a href="https://along777.github.io/along/projects/flexdashboard.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View dashboard <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGACY: Stock Analysis with Highcharter -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
+                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • FINANCIAL VIZ</div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Stock Analysis with Highcharter</h3>
+                        </div>
+                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Interactive technical charts for stocks and cryptocurrencies using highcharter (the R wrapper for Highcharts), with quantmod and TTR supplying the price data and technical indicators.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">highcharter</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">quantmod</span>
+                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">TTR</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-slate-500">Finance + interactive charting</div>
+                        <a href="https://along777.github.io/along/projects/highstocks.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            View charts <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
         </div>
-        <!-- LEFT AND RIGHT ARROW BUTTONS -->
-        <a class="carousel-control-prev mt-n5" href="#carouselExampleControls" role="button" data-slide="prev">
-          <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next mt-n5" href="#carouselExampleControls" role="button" data-slide="next">
-          <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-    </div>
-    <!-- END: DESKTOP WORK NAVIGATION SECTION -->
-  </div>
+    </section>
 
-<!-- START: TABLET & MOBILE PROJECTS ICONS-->
-<div id="mobile-tablet">
-  <div class="row">
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body bitcoinProj">
-        <img src="images/icons/bitcoin.png" alt="Bitcoin Regression Image" width="325" class="images">
-        <h5 class="card-title pt-2">Bitcoin Regression</h5>
-      </div>
+    <!-- Philosophy / Evolution note -->
+    <div class="max-w-screen-2xl mx-auto px-8 pb-16">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl p-8 md:p-10">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1">
+                    <div class="uppercase tracking-widest text-xs font-semibold text-sky-400 mb-2">MY APPROACH</div>
+                    <h3 class="text-2xl font-semibold tracking-tight">I don't just use AI — I integrate it thoughtfully.</h3>
+                    <p class="mt-3 text-slate-300">The best data science today combines statistical rigor, domain expertise, and modern tooling. My newer work deliberately layers generative AI and agentic systems on top of strong foundational practices rather than replacing them.</p>
+                </div>
+                <div class="md:w-80 text-sm text-slate-400 border-l border-slate-700 pl-8">
+                    This portfolio is intentionally split to show both the depth of my classical training and the direction I'm heading — building practical, production-minded AI systems.
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body stockProj">
-        <img src="images/icons/stockAnalysis.png" alt="Stock Analysis with Highcharter Image" width="325" class="images">
-        <h5 class="card-title pt-2">Stock Analysis with Highcharter</h5>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="row">
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body pdfExProj">
-      <img src="images/icons/pdfEx.png" alt="Parsing PDF's with Regular Expressions Image" width="325" class="images">
-      <h5 class="card-title pt-2">Parsing PDF's with Regular Expressions</h5>
-    </div>
-  </div>
-</div>
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body ptProj">
-      <img src="images/icons/pivotTable.png" alt="Python for Pivot Tables Image" width="325" class="images">
-      <h5 class="card-title pt-2">Blog Update and Python for Pivot Tables</h5>
-    </div>
-  </div>
-</div>
-</div>
+    <!-- Contact -->
+    <section id="contact" class="border-t border-slate-800 bg-slate-900 py-16">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="max-w-2xl mx-auto text-center">
+                <div class="uppercase tracking-[3px] text-xs font-semibold text-sky-400 mb-3">LET'S CONNECT</div>
+                <h2 class="section-header tracking-tighter mb-4">Interested in collaborating or chatting about data + AI?</h2>
+                <p class="text-slate-400 mb-8">I'm always open to interesting conversations about healthcare analytics, AI agents, building in public, or opportunities where rigorous data work meets real impact.</p>
 
-<div class="row">
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body flexDashProj">
-      <img src="images/icons/flexDash.png" alt="Flex Dashboard Image" width="325" class="images">
-      <h5 class="card-title pt-2">Flex Dashboard</h5>
-    </div>
-  </div>
-</div>
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body randomForestProj">
-      <img src="images/icons/randomForest.png" alt="Machine Learning with Random Forest on Wildfire Data Image" width="325" class="images">
-      <h5 class="card-title pt-2">Machine Learning with Random Forest on Wildfire Data</h5>
-    </div>
-  </div>
-</div>
-</div>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="mailto:&#097;&#108;&#111;&#110;&#103;&#049;&#057;&#050;&#057;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;"
+                       class="inline-flex items-center justify-center gap-x-3 bg-white text-slate-950 hover:bg-slate-100 font-semibold px-8 h-14 rounded-3xl transition-all">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Send me an email</span>
+                    </a>
 
-<div class="row">
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body wf2Proj">
-      <img src="images/icons/leaflet.png" alt="Wildfire Analysis Part II Image" width="325" class="images">
-      <h5 class="card-title pt-2">Wildfire Analysis Part II</h5>
-    </div>
-  </div>
-</div>
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body wf1Proj">
-      <img src="images/icons/wildfire2.png" alt="Wildfire Analysis Part I Image" width="325" class="images">
-      <h5 class="card-title pt-2">Wildfire Analysis Part I</h5>
-    </div>
-  </div>
-</div>
-</div>
+                    <a href="https://www.linkedin.com/in/aaron-long-403644a7/" target="_blank" rel="noopener"
+                       class="inline-flex items-center justify-center gap-x-3 border border-slate-600 hover:bg-slate-800 font-medium px-8 h-14 rounded-3xl transition-all">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                        <span>Connect on LinkedIn</span>
+                    </a>
 
-<div class="row">
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body ytProj">
-      <img src="images/icons/youtube.png" alt="Exploratory Analysis on Trending Videos Image" width="325" class="images">
-      <h5 class="card-title pt-2">Exploratory Analysis on Trending Videos</h5>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-<!-- END: TABLET & MOBILE PROJECTS ICONS-->
+                    <a href="https://github.com/Along777" target="_blank" rel="noopener"
+                       class="inline-flex items-center justify-center gap-x-3 border border-slate-600 hover:bg-slate-800 font-medium px-8 h-14 rounded-3xl transition-all">
+                        <i class="fa-brands fa-github"></i>
+                        <span>View GitHub</span>
+                    </a>
+                </div>
 
-  <!-- ************* END: DESKTOP MAIN PAGE ************* -->
+                <div class="mt-8 text-xs text-slate-500">
+                    Currently based in Orlando, Florida • Open to remote or hybrid roles
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- ************* FOOTER ************* -->
+    <footer class="border-t border-slate-800 py-8">
+        <div class="max-w-screen-2xl mx-auto px-8 text-xs text-slate-500 flex flex-col md:flex-row items-center justify-between gap-y-3">
+            <div>© 2026 Aaron Long. All rights reserved.</div>
+            <div class="flex items-center gap-x-5">
+                <span>Built with Tailwind + care</span>
+                <span class="hidden md:inline">•</span>
+                <span>Last major refresh: July 2026</span>
+            </div>
+            <div>
+                <a href="https://along777.github.io/along/legacy/" target="_blank" rel="noopener" class="hover:text-slate-300 transition-colors">View previous version →</a>
+            </div>
+        </div>
+    </footer>
 
+    <script>
+        // Project filtering
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('#projects-grid .project-card');
+            const buttons = document.querySelectorAll('#filter-buttons .filter-btn');
 
-  <!-- ************* JS FILES ************* -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="script.js"></script>
+            buttons.forEach(btn => {
+                const isActive = btn.dataset.filter === category;
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('bg-sky-500', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('border-sky-500', isActive);
+                btn.classList.toggle('border-slate-700', !isActive);
+                btn.classList.toggle('bg-slate-900', !isActive);
+            });
+
+            cards.forEach(card => {
+                card.style.display = (category === 'all' || card.dataset.category === category) ? 'flex' : 'none';
+            });
+        }
+
+        // Mobile menu toggle
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if (!btn || !menu) return;
+
+            btn.addEventListener('click', () => {
+                const isOpen = menu.classList.toggle('flex');
+                menu.classList.toggle('hidden', !isOpen);
+                btn.setAttribute('aria-expanded', String(isOpen));
+            });
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('mobile-menu-btn');
+            if (!menu) return;
+            menu.classList.add('hidden');
+            menu.classList.remove('flex');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        // Smooth scroll for anchor links
+        function setupSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        closeMobileMenu();
+                    }
+                });
+            });
+        }
+
+        // Keyboard support for filters: press "/" to reset to All
+        function setupKeyboardFilters() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    const allBtn = document.querySelector('[data-filter="all"]');
+                    if (allBtn) allBtn.click();
+                }
+            });
+
+            const filterContainer = document.getElementById('filter-buttons');
+            if (filterContainer) {
+                filterContainer.setAttribute('title', 'Press / to show all projects');
+            }
+        }
+
+        function init() {
+            setupMobileMenu();
+            setupSmoothScroll();
+            setupKeyboardFilters();
+        }
+
+        window.onload = init;
+    </script>
 </body>
-
 </html>
