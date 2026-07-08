@@ -526,7 +526,7 @@ def write_report(df, inds, year, miss, corr, out,
                  "ately drive missingness and occasional implausible values "
                  "in per-capita indicators; consider filtering them out "
                  "(`df[~df.is_micro_state]`) for cross-country regressions.")
-    out.write_text("\n".join(lines))
+    out.write_text("\n".join(lines), encoding="utf-8")
 
 
 # --------------------------------------------------------------------------- #
