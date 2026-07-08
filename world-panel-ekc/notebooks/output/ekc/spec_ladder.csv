@@ -1,0 +1,6 @@
+spec,se_type,n_obs,rsq_within,log_gdp_pc_c,log_gdp_pc_c_p,log_gdp_pc_c_sq,log_gdp_pc_c_sq_p,regulatory_quality,regulatory_quality_p,log_gdp_pc_x_gov,log_gdp_pc_x_gov_p
+1_pooled_quadratic,clustered,2843,,3.642***,0.0,1.324***,0.001,,,,
+2_entity_FE,Driscoll-Kraay,2843,0.056,0.964***,0.0,-0.122,0.224,,,,
+3_twoway_FE,Driscoll-Kraay,2843,-0.116,2.757***,0.0,-0.034,0.719,,,,
+4_twoway_FE_controls,Driscoll-Kraay,2843,-0.064,2.417***,0.0,0.478***,0.0,,,,
+5_twoway_FE_governance,Driscoll-Kraay,2843,-0.061,2.366***,0.0,0.503***,0.0,0.071,0.571,-0.049,0.668

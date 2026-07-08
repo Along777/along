@@ -1,0 +1,6 @@
+param,value
+n_estimators,400.0
+learning_rate,0.1
+max_depth,2.0
+subsample,0.8
+random_state,42.0

@@ -1,0 +1,5 @@
+test,statistic,dof,p_value,verdict,rho
+"Mundlak (FE vs RE, joint Wald on group means)",23.85,7.0,0.0012,FE required (group means jointly significant),
+Hausman FE vs RE,-751.0,7.0,,test degenerate (cov diff not PSD); FE preferred on serial-corr grounds,
+Wooldridge AR(1) in FE residuals,0.759,,0.0,serial correlation present,0.759
+Pesaran CD (cross-sectional dependence),4.78,,0.0,cross-sectional dependence present,

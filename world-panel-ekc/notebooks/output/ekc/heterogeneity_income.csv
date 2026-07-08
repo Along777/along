@@ -1,0 +1,5 @@
+income_group,n_obs,b_gdp,b_gdp_sq,gdp_sq_p,turning_point_usd_pt
+Low income,253,2.432,0.538,0.0,
+Lower middle income,677,1.349,0.328,0.0,
+Upper middle income,857,2.518,0.386,0.012,
+High income,1056,4.751,-0.214,0.565,

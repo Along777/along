@@ -1,0 +1,3 @@
+spec,b_gdp_sq,gdp_sq_p,turning_point_usd,ci_lo_usd,ci_hi_usd,inverted_u_boot_share,gdp_range_lo,gdp_range_hi,tp_in_sample
+FE_quadratic,-0.0337,0.3966,,71000.0,583954.0,0.022,563.0,132617.0,False
+FE_quadratic_controls,0.4775,0.0,,,,0.0,563.0,132617.0,False

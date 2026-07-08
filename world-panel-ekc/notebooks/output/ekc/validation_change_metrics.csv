@@ -1,0 +1,4 @@
+task,model,test_rmse,test_r2,n_test
+changes,naive_zero_change,0.6454,-0.0054,391
+changes,structural_diff_OLS,0.5813,0.1843,391
+changes,gradient_boosting_diff,0.6055,0.1151,391

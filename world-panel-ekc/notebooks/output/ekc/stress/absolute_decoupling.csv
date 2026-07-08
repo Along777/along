@@ -1,0 +1,5 @@
+income_group,abs_trend_t_per_yr,p_value,mean_level_t,n
+Low income,-0.0024,0.515,0.36,720
+Lower middle income,0.0088,0.065,1.05,1200
+Upper middle income,0.0377,0.0023,3.84,1260
+High income,-0.0697,0.0002,10.45,1500

@@ -1,0 +1,4 @@
+task,model,test_rmse,test_r2,n_test
+levels,naive_persistence,0.901,0.977,391
+levels,structural_country_FE_OLS,1.008,0.971,391
+levels,gradient_boosting,1.097,0.966,391

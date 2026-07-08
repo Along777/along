@@ -1,0 +1,3 @@
+model,test_r2,n_test
+lagged_info_only (true forecast),0.01,391
+"contemporaneous (attribution, from validation)",0.184,391

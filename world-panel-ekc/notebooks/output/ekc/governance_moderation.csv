@@ -1,0 +1,3 @@
+model,n_obs,gdp_x_gov_coef,gdp_x_gov_p
+pooled_between (year FE only),2843,-1.181*,0.0545
+twoway_FE (within-country),2843,-0.049,0.6678

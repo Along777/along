@@ -1,0 +1,8 @@
+variant,target,n_obs,b_gdp_sq,gdp_sq_p,turning_point_usd_pt
+baseline_full,co2_pc,2843,0.478,0.0,
+exclude_petrostates,co2_pc,2742,0.34,0.0,
+alt_DV_carbon_intensity,co2_per_1000gdp,2843,-0.016,0.0,91.1103559113071
+alt_DV_log_total_co2,log_co2_total,2843,-0.063,0.0,82029.61054791832
+subperiod_pre2010,co2_pc,1343,0.439,0.0,
+subperiod_post2010,co2_pc,1500,0.491,0.0,
+alt_moderator_rule_of_law,co2_pc,2843,0.443,0.0,

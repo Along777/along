@@ -1,0 +1,5 @@
+income_group,n_obs,trend_coef,p_value,pct_per_year
+Low income,622,0.00066,0.1255,0.754
+Lower middle income,1151,-0.00143,0.3144,-0.875
+Upper middle income,1230,-0.0059,0.0001,-2.003
+High income,1500,-0.00524,0.0,-2.219
