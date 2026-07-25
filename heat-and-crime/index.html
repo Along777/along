@@ -42,7 +42,21 @@
   header.hero{background:linear-gradient(180deg,var(--surface),var(--bg));
     border-bottom:1px solid var(--hair);padding:0 0 44px;text-align:center}
   .heatband{height:8px;background:linear-gradient(90deg,#2a78d6 0%,#eb6834 45%,#e34948 100%)}
-  .heroinner{padding:42px 24px 0}
+  .skyline-wrap{position:relative;width:100%;max-width:920px;margin:0 auto;padding:0 16px;
+    overflow:hidden}
+  .skyline{display:block;width:100%;height:auto;max-height:160px}
+  .skyline .sky{fill:url(#heatSky)}
+  .skyline .bldg{fill:#1a1a22}
+  .skyline .bldg-mid{fill:#22222c}
+  .skyline .window{fill:#f0a060;opacity:.55}
+  .skyline .therm{fill:#e34948}
+  .skyline .therm-glass{fill:#fff1ea;opacity:.35}
+  @media (prefers-color-scheme: dark){
+    .skyline .bldg{fill:#0a0a10}
+    .skyline .bldg-mid{fill:#12121a}
+    .skyline .window{fill:#eb6834;opacity:.7}
+  }
+  .heroinner{padding:28px 24px 0}
   .hero .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .hero h1{font-size:clamp(28px,5.2vw,50px);line-height:1.12;margin:14px auto 16px;max-width:920px;letter-spacing:-.02em}
   .hero h1 em{font-style:normal;color:var(--temp)}
@@ -138,6 +152,61 @@
 
 <header class="hero">
   <div class="heatband" aria-hidden="true"></div>
+  <div class="skyline-wrap" aria-hidden="true">
+    <svg class="skyline" viewBox="0 0 920 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chicago skyline in heat">
+      <defs>
+        <linearGradient id="heatSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a6ea5"/>
+          <stop offset="45%" stop-color="#e8a04a"/>
+          <stop offset="100%" stop-color="#e34948"/>
+        </linearGradient>
+      </defs>
+      <rect class="sky" x="0" y="0" width="920" height="150"/>
+      <!-- lakefront glow -->
+      <rect x="0" y="128" width="920" height="22" fill="#1b3a5c" opacity=".35"/>
+      <!-- skyline blocks (left to right, Chi-ish) -->
+      <g class="bldg">
+        <rect class="bldg-mid" x="40" y="70" width="36" height="58"/>
+        <rect x="90" y="48" width="44" height="80"/>
+        <rect class="bldg-mid" x="148" y="62" width="30" height="66"/>
+        <rect x="200" y="36" width="52" height="92"/>
+        <!-- Willis-ish tall -->
+        <rect x="280" y="18" width="38" height="110"/>
+        <rect x="292" y="8" width="14" height="14"/>
+        <rect class="bldg-mid" x="340" y="55" width="48" height="73"/>
+        <rect x="400" y="42" width="40" height="86"/>
+        <rect class="bldg-mid" x="460" y="68" width="34" height="60"/>
+        <rect x="520" y="30" width="46" height="98"/>
+        <rect class="bldg-mid" x="580" y="50" width="42" height="78"/>
+        <rect x="640" y="40" width="36" height="88"/>
+        <rect class="bldg-mid" x="700" y="58" width="50" height="70"/>
+        <rect x="770" y="45" width="44" height="83"/>
+        <rect class="bldg-mid" x="830" y="72" width="40" height="56"/>
+      </g>
+      <!-- windows -->
+      <g class="window">
+        <rect x="208" y="48" width="6" height="8"/><rect x="220" y="48" width="6" height="8"/><rect x="232" y="48" width="6" height="8"/>
+        <rect x="208" y="64" width="6" height="8"/><rect x="220" y="64" width="6" height="8"/><rect x="232" y="64" width="6" height="8"/>
+        <rect x="288" y="30" width="5" height="7"/><rect x="298" y="30" width="5" height="7"/><rect x="308" y="30" width="5" height="7"/>
+        <rect x="288" y="48" width="5" height="7"/><rect x="298" y="48" width="5" height="7"/><rect x="308" y="48" width="5" height="7"/>
+        <rect x="528" y="42" width="6" height="8"/><rect x="540" y="42" width="6" height="8"/><rect x="552" y="42" width="6" height="8"/>
+        <rect x="778" y="55" width="6" height="8"/><rect x="790" y="55" width="6" height="8"/><rect x="802" y="55" width="6" height="8"/>
+      </g>
+      <!-- thermometer / heat gauge (right) -->
+      <g transform="translate(860,28)">
+        <rect class="therm-glass" x="0" y="0" width="18" height="72" rx="9"/>
+        <rect class="therm" x="4" y="28" width="10" height="40" rx="5"/>
+        <circle class="therm" cx="9" cy="72" r="12"/>
+      </g>
+      <!-- rising crime bars motif (left foreground) -->
+      <g opacity=".85">
+        <rect x="48" y="118" width="10" height="10" fill="#e34948"/>
+        <rect x="62" y="108" width="10" height="20" fill="#e34948"/>
+        <rect x="76" y="96" width="10" height="32" fill="#eb6834"/>
+        <rect x="90" y="88" width="10" height="40" fill="#eb6834"/>
+      </g>
+    </svg>
+  </div>
   <div class="heroinner">
     <div class="kicker">Chicago &middot; 2015&ndash;2025 &middot; July 2026</div>
     <h1>A Tale of Two AI Minds:<br><em>Heat, Crime, and Chicago</em></h1>
@@ -145,8 +214,8 @@
     <p class="madeby">Portfolio analysis &middot; public data &middot; no API keys &middot; offline after first download</p>
     <div class="herobtns">
       <a class="bigbtn" href="#tldr">Start with the TL;DR</a>
-      <a class="bigbtn ghost" href="#two-minds">How it was built</a>
-      <a class="bigbtn ghost" href="#reproduce">Reproduce</a>
+      <a class="bigbtn ghost" href="https://github.com/Along777/along/blob/master/heat-and-crime/README.md">Code walkthrough (GitHub)</a>
+      <a class="bigbtn ghost" href="https://github.com/Along777/along/blob/master/heat-and-crime/examples/headline_fit.py">headline_fit.py</a>
     </div>
     <div class="kpis">
       <div class="kpi"><b>+5.6%</b><span>violent crime per +10&deg;F</span></div>
@@ -531,12 +600,19 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
 <section id="reproduce">
   <div class="secnum">11</div>
   <h2>Reproduce</h2>
-  <pre><code>cd heat
+  <div class="co plain">
+    <span class="tag">Story vs code</span>
+    <p>This page is the write-up. The <b>Python path</b> (panel, FE fit, lab, falsification) lives in the GitHub folder with a full follow-along README:
+    <a href="https://github.com/Along777/along/blob/master/heat-and-crime/README.md">heat-and-crime/README.md</a>.
+    Fastest check: <a href="https://github.com/Along777/along/blob/master/heat-and-crime/examples/headline_fit.py"><code class="inline">examples/headline_fit.py</code></a>.</p>
+  </div>
+  <pre><code>cd heat-and-crime
 pip install -r requirements.txt
-python run_model_lab.py
-python run_eda_diagnostics.py
-jupyter nbconvert --to notebook --execute --inplace heat_and_crime.ipynb</code></pre>
-  <p>With <code class="inline">data/</code> present, runs are offline. Public APIs only. Manifest hashes lock the cache. Delete caches only for a full refresh.</p>
+python examples/headline_fit.py      # +5.6% path
+python examples/leads_placebo.py     # F1 leads
+python run_model_lab.py              # full G0-G7 + F1-F7
+python run_eda_diagnostics.py</code></pre>
+  <p>With <code class="inline">data/</code> present, runs are offline. Public APIs only. Manifest hashes lock the cache.</p>
 </section>
 
 <section id="tldr-full">
@@ -564,6 +640,8 @@ jupyter nbconvert --to notebook --execute --inplace heat_and_crime.ipynb</code><
   <p>Data: City of Chicago Data Portal (ijzp-q8t2) &middot; Open-Meteo ERA5</p>
   <p>
     <a href="https://along777.github.io/along/heat-and-crime/">Live page</a>
+    &middot; <a href="https://github.com/Along777/along/tree/master/heat-and-crime">Code on GitHub</a>
+    &middot; <a href="https://github.com/Along777/along/blob/master/heat-and-crime/README.md">Python walkthrough</a>
     &middot; <a href="https://along777.github.io/along/ufo-news-cycle/">UFO news-cycle</a>
     &middot; <a href="https://along777.github.io/along/">Portfolio home</a>
   </p>

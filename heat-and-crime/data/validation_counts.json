@@ -1,0 +1,68 @@
+{
+  "spot_months": {
+    "2018-07": {
+      "total": 25308,
+      "violent": 7931,
+      "property": 10890
+    },
+    "2021-02": {
+      "total": 13159,
+      "violent": 4336,
+      "property": 4564
+    },
+    "2022-08": {
+      "total": 22406,
+      "violent": 6706,
+      "property": 10757
+    }
+  },
+  "annual_totals": {
+    "2016": 269991,
+    "2018": 269175,
+    "2019": 261728
+  },
+  "theft_months": {
+    "2018-07": 6168,
+    "2021-02": 2125
+  },
+  "meta": {
+    "fetched_at_utc": "2026-07-24T21:33:15Z",
+    "source": "independent Socrata count(*) queries",
+    "live_ok": true,
+    "note": "Prefer settled months; recent portal months can backfill after cache build.",
+    "annual_live_check": {
+      "2016": {
+        "api": 269991,
+        "cache": 269991,
+        "drift": 0
+      },
+      "2018": {
+        "api": 269177,
+        "cache": 269175,
+        "drift": 2
+      },
+      "2019": {
+        "api": 261729,
+        "cache": 261728,
+        "drift": 1
+      }
+    }
+  },
+  "cache_integrity": {
+    "crime_rows": 124867,
+    "crime_sum_n_2010_2025": 4400418,
+    "crime_sum_n_2015_2025": 2757885,
+    "crime_day_min": "2010-01-01",
+    "crime_day_max": "2025-12-31"
+  },
+  "2018-07": {
+    "total": 25308,
+    "violent": 7931,
+    "property": 10890
+  },
+  "2021-02": {
+    "total": 13159,
+    "violent": 4336,
+    "property": 4564
+  }
+}

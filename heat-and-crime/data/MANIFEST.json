@@ -1,0 +1,31 @@
+{
+  "created_at_utc": "2026-07-24T22:40:31Z",
+  "project": "heat_and_crime",
+  "files": {
+    "chicago_crime_daily_by_type.csv": {
+      "bytes": 3718193,
+      "sha256": "74bf6e010d3adf8bb27c25c97eca33af390df6b485bd070a7e8622b2bd95449f"
+    },
+    "chicago_weather_daily.csv": {
+      "bytes": 223250,
+      "sha256": "dd289f64343e57d3fbd9c775fdc023afd0dcdec68e08ec7d56066b513e58e0b6"
+    },
+    "crime_raw_sample.csv": {
+      "bytes": 361047,
+      "sha256": "4dbcafc37904dc20e1db0505ed95fe55ec9c71ddf131930adf483334a0907cd4"
+    },
+    "eda_diagnostics.json": {
+      "bytes": 2155,
+      "sha256": "d17abf34d0cde766505969167299991b093fe77ec6281acff7cdd582c76fc876"
+    },
+    "model_lab_results.json": {
+      "bytes": 61951,
+      "sha256": "70ec4c5cba064cd9f720900dcaa44b31dabc1c8c17862fffd08656db4c9adfa5"
+    },
+    "validation_counts.json": {
+      "bytes": 1422,
+      "sha256": "9b8a307cc711df35a8c4d46ead9cad29b9e8e35f17bdf6f7859b667caadf4d2c"
+    }
+  },
+  "notes": "Refreshed after model lab v2 + eda diagnostics"
+}
