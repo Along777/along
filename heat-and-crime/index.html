@@ -148,7 +148,7 @@
   <div class="heroinner">
     <div class="kicker">Chicago · 2015–2025 · July 2026</div>
     <h1>A Tale of Two AI Minds:<br><em>Heat, Crime, and Chicago</em></h1>
-    <p class="sub">Hotter day, more reported violence: <b>+5.6% per +10°F</b> after stripping the calendar. Claude Fable built the first notebook in two prompts. Grok 4.5 audited it, attacked it, and wrote this page.</p>
+    <p class="sub">Hotter day, more reported violence: <b>+5.6% per +10°F</b> after stripping the calendar. An old Freakonomics-style question, re-run with modern open data. Max model starts the build. Smart cheaper model finishes the audit. Different tools, different tasks.</p>
     <p class="madeby">Portfolio analysis · public data · no API keys · runs offline after first download</p>
     <div class="herobtns">
       <a class="bigbtn" href="#tldr">Start with the TL;DR</a>
@@ -198,6 +198,11 @@
   <div class="secnum">02</div>
   <h2>The question that data can answer</h2>
   <p class="lede">Most things that move crime (poverty, policing, demographics) change slowly. Weather jumps overnight. That makes heat one of the cleaner daily shocks a city gets.</p>
+
+  <div class="co why">
+    <span class="tag">Why this topic</span>
+    <p>Heat and crime is an old Freakonomics-style idea: take a behavioral claim people argue about, find a shock that is almost as good as random day to day, and measure it. The topic is not new. The fun is updating it. Free city crime APIs, free reanalysis weather, a full 2015–2025 panel, month×year fixed effects, and a written stress-test suite. Not nostalgia. A clean same-month identification story on modern data, with modern tools.</p>
+  </div>
 
   <p>Three specific bets, written before the models:</p>
   <div class="cards">
@@ -473,39 +478,42 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
 <section id="two-minds">
   <div class="secnum">09</div>
   <h2>A tale of two AI minds</h2>
-  <p class="lede">July 2026. One human directing. Two models doing labor. Different strengths. One finished report.</p>
+  <p class="lede">July 2026. One human directing. Two models. Not a contest. A handoff.</p>
+
+  <div class="co plain">
+    <span class="tag">The combo, stated flat</span>
+    <p><b>Max model starts. Smart cheaper model finishes.</b> Claude Fable 5 (max) opens a blank folder and builds the first complete analysis. Grok 4.5 takes that draft and does the second-pass work: validation depth, residual EDA, bandwidth and lag selection, falsification, shared modules, and this article. Neither is “the better model.” They are different tools for different tasks.</p>
+  </div>
 
   <div class="tblwrap">
     <table>
       <thead>
-        <tr><th>Mind</th><th>Role</th><th>What it actually did</th></tr>
+        <tr><th>Tool</th><th>Task fit</th><th>What shipped from that pass</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><b>Claude Fable 5</b><br><span style="color:var(--muted);font-size:13px">2 heavy prompts</span></td>
-          <td>Scaffold + first complete notebook</td>
-          <td>Greenfield heat-and-crime project: SoQL aggregation, weather join, full M1-M6 ladder, figures, sensitivity table, first written findings. Real heavy lifting. Fast start.</td>
+          <td><b>Claude Fable 5</b><br><span style="color:var(--muted);font-size:13px">max · 2 heavy prompts</span></td>
+          <td>Greenfield velocity. Super-prompt → working portfolio notebook.</td>
+          <td>SoQL aggregation, weather join, full M1–M6 ladder, first figures, sensitivity table, first findings. The scaffold that made the project real in one sitting.</td>
         </tr>
         <tr>
-          <td><b>Grok 4.5</b><br><span style="color:var(--muted);font-size:13px">everything after</span></td>
-          <td>Senior review, science finish, article</td>
-          <td>Data QA and validation depth, residual EDA, Model Lab (HAC, DLAG, kink, LOYO), falsification F1-F7, shared <code class="inline">panel.py</code>/<code class="inline">models.py</code>, integration, this page.</td>
+          <td><b>Grok 4.5</b><br><span style="color:var(--muted);font-size:13px">smart · cost-efficient · rest of the work</span></td>
+          <td>Audit, selection, stress tests, packaging.</td>
+          <td>Data QA and manifest, residual EDA, Model Lab (HAC, DLAG, kink, LOYO), F1–F7 falsification, <code class="inline">panel.py</code> / <code class="inline">models.py</code>, integration, this page.</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="co plain">
-    <span class="tag">How to read the split</span>
-    <p>Fable is strong at "build the whole project from a super prompt." Two prompts produced a working portfolio notebook. Grok 4.5 costs less per token and spent that budget on audit, formal selection, and falsification: turning a strong draft into something you can defend. Different jobs. Both useful.</p>
-  </div>
-
   <div class="co why">
-    <span class="tag">Process</span>
-    <p>Plan first. Run second. Human decides what ships. Same workflow as the UFO project on this site. The notebook runs top to bottom offline. The Model Lab is one command. This page is hand-written HTML, not a Jupyter export full of source cells.</p>
+    <span class="tag">Why not one model for everything</span>
+    <p>Starting cold rewards raw build speed and a long first draft. Finishing rewards skepticism: re-check the data contract, turn fiat knobs into selected ones, try to break the headline, then write for readers. You can force one model to do both. Splitting the jobs matches how the work actually feels. Max for ignition. Smart cheap for the second brain.</p>
   </div>
 
-  <p>Code and full notebook live with the analysis project (see the repo README). Public page here is the write-up: <code class="inline">index.html</code> + <code class="inline">figures/</code>.</p>
+  <div class="co tech">
+    <span class="tag">Process</span>
+    <p>Plan first. Run second. Human decides what ships. Notebook runs offline top to bottom. Model lab is one command. This page is hand-written HTML, not a notebook dump. Full code walkthrough is in the repo README.</p>
+  </div>
 </section>
 
 <section id="limits">
