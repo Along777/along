@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A Tale of Two AI Minds: Heat, Crime, and Chicago</title>
-<meta name="description" content="2.76 million Chicago crime reports, eleven years of weather: a +10F hotter day means about +5.6% more reported violent crime after stripping the calendar. Claude Fable started the notebook. Grok 4.5 finished the science. July 2026.">
+<meta name="description" content="2.76 million Chicago crime reports, 2015-2025. A day 10F hotter than others in the same month has about 5.6% more reported violent crime. Claude Fable started the notebook. Grok 4.5 finished the science. July 2026.">
 <meta name="author" content="Aaron Long">
 <meta property="og:title" content="A Tale of Two AI Minds: Heat, Crime, and Chicago">
-<meta property="og:description" content="Hotter days, more reported violence. +5.6% per +10F after stripping the calendar. Battery drives it. Hot spells compound. Future heat does not predict today.">
+<meta property="og:description" content="Hotter days, more reported violence: +5.6% per +10F after stripping the calendar. Battery drives it. Hot spells compound. Future heat does not predict today.">
 <meta property="og:url" content="https://along777.github.io/along/heat-and-crime/">
 <meta property="og:type" content="article">
 <style>
@@ -29,6 +29,7 @@
       --green:#1baf7a; --green-soft:#12291f; --gold:#c98500; --gold-soft:#2b230e;
       --temp:#f08a5a; --temp-soft:#2a1a12;
     }
+    figure{background:#141413}
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -53,14 +54,6 @@
   .bigbtn:hover{text-decoration:none;filter:brightness(1.08)}
   .bigbtn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
   .kpis{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:32px auto 0;max-width:1000px}
-  @media (prefers-color-scheme: dark){
-    figure{background:#141413}
-  }
-  @media print{
-    nav{display:none}
-    header.hero{border:none}
-    section{padding-top:24px;break-inside:avoid}
-  }
   .kpi{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 20px;min-width:140px}
   .kpi b{display:block;font-size:24px;letter-spacing:-.01em}
   .kpi span{font-size:12.5px;color:var(--muted)}
@@ -108,9 +101,6 @@
   td.num{text-align:right;white-space:nowrap}
   .chip{display:inline-block;padding:2px 10px;border-radius:99px;font:600 12px var(--mono)}
   .chip.pass{background:var(--green-soft);color:var(--green)}
-  .chip.win{background:var(--green);color:#fff}
-  .chip.split{background:var(--gold);color:#fff}
-  .chip.note{background:var(--blue-soft);color:var(--blue)}
 
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:20px 0}
   .card{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:18px}
@@ -120,7 +110,6 @@
                  padding:3px 10px;border-radius:99px}
   .v-win{background:var(--green);color:#fff}
   .v-split{background:var(--gold);color:#fff}
-  .v-note{background:var(--blue-soft);color:var(--blue)}
 
   .flow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0;counter-reset:step}
   .step{flex:1 1 160px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px}
@@ -138,6 +127,10 @@
   .tldrbox h3{margin:0 0 12px;font-size:18px}
   footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
   footer a{color:var(--ink2)}
+  @media print{
+    nav{display:none}
+    section{break-inside:avoid}
+  }
 </style>
 </head>
 <body>
@@ -146,20 +139,20 @@
 <header class="hero">
   <div class="heatband" aria-hidden="true"></div>
   <div class="heroinner">
-    <div class="kicker">Chicago · 2015–2025 · July 2026</div>
+    <div class="kicker">Chicago &middot; 2015&ndash;2025 &middot; July 2026</div>
     <h1>A Tale of Two AI Minds:<br><em>Heat, Crime, and Chicago</em></h1>
-    <p class="sub">Hotter day, more reported violence: <b>+5.6% per +10°F</b> after stripping the calendar. An old Freakonomics-style question, re-run with modern open data. Max model starts the build. Smart cheaper model finishes the audit. Different tools, different tasks.</p>
-    <p class="madeby">Portfolio analysis · public data · no API keys · runs offline after first download</p>
+    <p class="sub">A day <b>10&deg;F</b> hotter than others in the same month shows about <b>+5.6%</b> more reported violent crime. Old Freakonomics-style question. Modern open data. Max model starts the build. Smart cheaper model finishes the audit.</p>
+    <p class="madeby">Portfolio analysis &middot; public data &middot; no API keys &middot; offline after first download</p>
     <div class="herobtns">
       <a class="bigbtn" href="#tldr">Start with the TL;DR</a>
       <a class="bigbtn ghost" href="#two-minds">How it was built</a>
       <a class="bigbtn ghost" href="#reproduce">Reproduce</a>
     </div>
     <div class="kpis">
-      <div class="kpi"><b>+5.6%</b><span>violent crime per +10°F</span></div>
-      <div class="kpi"><b>~1.5×</b><span>violent vs property response</span></div>
+      <div class="kpi"><b>+5.6%</b><span>violent crime per +10&deg;F</span></div>
+      <div class="kpi"><b>~1.5&times;</b><span>violent vs property response</span></div>
       <div class="kpi"><b>+6.1%</b><span>cumulative hot-spell effect</span></div>
-      <div class="kpi"><b>2.76M</b><span>crimes · 4,018 days</span></div>
+      <div class="kpi"><b>2.76M</b><span>crimes &middot; 4,018 days</span></div>
     </div>
   </div>
 </header>
@@ -187,9 +180,9 @@
   <h2>TL;DR</h2>
   <div class="tldrbox">
     <h3>The short version</h3>
-    <p>Take a day in Chicago that is 10°F hotter than other days in the same month of the same year. Hold day-of-week, holidays, rain, and snow fixed. <b>Reported violent crime is about 5.6% higher</b> on that hotter day. Property crime moves too, but less (~3.7%). The gap is real.</p>
-    <p>This is not "crime is high in July." July is already stripped out. The model uses leftover day-to-day weather noise inside each month.</p>
-    <p>Battery drives the violent result. Hot days in a row compound rather than steal crime from tomorrow. Future temperature does not predict today's crime. Dropping 2020, unrest week, or any single year barely moves the number.</p>
+    <p>Take a day in Chicago that is 10&deg;F hotter than other days in the same month of the same year. Hold day-of-week, holidays, rain, and snow fixed. <b>Reported violent crime is about 5.6% higher</b> on that hotter day. Property crime moves too, but less (~3.7%). The gap is real.</p>
+    <p>This is not &ldquo;crime is high in July.&rdquo; July is already stripped out. The model uses leftover day-to-day weather noise inside each month.</p>
+    <p>Battery drives the violent result. Hot days in a row compound rather than steal crime from tomorrow. Future temperature does not predict today&rsquo;s crime. Dropping 2020, the unrest week, or any single year barely moves the number.</p>
     <p style="margin-bottom:14px"><b>What this is not:</b> proof of pure aggression, a neighborhood map, or a claim about unreported crime. It is a clean reduced-form fact about <i>reported</i> crime and heat at the city-day level.</p>
   </div>
 </section>
@@ -201,48 +194,48 @@
 
   <div class="co why">
     <span class="tag">Why this topic</span>
-    <p>Heat and crime is an old Freakonomics-style idea: take a behavioral claim people argue about, find a shock that is almost as good as random day to day, and measure it. The topic is not new. The fun is updating it. Free city crime APIs, free reanalysis weather, a full 2015–2025 panel, month×year fixed effects, and a written stress-test suite. Not nostalgia. A clean same-month identification story on modern data, with modern tools.</p>
+    <p>Heat and crime is an old Freakonomics-style question: take a behavioral claim people argue about, find a daily shock that is nearly as good as random, and measure it. The topic is not new. The fun is updating it with free city crime APIs, free reanalysis weather, a full 2015&ndash;2025 panel, month&times;year fixed effects, and a written stress-test suite. Not nostalgia. A clean same-month identification story on modern data.</p>
   </div>
 
-  <p>Three specific bets, written before the models:</p>
+  <p>Three bets, written before the models:</p>
   <div class="cards">
     <div class="card">
-      <h4>H1 · Level</h4>
+      <h4>H1 &middot; Level</h4>
       <p>Hotter days have more reported crime, all else equal.</p>
       <span class="verdict v-win">CONFIRMED</span>
     </div>
     <div class="card">
-      <h4>H2 · Composition</h4>
+      <h4>H2 &middot; Composition</h4>
       <p>Violent crime responds more, in percent terms, than property crime.</p>
-      <span class="verdict v-win">CONFIRMED · ~1.5×</span>
+      <span class="verdict v-win">CONFIRMED &middot; ~1.5&times;</span>
     </div>
     <div class="card">
-      <h4>H3 · Shape</h4>
+      <h4>H3 &middot; Shape</h4>
       <p>The response is not a straight line forever. Extreme heat might flatten or invert.</p>
-      <span class="verdict v-split">FLATTENS ~80°F · NO INVERTED-U</span>
+      <span class="verdict v-split">FLATTENS ~80&deg;F &middot; NO INVERTED-U</span>
     </div>
   </div>
 
   <div class="co plain">
     <span class="tag">Plain English</span>
-    <p>Imagine two Tuesdays in the same July. One is 78°F. One is 88°F. Same month, same year, same day-of-week structure, same rain flag. The second Tuesday is the experiment. Weather chose it. We count what the crime desk logged.</p>
+    <p>Imagine two Tuesdays in the same July. One is 78&deg;F. One is 88&deg;F. Same month, same year, same day-of-week structure, same rain flag. The second Tuesday is the experiment. Weather chose it. We count what the crime desk logged.</p>
   </div>
 
   <div class="co why">
     <span class="tag">Why this design</span>
-    <p>Routine-activity theory says heat puts more people outdoors and in contact. Heat-aggression research says heat shortens fuses. Both predict more interpersonal crime on hot days. Property crime should respond less once people (and their stuff) are already outside. City-day data cannot fully separate those channels. The <b>gap between crime types</b> is the tell that something behavioral is happening, not just "more cops writing tickets in nice weather."</p>
+    <p>Routine-activity theory says heat puts more people outdoors and in contact. Heat-aggression research says heat shortens fuses. Both predict more interpersonal crime on hot days. Property crime should respond less once people (and their stuff) are already outside. City-day data cannot fully separate those channels. The <b>gap between crime types</b> is the tell that something behavioral is happening, not just &ldquo;more tickets on nice weather.&rdquo;</p>
   </div>
 </section>
 
-<div class="divider" aria-hidden="true">· · ·</div>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
 
 <section id="data">
   <div class="secnum">03</div>
   <h2>The data, and why you can trust it</h2>
-  <p class="lede">2,757,885 reported crimes across 4,018 days (2015–2025), joined to ERA5 daily weather at the Loop. No API keys. Offline after first download.</p>
+  <p class="lede">2,757,885 reported crimes across 4,018 days (2015&ndash;2025), joined to ERA5 daily weather at the Loop. No API keys. Offline after first download.</p>
 
   <div class="flow">
-    <div class="step"><b>Pull counts, not 2.8M rows</b><span>Chicago portal SoQL aggregates server-side: day × crime type × count(*).</span></div>
+    <div class="step"><b>Pull counts, not 2.8M rows</b><span>Chicago portal SoQL aggregates server-side: day &times; crime type &times; count(*).</span></div>
     <div class="step"><b>Verify the aggregation</b><span>Independent count(*) checks for spot months, annual totals, and THEFT probes.</span></div>
     <div class="step"><b>Lock the cache</b><span>SHA-256 manifest so silent file drift fails loud.</span></div>
     <div class="step"><b>Own the weather object</b><span>One Loop grid point for a whole city. Measurement error attenuates. Estimates are conservative on that margin.</span></div>
@@ -250,7 +243,7 @@
 
   <div class="co tech">
     <span class="tag">Technical</span>
-    <p>Crime source: City of Chicago Data Portal <code class="inline">ijzp-q8t2</code> (CPD CLEAR). Weather: Open-Meteo ERA5 archive, America/Chicago, °F. Primary predictor: daily maximum temperature. Violent = battery, assault, robbery, homicide, criminal sexual assault (both portal spellings). Property = theft, burglary, motor vehicle theft, criminal damage. Window ends 2025-12-31 to avoid recent reporting lag.</p>
+    <p>Crime: City of Chicago Data Portal <code class="inline">ijzp-q8t2</code> (CPD CLEAR). Weather: Open-Meteo ERA5, America/Chicago, &deg;F. Primary predictor: daily maximum temperature. Violent = battery, assault, robbery, homicide, criminal sexual assault (both portal spellings). Property = theft, burglary, motor vehicle theft, criminal damage. Window ends 2025-12-31 to avoid recent reporting lag.</p>
   </div>
 
   <pre><code>/* The decision that makes the project runnable on a laptop */
@@ -260,49 +253,49 @@ $group  = day, primary_type
 
   <div class="co bug">
     <span class="tag">Data detail that mattered</span>
-    <p>Criminal sexual assault appears under two spellings for years (rename transition). Both labels get merged into violent. Each source incident has one primary type, so this is not double counting. "Total" crime is ~26% "other" (narcotics, deceptive practice, etc.). Headline modeling focuses on violent and property for a cleaner behavioral read.</p>
+    <p>Criminal sexual assault appears under two spellings for years (rename transition). Both labels merge into violent. Each source incident has one primary type, so this is not double counting. &ldquo;Total&rdquo; crime is ~26% &ldquo;other&rdquo; (narcotics, deceptive practice, etc.). Headline modeling focuses on violent and property.</p>
   </div>
 </section>
 
 <section id="raw">
   <div class="secnum">04</div>
   <h2>What the raw data shows (and what it does not prove)</h2>
-  <p class="lede">Every summer, crime and temperature rise together. That chart is not the result. It is the reason you need fixed effects.</p>
+  <p class="lede">Every summer, crime and temperature rise together. That chart is not the result. It is why you need fixed effects.</p>
 
   <figure>
-    <img src="figures/article_seasonality.png" alt="Two panel chart: monthly mean violent and property crime 2015-2025 on top, monthly mean daily high temperature below. Both series crest every summer and trough every winter. 2020 is shaded.">
-    <figcaption><b>Raw co-movement.</b> Every summer both crime series crest with temperature. COVID and the late-May 2020 unrest week leave visible scars. Property crime also climbs after 2022 with the motor-vehicle-theft wave. None of that is identified as a heat effect yet.</figcaption>
+    <img src="figures/article_seasonality.png" width="960" height="540" alt="Two-panel chart: monthly mean violent and property crime 2015-2025 on top, monthly mean daily high temperature below. Both series crest every summer and trough every winter. Early 2020 is shaded.">
+    <figcaption><b>Raw co-movement.</b> Every summer both crime series crest with temperature. COVID and the late-May 2020 unrest week leave scars. Property crime also climbs after 2022 with the motor-vehicle-theft wave. None of that is identified as a heat effect yet.</figcaption>
   </figure>
 
   <div class="co plain">
     <span class="tag">Plain English</span>
-    <p>If you only look at "hot months have more crime," you have mixed heat with daylight, school calendars, tourism, and summer life. The model throws those away and only keeps day-to-day weather surprises inside each month. Within a typical month, daily highs still swing about 9°F on average. Plenty of identifying variation.</p>
+    <p>If you only look at &ldquo;hot months have more crime,&rdquo; you mixed heat with daylight, school calendars, tourism, and summer life. The model throws those away and keeps day-to-day weather surprises inside each month. Within a typical month, daily highs still swing about 9&deg;F on average. Plenty of identifying variation.</p>
   </div>
 
   <figure>
-    <img src="figures/eda_type_residual_gradients.png" alt="Four scatter plots of residual log crime against residual temperature for battery, robbery, theft, and assault after removing month-year means. Battery and assault show the strongest upward residual slopes.">
-    <figcaption><b>After stripping the calendar.</b> Within-month residual heat still tracks residual crime, strongest for battery and assault, weaker for theft. This is the variation the regressions actually use.</figcaption>
+    <img src="figures/eda_type_residual_gradients.png" width="960" height="720" alt="Four scatter plots of residual log crime against residual temperature for battery, robbery, theft, and assault after removing month-year means. Battery and assault show the strongest upward residual slopes.">
+    <figcaption><b>After stripping the calendar.</b> Within-month residual heat still tracks residual crime, strongest for battery and assault, weaker for theft. This is the variation the regressions use.</figcaption>
   </figure>
 </section>
 
-<div class="divider" aria-hidden="true">· · ·</div>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
 
 <section id="model">
   <div class="secnum">05</div>
   <h2>The model, stated cleanly</h2>
-  <p class="lede">One workhorse specification. Several stress tests. No black-box "the computer found heat" story.</p>
+  <p class="lede">One workhorse specification. Several stress tests. No black-box &ldquo;the computer found heat&rdquo; story.</p>
 
   <div class="co tech">
     <span class="tag">Technical</span>
     <p>For daily count C<sub>t</sub> and daily high T<sub>t</sub>:</p>
-    <pre style="margin:12px 0"><code>log C_t = β · (T_t / 10) + α_month×year + δ_day-of-week + γ′W_t + ε_t</code></pre>
-    <p>W holds holiday, rain (≥1 mm), and snow-day flags. Report 100×(e<sup>β</sup> − 1) as percent change per +10°F. Errors: Newey-West HAC with data-selected lag 9 (lag 14 as sensitivity). Count-model check: Poisson QMLE and Negative Binomial. Violent-vs-property gap: stacked regression with day-clustered errors.</p>
+    <pre style="margin:12px 0"><code>log C_t = &beta; &middot; (T_t / 10) + &alpha;_month&times;year + &delta;_day-of-week + &gamma;'W_t + &epsilon;_t</code></pre>
+    <p>W holds holiday, rain (&ge;1 mm), and snow-day flags. Report 100&times;(e<sup>&beta;</sup> &minus; 1) as percent change per +10&deg;F. Errors: Newey-West HAC with data-selected lag 9 (lag 14 as sensitivity). Count-model check: Poisson QMLE and Negative Binomial. Violent-vs-property gap: stacked regression with day-clustered errors.</p>
   </div>
 
   <div class="cards">
     <div class="card">
-      <h4>M1 → M2</h4>
-      <p>Calendar controls, then full month×year fixed effects. Tightening barely moves β. Seasonal artifact would collapse here.</p>
+      <h4>M1 &rarr; M2</h4>
+      <p>Calendar controls, then full month&times;year fixed effects. Tightening barely moves &beta;. A pure seasonal artifact would collapse here.</p>
       <span class="verdict v-win">STABLE</span>
     </div>
     <div class="card">
@@ -312,19 +305,19 @@ $group  = day, primary_type
     </div>
     <div class="card">
       <h4>M4 shape</h4>
-      <p>Temperature bins plus AIC-selected spline (df=6). Formal kink search for violent crime at 80°F.</p>
+      <p>Temperature bins plus AIC-selected spline (df=6). Formal kink search for violent crime at 80&deg;F.</p>
       <span class="verdict v-split">PLATEAU</span>
     </div>
     <div class="card">
-      <h4>M5–M6</h4>
-      <p>Stacked gap test. Hottest-decile and summer-only ≥90°F cuts. Not "just summer."</p>
+      <h4>M5 &ndash; M6</h4>
+      <p>Stacked gap test. Hottest-decile dummy and summer-only &ge;90&deg;F vs 70s. Not &ldquo;just summer.&rdquo;</p>
       <span class="verdict v-win">HOLDS</span>
     </div>
   </div>
 
   <div class="co plain">
     <span class="tag">Plain English</span>
-    <p>We do not ask the model to invent a story. We ask whether unusually hot days, compared with other days in the same month, show more crime reports. Then we ask whether violence moves more than property, whether the curve flattens at the top, and whether the result dies when we change the estimator or drop weird years.</p>
+    <p>We ask whether unusually hot days, compared with other days in the same month, show more crime reports. Then whether violence moves more than property, whether the curve flattens at the top, and whether the result dies when we change the estimator or drop weird years.</p>
   </div>
 </section>
 
@@ -334,19 +327,19 @@ $group  = day, primary_type
   <p class="lede">Same-day heat moves reported crime. Violence moves more. Hot spells add memory. Extreme heat plateaus rather than reverses.</p>
 
   <figure>
-    <img src="figures/article_effects.png" alt="Horizontal bar chart of percent effects per plus 10 Fahrenheit for total, violent, property, battery, and theft with 95 percent confidence intervals.">
-    <figcaption><b>Same-day effects per +10°F daily max</b> under month×year fixed effects. Battery is the engine of the violent result. Theft looks like the property story.</figcaption>
+    <img src="figures/article_effects.png" width="800" height="420" alt="Horizontal bar chart of percent effects per plus 10 Fahrenheit for total, violent, property, battery, and theft with 95 percent confidence intervals.">
+    <figcaption><b>Same-day effects per +10&deg;F daily max</b> under month&times;year fixed effects. Battery is the engine of the violent result. Theft looks like the property story.</figcaption>
   </figure>
 
   <div class="tblwrap">
     <table>
       <thead>
-        <tr><th>Outcome</th><th class="num">% per +10°F</th><th class="num">95% CI</th><th>Note</th></tr>
+        <tr><th>Outcome</th><th class="num">% per +10&deg;F</th><th class="num">95% CI</th><th>Note</th></tr>
       </thead>
       <tbody>
         <tr><td>Total crime</td><td class="num">+4.0%</td><td class="num">[+3.5, +4.4]</td><td>Mixture of motives</td></tr>
         <tr><td>Violent</td><td class="num"><b>+5.6%</b></td><td class="num">[+5.1, +6.0]</td><td>Public headline</td></tr>
-        <tr><td>Property</td><td class="num">+3.7%</td><td class="num">[+3.2, +4.2]</td><td>~1.5× smaller than violent</td></tr>
+        <tr><td>Property</td><td class="num">+3.7%</td><td class="num">[+3.2, +4.2]</td><td>~1.5&times; smaller than violent</td></tr>
         <tr><td>Battery only</td><td class="num">+6.0%</td><td class="num">[+5.5, +6.5]</td><td>59% of violent volume</td></tr>
         <tr><td>Theft only</td><td class="num">+3.4%</td><td class="num">[+2.8, +4.0]</td><td>Property core</td></tr>
         <tr><td>Hot spell (cumulative, L*=1)</td><td class="num"><b>+6.1%</b></td><td class="num">[+5.6, +6.6]</td><td>Same-day + lag memory</td></tr>
@@ -355,25 +348,25 @@ $group  = day, primary_type
   </div>
 
   <figure>
-    <img src="figures/g3_dlag_violent.png" alt="Bar chart of distributed lag coefficients for violent crime at lag 0 and lag 1 selected by AIC.">
-    <figcaption><b>Hot spells compound.</b> AIC selects one lag for violence. Yesterday's heat still adds. Cumulative effect about +6.1% per +10°F spell. Not pure displacement from tomorrow.</figcaption>
+    <img src="figures/g3_dlag_violent.png" width="800" height="400" alt="Bar chart of distributed lag coefficients for violent crime at lag 0 and lag 1 selected by AIC.">
+    <figcaption><b>Hot spells compound.</b> AIC selects one lag for violence. Yesterday&rsquo;s heat still adds. Cumulative effect about +6.1% per +10&deg;F spell. Not pure displacement from tomorrow.</figcaption>
   </figure>
 
   <figure>
-    <img src="figures/g4_kink_aic.png" alt="Two panels of AIC versus break temperature for violent and property crime piecewise linear models.">
-    <figcaption><b>Shape, chosen by AIC.</b> Violent crime: break near 80°F. Slope about +6.0% per +10°F below the break, near flat above. Property crime: break near 50°F (cold suppression, then shallow). No Cohn-Rotton inverted-U in Chicago's observed range.</figcaption>
+    <img src="figures/g4_kink_aic.png" width="960" height="420" alt="Two panels of AIC versus break temperature for violent and property crime piecewise linear models.">
+    <figcaption><b>Shape, chosen by AIC.</b> Violent crime: break near 80&deg;F. Slope about +6.0% per +10&deg;F below the break, near flat above. Property crime: break near 50&deg;F (cold suppression, then shallow). No inverted-U in Chicago&rsquo;s observed range.</figcaption>
   </figure>
 
   <div class="co heat">
     <span class="tag">Summer check</span>
-    <p>Within June-August only, days ≥90°F still show higher violent crime than same-summer 70s days (~+2.5%). Property shows nothing in that cut. Heat is not a costume for "it was July."</p>
+    <p>Within June&ndash;August only, days &ge;90&deg;F still show higher violent crime than same-summer 70s days (~+2.5%). Property shows nothing in that cut. Heat is not a costume for &ldquo;it was July.&rdquo;</p>
   </div>
 </section>
 
 <section id="attack">
   <div class="secnum">07</div>
   <h2>Stress tests</h2>
-  <p class="lede">If a finding only lives in one specification, it is not a finding. Scoreboard:</p>
+  <p class="lede">If a finding only lives in one specification, it is not a finding.</p>
 
   <div class="tblwrap">
     <table>
@@ -383,20 +376,20 @@ $group  = day, primary_type
       <tbody>
         <tr>
           <td><b>F1 Leads</b></td>
-          <td>Does tomorrow's heat predict today's crime?</td>
+          <td>Does tomorrow&rsquo;s heat predict today&rsquo;s crime?</td>
           <td>Same-day +5.1%. Lead-1 +0.6%. Lead-2 +0.3%.</td>
           <td><span class="chip pass">PASS</span></td>
         </tr>
         <tr>
           <td><b>F2 Components</b></td>
-          <td>Is "violent" just a label, or battery-heavy behavior?</td>
+          <td>Is &ldquo;violent&rdquo; battery-heavy behavior?</td>
           <td>Battery +6.0%. Assault +5.7%. Robbery +3.5%. Theft +3.4%.</td>
           <td><span class="chip pass">PASS</span></td>
         </tr>
         <tr>
           <td><b>F3 Heat index</b></td>
-          <td>Does "feels like" overturn dry-bulb?</td>
-          <td>Per residual SD, tmax / apparent / heat-index sit near 4.6-5.1%. Tmax stays public.</td>
+          <td>Does &ldquo;feels like&rdquo; overturn dry-bulb?</td>
+          <td>Per residual SD, tmax / apparent / heat-index sit near 4.6&ndash;5.1%. Tmax stays public.</td>
           <td><span class="chip pass">PASS</span></td>
         </tr>
         <tr>
@@ -408,12 +401,12 @@ $group  = day, primary_type
         <tr>
           <td><b>F5 Permutation</b></td>
           <td>Shuffle temperature inside each month 300 times.</td>
-          <td>Observed residual slope is extreme. p ≈ 0.</td>
+          <td>Observed residual slope is extreme. p &approx; 0.</td>
           <td><span class="chip pass">PASS</span></td>
         </tr>
         <tr>
           <td><b>F6 Influence</b></td>
-          <td>Drop unrest, New Year's, top 1% days, all of 2020.</td>
+          <td>Drop unrest, New Year&rsquo;s, top 1% days, all of 2020.</td>
           <td>Every shift under 0.1 percentage points.</td>
           <td><span class="chip pass">PASS</span></td>
         </tr>
@@ -428,12 +421,12 @@ $group  = day, primary_type
   </div>
 
   <figure>
-    <img src="figures/f5_permutation.png" alt="Histogram of residual slope estimates under within-month temperature shuffles, with observed slope marked far in the right tail.">
-    <figcaption><b>Permutation null.</b> Within each month×year cell, shuffle temperature and refit. The real residual association sits outside the null cloud.</figcaption>
+    <img src="figures/f5_permutation.png" width="800" height="400" alt="Histogram of residual slope estimates under within-month temperature shuffles, with observed slope marked far in the right tail.">
+    <figcaption><b>Permutation null.</b> Within each month&times;year cell, shuffle temperature and refit. The real residual association sits outside the null cloud.</figcaption>
   </figure>
 
   <figure>
-    <img src="figures/eda_leads_residual_corr.png" alt="Bar chart of residual correlations between log violent crime and temperature for same day and three future leads. Same day is largest.">
+    <img src="figures/eda_leads_residual_corr.png" width="800" height="400" alt="Bar chart of residual correlations between log violent crime and temperature for same day and three future leads. Same day is largest.">
     <figcaption><b>Leads are small.</b> Residual correlation peaks on the same day and falls for future heat. Reverse causality would have looked different.</figcaption>
   </figure>
 </section>
@@ -446,24 +439,24 @@ $group  = day, primary_type
   <div class="cards">
     <div class="card">
       <h4>HAC lag = 9</h4>
-      <p>Newey-West rule of thumb for T≈4,018, confirmed on an SE grid. Original lag 14 was slightly conservative. Point estimate unchanged.</p>
+      <p>Newey-West rule of thumb for T&asymp;4,018, confirmed on an SE grid. Original lag 14 was slightly conservative. Point estimate unchanged.</p>
     </div>
     <div class="card">
       <h4>Distributed lag L* = 1</h4>
-      <p>AIC and BIC agree for violence. Same-day + lag memory → cumulative +6.1%.</p>
+      <p>AIC and BIC agree for violence. Same-day + lag memory &rarr; cumulative +6.1%.</p>
     </div>
     <div class="card">
-      <h4>Kink at 80°F</h4>
+      <h4>Kink at 80&deg;F</h4>
       <p>Piecewise linear search by AIC. Rises, then flattens. Not an inverted-U.</p>
     </div>
     <div class="card">
       <h4>Per-1SD treatment race</h4>
-      <p>Mean temperature looks "bigger" per +10°F because means move less. On a within-month SD scale, tmax and tmean are close. Public treatment stays daily max.</p>
+      <p>Mean temperature looks &ldquo;bigger&rdquo; per +10&deg;F because means move less. On a within-month SD scale, tmax and tmean are close. Public treatment stays daily max.</p>
     </div>
   </div>
 
   <figure>
-    <img src="figures/g5_stability.png" alt="Leave-one-year-out forest plot and rolling three-year window path for the violent heat coefficient.">
+    <img src="figures/g5_stability.png" width="960" height="420" alt="Leave-one-year-out forest plot and rolling three-year window path for the violent heat coefficient.">
     <figcaption><b>Stability.</b> Leave-one-year-out violent effects sit between about +5.4% and +5.7%. No year is load-bearing.</figcaption>
   </figure>
 
@@ -473,7 +466,7 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
 # report: 100 * expm1(coef['tmax10'])</code></pre>
 </section>
 
-<div class="divider" aria-hidden="true">· · ·</div>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
 
 <section id="two-minds">
   <div class="secnum">09</div>
@@ -482,24 +475,24 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
 
   <div class="co plain">
     <span class="tag">The combo, stated flat</span>
-    <p><b>Max model starts. Smart cheaper model finishes.</b> Claude Fable 5 (max) opens a blank folder and builds the first complete analysis. Grok 4.5 takes that draft and does the second-pass work: validation depth, residual EDA, bandwidth and lag selection, falsification, shared modules, and this article. Neither is “the better model.” They are different tools for different tasks.</p>
+    <p><b>Max model starts. Smart cheaper model finishes.</b> Claude Fable 5 (max) opens a blank folder and builds the first complete analysis. Grok 4.5 takes that draft and does the second-pass work: validation depth, residual EDA, bandwidth and lag selection, falsification, shared modules, and this article. Neither is &ldquo;the better model.&rdquo; Different tools, different tasks.</p>
   </div>
 
   <div class="tblwrap">
     <table>
       <thead>
-        <tr><th>Tool</th><th>Task fit</th><th>What shipped from that pass</th></tr>
+        <tr><th>Tool</th><th>Task fit</th><th>What that pass shipped</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><b>Claude Fable 5</b><br><span style="color:var(--muted);font-size:13px">max · 2 heavy prompts</span></td>
-          <td>Greenfield velocity. Super-prompt → working portfolio notebook.</td>
-          <td>SoQL aggregation, weather join, full M1–M6 ladder, first figures, sensitivity table, first findings. The scaffold that made the project real in one sitting.</td>
+          <td><b>Claude Fable 5</b><br><span style="color:var(--muted);font-size:13px">max &middot; 2 heavy prompts</span></td>
+          <td>Greenfield velocity. Super-prompt to working portfolio notebook.</td>
+          <td>SoQL aggregation, weather join, full M1&ndash;M6 ladder, first figures, sensitivity table, first findings. The scaffold that made the project real in one sitting.</td>
         </tr>
         <tr>
-          <td><b>Grok 4.5</b><br><span style="color:var(--muted);font-size:13px">smart · cost-efficient · rest of the work</span></td>
+          <td><b>Grok 4.5</b><br><span style="color:var(--muted);font-size:13px">smart &middot; cost-efficient &middot; rest of the work</span></td>
           <td>Audit, selection, stress tests, packaging.</td>
-          <td>Data QA and manifest, residual EDA, Model Lab (HAC, DLAG, kink, LOYO), F1–F7 falsification, <code class="inline">panel.py</code> / <code class="inline">models.py</code>, integration, this page.</td>
+          <td>Data QA and manifest, residual EDA, Model Lab (HAC, DLAG, kink, LOYO), F1&ndash;F7 falsification, <code class="inline">panel.py</code> / <code class="inline">models.py</code>, integration, this page.</td>
         </tr>
       </tbody>
     </table>
@@ -507,12 +500,12 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
 
   <div class="co why">
     <span class="tag">Why not one model for everything</span>
-    <p>Starting cold rewards raw build speed and a long first draft. Finishing rewards skepticism: re-check the data contract, turn fiat knobs into selected ones, try to break the headline, then write for readers. You can force one model to do both. Splitting the jobs matches how the work actually feels. Max for ignition. Smart cheap for the second brain.</p>
+    <p>Starting cold rewards build speed and a long first draft. Finishing rewards skepticism: re-check the data contract, turn fiat knobs into selected ones, try to break the headline, then write for readers. You can force one model to do both. Splitting the jobs matches how the work actually feels. Max for ignition. Smart cheap for the second brain.</p>
   </div>
 
   <div class="co tech">
     <span class="tag">Process</span>
-    <p>Plan first. Run second. Human decides what ships. Notebook runs offline top to bottom. Model lab is one command. This page is hand-written HTML, not a notebook dump. Full code walkthrough is in the repo README.</p>
+    <p>Plan first. Run second. Human decides what ships. Notebook runs offline top to bottom. Model lab is one command. This page is hand-written HTML, not a notebook dump. Code walkthrough lives in the repo README.</p>
   </div>
 </section>
 
@@ -533,10 +526,10 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
   <h2>Reproduce</h2>
   <pre><code>cd heat
 pip install -r requirements.txt
-py -3 run_model_lab.py
-py -3 run_eda_diagnostics.py
+python run_model_lab.py
+python run_eda_diagnostics.py
 jupyter nbconvert --to notebook --execute --inplace heat_and_crime.ipynb</code></pre>
-  <p>With <code class="inline">data/</code> present, runs are offline. Public APIs only. Manifest hashes lock the cache. Delete caches only if you intend a full refresh.</p>
+  <p>With <code class="inline">data/</code> present, runs are offline. Public APIs only. Manifest hashes lock the cache. Delete caches only for a full refresh.</p>
 </section>
 
 <section id="tldr-full">
@@ -545,13 +538,13 @@ jupyter nbconvert --to notebook --execute --inplace heat_and_crime.ipynb</code><
   <div class="tldrbox">
     <h3>What to remember</h3>
     <ul>
-      <li><b>+10°F daily max → +5.6% violent crime</b> the same day, inside month×year cells. Total +4.0%. Property +3.7%.</li>
-      <li><b>Violence responds ~1.5× property.</b> Battery +6.0% is the core.</li>
+      <li><b>+10&deg;F daily max &rarr; +5.6% violent crime</b> the same day, inside month&times;year cells. Total +4.0%. Property +3.7%.</li>
+      <li><b>Violence responds ~1.5&times; property.</b> Battery +6.0% is the core.</li>
       <li><b>Hot spells compound</b> to about +6.1% cumulative (AIC lag order 1).</li>
-      <li><b>Shape:</b> rises then flattens near 80°F. No inverted-U in this range.</li>
-      <li><b>Not just summer:</b> within Jun-Aug, 90°F+ days still elevate violence vs 70s.</li>
+      <li><b>Shape:</b> rises then flattens near 80&deg;F. No inverted-U in this range.</li>
+      <li><b>Not just summer:</b> within Jun&ndash;Aug, 90&deg;F+ days still elevate violence vs 70s.</li>
       <li><b>Stress tests:</b> leads small, permutation extreme, influence cuts tiny, FDR clear.</li>
-      <li><b>Build:</b> Claude Fable scaffolded the notebook in two prompts (July 2026). Grok 4.5 did the audit, lab, stress tests, and this article.</li>
+      <li><b>Build:</b> Claude Fable scaffolded the notebook in two prompts (July 2026). Grok 4.5 did the audit, lab, stress tests, and this article. Max starts. Smart cheap finishes. Different tools, different tasks.</li>
     </ul>
   </div>
   <p><a href="#top">Back to the top</a></p>
@@ -560,12 +553,12 @@ jupyter nbconvert --to notebook --execute --inplace heat_and_crime.ipynb</code><
 </main>
 
 <footer>
-  <p>Heat and Crime · Chicago 2015–2025 · July 2026</p>
-  <p>Data: City of Chicago Data Portal (ijzp-q8t2) · Open-Meteo ERA5</p>
+  <p>Heat and Crime &middot; Chicago 2015&ndash;2025 &middot; July 2026</p>
+  <p>Data: City of Chicago Data Portal (ijzp-q8t2) &middot; Open-Meteo ERA5</p>
   <p>
     <a href="https://along777.github.io/along/heat-and-crime/">Live page</a>
-    · <a href="https://along777.github.io/along/ufo-news-cycle/">UFO news-cycle</a>
-    · <a href="https://along777.github.io/along/">Portfolio home</a>
+    &middot; <a href="https://along777.github.io/along/ufo-news-cycle/">UFO news-cycle</a>
+    &middot; <a href="https://along777.github.io/along/">Portfolio home</a>
   </p>
 </footer>
 
