@@ -471,11 +471,23 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
 <section id="two-minds">
   <div class="secnum">09</div>
   <h2>A tale of two AI minds</h2>
-  <p class="lede">July 2026. One human directing. Two models. Not a contest. A handoff.</p>
+  <p class="lede">July 2026. One human directing. Two models. Not a contest. A handoff with a real constraint.</p>
+
+  <div class="co why">
+    <span class="tag">Two July projects</span>
+    <p>This heat study is one of <b>two</b> AI-built Freakonomics-style portfolio pieces worked in July 2026. The other is
+    <a href="https://along777.github.io/along/ufo-news-cycle/">Do UFOs Follow the News Cycle?</a>
+    (618k reports, media and misidentification, Claude-led). Neither write-up was invented on publish day. Both were planned as a pair: public data, behavioral framing, full attack surface, hand-built HTML articles.</p>
+  </div>
 
   <div class="co plain">
     <span class="tag">The combo, stated flat</span>
-    <p><b>Max model starts. Smart cheaper model finishes.</b> Claude Fable 5 (max) opens a blank folder and builds the first complete analysis. Grok 4.5 takes that draft and does the second-pass work: validation depth, residual EDA, bandwidth and lag selection, falsification, shared modules, and this article. Neither is &ldquo;the better model.&rdquo; Different tools, different tasks.</p>
+    <p><b>Max model starts. Smart cheaper model finishes.</b> Claude Fable 5 on Claude Max opens a blank folder and builds the first complete analysis. Grok 4.5 on SuperGrok takes that draft and does the second-pass work: validation depth, residual EDA, bandwidth and lag selection, falsification, shared modules, and this article. Neither is &ldquo;the better model.&rdquo; Different tools, different tasks.</p>
+  </div>
+
+  <div class="co bug">
+    <span class="tag">Why the handoff is practical, not ideology</span>
+    <p>Claude Max is excellent for greenfield velocity, but it <b>rate-limits on a roughly five-hour cycle</b>. Mid-project, that clock stops a long session cold. SuperGrok / Grok 4.5 is available on the X side (poster access, paid). When Max is limited, or when the job is audit-and-attack rather than blank-page build, the work continues on Grok instead of waiting. Capacity and task fit, not a scoreboard of which model is smarter.</p>
   </div>
 
   <div class="tblwrap">
@@ -485,27 +497,22 @@ log(violent) ~ tmax10 + C(ym) + C(dow) + holiday + rain + snow_day
       </thead>
       <tbody>
         <tr>
-          <td><b>Claude Fable 5</b><br><span style="color:var(--muted);font-size:13px">max &middot; 2 heavy prompts</span></td>
-          <td>Greenfield velocity. Super-prompt to working portfolio notebook.</td>
-          <td>SoQL aggregation, weather join, full M1&ndash;M6 ladder, first figures, sensitivity table, first findings. The scaffold that made the project real in one sitting.</td>
+          <td><b>Claude Fable 5</b><br><span style="color:var(--muted);font-size:13px">Max &middot; 2 heavy prompts</span></td>
+          <td>Greenfield velocity. Super-prompt to working portfolio notebook. Until the 5-hour Max limit hits.</td>
+          <td>SoQL aggregation, weather join, full M1&ndash;M6 ladder, first figures, sensitivity table, first findings. Scaffold that made the project real in one sitting.</td>
         </tr>
         <tr>
-          <td><b>Grok 4.5</b><br><span style="color:var(--muted);font-size:13px">smart &middot; cost-efficient &middot; rest of the work</span></td>
-          <td>Audit, selection, stress tests, packaging.</td>
+          <td><b>Grok 4.5</b><br><span style="color:var(--muted);font-size:13px">SuperGrok &middot; rest of the work</span></td>
+          <td>Keep building when Max is limited. Audit, selection, stress tests, packaging.</td>
           <td>Data QA and manifest, residual EDA, Model Lab (HAC, DLAG, kink, LOYO), F1&ndash;F7 falsification, <code class="inline">panel.py</code> / <code class="inline">models.py</code>, integration, this page.</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="co why">
-    <span class="tag">Why not one model for everything</span>
-    <p>Starting cold rewards build speed and a long first draft. Finishing rewards skepticism: re-check the data contract, turn fiat knobs into selected ones, try to break the headline, then write for readers. You can force one model to do both. Splitting the jobs matches how the work actually feels. Max for ignition. Smart cheap for the second brain.</p>
-  </div>
-
   <div class="co tech">
     <span class="tag">Process</span>
-    <p>Plan first. Run second. Human decides what ships. Notebook runs offline top to bottom. Model lab is one command. This page is hand-written HTML, not a notebook dump. Code walkthrough lives in the repo README.</p>
+    <p>Plan first. Run second. Human decides what ships. Notebook runs offline top to bottom. Model lab is one command. This page is hand-written HTML, not a notebook dump. For the code path a strong DS can follow in the repo, see the project README.</p>
   </div>
 </section>
 
