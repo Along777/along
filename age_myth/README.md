@@ -1,6 +1,6 @@
 # age_myth
 
-**People did not die at 35. Babies did.**
+**Life expectancy was 35. Almost nobody died at 35.**
 
 When life expectancy at birth was under 40, people already 65 still expected about **75**. Only about **27%** of births got there. Median infant mortality was about **196 per 1,000**. Adults also gained about **+8.5 years** of remaining life at 65 from pre-1900 to post-2000.
 
