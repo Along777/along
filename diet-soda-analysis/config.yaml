@@ -1,0 +1,134 @@
+# Diet soda / ASB analysis configuration
+project_name: diet-soda-analysis
+seed: 42
+
+paths:
+  root: .
+  raw_nhanes: data/raw/nhanes
+  raw_wweia: data/raw/wweia_categories
+  raw_fndds: data/raw/fndds
+  raw_mortality: data/raw/mortality
+  raw_off: data/raw/openfoodfacts
+  interim: data/interim
+  processed: data/processed
+  figures: outputs/figures
+  tables: outputs/tables
+  docs: docs
+
+# Primary analytic window: 2011–2018 continuous NHANES
+cycles:
+  - suffix: G
+    years: "2011-2012"
+    begin_year: 2011
+  - suffix: H
+    years: "2013-2014"
+    begin_year: 2013
+  - suffix: I
+    years: "2015-2016"
+    begin_year: 2015
+  - suffix: J
+    years: "2017-2018"
+    begin_year: 2017
+
+# NHANES file stems to download per cycle
+nhanes_files:
+  - DEMO
+  - DR1IFF
+  - DR2IFF
+  - DRXFCD
+  - DR1TOT
+  - DR2TOT
+  - BMX
+  - BPX
+  - GHB
+  - GLU
+  - INS
+  - HDL
+  - TCHOL
+  - TRIGLY
+  - SMQ
+  - PAQ
+  - DIQ
+  - MCQ
+  - ALQ
+  - BPQ
+
+# CDC base URL pattern (begin_year folder)
+nhanes_url_template: "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/{begin_year}/DataFiles/{stem}_{suffix}.xpt"
+
+# Multi-cycle weight divisor (= number of 2-year cycles)
+n_cycles: 4
+
+# Analytic population defaults (applied in Phase 1B, not inventory)
+population:
+  min_age: 20
+  exclude_pregnant: true
+
+# WWEIA food category codes (official exposure labels)
+wweia_categories:
+  diet_soft_drinks: 7102
+  diet_sport_energy: 7104
+  other_diet_drinks: 7106
+  soft_drinks: 7202
+  fruit_drinks: 7204
+  sport_energy: 7206
+
+# Key variables for inventory missingness checks
+key_variables:
+  DEMO:
+    - SEQN
+    - RIDAGEYR
+    - RIAGENDR
+    - RIDRETH3
+    - DMDEDUC2
+    - INDFMPIR
+    - SDMVPSU
+    - SDMVSTRA
+    - WTMEC2YR
+    - WTINT2YR
+  BMX:
+    - SEQN
+    - BMXBMI
+    - BMXWAIST
+  BPX:
+    - SEQN
+    - BPXSY1
+    - BPXDI1
+  GHB:
+    - SEQN
+    - LBXGH
+  GLU:
+    - SEQN
+    - LBXGLU
+    - WTSAF2YR
+  INS:
+    - SEQN
+    - LBXIN
+  HDL:
+    - SEQN
+    - LBDHDD
+  TCHOL:
+    - SEQN
+    - LBXTC
+  TRIGLY:
+    - SEQN
+    - LBXTR
+    - LBDLDL
+  DR1IFF:
+    - SEQN
+    - DR1IFDCD
+    - DR1IGRMS
+  DR1TOT:
+    - SEQN
+    - DR1TKCAL
+  MCQ:
+    - SEQN
+    - MCQ220
+  SMQ:
+    - SEQN
+    - SMQ020
+  DIQ:
+    - SEQN
+    - DIQ010
+  PAQ:
+    - SEQN
