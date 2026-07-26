@@ -12,6 +12,13 @@
 <meta property="og:image" content="https://along777.github.io/along/images/logo-big.png">
 <meta property="og:image:alt" content="Aaron Long, data scientist portfolio">
 <meta property="og:type" content="article">
+<script>
+// Resolve the theme before paint. This page is authored dark, so the default
+// comes from the OS setting unless the visitor has chosen one.
+(function(){var t;try{t=localStorage.getItem('theme');}catch(e){}
+if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}
+document.documentElement.setAttribute('data-theme',t);})();
+</script>
 <style>
   :root {
     --bg:        #0d1117;
@@ -187,6 +194,54 @@
     background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
   }
   footer { color: var(--muted); font-size: 13.5px; text-align: center; padding-top: 30px; }
+
+  /* ---------- Light theme ----------
+     This page was authored dark. The palette is swapped wholesale, and the
+     few places with hard-coded dark values (page wash, code syntax, the
+     gradient headline) get light counterparts. Diagram panels stay dark on
+     purpose: their SVG fills are baked in, so they read as figure plates. */
+  :root[data-theme="light"]{
+    --bg:#ffffff; --panel:#f6f8fa; --panel-2:#eaeef2; --border:#d0d7de;
+    --text:#1f2328; --muted:#59636e;
+    --accent:#0969da; --accent-2:#1a7f37; --violet:#8250df;
+    --warn:#9a6700; --red:#cf222e; --code-bg:#f6f8fa;
+    color-scheme: light;
+  }
+  :root[data-theme="light"] body{
+    background: radial-gradient(1200px 600px at 20% -10%, #eaf2fc 0%, var(--bg) 55%) fixed;
+  }
+  /* background-image, not the background shorthand: the shorthand would reset
+     background-clip:text and paint the gradient as a solid block. */
+  :root[data-theme="light"] h1{ background-image: linear-gradient(90deg,#1f2328,#0969da); }
+  :root[data-theme="light"] .tag-chip{
+    background: rgba(9,105,218,.08); border-color: rgba(9,105,218,.28); color:#0a3069;
+  }
+  /* Code reads on a light surface */
+  :root[data-theme="light"] pre code{ color:#1f2328; }
+  :root[data-theme="light"] .cmt { color:#6e7781; }
+  :root[data-theme="light"] .kw  { color:#cf222e; }
+  :root[data-theme="light"] .str { color:#0a3069; }
+  :root[data-theme="light"] .fn  { color:#8250df; }
+  :root[data-theme="light"] .num2{ color:#0550ae; }
+  :root[data-theme="light"] .hl-good { color:#1a7f37; }
+  :root[data-theme="light"] .hl-bad  { color:#cf222e; }
+  /* Diagrams keep their dark plate so the baked-in SVG colours stay legible */
+  :root[data-theme="light"] .figbox{ background:#0d1117; border-color:#2b3444; }
+
+  /* ---- theme toggle ---- */
+  #theme-toggle{position:fixed;right:18px;bottom:18px;z-index:200;width:44px;height:44px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    background:var(--panel);color:var(--text);border:1px solid var(--border);
+    box-shadow:0 4px 14px rgba(0,0,0,.28);padding:0}
+  #theme-toggle:hover{filter:brightness(1.15)}
+  #theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #theme-toggle svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  #theme-toggle .i-moon{display:none}
+  #theme-toggle .i-sun{display:block}
+  :root[data-theme="light"] #theme-toggle .i-sun{display:none}
+  :root[data-theme="light"] #theme-toggle .i-moon{display:block}
+  @media print{#theme-toggle{display:none}}
 </style>
 </head>
 <body>
@@ -849,5 +904,23 @@ python rag_ui.py</code></pre>
   </footer>
 
 </div>
+<button type="button" id="theme-toggle" aria-label="Switch between light and dark theme" title="Switch theme">
+<svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+<svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+</button>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  if(!btn) return;
+  function sync(){ btn.setAttribute('aria-pressed', String(root.getAttribute('data-theme')==='dark')); }
+  btn.addEventListener('click', function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next); }catch(e){}
+    sync();
+  });
+  sync();
+})();
+</script>
 </body>
 </html>
