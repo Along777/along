@@ -195,8 +195,7 @@
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
 
-                        <!-- TODO: add resume PDF (e.g. href="aaron-long-resume.pdf") -->
-                        <a href="#"
+                        <a href="aaron-long-resume.pdf" target="_blank" rel="noopener"
                            class="inline-flex items-center justify-center gap-x-3 border border-slate-700 hover:bg-slate-900 transition-all font-medium px-8 h-14 rounded-3xl text-base">
                             <i class="fa-solid fa-download"></i>
                             <span>Download Résumé</span>
@@ -540,6 +539,40 @@
                 </div>
             </div>
 
+            <!-- AI PROJECT: Return to Fire — the 2020 wildfire trilogy, rebuilt -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
+                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">2026 • 100% AI-BUILT REBUILD</div>
+                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
+                            </div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Return to Fire</h3>
+                        </div>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">My first-ever data science project — the 2020 wildfire trilogy, born after the Tubbs Fire took my family's home — rebuilt six years later on 2.3M fires with 308 attributes each, in five rounds that are all still published: a frozen first draft, a 29-check data audit, a tuned and calibrated escalation model, a 35-finding hostile red-team review, and the final report. The 2020 random forest is reconstructed bugs-and-all as a museum piece (the replica's 96.0% sat 0.3 points above guessing-the-majority), one published claim is retracted and rebuilt in print, and the verdict on "wildfires are increasing" lands as a SPLIT: not more fires — bigger fires. The old dataset ended in 2015; the new one finally contains the fire, as a single database row the finished model scores at the 97th percentile.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Claude Fable 5</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Claude Opus 5</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">5-round AI pipeline</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Verifier-enforced claims</span>
+                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">LightGBM · Optuna · SHAP</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <div class="text-indigo-400 font-medium">Built by Claude • 112 claims machine-verified • one claim retracted, rebuilt, re-verified</div>
+                        <a href="https://along777.github.io/along/wildfire-return/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!--
             TEMPLATE: copy this block to add a new AI project card, then fill in the [BRACKETED] parts.
 
@@ -584,7 +617,7 @@
                         <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
                     </div>
 
-                    <p class="text-slate-400 text-sm flex-1">Built Random Forest classifiers on the 1.88M US Wildfires dataset to predict fire cause and severity. Covers SQL extraction from SQLite, feature importance analysis, and model validation, the ML capstone of a three-part wildfire series.</p>
+                    <p class="text-slate-400 text-sm flex-1">Built Random Forest classifiers on the 1.88M US Wildfires dataset to predict fire cause — SQL extraction from SQLite and scikit-learn classification, the ML chapter of a three-part wildfire series and one of the first projects of my career, preserved as written in 2020. Honestly revisited in 2026 as <a href="https://along777.github.io/along/wildfire-return/" class="text-sky-400 hover:text-sky-300">Return to Fire</a>.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
                         <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">scikit-learn</span>
