@@ -1,0 +1,23 @@
+{
+  "retrieved_at": "2026-07-26T02:24:03.097650+00:00",
+  "files": [
+    {
+      "name": "hmd_summary_IMR.xlsx",
+      "url": "https://www.mortality.org/File/GetDocument/Public/HMD_summary/hmd_summary_IMR.xlsx",
+      "bytes": 167924,
+      "sha256": "2dc6470f478452361f55cd9dc7a3c2603c0491af8effc06124fa39bdaf277730"
+    },
+    {
+      "name": "hmd_summary_px_0_to_65.xlsx",
+      "url": "https://www.mortality.org/File/GetDocument/Public/HMD_summary/hmd_summary_px_0_to_65.xlsx",
+      "bytes": 166220,
+      "sha256": "3b100bd0e78760b47c941f3a49bd287c9f08148d76ebc2c27f535b17518017fd"
+    },
+    {
+      "name": "hmd_summary_ex_0_65_80.xlsx",
+      "url": "https://www.mortality.org/File/GetDocument/Public/HMD_summary/hmd_summary_ex_0_65_80.xlsx",
+      "bytes": 467833,
+      "sha256": "4a239e306bfd8dbfe897e43a763a9981ce578f37b2822af35e369736858098d5"
+    }
+  ]
+}

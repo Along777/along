@@ -1,0 +1,7 @@
+region_id,name,iso3,hmd_code,hld_name,region_type,continent,coverage_notes
+SWE,Sweden,SWE,SWE,Sweden,country,Europe,HMD period tables from 1751
+GBRTENW,England and Wales,GBR,GBRTENW,England and Wales,country,Europe,HMD England & Wales; Cambridge Group for earlier periods
+FRATNP,France,FRA,FRATNP,France,country,Europe,Long HMD series; used in OWID multi-age examples
+JPN,Japan,JPN,JPN,Japan,country,Asia,HMD modern series
+OWID_WORLD,World,,,,aggregate,World,OWID global aggregates
+FORAGER_COMPOSITE,Hunter-gatherer composite (Gurven & Kaplan),,,,population_group,Multi,Anthropological samples; not national VR

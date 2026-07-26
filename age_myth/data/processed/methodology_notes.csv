@@ -1,0 +1,7 @@
+note_id,topic,applies_to_source_id,applies_to_region_id,text,severity
+dual_myth,dual_myth,,,Myth A: e0~30 does not mean adults died at 30. Myth B: surviving childhood did not yield modern adult e(x). Always compare multi-age e(x) over time.,info
+owid_stitch,source_methods,owid_le_longrun,,"OWID long-run e0 stitches HMD, Zijdeman/Clio-Infra, Riley, and UN WPP. Not a single method.",caveat
+hld_hetero,source_methods,hld,,HLD aggregates published life tables with heterogeneous construction methods. Prefer HMD for gold-standard national series when both exist.,caveat
+hmd_registration,access,hmd_v6,,HMD requires free registration. Full country series need HMD_USER/HMD_PASSWORD.,info
+forager_modal,interpretation,gurven_kaplan_2007,FORAGER_COMPOSITE,Modal adult lifespan ~68-78 is not e0. Gurven & Kaplan e0 for traditional hunter-gatherers is typically low 20s to mid 30s.,limitation
+no_paleodemography_in_fact,exclusions,,,Mean age at death from cemeteries is not stored as life expectancy in the main fact table.,limitation

@@ -1,0 +1,252 @@
+{
+  "peer_review_version": "1.0",
+  "myth_a_hardened": {
+    "definition": "both-sex HMD summary, e0<40, subseries de-duplicated",
+    "n_country_years": 211,
+    "n_countries": 11,
+    "countries": [
+      "BEL",
+      "CHE",
+      "DNK",
+      "ESP",
+      "FIN",
+      "FRANCE:_TOTAL_POPULATION",
+      "ISL",
+      "ITA",
+      "NLD",
+      "SWE",
+      "UK:_ENGLAND_&_WALES_TOTAL_POPULATION"
+    ],
+    "e0_median": 37.0,
+    "imr_median": 195.94,
+    "s_to_65_median": 0.2697,
+    "exp_death_65": {
+      "n_rows": 211,
+      "n_clusters": 11,
+      "median": 75.39,
+      "ci_low": 75.12,
+      "ci_high": 75.7,
+      "method": "cluster_bootstrap_by_country"
+    },
+    "adult_gap_65": {
+      "n_rows": 211,
+      "n_clusters": 11,
+      "median": 38.29,
+      "ci_low": 37.42,
+      "ci_high": 40.25174999999999,
+      "method": "cluster_bootstrap_by_country"
+    },
+    "share_exp_death_65_ge_70": 1.0,
+    "share_exp_death_65_ge_60": 1.0,
+    "exp_death_65_p10_p90": [
+      74.25,
+      76.4
+    ],
+    "n_e0_in_30_35": 45,
+    "reject_myth_A": true,
+    "caveat": "exp_death_65 is CONDITIONAL on surviving to age 65; median S(0->65) is low",
+    "primary_allowlist": {
+      "n_country_years": 208,
+      "n_countries": 10,
+      "exp_death_65_median": 75.4,
+      "share_ge_70": 1.0
+    }
+  },
+  "myth_b_hardened": {
+    "definition": "de-duplicated countries with pre-1900 and post-2000 e65",
+    "delta_e65": {
+      "n_clusters": 12,
+      "mean": 8.45185992860241,
+      "median": 8.436731831022087,
+      "min": 6.360135265700482,
+      "max": 10.65875,
+      "ci_low": 7.744715001641014,
+      "ci_high": 9.165062882908554,
+      "method": "bootstrap_countries",
+      "cluster_ids": [
+        "BEL",
+        "CHE",
+        "DNK",
+        "FIN",
+        "FRANCE:_TOTAL_POPULATION",
+        "ISL",
+        "ITA",
+        "NLD",
+        "NOR",
+        "SWE",
+        "UK:_ENGLAND_&_WALES_TOTAL_POPULATION",
+        "UK:_SCOTLAND"
+      ]
+    },
+    "country_table": [
+      {
+        "region_id": "BEL",
+        "pre": 11.036271186440677,
+        "post": 19.256666666666668,
+        "delta": 8.22039548022599
+      },
+      {
+        "region_id": "CHE",
+        "pre": 9.87,
+        "post": 20.52875,
+        "delta": 10.65875
+      },
+      {
+        "region_id": "DNK",
+        "pre": 11.493692307692308,
+        "post": 18.548750000000002,
+        "delta": 7.0550576923076935
+      },
+      {
+        "region_id": "FIN",
+        "pre": 10.773181818181818,
+        "post": 19.42625,
+        "delta": 8.653068181818181
+      },
+      {
+        "region_id": "FRANCE:_TOTAL_POPULATION",
+        "pre": 10.906309523809524,
+        "post": 20.722916666666666,
+        "delta": 9.816607142857142
+      },
+      {
+        "region_id": "ISL",
+        "pre": 11.162903225806453,
+        "post": 19.93375,
+        "delta": 8.770846774193547
+      },
+      {
+        "region_id": "ITA",
+        "pre": 10.29857142857143,
+        "post": 20.131666666666668,
+        "delta": 9.833095238095238
+      },
+      {
+        "region_id": "NLD",
+        "pre": 10.967,
+        "post": 19.09541666666667,
+        "delta": 8.128416666666668
+      },
+      {
+        "region_id": "NOR",
+        "pre": 12.950555555555557,
+        "post": 19.67833333333333,
+        "delta": 6.727777777777774
+      },
+      {
+        "region_id": "SWE",
+        "pre": 10.666912751677852,
+        "post": 19.765833333333333,
+        "delta": 9.09892058165548
+      },
+      {
+        "region_id": "UK:_ENGLAND_&_WALES_TOTAL_POPULATION",
+        "pre": 11.071186440677966,
+        "post": 19.170434782608698,
+        "delta": 8.099248341930732
+      },
+      {
+        "region_id": "UK:_SCOTLAND",
+        "pre": 11.593777777777778,
+        "post": 17.95391304347826,
+        "delta": 6.360135265700482
+      }
+    ],
+    "reject_myth_B": true,
+    "delta_e80": {
+      "n_clusters": 12,
+      "mean": 3.8902802755609005,
+      "median": 3.85869081920904,
+      "min": 2.84696618357488,
+      "max": 5.057083333333333,
+      "ci_low": 3.504511183018572,
+      "ci_high": 4.282427436425381,
+      "method": "bootstrap_countries",
+      "cluster_ids": [
+        "BEL",
+        "CHE",
+        "DNK",
+        "FIN",
+        "FRANCE:_TOTAL_POPULATION",
+        "ISL",
+        "ITA",
+        "NLD",
+        "NOR",
+        "SWE",
+        "UK:_ENGLAND_&_WALES_TOTAL_POPULATION",
+        "UK:_SCOTLAND"
+      ]
+    }
+  },
+  "model_comparison": {
+    "note": "High R2 with IMR is expected: e0 and IMR are functions of the same period mortality schedule. Not an ML overfit. Not causal.",
+    "corr_imr_year": -0.9122956907618426,
+    "models": {
+      "M0_pooled_imr_only": {
+        "r2": 0.9181811733621728,
+        "beta_imr": -0.20920918316403275,
+        "se": 0.0009551577766986412
+      },
+      "M1_within_imr_only": {
+        "r2": 0.9137358149099595,
+        "beta_imr": -0.21111459015857742,
+        "se": 0.0009920992630383005
+      },
+      "M2_within_imr_plus_year": {
+        "r2": 0.951075955129376,
+        "beta_imr": -0.12114833845363698,
+        "se": 0.0017434448415249088,
+        "beta_year": 0.12232408540479567
+      },
+      "M3_first_difference": {
+        "r2": 0.5069386885045819,
+        "beta_dimr": -0.11262287844242698,
+        "se": 0.001707567400819538,
+        "n": 4233,
+        "corr_de0_dimr": -0.7119962700074928
+      },
+      "M_fe_full_sensitivity": {
+        "r2": 0.9644292132150026,
+        "beta_imr": -0.12114833845363746,
+        "se_cluster": 0.016941562043704714,
+        "do_not_headline_r2": true
+      }
+    },
+    "loco_within_imr_year_beta": {
+      "mean": -0.12125794233115031,
+      "std": 0.0034667887068716504,
+      "min": -0.14109986773423855,
+      "max": -0.11386385651244192
+    },
+    "n_rows": 4277,
+    "n_countries": 44
+  },
+  "hld_mid_adult": {
+    "n_rows_e0": 3626,
+    "age15": {
+      "n_low_e0": 111,
+      "n_countries": 25,
+      "median_e0": 36.97,
+      "median_e15_remaining": 42.61,
+      "median_exp_age_if_15": 57.61,
+      "share_exp15_ge_50": 0.8828828828828829,
+      "share_exp15_ge_45": 0.990990990990991,
+      "caveat": "HLD median-collapsed multi-table; male/female averaged; methods heterogeneous"
+    },
+    "age30": {
+      "n_low_e0": 116,
+      "median_exp_age_if_30": 62.462500000000006,
+      "share_exp30_ge_55": 0.9568965517241379
+    },
+    "age65_hld": {
+      "n_low_e0": 111,
+      "median_exp_age_if_65": 75.33500000000001,
+      "share_ge_70": 1.0
+    }
+  },
+  "within_corr_summary": {
+    "n_countries": 44,
+    "median_pearson": -0.9438580012510758,
+    "mean_pearson": -0.8487530997319996
+  }
+}

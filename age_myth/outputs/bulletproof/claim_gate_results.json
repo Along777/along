@@ -1,0 +1,36 @@
+{
+  "A": {
+    "median_exp65_ge_70": true,
+    "share_ge_70": true,
+    "s_to_65_low": true,
+    "imr_high": true,
+    "n_ok": true,
+    "pass": true
+  },
+  "A2": {
+    "has_age15": true,
+    "median_exp15": true,
+    "share_exp15_ge_45": true,
+    "median_exp30": true,
+    "n_ok": true,
+    "pass": true
+  },
+  "B": {
+    "mean_gt": true,
+    "ci_low_gt_0": true,
+    "n_countries": true,
+    "pass": true
+  },
+  "C": {
+    "corr": true,
+    "fd_sign": true,
+    "pass": true
+  },
+  "S": {
+    "e0": true,
+    "exp65": true,
+    "imr": true,
+    "pass": true
+  },
+  "all_pass": true
+}

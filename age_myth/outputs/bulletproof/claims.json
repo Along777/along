@@ -1,0 +1,444 @@
+{
+  "scope": {
+    "populations": "High-quality vital registration (HMD public summary); HLD for mid-adult ages",
+    "not_claiming": [
+      "Global premodern humanity outside VR data",
+      "Cohort (lived) lifespan equal to period e0",
+      "Causal effect of IMR on e0 from regressions",
+      "Everyone reached age 65 historically"
+    ],
+    "measure_notes": [
+      "expected_age_if_alive_at_x = x + period remaining LE e(x)",
+      "S(0->65) is required co-evidence for Claim A",
+      "Period life tables apply one year age-specific rates"
+    ]
+  },
+  "claim_A": {
+    "n_country_years": 211,
+    "n_countries": 11,
+    "countries": [
+      "BEL",
+      "CHE",
+      "DNK",
+      "ESP",
+      "FIN",
+      "FRANCE:_TOTAL_POPULATION",
+      "ISL",
+      "ITA",
+      "NLD",
+      "SWE",
+      "UK:_ENGLAND_&_WALES_TOTAL_POPULATION"
+    ],
+    "median_e0": 37.0,
+    "median_imr": 195.94,
+    "median_s_to_65": 0.2697,
+    "exp_death_65": {
+      "median": 75.39,
+      "ci_low": 75.1195,
+      "ci_high": 75.7,
+      "n_rows": 211,
+      "n_clusters": 11,
+      "method": "cluster_bootstrap_country"
+    },
+    "adult_gap_65": {
+      "median": 38.29,
+      "ci_low": 37.46999999999999,
+      "ci_high": 40.180499999999995,
+      "n_rows": 211,
+      "n_clusters": 11,
+      "method": "cluster_bootstrap_country"
+    },
+    "share_exp65_ge_70": 1.0,
+    "share_exp65_ge_60": 1.0,
+    "p10_p90_exp65": [
+      74.25,
+      76.4
+    ],
+    "n_e0_30_35": 45
+  },
+  "claim_A_primary": {
+    "n_country_years": 208,
+    "n_countries": 10,
+    "countries": [
+      "BEL",
+      "CHE",
+      "DNK",
+      "FIN",
+      "FRANCE:_TOTAL_POPULATION",
+      "ISL",
+      "ITA",
+      "NLD",
+      "SWE",
+      "UK:_ENGLAND_&_WALES_TOTAL_POPULATION"
+    ],
+    "median_e0": 36.985,
+    "median_imr": 196.17000000000002,
+    "median_s_to_65": 0.2694,
+    "exp_death_65": {
+      "median": 75.4,
+      "ci_low": 75.1,
+      "ci_high": 75.71000000000001,
+      "n_rows": 208,
+      "n_clusters": 10,
+      "method": "cluster_bootstrap_country"
+    },
+    "adult_gap_65": {
+      "median": 38.29,
+      "ci_low": 37.42,
+      "ci_high": 40.32,
+      "n_rows": 208,
+      "n_clusters": 10,
+      "method": "cluster_bootstrap_country"
+    },
+    "share_exp65_ge_70": 1.0,
+    "share_exp65_ge_60": 1.0,
+    "p10_p90_exp65": [
+      74.229,
+      76.4
+    ],
+    "n_e0_30_35": 44
+  },
+  "claim_A2": {
+    "quality_used": "gold",
+    "ages": {
+      "15": {
+        "median": 55.9225,
+        "ci_low": 51.015,
+        "ci_high": 57.61,
+        "n_rows": 44,
+        "n_clusters": 16,
+        "method": "cluster_bootstrap_country",
+        "median_e_x": 40.9225,
+        "share_ge_45": 0.9772727272727273,
+        "share_ge_50": 0.8409090909090909,
+        "share_ge_55": 0.6363636363636364,
+        "share_ge_60": 0.022727272727272728,
+        "share_ge_70": 0.0,
+        "n_countries": 16
+      },
+      "30": {
+        "median": 60.18,
+        "ci_low": 57.75,
+        "ci_high": 61.730000000000004,
+        "n_rows": 49,
+        "n_clusters": 18,
+        "method": "cluster_bootstrap_country",
+        "median_e_x": 30.18,
+        "share_ge_45": 1.0,
+        "share_ge_50": 1.0,
+        "share_ge_55": 0.8979591836734694,
+        "share_ge_60": 0.5510204081632653,
+        "share_ge_70": 0.0,
+        "n_countries": 18
+      },
+      "65": {
+        "median": 74.8125,
+        "ci_low": 74.145,
+        "ci_high": 75.02575,
+        "n_rows": 44,
+        "n_clusters": 16,
+        "method": "cluster_bootstrap_country",
+        "median_e_x": 9.8125,
+        "share_ge_45": 1.0,
+        "share_ge_50": 1.0,
+        "share_ge_55": 1.0,
+        "share_ge_60": 1.0,
+        "share_ge_70": 1.0,
+        "n_countries": 16
+      }
+    },
+    "ladder_agg": [
+      {
+        "age_x": 0,
+        "n": 49,
+        "n_countries": 18,
+        "median_e0": 35.075,
+        "median_e_x": 35.075,
+        "median_expected_age": 35.075,
+        "p10_expected_age": 30.083000000000002,
+        "p90_expected_age": 39.088,
+        "share_ge_45": 0.0,
+        "share_ge_50": 0.0,
+        "share_ge_60": 0.0,
+        "share_ge_70": 0.0,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 1,
+        "n": 47,
+        "n_countries": 16,
+        "median_e0": 35.07,
+        "median_e_x": 42.86,
+        "median_expected_age": 43.86,
+        "p10_expected_age": 37.905,
+        "p90_expected_age": 48.548,
+        "share_ge_45": 0.44680851063829785,
+        "share_ge_50": 0.0,
+        "share_ge_60": 0.0,
+        "share_ge_70": 0.0,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 5,
+        "n": 49,
+        "n_countries": 18,
+        "median_e0": 35.075,
+        "median_e_x": 46.775000000000006,
+        "median_expected_age": 51.775000000000006,
+        "p10_expected_age": 44.314,
+        "p90_expected_age": 55.407,
+        "share_ge_45": 0.8571428571428571,
+        "share_ge_50": 0.6530612244897959,
+        "share_ge_60": 0.0,
+        "share_ge_70": 0.0,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 15,
+        "n": 44,
+        "n_countries": 16,
+        "median_e0": 35.644999999999996,
+        "median_e_x": 40.9225,
+        "median_expected_age": 55.9225,
+        "p10_expected_age": 48.781,
+        "p90_expected_age": 59.059,
+        "share_ge_45": 0.9772727272727273,
+        "share_ge_50": 0.8409090909090909,
+        "share_ge_60": 0.022727272727272728,
+        "share_ge_70": 0.0,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 20,
+        "n": 49,
+        "n_countries": 18,
+        "median_e0": 35.075,
+        "median_e_x": 37.010000000000005,
+        "median_expected_age": 57.010000000000005,
+        "p10_expected_age": 50.133,
+        "p90_expected_age": 60.251,
+        "share_ge_45": 1.0,
+        "share_ge_50": 0.8979591836734694,
+        "share_ge_60": 0.1836734693877551,
+        "share_ge_70": 0.0,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 30,
+        "n": 49,
+        "n_countries": 18,
+        "median_e0": 35.075,
+        "median_e_x": 30.18,
+        "median_expected_age": 60.18,
+        "p10_expected_age": 54.993,
+        "p90_expected_age": 63.312,
+        "share_ge_45": 1.0,
+        "share_ge_50": 1.0,
+        "share_ge_60": 0.5510204081632653,
+        "share_ge_70": 0.0,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 50,
+        "n": 49,
+        "n_countries": 18,
+        "median_e0": 35.075,
+        "median_e_x": 17.814999999999998,
+        "median_expected_age": 67.815,
+        "p10_expected_age": 64.922,
+        "p90_expected_age": 69.686,
+        "share_ge_45": 1.0,
+        "share_ge_50": 1.0,
+        "share_ge_60": 1.0,
+        "share_ge_70": 0.061224489795918366,
+        "e0_threshold": 40.0
+      },
+      {
+        "age_x": 65,
+        "n": 44,
+        "n_countries": 16,
+        "median_e0": 35.644999999999996,
+        "median_e_x": 9.8125,
+        "median_expected_age": 74.8125,
+        "p10_expected_age": 73.4175,
+        "p90_expected_age": 76.0755,
+        "share_ge_45": 1.0,
+        "share_ge_50": 1.0,
+        "share_ge_60": 1.0,
+        "share_ge_70": 1.0,
+        "e0_threshold": 40.0
+      }
+    ]
+  },
+  "claim_B": {
+    "delta_e65": {
+      "mean": 8.45185992860241,
+      "median": 8.436731831022087,
+      "ci_low": 7.735706407902301,
+      "ci_high": 9.144526026646757,
+      "min": 6.360135265700482,
+      "max": 10.65875,
+      "n": 12,
+      "method": "bootstrap_countries"
+    },
+    "countries": [
+      {
+        "region_id": "BEL",
+        "pre": 11.036271186440677,
+        "post": 19.256666666666668,
+        "delta": 8.22039548022599
+      },
+      {
+        "region_id": "CHE",
+        "pre": 9.87,
+        "post": 20.52875,
+        "delta": 10.65875
+      },
+      {
+        "region_id": "DNK",
+        "pre": 11.493692307692308,
+        "post": 18.548750000000002,
+        "delta": 7.0550576923076935
+      },
+      {
+        "region_id": "FIN",
+        "pre": 10.773181818181818,
+        "post": 19.42625,
+        "delta": 8.653068181818181
+      },
+      {
+        "region_id": "FRANCE:_TOTAL_POPULATION",
+        "pre": 10.906309523809524,
+        "post": 20.722916666666666,
+        "delta": 9.816607142857142
+      },
+      {
+        "region_id": "ISL",
+        "pre": 11.162903225806453,
+        "post": 19.93375,
+        "delta": 8.770846774193547
+      },
+      {
+        "region_id": "ITA",
+        "pre": 10.29857142857143,
+        "post": 20.131666666666668,
+        "delta": 9.833095238095238
+      },
+      {
+        "region_id": "NLD",
+        "pre": 10.967,
+        "post": 19.09541666666667,
+        "delta": 8.128416666666668
+      },
+      {
+        "region_id": "NOR",
+        "pre": 12.950555555555557,
+        "post": 19.67833333333333,
+        "delta": 6.727777777777774
+      },
+      {
+        "region_id": "SWE",
+        "pre": 10.666912751677852,
+        "post": 19.765833333333333,
+        "delta": 9.09892058165548
+      },
+      {
+        "region_id": "UK:_ENGLAND_&_WALES_TOTAL_POPULATION",
+        "pre": 11.071186440677966,
+        "post": 19.170434782608698,
+        "delta": 8.099248341930732
+      },
+      {
+        "region_id": "UK:_SCOTLAND",
+        "pre": 11.593777777777778,
+        "post": 17.95391304347826,
+        "delta": 6.360135265700482
+      }
+    ],
+    "delta_e80": {
+      "mean": 3.8902802755609005,
+      "median": 3.85869081920904,
+      "ci_low": 3.502214851569736,
+      "ci_high": 4.276976296026232,
+      "min": 2.84696618357488,
+      "max": 5.057083333333333,
+      "n": 12,
+      "method": "bootstrap_countries"
+    }
+  },
+  "claim_C": {
+    "median_within_corr_e0_imr": -0.9438580012510758,
+    "mean_within_corr_e0_imr": -0.8487530997319996,
+    "n_countries_corr": 44,
+    "models": {
+      "M0_pooled": {
+        "r2": 0.9181811733621728,
+        "beta_imr": -0.20920918316403275
+      },
+      "M1_within": {
+        "r2": 0.9137358149099595,
+        "beta_imr": -0.21111459015857742
+      },
+      "M2_within_year": {
+        "r2": 0.951075955129376,
+        "beta_imr": -0.12114833845363698,
+        "beta_year": 0.12232408540479567
+      },
+      "M3_first_diff": {
+        "r2": 0.5069386885045819,
+        "beta_dimr": -0.11262287844242698,
+        "corr_de0_dimr": -0.7119962700074928
+      }
+    },
+    "out_of_time": {
+      "beta_imr_pre1950": -0.11815597695226486,
+      "beta_imr_post1950_refit": -0.13005969029020878,
+      "same_sign": true
+    },
+    "note": "Associational only; high R2 expected from shared mortality schedule"
+  },
+  "sweden_1800": {
+    "year": 1800,
+    "e0": 32.19,
+    "imr": 227.06,
+    "e65": 8.73,
+    "exp_death_65": 73.73,
+    "s_to_65": 0.2092
+  },
+  "gates": {
+    "A": {
+      "median_exp65_ge_70": true,
+      "share_ge_70": true,
+      "s_to_65_low": true,
+      "imr_high": true,
+      "n_ok": true,
+      "pass": true
+    },
+    "A2": {
+      "has_age15": true,
+      "median_exp15": true,
+      "share_exp15_ge_45": true,
+      "median_exp30": true,
+      "n_ok": true,
+      "pass": true
+    },
+    "B": {
+      "mean_gt": true,
+      "ci_low_gt_0": true,
+      "n_countries": true,
+      "pass": true
+    },
+    "C": {
+      "corr": true,
+      "fd_sign": true,
+      "pass": true
+    },
+    "S": {
+      "e0": true,
+      "exp65": true,
+      "imr": true,
+      "pass": true
+    },
+    "all_pass": true
+  }
+}

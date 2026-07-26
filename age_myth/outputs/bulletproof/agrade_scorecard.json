@@ -1,0 +1,25 @@
+{
+  "points": {
+    "myth_A_multicountry": 20,
+    "equal_country_and_strict_band": 10,
+    "mid_adult_ladder": 15,
+    "myth_B": 15,
+    "uncertainty_method": 10,
+    "association_models": 10,
+    "chart_pack": 10,
+    "scope_dual_metric": 10
+  },
+  "total": 100,
+  "max": 100,
+  "letter": "A",
+  "notes": [
+    "External validity limited to high-quality VR populations (not all past humans).",
+    "Period LE \u2260 cohort lifespan.",
+    "Female min age|65=69.88 (Iceland 1843 crisis) \u2014 do not claim 100% females >=70 without footnote.",
+    "Capped at A (not A+) due to VR-only external validity."
+  ],
+  "figure_counts": {
+    "definitive": 12,
+    "final": 0
+  }
+}

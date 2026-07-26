@@ -1,0 +1,4 @@
+age_x,n,n_countries,median_e0,median_e_x,median_expected_age,p10_expected_age,p90_expected_age,share_ge_45,share_ge_50,share_ge_60,share_ge_70,e0_threshold
+0,63,8,32.47,32.47,32.47,26.038,34.692,0.0,0.0,0.0,0.0,35.0
+65,63,8,32.47,9.95,74.95,73.108,76.084,1.0,1.0,1.0,1.0,35.0
+80,63,8,32.47,4.65,84.65,83.83,85.83999999999999,1.0,1.0,1.0,1.0,35.0

@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Virtual envs / local config
+.venv/
+venv/
+.env
+.env.*
+
+# Secrets
+HMD_CREDENTIALS*
+*.pem
+*.key
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Bulk raw downloads (scripts re-fetch; keep structure + fixtures)
+data/raw/owid/*.csv
+data/raw/owid/*.json
+!data/raw/owid/.gitkeep
+data/raw/hld/**
+!data/raw/hld/.gitkeep
+data/raw/hmd/**
+!data/raw/hmd/.gitkeep
+!data/raw/fixtures/**
+data/raw/clio_infra/*.xlsx
+data/raw/eurostat/*.csv
+!data/raw/clio_infra/.gitkeep
+!data/raw/eurostat/.gitkeep
+
+# Interim rebuilds
+data/interim/**
+!data/interim/.gitkeep
+
+# Heavy processed binaries
+data/processed/*.parquet
+data/processed/**/*.parquet
+data/processed/*.sqlite
+data/processed/*.db
+!data/processed/.gitkeep
+!data/processed/analysis/.gitkeep
+
+# Built datasets: regenerate with scripts/run_phase1.py, do not ship.
+# Small reference tables (sources, benchmarks, methodology, country map) stay.
+data/processed/*.csv
+data/processed/analysis/*.csv
+!data/processed/sources.csv
+!data/processed/literature_benchmarks.csv
+!data/processed/methodology_notes.csv
+!data/processed/countries_regions.csv
+
+# Raw source workbooks: re-fetch with the acquisition scripts.
+# download_log.json stays as the provenance record.
+data/raw/hmd_summary/*.xlsx
+
+# Optional local noise
+*.log
+.cache/

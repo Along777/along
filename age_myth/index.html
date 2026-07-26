@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People did not die at 35. Babies did.</title>
+<meta name="description" content="When life expectancy at birth was about 30 to 35, people who reached 65 still expected about 75. High infant death crushed the average. Open data from the Human Mortality Database.">
+<meta name="author" content="age_myth">
+<meta property="og:title" content="People did not die at 35. Babies did.">
+<meta property="og:description" content="When life expectancy at birth was in the 30s, survivors to 65 still expected about 75. Only about 27% got there. Adults also gained about 8.5 years later.">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --bg:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+    --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+    --hair:#e1e0d9; --base:#c3c2b7;
+    --blue:#2a78d6; --blue-soft:#eaf2fc; --red:#e34948; --red-soft:#fdeeee;
+    --green:#1baf7a; --green-soft:#e9f7f1; --gold:#eda100; --gold-soft:#fdf5e3;
+    --accent:#5b4cdb; --accent-soft:#eeecfb;
+    --life:#0d9488; --life-soft:#e6f7f5;
+    --mono:ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0d0d0d; --surface:#1a1a19; --card:#212120;
+      --ink:#f5f5f2; --ink2:#c3c2b7; --muted:#898781;
+      --hair:#2c2c2a; --base:#383835;
+      --blue:#3987e5; --blue-soft:#14233a; --red:#e66767; --red-soft:#331b1b;
+      --green:#1baf7a; --green-soft:#12291f; --gold:#c98500; --gold-soft:#2b230e;
+      --accent:#8b7cf0; --accent-soft:#1c1833;
+      --life:#2dd4bf; --life-soft:#0f2422;
+    }
+    figure{background:#141413}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  header.hero{background:linear-gradient(180deg,var(--surface),var(--bg));
+    border-bottom:1px solid var(--hair);padding:0 0 40px;text-align:center}
+  .band{height:8px;background:linear-gradient(90deg,#e34948 0%,#eda100 35%,#5b4cdb 70%,#0d9488 100%)}
+  .heroinner{padding:36px 24px 0}
+  .hero .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .hero h1{font-size:clamp(30px,5.4vw,50px);line-height:1.1;margin:14px auto 16px;max-width:900px;letter-spacing:-.025em}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero .sub{max-width:700px;margin:0 auto;color:var(--ink2);font-size:18.5px}
+  .madeby{margin:14px auto 0;font-size:14px;color:var(--muted)}
+  .herobtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:22px auto 0}
+  .bigbtn{display:inline-block;background:var(--accent);color:#fff;border-radius:99px;
+    padding:12px 24px;font-size:15px;font-weight:700}
+  .bigbtn:hover{text-decoration:none;filter:brightness(1.08)}
+  .bigbtn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+  .kpis{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:28px auto 0;max-width:1000px}
+  .kpi{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 18px;min-width:140px}
+  .kpi b{display:block;font-size:26px;letter-spacing:-.02em}
+  .kpi span{font-size:12.5px;color:var(--muted);line-height:1.35}
+
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);
+      backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+  nav .wrap{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:0 2px;padding:0 10px}
+  nav a{flex:0 0 auto;padding:11px 12px;font-size:13.5px;color:var(--ink2);border-bottom:2px solid transparent;white-space:nowrap}
+  nav a:hover{text-decoration:none;color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+  main{max-width:880px;margin:0 auto;padding:8px 24px 80px}
+  section{padding-top:52px;scroll-margin-top:70px}
+  .secnum{font:600 13px var(--mono);color:var(--accent);letter-spacing:.12em}
+  h2{font-size:clamp(24px,3.4vw,34px);margin:6px 0 8px;letter-spacing:-.015em}
+  .lede{color:var(--ink2);font-size:17.5px;margin:0 0 20px}
+  h3{font-size:19px;margin:28px 0 10px}
+  p{margin:0 0 14px}
+  ul{margin:0 0 16px;padding-left:1.2em}
+  li{margin:0 0 8px}
+  .divider{text-align:center;color:var(--base);margin:44px 0 -24px;font-size:18px;letter-spacing:.4em}
+
+  .finding{
+    background:var(--card);
+    border:3px solid var(--accent);
+    border-radius:20px;
+    padding:28px 26px 22px;
+    margin:8px 0;
+    box-shadow:0 12px 40px color-mix(in srgb,var(--accent) 12%,transparent);
+  }
+  .finding .label{
+    font:700 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 10px
+  }
+  .finding .boom{
+    font-size:clamp(26px,4.2vw,38px);line-height:1.15;letter-spacing:-.02em;margin:0 0 16px;font-weight:800
+  }
+  .finding .boom span{color:var(--accent)}
+  .finding p{font-size:16.5px;color:var(--ink2)}
+  .finding p strong{color:var(--ink)}
+  .finding-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0 8px
+  }
+  .finding-grid .cell{
+    background:var(--accent-soft);border-radius:14px;padding:16px 14px;text-align:center
+  }
+  .finding-grid .cell b{display:block;font-size:clamp(28px,4vw,36px);letter-spacing:-.02em;line-height:1.1}
+  .finding-grid .cell span{display:block;font-size:12.5px;color:var(--ink2);margin-top:6px;line-height:1.35}
+  .finding .pair{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 4px
+  }
+  @media (max-width:560px){ .finding .pair{grid-template-columns:1fr} }
+  .finding .pair .yes,.finding .pair .no{
+    border-radius:12px;padding:14px 16px;font-size:14.5px
+  }
+  .finding .pair .yes{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 30%,var(--hair))}
+  .finding .pair .no{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 30%,var(--hair))}
+  .finding .pair b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .finding .pair .yes b{color:var(--green)}
+  .finding .pair .no b{color:var(--red)}
+
+  .co{border-radius:12px;padding:16px 18px;margin:18px 0;border:1px solid var(--hair);font-size:15.2px}
+  .co .tag{display:inline-block;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+           padding:4px 9px;border-radius:99px;margin-bottom:9px}
+  .plain{background:var(--blue-soft)} .plain .tag{background:var(--blue);color:#fff}
+  .why{background:var(--gold-soft)} .why .tag{background:var(--gold);color:#fff}
+  .tech{background:var(--green-soft)} .tech .tag{background:var(--green);color:#fff}
+  .bug{background:var(--red-soft)} .bug .tag{background:var(--red);color:#fff}
+  .eli5{background:var(--life-soft);border-color:color-mix(in srgb,var(--life) 35%,var(--hair))}
+  .eli5 .tag{background:var(--life);color:#fff}
+  .co p:last-child{margin-bottom:0}
+
+  figure{margin:24px 0;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:14px}
+  figure img{width:100%;height:auto;display:block;border-radius:8px}
+  figcaption{font-size:13.5px;color:var(--muted);padding:10px 6px 2px;line-height:1.5}
+  figcaption b{color:var(--ink2)}
+
+  .chartgrid{display:grid;grid-template-columns:1fr;gap:0}
+  @media (min-width:720px){
+    .chartgrid.two{grid-template-columns:1fr 1fr;gap:14px}
+    .chartgrid.two figure{margin:14px 0}
+  }
+
+  .tblwrap{overflow-x:auto;margin:18px 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);
+        border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     text-align:left;padding:11px 14px;border-bottom:1px solid var(--hair);background:var(--surface)}
+  td{padding:10px 14px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.num, th.num{text-align:right;white-space:nowrap}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:20px 0}
+  .card{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:18px}
+  .card h4{margin:0 0 8px;font-size:15.5px}
+  .card p{font-size:14px;color:var(--ink2);margin:0}
+  .card .verdict{display:inline-block;margin-top:10px;font:600 11.5px var(--mono);letter-spacing:.06em;
+                 padding:3px 10px;border-radius:99px}
+  .v-fail{background:var(--red);color:#fff}
+  .v-win{background:var(--green);color:#fff}
+
+  .room{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+  .room .box{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:16px}
+  .room .box h4{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .room .box p{margin:0;font-size:15px;color:var(--ink2)}
+  .room .box .n{font-size:28px;font-weight:800;letter-spacing:-.02em;color:var(--ink);display:block;margin-bottom:4px}
+
+  pre,code{font-family:var(--mono);font-size:13px}
+  pre{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;
+      overflow-x:auto;line-height:1.5;color:var(--ink2)}
+  code.inline{background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:1px 6px}
+
+  footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer a{color:var(--ink2)}
+  @media print{
+    nav{display:none}
+    section{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<a id="top"></a>
+
+<header class="hero">
+  <div class="band" aria-hidden="true"></div>
+  <div class="heroinner">
+    <div class="kicker">Open vital statistics &middot; historical demography</div>
+    <h1>People did not die at 35.<br><em>Babies did.</em></h1>
+    <p class="sub">You have heard that people in the past &ldquo;only lived to 30 or 35.&rdquo; The number is real. The story is wrong. Dead infants dragged the average down. Adults who made old age were not living on a 35-year clock.</p>
+    <p class="madeby"><code class="inline">age_myth</code> &middot; Human Mortality Database &middot; Human Life-Table Database</p>
+    <div class="herobtns">
+      <a class="bigbtn" href="#finding">The finding</a>
+      <a class="bigbtn ghost" href="#eli5">Plain English</a>
+      <a class="bigbtn ghost" href="#proof">Charts</a>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>75.4</b><span>expected age if already 65<br>when birth LE was under 40</span></div>
+      <div class="kpi"><b>27%</b><span>of births reached 65<br>in that window</span></div>
+      <div class="kpi"><b>196</b><span>infant deaths per 1,000<br>median</span></div>
+      <div class="kpi"><b>+8.5 yr</b><span>gain in remaining life at 65<br>pre-1900 to post-2000</span></div>
+    </div>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a href="#finding">Finding</a>
+    <a href="#eli5">Plain English</a>
+    <a href="#broke">Myths</a>
+    <a href="#proof">Proof</a>
+    <a href="#ladder">Ladder</a>
+    <a href="#adults">Adults</a>
+    <a href="#data">Data</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="finding">
+  <div class="secnum">01</div>
+  <h2>The finding</h2>
+  <p class="lede">This box is the article. The rest is evidence.</p>
+
+  <div class="finding">
+    <p class="label">TL;DR</p>
+    <p class="boom">When life expectancy at birth was under <span>40</span>, people already 65 still expected about <span>75</span>.</p>
+
+    <div class="finding-grid">
+      <div class="cell"><b>75.39</b><span>median expected age if alive at 65<br>211 country-years, 11 countries</span></div>
+      <div class="cell"><b>0.27</b><span>share of births that reached 65</span></div>
+      <div class="cell"><b>195.9</b><span>infant deaths per 1,000 births</span></div>
+      <div class="cell"><b>75.07</b><span>same age-at-65 figure when birth LE was 30 to 35</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="no">
+        <b>The myth</b>
+        &ldquo;Life expectancy was 30 to 35, so adults died at 30 to 35.&rdquo;
+      </div>
+      <div class="yes">
+        <b>What the tables say</b>
+        Early deaths were mostly babies and children. People who reached old age were not timed to die at 35.
+      </div>
+    </div>
+
+    <p style="margin-top:18px"><strong>Sweden, 1800:</strong> life expectancy at birth <strong>32.2</strong>. About <strong>227</strong> infant deaths per 1,000. About <strong>21%</strong> of births reached 65. Those who did expected age about <strong>73.7</strong>.</p>
+    <p><strong>Second myth, also wrong:</strong> adults improved too. Remaining life at 65 rose about <strong>+8.45 years</strong> from before 1900 to after 2000 (12 countries; about 7.7 to 9.1).</p>
+    <p style="margin-bottom:4px"><strong>Scope:</strong> countries with strong vital registration in open life tables (Human Mortality Database style). One year&rsquo;s death rates, not every past society, not one person&rsquo;s full life story.</p>
+  </div>
+</section>
+
+<section id="eli5">
+  <div class="secnum">02</div>
+  <h2>Plain English</h2>
+  <p class="lede">If 75 and 27% feel like they fight each other, start here.</p>
+
+  <div class="co eli5">
+    <span class="tag">Simple version</span>
+    <p>Picture 1,000 babies in a hard year. Hundreds die before age one. More die as small children. Average age at death for the whole group can sit in the thirties. That average is real. It is a bad summary of how long a grown-up lived.</p>
+  </div>
+
+  <div class="room">
+    <div class="box">
+      <h4>The meme number</h4>
+      <span class="n">~32</span>
+      <p>Life expectancy at birth: average years for a newborn if this year&rsquo;s death rates never changed. Dead babies pull it down hard.</p>
+    </div>
+    <div class="box">
+      <h4>The forgotten number</h4>
+      <span class="n">~75</span>
+      <p>If you already reached 65 under those rates, expected age at death is around the mid-seventies. Not 35.</p>
+    </div>
+    <div class="box">
+      <h4>The catch</h4>
+      <span class="n">~1 in 4</span>
+      <p>Only about a quarter of births reached 65 when birth life expectancy was under 40. Most never got the old-age number.</p>
+    </div>
+  </div>
+
+  <div class="co plain">
+    <span class="tag">Two questions, same year</span>
+    <p><b>Life expectancy at birth:</b> for a baby born into this year&rsquo;s death rates, how many years on average?<br>
+    <b>Age if already 65:</b> you already survived; under this year&rsquo;s rates, how old do people like you die?<br>
+    Same rates. Different questions. The myth swaps them.</p>
+  </div>
+
+  <div class="co why">
+    <span class="tag">So did people die young?</span>
+    <p><b>Yes.</b> Childhood killed a huge share of births. That is why the newborn average was low.<br>
+    <b>No.</b> Adults were not on a 35-year clock. By 15, expected age is already the mid-fifties. By 65, about 75.</p>
+  </div>
+</section>
+
+<section id="broke">
+  <div class="secnum">03</div>
+  <h2>Two myths</h2>
+  <p class="lede">Both fail for the same reason: one number, wrong question.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>Myth A</h4>
+      <p>&ldquo;Life expectancy was 30 to 35, so people died at 30 to 35.&rdquo; Confuses the newborn average with adult death age.</p>
+      <span class="verdict v-fail">FALSE</span>
+    </div>
+    <div class="card">
+      <h4>Myth B</h4>
+      <p>&ldquo;Only baby survival got better. Adults always lived modern lengths.&rdquo; Remaining life at 65 still rose hard.</p>
+      <span class="verdict v-fail">FALSE</span>
+    </div>
+    <div class="card">
+      <h4>The rule</h4>
+      <p>Always pair survivor age with infant death or survival to 65. Never post 75 without the 27%. Never post 32 without asking who died early.</p>
+      <span class="verdict v-win">DO THIS</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<section id="proof">
+  <div class="secnum">04</div>
+  <h2>Proof</h2>
+  <p class="lede">One long series first. Then many countries. Then the exact meme window.</p>
+
+  <h3>Sweden</h3>
+  <div class="co eli5">
+    <span class="tag">What to look at</span>
+    <p>Longest clean series. As baby death falls, life expectancy at birth rises. The &ldquo;already 65&rdquo; line sits high the whole time, then rises further.</p>
+  </div>
+
+  <figure>
+    <img src="outputs/figures/definitive/D1_sweden_storyboard.png" width="960" height="640" alt="Sweden: life expectancy, infant mortality, survival to 65, expected age at 65">
+    <figcaption><b>Sweden over time.</b> Low newborn average and high old-age expectation in the same country. Infant death and survival to 65 explain the gap.</figcaption>
+  </figure>
+
+  <h3>Eleven countries, same pattern</h3>
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr><th>When life expectancy at birth &lt; 40</th><th class="num">Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Country-years (both sexes, cleaned)</td><td class="num">211</td></tr>
+        <tr><td>Countries</td><td class="num">11</td></tr>
+        <tr><td>Median life expectancy at birth</td><td class="num">37.0</td></tr>
+        <tr><td>Median infant deaths per 1,000</td><td class="num"><b>195.9</b></td></tr>
+        <tr><td>Median share reaching 65</td><td class="num"><b>0.270</b></td></tr>
+        <tr><td>Median expected age if alive at 65</td><td class="num"><b>75.39</b></td></tr>
+        <tr><td>Median of country medians (one vote each)</td><td class="num"><b>75.37</b></td></tr>
+        <tr><td>Range of country medians</td><td class="num">74.78 to 76.08</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Sweden has many years in the sample. One vote per country still lands near 75.</p>
+
+  <figure>
+    <img src="outputs/figures/definitive/D3_multicountry_e0_age65.png" width="960" height="540" alt="Multi-country low birth LE with high age at 65">
+    <figcaption><b>Not just Sweden.</b> In low birth-LE years, expected age if alive at 65 clusters near the mid-seventies.</figcaption>
+  </figure>
+
+  <div class="chartgrid two">
+    <figure>
+      <img src="outputs/figures/F2_scatter_e0_vs_exp_death_65.png" width="640" height="480" alt="Scatter: birth LE vs expected age at 65">
+      <figcaption><b>The gap on a scatter.</b> Low birth LE, high age-if-65.</figcaption>
+    </figure>
+    <figure>
+      <img src="outputs/figures/definitive/D4_low_e0_distributions.png" width="640" height="480" alt="Distributions when birth LE is low">
+      <figcaption><b>When birth LE is low.</b> High infant death, low survival to 65, high age if already 65.</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <img src="outputs/figures/final/FA1_year_vs_equal_country.png" width="960" height="540" alt="Year-weighted vs equal-country medians">
+    <figcaption><b>Weighting check.</b> Count every year, or one median per country. Both answers are about 75.4.</figcaption>
+  </figure>
+
+  <h3>Deaths pile up early</h3>
+  <figure>
+    <img src="outputs/figures/definitive/D6_survival_composition.png" width="960" height="540" alt="Where deaths concentrate early in life">
+    <figcaption><b>Where deaths sit.</b> Early life takes the big bite. That is why the newborn average looks like the thirties.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="outputs/figures/definitive/D7_imr_correlation.png" width="960" height="540" alt="Birth LE versus infant mortality">
+    <figcaption><b>Birth LE tracks infant death.</b> Median within-country correlation about -0.94. When babies die less, the newborn average rises.</figcaption>
+  </figure>
+
+  <h3>Force 30 to 35</h3>
+  <p>Only years where life expectancy at birth was 30 to 35:</p>
+  <ul>
+    <li>45 country-years, 8 countries</li>
+    <li>Median birth LE about 33.5</li>
+    <li>Median infant deaths per 1,000 about <b>213</b></li>
+    <li>Median share reaching 65 about <b>0.22</b></li>
+    <li>Median expected age if alive at 65 still about <b>75.07</b></li>
+  </ul>
+
+  <figure>
+    <img src="outputs/figures/final/FA2_strict_band_30_35.png" width="960" height="540" alt="Strict 30-35 birth LE band still near 75 at age 65">
+    <figcaption><b>The meme window.</b> Early death gets worse. Age if already 65 does not fall to the thirties.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="outputs/figures/definitive/D5_mythA_forest.png" width="960" height="540" alt="Age at 65 by country when birth LE is low">
+    <figcaption><b>Country by country.</b> Every country median for age if alive at 65 sits near 75 when birth LE is under 40.</figcaption>
+  </figure>
+</section>
+
+<section id="ladder">
+  <div class="secnum">05</div>
+  <h2>You do not need age 65</h2>
+  <p class="lede">The myth already fails at 15. Each rung is expected age if you are already alive there.</p>
+
+  <div class="co eli5">
+    <span class="tag">Simple version</span>
+    <p>At birth the average is low because of baby death. If you are still alive at 15, expected age jumps into the fifties. At 30, about 60. At 65, about 75.</p>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr><th>Already this age</th><th class="num">Expected age (single-table)</th><th class="num">Expected age (median of tables)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0 (birth)</td><td class="num">~35</td><td class="num">~37</td></tr>
+        <tr><td>5</td><td class="num">~52</td><td class="num">~53</td></tr>
+        <tr><td><b>15</b></td><td class="num"><b>~56</b></td><td class="num"><b>~58</b></td></tr>
+        <tr><td>20</td><td class="num">~57</td><td class="num">~59</td></tr>
+        <tr><td><b>30</b></td><td class="num"><b>~60</b></td><td class="num"><b>~62</b></td></tr>
+        <tr><td>50</td><td class="num">~68</td><td class="num">~69</td></tr>
+        <tr><td><b>65</b></td><td class="num"><b>~75</b></td><td class="num"><b>~75</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Source: Human Life-Table Database, years when birth LE was under 40. Single-table cells and multi-table medians both show the same climb.</p>
+
+  <figure>
+    <img src="outputs/figures/definitive/D2_age_ladder_when_e0_under_40.png" width="960" height="540" alt="Age ladder of expected ages when birth LE under 40">
+    <figcaption><b>Age ladder.</b> Expected age climbs once childhood is cleared. The myth is broken by the teen rung.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="outputs/figures/final/FA3_dual_hld_ladder.png" width="960" height="540" alt="Single-table and multi-table ladders">
+    <figcaption><b>Two ways to build the ladder.</b> Coverage differs. The shape does not.</figcaption>
+  </figure>
+</section>
+
+<section id="adults">
+  <div class="secnum">06</div>
+  <h2>Adults improved too</h2>
+  <p class="lede">Fixing Myth A does not mean adult longevity never moved.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr><th>Remaining life at age 65</th><th class="num">Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mean change (after 2000 minus before 1900)</td><td class="num"><b>+8.45 years</b></td></tr>
+        <tr><td>95% interval (bootstrap over countries)</td><td class="num">7.74 to 9.14</td></tr>
+        <tr><td>Median country change</td><td class="num">+8.44</td></tr>
+        <tr><td>Range across countries</td><td class="num">+6.4 to +10.7</td></tr>
+        <tr><td>Countries</td><td class="num">12</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="outputs/figures/definitive/D10_mythB_dumbbell.png" width="960" height="540" alt="Remaining life at 65 before 1900 vs after 2000">
+    <figcaption><b>Before 1900 vs after 2000.</b> Remaining life at 65 rose about 8 to 9 years. Baby survival was the big early story. Old-age remaining life still moved.</figcaption>
+  </figure>
+</section>
+
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<section id="data">
+  <div class="secnum">07</div>
+  <h2>Data and checks</h2>
+  <p class="lede">Headline numbers: Human Mortality Database public summaries (birth LE, LE at 65, infant mortality, survival to 65). Age ladder: Human Life-Table Database. Context: OWID, Clio, Eurostat.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr><th>Piece</th><th>What we used</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Main panel</td><td>4,277 country-years, 44 regions, 1751 to 2023</td></tr>
+        <tr><td>Myth A sample</td><td>Birth LE under 40: 211 country-years, 11 countries</td></tr>
+        <tr><td>Long series</td><td>Sweden from 1751; France from 1816; England and Wales from 1841; USA from 1933</td></tr>
+        <tr><td>Cleanup</td><td>Drop double-counted population variants; do not let multi-table life tables flood the average</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="outputs/figures/definitive/D11_coverage.png" width="960" height="540" alt="Coverage by country and year">
+    <figcaption><b>Who is in the data.</b> Low birth-LE years are mostly historical vital-registration Europe plus early Sweden.</figcaption>
+  </figure>
+
+  <h3>Birth LE and infant death move together</h3>
+  <p>Simple regressions and within-country correlations show it. High R-squared is expected: both come from the same year&rsquo;s death rates. Description, not a causal claim about one policy lever.</p>
+
+  <div class="chartgrid two">
+    <figure>
+      <img src="outputs/figures/definitive/D9_model_r2.png" width="640" height="400" alt="How tightly birth LE tracks infant death">
+      <figcaption><b>Fit of the association.</b> Useful description only.</figcaption>
+    </figure>
+    <figure>
+      <img src="outputs/figures/definitive/D8_first_differences.png" width="640" height="400" alt="Year-to-year changes in birth LE and infant death">
+      <figcaption><b>Year-to-year changes.</b> When infant death falls, birth LE usually rises with it.</figcaption>
+    </figure>
+  </div>
+
+  <h3>Men, women, worst year</h3>
+  <figure>
+    <img src="outputs/figures/final/FA4_sex_honesty.png" width="960" height="540" alt="Sex-specific results including Iceland 1843">
+    <figcaption><b>By sex.</b> Medians still near 75. Worst female year in the low birth-LE sample: Iceland 1843, about 69.9, with tiny survival to 65. Still about 70, not 30.</figcaption>
+  </figure>
+
+  <pre><code>python -m src.analysis.run_final_agrade
+python -m pytest -q
+
+# outputs/bulletproof/final_claims.json
+# outputs/reports/FINAL_A_GRADE_REPORT.md</code></pre>
+
+  <p style="color:var(--muted);font-size:14px">Built with Grok 4.5 as a coding partner. Numbers are checked against open tables and repo claim gates.</p>
+</section>
+
+<section id="limits">
+  <div class="secnum">08</div>
+  <h2>Limits</h2>
+  <ul>
+    <li>Strong vital-registration countries in open databases. Not every past society.</li>
+    <li>Period rates for a year. Not one person&rsquo;s full biography from birth to death.</li>
+    <li>&ldquo;Age if already 65&rdquo; only applies to people who reached 65. Pair it with survival or infant death.</li>
+    <li>Mid-age ladder tables vary by method. We show two builds on purpose.</li>
+    <li>Iceland 1843 is a crisis floor near 70 for women, not proof of the 35 myth.</li>
+  </ul>
+
+  <div class="finding" style="margin-top:28px">
+    <p class="label">One line to share</p>
+    <p class="boom" style="font-size:clamp(22px,3.4vw,30px)">Life expectancy of 30 meant childhood was deadly, not that adults died at 30. Survivors to 65 still expected about 75. Adults later gained about 8 more years at that age.</p>
+    <p style="margin-bottom:4px">Post 75 with the 27%. Post 32 with the infant deaths. Keep both numbers together.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p><b>age_myth</b> &middot; historical life expectancy, open data</p>
+  <p>Human Mortality Database public summaries &middot; Human Life-Table Database</p>
+  <p>Open this file from the project root so chart paths work.</p>
+  <p style="margin-top:12px"><a href="#top">Back to top</a></p>
+</footer>
+
+</body>
+</html>

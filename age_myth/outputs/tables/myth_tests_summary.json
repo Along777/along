@@ -1,0 +1,163 @@
+{
+  "myth_a_all": {
+    "definition": "both-sex HMD summary country-years with e0 < 40",
+    "n_country_years": 247,
+    "n_countries": 13,
+    "countries": [
+      "BEL",
+      "CHE",
+      "DNK",
+      "ESP",
+      "FIN",
+      "FRANCE:_CIVILIAN_POPULATION",
+      "FRANCE:_TOTAL_POPULATION",
+      "ISL",
+      "ITA",
+      "NLD",
+      "SWE",
+      "UK:_ENGLAND_&_WALES_CIVILIAN_POPULATION",
+      "UK:_ENGLAND_&_WALES_TOTAL_POPULATION"
+    ],
+    "e0": {
+      "median": 37.56,
+      "p10": 31.326,
+      "p90": 39.71
+    },
+    "imr": {
+      "median": 193.04,
+      "p10": 158.514,
+      "p90": 239.96400000000003
+    },
+    "s_to_65": {
+      "median": 0.2738,
+      "p10": 0.19175999999999996,
+      "p90": 0.3107
+    },
+    "exp_death_65": {
+      "n": 247,
+      "median": 75.45,
+      "ci_low": 75.36,
+      "ci_high": 75.64
+    },
+    "exp_death_65_p10_p90": [
+      74.28,
+      76.388
+    ],
+    "share_exp_death_65_ge_70": 1.0,
+    "share_exp_death_65_ge_60": 1.0,
+    "adult_gap_65": {
+      "n": 247,
+      "median": 38.01,
+      "ci_low": 37.660000000000004,
+      "ci_high": 38.49
+    },
+    "n_e0_in_30_35": 45,
+    "reject_myth_A": true
+  },
+  "myth_a_primary_allowlist": {
+    "definition": "both-sex HMD summary country-years with e0 < 40",
+    "n_country_years": 208,
+    "n_countries": 10,
+    "countries": [
+      "BEL",
+      "CHE",
+      "DNK",
+      "FIN",
+      "FRANCE:_TOTAL_POPULATION",
+      "ISL",
+      "ITA",
+      "NLD",
+      "SWE",
+      "UK:_ENGLAND_&_WALES_TOTAL_POPULATION"
+    ],
+    "e0": {
+      "median": 36.985,
+      "p10": 30.775000000000002,
+      "p90": 39.7
+    },
+    "imr": {
+      "median": 196.17000000000002,
+      "p10": 160.504,
+      "p90": 246.90000000000003
+    },
+    "s_to_65": {
+      "median": 0.2694,
+      "p10": 0.18494999999999998,
+      "p90": 0.31062999999999996
+    },
+    "exp_death_65": {
+      "n": 208,
+      "median": 75.4,
+      "ci_low": 75.295,
+      "ci_high": 75.535
+    },
+    "exp_death_65_p10_p90": [
+      74.229,
+      76.4
+    ],
+    "share_exp_death_65_ge_70": 1.0,
+    "share_exp_death_65_ge_60": 1.0,
+    "adult_gap_65": {
+      "n": 208,
+      "median": 38.29,
+      "ci_low": 37.83500000000001,
+      "ci_high": 39.029999999999994
+    },
+    "n_e0_in_30_35": 44,
+    "reject_myth_A": true
+  },
+  "myth_b": {
+    "definition": "countries with both pre-1900 and post-2000 both-sex e65 in HMD summary",
+    "n_countries": 14,
+    "delta_e65": {
+      "n": 14,
+      "mean": 8.524155330572627,
+      "ci_low": 7.88438156208505,
+      "ci_high": 9.17334556666015
+    },
+    "delta_e65_median": 8.436731831022087,
+    "delta_e65_min": 6.360135265700482,
+    "delta_e65_max": 10.65875,
+    "reject_myth_B": true,
+    "delta_e80": {
+      "n": 14,
+      "mean": 3.957101534878127,
+      "ci_low": 3.5980243107175456,
+      "ci_high": 4.3255550525854565
+    },
+    "n_countries_e80": 14
+  },
+  "fe_regression": {
+    "n": 4966,
+    "n_countries": 50,
+    "r2": 0.9675312162202861,
+    "r2_adj": 0.9671942386108507,
+    "params": {
+      "imr": -0.12241637671916453,
+      "year": 0.12173134915050582,
+      "Intercept": -164.57785401325023
+    },
+    "bse": {
+      "imr": 0.01581469984648414,
+      "year": 0.01999573240140115
+    },
+    "pvalue": {
+      "imr": 9.889407508525542e-15,
+      "year": 1.1442522895235472e-09
+    },
+    "note": "Cluster-robust SE by region_id; associational not causal"
+  },
+  "concordance_hmd_vs_owid": {
+    "n": 3721,
+    "n_countries": 39,
+    "corr": 0.9998954236898089,
+    "rmse": 0.1966260527628543,
+    "mae": 0.06267823165815653,
+    "mean_bias_hmd_minus_owid": 0.015173958613275992
+  },
+  "infant_corr_summary": {
+    "n_countries": 50,
+    "median_pearson": -0.9388352153210587,
+    "mean_pearson": -0.8588623173309331
+  }
+}
