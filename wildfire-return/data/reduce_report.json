@@ -1,0 +1,318 @@
+{
+  "generated_utc": "2026-07-25T22:56:21+00:00",
+  "rows_total": 2302521,
+  "files": [
+    {
+      "year": 1992,
+      "rows": 67961,
+      "ca_rows": 10831,
+      "fl_rows": 4222
+    },
+    {
+      "year": 1993,
+      "rows": 61975,
+      "ca_rows": 8268,
+      "fl_rows": 4548
+    },
+    {
+      "year": 1994,
+      "rows": 75932,
+      "ca_rows": 8649,
+      "fl_rows": 3530
+    },
+    {
+      "year": 1995,
+      "rows": 71440,
+      "ca_rows": 7381,
+      "fl_rows": 3186
+    },
+    {
+      "year": 1996,
+      "rows": 75561,
+      "ca_rows": 9170,
+      "fl_rows": 4697
+    },
+    {
+      "year": 1997,
+      "rows": 61442,
+      "ca_rows": 7928,
+      "fl_rows": 3912
+    },
+    {
+      "year": 1998,
+      "rows": 68356,
+      "ca_rows": 6861,
+      "fl_rows": 4813
+    },
+    {
+      "year": 1999,
+      "rows": 89350,
+      "ca_rows": 8909,
+      "fl_rows": 5484
+    },
+    {
+      "year": 2000,
+      "rows": 96397,
+      "ca_rows": 6970,
+      "fl_rows": 6504
+    },
+    {
+      "year": 2001,
+      "rows": 87001,
+      "ca_rows": 8163,
+      "fl_rows": 4891
+    },
+    {
+      "year": 2002,
+      "rows": 76128,
+      "ca_rows": 7118,
+      "fl_rows": 3131
+    },
+    {
+      "year": 2003,
+      "rows": 68275,
+      "ca_rows": 7894,
+      "fl_rows": 2148
+    },
+    {
+      "year": 2004,
+      "rows": 69370,
+      "ca_rows": 7407,
+      "fl_rows": 3610
+    },
+    {
+      "year": 2005,
+      "rows": 92921,
+      "ca_rows": 10219,
+      "fl_rows": 2392
+    },
+    {
+      "year": 2006,
+      "rows": 117943,
+      "ca_rows": 12038,
+      "fl_rows": 5099
+    },
+    {
+      "year": 2007,
+      "rows": 98837,
+      "ca_rows": 13428,
+      "fl_rows": 4577
+    },
+    {
+      "year": 2008,
+      "rows": 88306,
+      "ca_rows": 10594,
+      "fl_rows": 3100
+    },
+    {
+      "year": 2009,
+      "rows": 81492,
+      "ca_rows": 9862,
+      "fl_rows": 3008
+    },
+    {
+      "year": 2010,
+      "rows": 85579,
+      "ca_rows": 8304,
+      "fl_rows": 3291
+    },
+    {
+      "year": 2011,
+      "rows": 98904,
+      "ca_rows": 8560,
+      "fl_rows": 5029
+    },
+    {
+      "year": 2012,
+      "rows": 74258,
+      "ca_rows": 7198,
+      "fl_rows": 3107
+    },
+    {
+      "year": 2013,
+      "rows": 66434,
+      "ca_rows": 8722,
+      "fl_rows": 2163
+    },
+    {
+      "year": 2014,
+      "rows": 70480,
+      "ca_rows": 6493,
+      "fl_rows": 2144
+    },
+    {
+      "year": 2015,
+      "rows": 77274,
+      "ca_rows": 7354,
+      "fl_rows": 2548
+    },
+    {
+      "year": 2016,
+      "rows": 81994,
+      "ca_rows": 7882,
+      "fl_rows": 3052
+    },
+    {
+      "year": 2017,
+      "rows": 82279,
+      "ca_rows": 9537,
+      "fl_rows": 3098
+    },
+    {
+      "year": 2018,
+      "rows": 80863,
+      "ca_rows": 9488,
+      "fl_rows": 2072
+    },
+    {
+      "year": 2019,
+      "rows": 62548,
+      "ca_rows": 6454,
+      "fl_rows": 1938
+    },
+    {
+      "year": 2020,
+      "rows": 73221,
+      "ca_rows": 10200,
+      "fl_rows": 2115
+    }
+  ],
+  "column_mapping": {
+    "fod_id": "FOD_ID",
+    "fpa_id": "FPA_ID",
+    "fire_name": "FIRE_NAME",
+    "fire_year": "FIRE_YEAR",
+    "discovery_date": "DISCOVERY_DATE",
+    "discovery_doy_raw": "DISCOVERY_DOY",
+    "cause_class": "NWCG_CAUSE_CLASSIFICATION",
+    "cause_general": "NWCG_GENERAL_CAUSE",
+    "cont_date": "CONT_DATE",
+    "fire_size": "FIRE_SIZE",
+    "size_class": "FIRE_SIZE_CLASS",
+    "lat": "LATITUDE",
+    "lon": "LONGITUDE",
+    "state": "STATE",
+    "county": "COUNTY",
+    "agency": "NWCG_REPORTING_AGENCY",
+    "owner": "OWNER_DESCR",
+    "tmmx": "tmmx",
+    "rmin": "rmin",
+    "wind": "vs",
+    "precip": "pr",
+    "vpd": "vpd",
+    "erc": "erc",
+    "bi": "bi",
+    "fm100": "fm100",
+    "fm1000": "fm1000",
+    "precip_5d_mean": "pr_5D_mean",
+    "vpd_5d_max": "vpd_5D_max",
+    "erc_5d_max": "erc_5D_max",
+    "wind_5d_max": "vs_5D_max",
+    "erc_pctl": "erc_Percentile",
+    "vpd_pctl": "vpd_Percentile",
+    "vpd_normal": "vpd_Normal",
+    "erc_normal": "erc_Normal",
+    "ndvi_1day": "NDVI-1day",
+    "ndvi_12m": "MOD_NDVI_12m",
+    "land_cover": "Land_Cover",
+    "frg": "FRG",
+    "elevation": "Elevation",
+    "slope": "Slope",
+    "aspect": "Aspect",
+    "tpi": "TPI",
+    "population": "Population",
+    "ghm": "GHM",
+    "road_county_dis": "road_county_dis",
+    "road_interstate_dis": "road_interstate_dis",
+    "firestations_10km": "No_FireStation_10.0km",
+    "svi": "RPL_THEMES",
+    "ecoregion_l3": "Ecoregion_US_L3CODE",
+    "aridity": "Aridity_index",
+    "gacc": "GACCAbbrev",
+    "wind_dir": "th",
+    "wind_dir_5d_max": "th_5D_max",
+    "fm100_normal": "fm100_Normal",
+    "fm1000_normal": "fm1000_Normal",
+    "bi_normal": "bi_Normal",
+    "tmmx_normal": "tmmx_Normal",
+    "rmin_normal": "rmin_Normal",
+    "precip_normal": "pr_Normal",
+    "tmmn": "tmmn",
+    "rmax": "rmax",
+    "sph": "sph",
+    "srad": "srad",
+    "etr": "etr",
+    "rpms": "rpms",
+    "cheatgrass": "CheatGrass",
+    "exotic_grass": "ExoticAnnualGrass",
+    "evc": "EVC",
+    "evh": "EVH",
+    "evt": "EVT",
+    "tri": "TRI",
+    "annual_precip": "Annual_precipitation",
+    "annual_temp": "Annual_tempreture",
+    "sdi": "SDI",
+    "tmmx_pctl": "tmmx_Percentile",
+    "wind_pctl": "vs_Percentile",
+    "fm100_pctl": "fm100_Percentile",
+    "bi_pctl": "bi_Percentile",
+    "mtbs_id": "MTBS_ID",
+    "ics209_id": "ICS_209_PLUS_INCIDENT_JOIN_ID"
+  },
+  "corpus": {
+    "months_seen": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "weekdays_seen": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "year_mismatch_share": 1.6503649695268793e-05,
+    "missing_shares": {
+      "cause_general": 0.0,
+      "fire_size": 0.0,
+      "lat": 0.0,
+      "lon": 0.0,
+      "erc": 0.02070035409014728,
+      "vpd": 0.02070035409014728,
+      "ndvi_1day": 0.03316060961007522,
+      "svi": 0.01245070077536752
+    },
+    "cause_class_counts": {
+      "Human": 1781895,
+      "Natural": 327267,
+      "Missing data/not specified/undetermined": 193359
+    },
+    "cause_general_counts": {
+      "Missing data/not specified/undetermined": 597581,
+      "Debris and open burning": 535517,
+      "Natural": 327267,
+      "Arson/incendiarism": 320674,
+      "Equipment and vehicle use": 190188,
+      "Recreation and ceremony": 99463,
+      "Misuse of fire by a minor": 66278,
+      "Smoking": 63770,
+      "Railroad operations and maintenance": 37285,
+      "Fireworks": 18597,
+      "Other causes": 10516,
+      "Power generation/transmission/distribution": 32652,
+      "Firearms and explosives use": 2733
+    }
+  }
+}

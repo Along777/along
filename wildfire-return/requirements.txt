@@ -1,0 +1,19 @@
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.8
+scipy>=1.11
+statsmodels>=0.14
+patsy>=0.5
+scikit-learn>=1.4
+pyarrow>=15
+requests>=2.31
+pyshp>=2.3
+
+# Round 3 (modeling stage). The sklearn-only path is the backbone and works
+# without these; they exist so the three-track tuning bake-off can actually
+# compare stacks rather than assert a winner. All three install on Python 3.14
+# (lightgbm ships a py3-none wheel, shap a cp312-abi3 wheel, optuna is pure
+# Python) -- if any is missing, tuning.py drops that track and says so.
+optuna>=4.0
+lightgbm>=4.5
+shap>=0.48

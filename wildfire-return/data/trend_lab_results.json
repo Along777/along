@@ -1,0 +1,355 @@
+{
+  "trends": {
+    "national_all_sizes": {
+      "irr_decade": 1.243159,
+      "irr_lo": 1.176623,
+      "irr_hi": 1.313457,
+      "p_nb": 0.0,
+      "theil_slope": 213.05,
+      "theil_lo": -388.166667,
+      "theil_hi": 698.636364,
+      "mk_tau": 0.078818,
+      "mk_p": 0.56415,
+      "n_obs": 1390
+    },
+    "national_large": {
+      "irr_decade": 1.124169,
+      "irr_lo": 1.046347,
+      "irr_hi": 1.20778,
+      "p_nb": 0.001385,
+      "theil_slope": 7.190476,
+      "theil_lo": -1.722222,
+      "theil_hi": 15.272727,
+      "mk_tau": 0.216749,
+      "mk_p": 0.103031,
+      "n_obs": 821
+    },
+    "west_large": {
+      "irr_decade": 1.141005,
+      "irr_lo": 1.03709,
+      "irr_hi": 1.255333,
+      "p_nb": 0.006779,
+      "theil_slope": 3.552381,
+      "theil_lo": -2.5,
+      "theil_hi": 9.526316,
+      "mk_tau": 0.17734,
+      "mk_p": 0.184594,
+      "n_obs": 318
+    },
+    "east_large": {
+      "irr_decade": 1.10357,
+      "irr_lo": 0.99124,
+      "irr_hi": 1.228628,
+      "p_nb": 0.071962,
+      "theil_slope": 3.348485,
+      "theil_lo": 0.5,
+      "theil_hi": 6.772727,
+      "mk_tau": 0.303329,
+      "mk_p": 0.021019,
+      "n_obs": 503
+    },
+    "ca_large": {
+      "irr_decade": 1.072845,
+      "irr_lo": 0.88892,
+      "irr_hi": 1.294826,
+      "p_nb": 0.463668,
+      "theil_slope": 0.318841,
+      "theil_lo": -0.6,
+      "theil_hi": 1.222222,
+      "mk_tau": 0.101867,
+      "mk_p": 0.441175,
+      "n_obs": 29
+    },
+    "fl_large": {
+      "irr_decade": 0.990736,
+      "irr_lo": 0.719749,
+      "irr_hi": 1.36375,
+      "p_nb": 0.954474,
+      "theil_slope": 0.111111,
+      "theil_lo": -0.666667,
+      "theil_hi": 0.6,
+      "mk_tau": 0.067083,
+      "mk_p": 0.612048,
+      "n_obs": 29
+    }
+  },
+  "sensitivity_national": {
+    "baseline": {
+      "irr_decade": 1.243159,
+      "irr_lo": 1.176623,
+      "irr_hi": 1.313457,
+      "p_nb": 0.0,
+      "theil_slope": 213.05,
+      "theil_lo": -388.166667,
+      "theil_hi": 698.636364,
+      "mk_tau": 0.078818,
+      "mk_p": 0.56415,
+      "n_obs": 1390
+    },
+    "drop_step_states": {
+      "irr_decade": 1.163941,
+      "irr_lo": 1.108855,
+      "irr_hi": 1.221764,
+      "p_nb": 0.0,
+      "theil_slope": 20.6,
+      "theil_lo": -450.5,
+      "theil_hi": 532.4,
+      "mk_tau": 0.024631,
+      "mk_p": 0.867161,
+      "n_obs": 1275
+    },
+    "large_only": {
+      "irr_decade": 1.124169,
+      "irr_lo": 1.046347,
+      "irr_hi": 1.20778,
+      "p_nb": 0.001385,
+      "theil_slope": 7.190476,
+      "theil_lo": -1.722222,
+      "theil_hi": 15.272727,
+      "mk_tau": 0.216749,
+      "mk_p": 0.103031,
+      "n_obs": 821
+    }
+  },
+  "threshold_ladder": {
+    "all sizes": {
+      "irr_decade": 1.243159,
+      "irr_lo": 1.176623,
+      "irr_hi": 1.313457,
+      "p_nb": 0.0,
+      "theil_slope": 213.05,
+      "theil_lo": -388.166667,
+      "theil_hi": 698.636364,
+      "mk_tau": 0.078818,
+      "mk_p": 0.56415,
+      "n_obs": 1390
+    },
+    ">=100ac": {
+      "irr_decade": 1.025314,
+      "irr_lo": 0.972907,
+      "irr_hi": 1.080544,
+      "p_nb": 0.350347,
+      "theil_slope": 11.981884,
+      "theil_lo": -17.666667,
+      "theil_hi": 40.73913,
+      "mk_tau": 0.08867,
+      "mk_p": 0.514861,
+      "n_obs": 1167
+    },
+    ">=1000ac": {
+      "irr_decade": 1.124169,
+      "irr_lo": 1.046347,
+      "irr_hi": 1.20778,
+      "p_nb": 0.001385,
+      "theil_slope": 7.190476,
+      "theil_lo": -1.722222,
+      "theil_hi": 15.272727,
+      "mk_tau": 0.216749,
+      "mk_p": 0.103031,
+      "n_obs": 821
+    },
+    ">=5000ac": {
+      "irr_decade": 1.169137,
+      "irr_lo": 1.0693,
+      "irr_hi": 1.278296,
+      "p_nb": 0.000601,
+      "theil_slope": 3.10101,
+      "theil_lo": 0.5,
+      "theil_hi": 6.555556,
+      "mk_tau": 0.29064,
+      "mk_p": 0.027246,
+      "n_obs": 495
+    }
+  },
+  "acres": {
+    "conus": {
+      "theil_slope": 149517.99958375006,
+      "theil_lo": 27259.187730769234,
+      "theil_hi": 288874.04609090905,
+      "mk_tau": 0.3152709359605911,
+      "mk_p": 0.016235008804067922,
+      "n_years": 29
+    },
+    "west": {
+      "theil_slope": 110773.69651702786,
+      "theil_lo": 16927.099357142863,
+      "theil_hi": 220113.75199999995,
+      "mk_tau": 0.31034482758620685,
+      "mk_p": 0.018062900791912716,
+      "n_years": 29
+    },
+    "ca": {
+      "theil_slope": 21290.129371980678,
+      "theil_lo": 3787.6757894736825,
+      "theil_hi": 49186.74363636363,
+      "mk_tau": 0.31034482758620685,
+      "mk_p": 0.018062900791912716,
+      "n_years": 29
+    },
+    "fl": {
+      "theil_slope": 1720.3359126984121,
+      "theil_lo": -3580.3615384615396,
+      "theil_hi": 5515.691999999999,
+      "mk_tau": 0.09852216748768472,
+      "mk_p": 0.46786670864704466,
+      "n_years": 29
+    },
+    "conus_mean_9296": 2961968.9,
+    "conus_mean_1620": 6955821.94702,
+    "ca_2020_acres": 4273417.15
+  },
+  "class_G_national": {
+    "theil_slope": 3.101010101010101,
+    "theil_lo": 0.5,
+    "theil_hi": 6.555555555555555,
+    "mk_tau": 0.29064039408866993,
+    "mk_p": 0.02724570500361764,
+    "n_years": 29
+  },
+  "ca_p95_size": {
+    "theil_slope": -0.5590277777777778,
+    "theil_lo": -0.9047619047619048,
+    "theil_hi": -0.300107142857155,
+    "mk_tau": -0.46984680189838607,
+    "mk_p": 0.00045294103753830585,
+    "n_years": 29
+  },
+  "season": {
+    "ca": {
+      "theil_slope": 1.7841614906832297,
+      "theil_lo": 1.0,
+      "theil_hi": 2.7142857142857144,
+      "mk_tau": 0.487024362230782,
+      "mk_p": 0.00021791325408898366,
+      "n_years": 29
+    },
+    "fl": {
+      "theil_slope": -0.5692307692307692,
+      "theil_lo": -2.5999999999999903,
+      "theil_hi": 1.1888888888888876,
+      "mk_tau": -0.11590637664482409,
+      "mk_p": 0.37789359620434726,
+      "n_years": 29
+    },
+    "ca_span_9296": 147.42,
+    "ca_span_1620": 180.13999999999996,
+    "fl_span_9296": 257.0,
+    "fl_span_1620": 227.7000000000001
+  },
+  "weather_shift_ca": {
+    "erc": {
+      "median_early": 58.0,
+      "median_late": 62.0,
+      "ks_stat": 0.09955835342407227,
+      "ks_p": 0.0,
+      "n_early": 115768,
+      "n_late": 136114
+    },
+    "vpd": {
+      "median_early": 1.7100000381469727,
+      "median_late": 1.7100000381469727,
+      "ks_stat": 0.035236671566963196,
+      "ks_p": 0.0,
+      "n_early": 115768,
+      "n_late": 136114
+    },
+    "top_decile_erc_share_early": 0.07739617165365213,
+    "top_decile_erc_share_late": 0.28196952554476395
+  },
+  "cause_split": {
+    "human_share_count": 0.8461549482705016,
+    "natural_share_acres_national": 0.5365720322693207,
+    "natural_share_acres_west": 0.6535551541689487
+  },
+  "wfigs": {
+    "conus_large_mean_2016_2020_fpa": 513.0,
+    "conus_large_mean_2021_2025_wfigs": 349.0,
+    "conus_large_acres_mean_2016_2020_fpa": 6215641.662,
+    "conus_large_acres_mean_2021_2025_wfigs": 4419465.478,
+    "caveat": "different reporting system; like-for-like >=1000ac series only"
+  },
+  "hypotheses": {
+    "H1": {
+      "claim": "Wildfires are increasing in the US (2020's premise)",
+      "verdict": "SPLIT",
+      "numbers": {
+        "national_ignitions_irr_panel": 1.2431587268671904,
+        "national_counts_mk_p": 0.5641495892267511,
+        "conus_acres_mk_p": 0.016235008804067922,
+        "conus_acres_x_change": 2.3483777790577074,
+        "note": "counts flat (panel IRR reflects reporting growth); burned area rose"
+      }
+    },
+    "H2": {
+      "claim": "The West is burning bigger (burned area and fire size)",
+      "verdict": "CONFIRMED",
+      "numbers": {
+        "west_acres_slope_per_yr": 110773.69651702786,
+        "west_acres_mk_p": 0.018062900791912716,
+        "west_large_irr": 1.1410051685268465,
+        "west_large_p_nb": 0.0067790746951251184,
+        "west_large_mk_p": 0.18459403185660211,
+        "ca_p95_slope": -0.5590277777777778,
+        "ca_p95_mk_p": 0.00045294103753830585
+      }
+    },
+    "H3": {
+      "claim": "CA fires increasingly ignite under extreme fire weather (association, not attribution)",
+      "verdict": "CONFIRMED",
+      "numbers": {
+        "top_decile_share_early": 0.07739617165365213,
+        "top_decile_share_late": 0.28196952554476395,
+        "tail_ratio": 3.6431973251413208,
+        "erc_median_early": 58.0,
+        "erc_median_late": 62.0,
+        "vpd_median_early": 1.7100000381469727,
+        "vpd_median_late": 1.7100000381469727,
+        "note": "VPD median flat while ERC extreme tail quadrupled: fuel-dryness memory, not same-day atmosphere, drives the shift"
+      }
+    },
+    "H4": {
+      "claim": "Humans start most fires",
+      "verdict": "SPLIT",
+      "numbers": {
+        "human_share_count": 0.8461549482705016,
+        "natural_share_acres_national": 0.5365720322693207,
+        "natural_share_acres_west": 0.6535551541689487
+      }
+    },
+    "H5": {
+      "claim": "Fire season is lengthening",
+      "verdict": "SPLIT",
+      "numbers": {
+        "ca_days_per_year": 1.7841614906832297,
+        "ca_mk_p": 0.00021791325408898366,
+        "fl_days_per_year": -0.5692307692307692,
+        "fl_mk_p": 0.37789359620434726
+      }
+    },
+    "H6": {
+      "claim": "Large fires are increasing everywhere, including Florida (2020's extrapolation)",
+      "verdict": "REJECTED",
+      "numbers": {
+        "fl_large_irr": 0.9907357771318688,
+        "fl_large_mk_p": 0.6120480407178746,
+        "east_large_irr": 1.103569695784405,
+        "east_large_mk_p": 0.02101874296869683
+      }
+    }
+  },
+  "verdict_rules_note": "Rules revised once (v2) after first run: H1 re-scoped from counts-only to counts+area (activity claim), H2 to area+size (a 'bigger' claim), H3 to top-decile ignition share (an 'extreme' claim). Underlying numbers unchanged; percentile labels verified era-stable. Disclosed in the article's defense section.",
+  "claims": {
+    "national_ignitions_irr_decade": 1.243,
+    "west_large_irr_decade": 1.141,
+    "east_large_irr_decade": 1.104,
+    "ca_large_irr_decade": 1.073,
+    "fl_large_irr_decade": 0.991,
+    "conus_acres_x_change": 2.35,
+    "ca_2020_acres_m": 4.27,
+    "ca_season_days_per_decade": 17.8,
+    "top_decile_erc_share_early": 0.077,
+    "top_decile_erc_share_late": 0.282,
+    "human_share_count": 0.846,
+    "natural_share_acres_west": 0.654
+  }
+}

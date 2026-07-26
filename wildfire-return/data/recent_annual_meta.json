@@ -1,0 +1,113 @@
+{
+  "fetched_utc": "2026-07-25T05:10:26+00:00",
+  "service": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters/FeatureServer/0/query",
+  "source": "NIFC Open Data / WFIGS Interagency Fire Perimeters (public domain)",
+  "definition": "wildfires (WF) with attr_IncidentSize >= 1000 acres, by discovery year; complex children excluded in headline columns; conus scope excludes AK/HI/PR",
+  "caveats": [
+    "Different reporting system than FPA-FOD; compare only like-for-like large-fire series.",
+    "Perimeter-based dataset; completeness below 1,000 acres is poor, above it is good.",
+    "acres_incident = sum of reported incident size; acres_poly = sum of GIS perimeter acres."
+  ],
+  "queries": [
+    {
+      "scope": "conus",
+      "year": 2021,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2021-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2022-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL) AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2021,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2021-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2022-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2022,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2022-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2023-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL) AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2022,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2022-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2023-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2023,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2023-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2024-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL) AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2023,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2023-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2024-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2024,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2024-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2025-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL) AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2024,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2024-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2025-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2025,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2025-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2026-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL) AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "conus",
+      "year": 2025,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2025-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2026-01-01 00:00:00' AND (attr_POOState NOT IN ('US-AK','US-HI','US-PR') OR attr_POOState IS NULL)"
+    },
+    {
+      "scope": "CA",
+      "year": 2021,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2021-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2022-01-01 00:00:00' AND attr_POOState = 'US-CA' AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "CA",
+      "year": 2021,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2021-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2022-01-01 00:00:00' AND attr_POOState = 'US-CA'"
+    },
+    {
+      "scope": "CA",
+      "year": 2022,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2022-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2023-01-01 00:00:00' AND attr_POOState = 'US-CA' AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "CA",
+      "year": 2022,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2022-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2023-01-01 00:00:00' AND attr_POOState = 'US-CA'"
+    },
+    {
+      "scope": "CA",
+      "year": 2023,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2023-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2024-01-01 00:00:00' AND attr_POOState = 'US-CA' AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "CA",
+      "year": 2023,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2023-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2024-01-01 00:00:00' AND attr_POOState = 'US-CA'"
+    },
+    {
+      "scope": "CA",
+      "year": 2024,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2024-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2025-01-01 00:00:00' AND attr_POOState = 'US-CA' AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "CA",
+      "year": 2024,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2024-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2025-01-01 00:00:00' AND attr_POOState = 'US-CA'"
+    },
+    {
+      "scope": "CA",
+      "year": 2025,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2025-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2026-01-01 00:00:00' AND attr_POOState = 'US-CA' AND (attr_IsCpxChild = 0 OR attr_IsCpxChild IS NULL)"
+    },
+    {
+      "scope": "CA",
+      "year": 2025,
+      "where": "attr_IncidentTypeCategory = 'WF' AND attr_IncidentSize >= 1000 AND attr_FireDiscoveryDateTime >= TIMESTAMP '2025-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2026-01-01 00:00:00' AND attr_POOState = 'US-CA'"
+    }
+  ]
+}

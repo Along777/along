@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Data Expert's Cut</title>
+<meta name="description" content="2,302,521 wildfire records cross-examined before a single trend was trusted: ingest engineering, a 29-check streaming audit, duplicate forensics, coordinate microscopy, and the cause-label mystery. The companion data audit to Return to Fire.">
+<meta name="author" content="Aaron Long">
+<meta property="og:title" content="The Data Expert's Cut">
+<meta property="og:description" content="The data audit behind Return to Fire: 29 checks over 4.68 GB, an ID-collision discovery, 47,367 Alaskan rows hiding in a 'CONUS' dataset, and a cleaning gate that changed zero bytes, on purpose.">
+<meta property="og:url" content="https://along777.github.io/along/wildfire-return/data.html">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --bg:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+    --ink:#0b0b0b; --ink2:#52514e; --muted:#6f6d68;
+    --hair:#e1e0d9; --base:#c3c2b7;
+    --blue:#2a78d6; --blue-soft:#eaf2fc; --red:#e34948; --red-soft:#fdeeee;
+    --green:#1baf7a; --green-soft:#e9f7f1; --gold:#eda100; --gold-soft:#fdf5e3;
+    --fire:#d9481f; --fire-soft:#fdece5;
+    --mono:ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0d0d0d; --surface:#1a1a19; --card:#212120;
+      --ink:#f5f5f2; --ink2:#c3c2b7; --muted:#898781;
+      --hair:#2c2c2a; --base:#383835;
+      --blue:#3987e5; --blue-soft:#14233a; --red:#e66767; --red-soft:#331b1b;
+      --green:#1baf7a; --green-soft:#12291f; --gold:#c98500; --gold-soft:#2b230e;
+      --fire:#f0764a; --fire-soft:#2b160f;
+    }
+    figure{background:#141413}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+  header.hero{background:linear-gradient(180deg,var(--surface),var(--bg));
+    border-bottom:1px solid var(--hair);padding:0 0 36px;text-align:center}
+  .fireband{height:8px;background:linear-gradient(90deg,#eda100 0%,#d9481f 45%,#7a1c0e 100%)}
+  .pipe-wrap{width:100%;max-width:760px;margin:0 auto;padding:8px 16px 0}
+  .pipe{display:block;width:100%;height:auto;max-height:120px}
+  .heroinner{padding:18px 24px 0}
+  .hero .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .hero h1{font-size:clamp(26px,4.6vw,44px);line-height:1.12;margin:12px auto 14px;max-width:880px;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--fire)}
+  .hero .sub{max-width:720px;margin:0 auto;color:var(--ink2);font-size:17.5px}
+  .madeby{margin:14px auto 0;font-size:14px;color:var(--muted)}
+  .herobtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px auto 0}
+  .bigbtn{display:inline-block;background:var(--fire);color:#fff;border-radius:99px;
+    padding:11px 22px;font-size:14.5px;font-weight:700}
+  .bigbtn:hover{text-decoration:none;filter:brightness(1.08)}
+  .bigbtn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+  .kpis{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:26px auto 0;max-width:1000px}
+  .kpi{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 20px;min-width:130px}
+  .kpi b{display:block;font-size:24px;letter-spacing:-.01em}
+  .kpi span{font-size:12.5px;color:var(--muted)}
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);
+      backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+  nav .wrap{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:0 2px;padding:0 12px}
+  nav a{flex:0 0 auto;padding:10px 11px;font-size:13.5px;color:var(--ink2);border-bottom:2px solid transparent;white-space:nowrap}
+  nav a:hover{text-decoration:none;color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  main{max-width:880px;margin:0 auto;padding:8px 24px 80px}
+  section{padding-top:56px;scroll-margin-top:72px}
+  .secnum{font:600 13px var(--mono);color:var(--fire);letter-spacing:.12em}
+  h2{font-size:clamp(24px,3.4vw,34px);margin:6px 0 8px;letter-spacing:-.015em}
+  .lede{color:var(--ink2);font-size:17.5px;margin:0 0 22px}
+  h3{font-size:19px;margin:30px 0 10px}
+  p{margin:0 0 14px}
+  ul{margin:0 0 16px;padding-left:1.2em}
+  ol{margin:0 0 16px;padding-left:1.2em}
+  li{margin:0 0 8px}
+  .divider{text-align:center;color:var(--base);margin:48px 0 -28px;font-size:18px;letter-spacing:.4em}
+  .co{border-radius:12px;padding:16px 18px;margin:18px 0;border:1px solid var(--hair);font-size:15.2px}
+  .co .tag{display:inline-block;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+           padding:4px 9px;border-radius:99px;margin-bottom:9px}
+  .plain{background:var(--blue-soft)} .plain .tag{background:var(--blue);color:#fff}
+  .why{background:var(--gold-soft)} .why .tag{background:var(--gold);color:#fff}
+  .tech{background:var(--green-soft)} .tech .tag{background:var(--green);color:#fff}
+  .bug{background:var(--red-soft)} .bug .tag{background:var(--red);color:#fff}
+  .ember{background:var(--fire-soft)} .ember .tag{background:var(--fire);color:#fff}
+  .co p:last-child{margin-bottom:0}
+  figure{margin:26px 0;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:14px}
+  figure img{width:100%;height:auto;display:block;border-radius:8px}
+  figcaption{font-size:13.5px;color:var(--muted);padding:10px 6px 2px;line-height:1.5}
+  figcaption b{color:var(--ink2)}
+  .tblwrap{overflow-x:auto;margin:18px 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);
+        border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     text-align:left;padding:11px 14px;border-bottom:1px solid var(--hair);background:var(--surface)}
+  td{padding:10px 14px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.num{text-align:right;white-space:nowrap}
+  .chip{display:inline-block;padding:2px 10px;border-radius:99px;font:600 12px var(--mono)}
+  .chip.pass{background:var(--green-soft);color:var(--green)}
+  .chip.warn{background:var(--gold-soft);color:var(--gold)}
+  .chip.fail{background:var(--red-soft);color:var(--red)}
+  .flow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0;counter-reset:step}
+  .step{flex:1 1 160px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px}
+  .step::before{counter-increment:step;content:counter(step,decimal-leading-zero);
+    font:700 12px var(--mono);color:var(--fire)}
+  .step b{display:block;font-size:14.5px;margin:4px 0 4px}
+  .step span{font-size:13px;color:var(--ink2);line-height:1.45}
+  pre,code{font-family:var(--mono);font-size:13px}
+  pre{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;
+      overflow-x:auto;line-height:1.5;color:var(--ink2)}
+  code.inline{background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:1px 6px}
+  .tldrbox{background:var(--card);border:2px solid var(--fire);border-radius:16px;padding:22px 22px 8px;margin:8px 0 24px}
+  .tldrbox h3{margin:0 0 12px;font-size:18px}
+    .note{color:var(--ink2)}
+  .madeby.tight{margin-top:10px}
+  blockquote{border-left:3px solid var(--fire);margin:16px 0;padding:6px 18px;color:var(--ink2)}
+  /* the exhibit rail: four pages, one click apart, current one marked */
+  .rail{border-bottom:1px solid var(--hair);background:var(--surface)}
+  .railwrap{max-width:1160px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px}
+  .raillabel{flex:0 0 auto;align-self:center;font:700 10.5px/1.35 var(--mono);letter-spacing:.14em;
+             text-transform:uppercase;color:var(--muted);max-width:104px;padding-right:4px}
+  .railcard{flex:1 1 168px;padding:9px 12px;border-radius:10px;border:1px solid var(--hair);
+            background:var(--card);color:var(--ink)}
+  .railcard:hover{text-decoration:none;border-color:var(--fire)}
+  .railcard i{font-style:normal;font:700 10px var(--mono);letter-spacing:.1em;color:var(--fire)}
+  .railcard b{display:block;font-size:13.5px;letter-spacing:-.01em;margin-top:1px}
+  .railcard span{display:block;font-size:11.5px;color:var(--ink2);line-height:1.4;margin-top:2px}
+  .railcard.here{background:var(--fire-soft);border-color:var(--fire)}
+  .railcard.here b{color:var(--fire)}
+  @media (max-width:640px){
+    .railwrap{padding:8px 12px;gap:6px}
+    .raillabel{width:100%;max-width:none;padding:0 0 2px}
+    .railcard{flex:1 1 140px;padding:7px 10px}
+    .railcard b{font-size:12.5px}
+    .railcard span{display:none}
+    .railcard.here span{display:block;font-size:11px}
+  }
+
+  footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer a{color:var(--ink2)}
+  @media print{ nav,.rail{display:none} section{break-inside:avoid} }
+</style>
+</head>
+<body>
+<a id="top"></a>
+
+<header class="hero">
+  <div class="fireband" aria-hidden="true"></div>
+  <div class="pipe-wrap" aria-hidden="true">
+    <svg class="pipe" viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pipeline: raw CSVs through a magnifier into hash-locked caches">
+      <!-- raw CSV cylinders -->
+      <g fill="#8a6a52" stroke="#5a3020" stroke-width="1.4">
+        <ellipse cx="90" cy="34" rx="46" ry="10"/>
+        <rect x="44" y="34" width="92" height="42" stroke="none"/>
+        <line x1="44" y1="34" x2="44" y2="76"/><line x1="136" y1="34" x2="136" y2="76"/>
+        <ellipse cx="90" cy="76" rx="46" ry="10"/>
+      </g>
+      <text x="90" y="59" text-anchor="middle" font-size="11" fill="#fff" font-family="monospace">29 CSVs</text>
+      <text x="90" y="100" text-anchor="middle" font-size="10" fill="#898781">4.68 GB raw</text>
+      <!-- arrow -->
+      <path d="M150,55 h70 m-10,-7 l10,7 l-10,7" stroke="#c3c2b7" stroke-width="2" fill="none"/>
+      <!-- magnifier -->
+      <g stroke="#d9481f" stroke-width="5" fill="none">
+        <circle cx="330" cy="48" r="26"/>
+        <line x1="350" y1="68" x2="372" y2="90"/>
+      </g>
+      <path d="M318,48 l8,9 l16,-18" stroke="#1baf7a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <text x="330" y="104" text-anchor="middle" font-size="10" fill="#898781">88 columns &#183; 29 checks</text>
+      <!-- arrow -->
+      <path d="M400,55 h70 m-10,-7 l10,7 l-10,7" stroke="#c3c2b7" stroke-width="2" fill="none"/>
+      <!-- cache stack -->
+      <g fill="#2a78d6" stroke="#14233a" stroke-width="1.2">
+        <rect x="500" y="62" width="110" height="16" rx="4"/>
+        <rect x="508" y="44" width="94" height="16" rx="4"/>
+        <rect x="516" y="26" width="78" height="16" rx="4"/>
+      </g>
+      <text x="555" y="104" text-anchor="middle" font-size="10" fill="#898781">24 MB, SHA-256 locked</text>
+      <!-- lock -->
+      <g transform="translate(624,30)" stroke="#eda100" stroke-width="3" fill="none">
+        <rect x="0" y="10" width="22" height="18" rx="3" fill="#eda100" stroke="none"/>
+        <path d="M4,10 v-3 a7,7 0 0 1 14,0 v3"/>
+      </g>
+    </svg>
+  </div>
+  <div class="heroinner">
+    <div class="kicker">Return to Fire &middot; the companion audit &middot; July 2026</div>
+    <h1>The Data <em>Expert's</em> Cut</h1>
+    <p class="sub"><b>2,302,521 rows cross-examined before a single trend was trusted.</b>
+      The first article asked what the fires did. This one asks whether the ledger
+      that recorded them can carry the weight, and fixes the two places it couldn't.</p>
+    <p class="madeby">One streaming pass &middot; 29 checks &middot; zero new dependencies &middot; every number below machine-verified</p>
+    <div class="herobtns">
+      <a class="bigbtn" href="#tldr">Start with the findings</a>
+      <a class="bigbtn ghost" href="index.html">The main article</a>
+      <a class="bigbtn ghost" href="modeling.html">The modeling stage</a>
+      <a class="bigbtn ghost" href="https://github.com/Along777/along/blob/master/wildfire-return/DATA_DICTIONARY.md">Data dictionary (GitHub)</a>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>2.30M</b><span>rows audited &middot; 88 columns</span></div>
+      <div class="kpi"><b>29</b><span>checks: 12 pass &middot; 9 info &middot; 6 warn</span></div>
+      <div class="kpi"><b>64</b><span>ID collisions found in the "unique" key</span></div>
+      <div class="kpi"><b>0 rows</b><span>changed by cleaning, on purpose</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="rail">
+  <div class="railwrap">
+    <span class="raillabel">One project<br>four exhibits</span>
+    <a class="railcard" href="first_shot.html"><i>01</i><b>The first shot</b><span>one prompt, then frozen byte-for-byte with its flaws intact</span></a>
+    <span class="railcard here" aria-current="page"><i>02</i><b>The data audit</b><span>You are here. 2.3M rows cross-examined by 29 checks before any trend was trusted</span></span>
+    <a class="railcard" href="modeling.html"><i>03</i><b>The modeling stage</b><span>the escalation model, tuned and calibrated, then hostilely reviewed</span></a>
+    <a class="railcard" href="index.html"><i>04</i><b>The final report</b><span>the claims that survived all four rounds, each one machine-checked</span></a>
+  </div>
+</div>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a href="#why">Why</a>
+    <a href="#tldr">TL;DR</a>
+    <a href="#ingest">Ingest</a>
+    <a href="#onepass">One Pass</a>
+    <a href="#dictionary">Dictionary</a>
+    <a href="#missingness">Missingness</a>
+    <a href="#cause">Cause</a>
+    <a href="#duplicates">Duplicates</a>
+    <a href="#coordinates">Coordinates</a>
+    <a href="#integrity">Integrity</a>
+    <a href="#changed">What Changed</a>
+    <a href="#review">Review</a>
+    <a href="#reproduce">Reproduce</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================================================ 01 WHY -->
+<section id="why">
+  <div class="secnum">01</div>
+  <h2>Why the data gets its own article</h2>
+  <p class="lede">Round 1 rebuilt my first data science project and told the fire story.
+    But every one of its claims stands on a table nobody had cross-examined, including me.</p>
+  <p><a href="index.html">Return to Fire</a> shipped with real rigor at the model layer: temporal
+    holdouts, spatial blocks, baselines, a verifier that ties every printed number to a results
+    file. The <i>data</i> layer got working engineering (checksums, streamed reduction, fail-loud column discovery) but not a forensic examination. This page is the confession
+    list from that first build, worked through like a data engineer with the whole afternoon:</p>
+  <ol>
+    <li>The dataset's own <code class="inline">DISCOVERY_DOY</code> was cached and never cross-checked
+      against our derived day-of-year.</li>
+    <li>Two columns that could <i>verify coordinates against claimed location</i>
+      (<code class="inline">LatLong_State</code>, <code class="inline">LatLong_County</code>) sat unused.</li>
+    <li>Zero duplicate detection, on a registry famously merged from federal, state, and
+      local reporting systems. Even <code class="inline">FOD_ID</code> uniqueness was assumed, not checked.</li>
+    <li>Missingness was audited for CA and FL only; corpus-wide, nobody knew which attributes were
+      dead where.</li>
+    <li>Units lived in my head (the temperature column is in Kelvin; ask the example script that
+      quietly subtracts 273.15).</li>
+    <li>The sentinel list, the vocabulary stability of the percentile labels, and the
+      size-vs-class consistency were all unverified assumptions.</li>
+  </ol>
+  <div class="co why">
+    <span class="tag">Why this matters</span>
+    <p>Two of these turned out to be live rounds. The "unique" primary key has 64 collisions, and
+      47,367 rows of Alaska, Hawaii, and Puerto Rico were hiding inside a dataset documented as contiguous-US, sitting unremarked in Round 1's "CONUS" trend series. Both are fixed or
+      fenced below, and the main article has been corrected. The frozen
+      <a href="first_shot.html">first shot</a> preserves what it said before the audit.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 02 TLDR -->
+<section id="tldr">
+  <div class="secnum">02</div>
+  <h2>TL;DR</h2>
+  <div class="tldrbox">
+    <h3>What 29 checks over 4.68 GB actually found</h3>
+    <p><span class="chip warn">FOUND</span> <b>The primary key lies, 64 times.</b> 64 rows share a
+      FOD_ID with a completely different fire: a reused ID block pairing 2019 Florida records
+      with 2020 Alaska records. Both fires in each pair are real, so deduplication would delete a
+      fire. Documented, not dropped.</p>
+    <p><span class="chip warn">FOUND</span> <b>A "CONUS" dataset with 47,367 non-CONUS rows.</b>
+      Alaska (15,195 fires, 36.65M acres!), Hawaii, and Puerto Rico are all present as records. Only their <i>attributes</i> are absent. Round 1's national series silently included Alaska;
+      the trend lab now excludes AK/HI/PR, and the headline survived: burned area still up
+      2.4&times; (2.35 vs 2.37 before). The giant-fire trend weakened honestly: +3.1/yr (p=0.027),
+      not +4.2.</p>
+    <p><span class="chip pass">CLEAN</span> <b>The clock checks out.</b> The dataset's own
+      day-of-year agrees with its dates in <b>2,302,521 of 2,302,521</b> rows. Zero negative burn
+      durations. The percentile-label vocabulary is stable across all 29 years.</p>
+    <p><span class="chip pass">CLEAN</span> <b>Coordinates are better than feared.</b> 99.9%
+      agreement between claimed state and coordinate-derived state; only 5.3% of fires carry
+      centroid-grade precision (&le;2 decimals), including 2,918 whole-degree points.</p>
+    <p><span class="chip warn">FOUND</span> <b>Cause-labeling is an agency behavior, not a data
+      property.</b> California knows a fire was human-caused but increasingly not <i>what kind</i>:
+      general-cause missing runs 37.8% in CA vs 13.5% in FL, and CAL FIRE's specific-cause
+      completeness collapsed after ~2005 while Florida's held. Puerto Rico and Hawaii barely code
+      cause at all (~98%).</p>
+    <p><span class="chip pass">GATE</span> <b>The cleaning gate opened and changed 0 rows.</b> One
+      defensive fix (a newly found 32767 nodata sentinel) was applied and <i>proven byte-identical</i>
+      on the caches; everything else failed the pre-registered bar and is documented instead.
+      "Nothing met the bar" is a result worth reporting.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 03 INGEST -->
+<section id="ingest">
+  <div class="secnum">03</div>
+  <h2>Ingest, engineered</h2>
+  <p class="lede">Before auditing the data, audit the download. Every byte in
+    <code class="inline">data/raw/</code> can now prove where it came from.</p>
+  <div class="flow">
+    <div class="step"><b>Per-year files, not the blob</b><span>Zenodo offers one 5 GB CSV or 29 annual ones. Annual wins: resume granularity, and a subset flag that let the Tubbs work start after one 180 MB file.</span></div>
+    <div class="step"><b>md5 while writing</b><span>Every download is hashed as it streams and compared to Zenodo's published checksum. A flipped bit costs a redownload, never a wrong analysis.</span></div>
+    <div class="step"><b>Range resume</b><span>An interrupted file resumes with an HTTP Range request: the existing prefix is re-hashed from disk, the stream appends (HTTP 206), and the final digest still must match. Servers that ignore Range trigger a clean restart.</span></div>
+    <div class="step"><b>--verify-only</b><span>One command re-hashes all 4.68 GB against Zenodo and prints a 30-row table. Current status: 30/30 OK.</span></div>
+    <div class="step"><b>Fail-loud discovery</b><span>All 88 audited columns are verified present in all 29 files before any row is read. Schema drift is a crash with a printout, never a guess. (The audit covered 59 columns when this page first shipped; the modeling stage's cache v2 added 29 fire-science columns to the map, and re-running the same audit folded them in.)</span></div>
+  </div>
+  <div class="co tech">
+    <span class="tag">Technical</span>
+    <p>The resume design keeps the single-pass md5: on HTTP 206 the existing
+      <code class="inline">.part</code> bytes are re-hashed from disk (cost only on the resume path),
+      then the stream appends into the same digest. A stream error preserves the
+      <code class="inline">.part</code> as the resume asset; an md5 mismatch destroys it, because
+      resuming onto corrupt bytes would loop forever. Both paths were exercised live: a
+      mid-download kill at 3.9 MB of a 121.9 MB file resumed with 206 and verified.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 04 ONE PASS -->
+<section id="onepass">
+  <div class="secnum">04</div>
+  <h2>One pass, fifty-nine columns, twenty-nine checks</h2>
+  <p class="lede">The audit reads the corpus once, streaming, and accumulates everything:
+    missingness matrices, vocabularies, ID uniqueness, duplicate buckets, cross-field rules.</p>
+  <p>Each check is a small object with two methods: <code class="inline">update(chunk, year)</code>
+    called as the stream flows, and <code class="inline">finalize()</code> returning a plain dict that
+    lands in <code class="inline">data/data_audit.json</code>. Statuses are
+    <b>pass / info / warn</b>. The audit reports, it never gates; the only thing that stops
+    the pipeline is an operational failure like missing files or schema drift.</p>
+  <div class="co tech">
+    <span class="tag">Why not pandera / great expectations</span>
+    <p>Both are built to validate one in-memory DataFrame. This audit's questions are
+      <i>cross-file</i>: is FOD_ID unique across 29 files? is a label vocabulary stable across 29 years? The accumulator layer would have to be written either way, and the heavy
+      frameworks would contribute a dependency chain without contributing answers. The result
+      contract also matters: <code class="inline">verify_claims.py</code> consumes plain JSON, and every
+      number on this page is enforced against it.</p>
+  </div>
+  <p>Memory stays flat: chunks stream at 250k rows, per-year duplicate buckets are freed at each
+    year boundary, and the 2.3M FOD_IDs ride along as one 18 MB numpy array. The whole pass runs in
+    about 12 minutes next to the caches it is auditing.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 05 DICTIONARY -->
+<section id="dictionary">
+  <div class="secnum">05</div>
+  <h2>The dictionary that generates itself</h2>
+  <p class="lede">Units, missingness, observed ranges, and dead-column flags, all measured from the data by the audit and written into <code class="inline">DATA_DICTIONARY.md</code>, never
+    hand-maintained.</p>
+  <div class="co bug">
+    <span class="tag">The Kelvin confession</span>
+    <p>The temperature column is in <b>Kelvin</b>. Round 1 discovered this the classic way: a
+      display script quietly grew a <code class="inline">k_to_f()</code> helper and nobody wrote the
+      unit down anywhere. That is how unit bugs are born. The Mars Climate Orbiter was lost
+      for less. The dictionary now flags it loudly, and marks the two columns whose units could
+      <i>not</i> be verified as UNVERIFIED instead of guessing.</p>
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">column</th><th scope="col">raw name</th><th scope="col">units</th><th scope="col">missing (corpus)</th><th scope="col">note</th></tr></thead>
+      <tbody>
+        <tr><td><code class="inline">tmmx</code></td><td>tmmx</td><td><b>(!) KELVIN</b></td><td class="num">2.1%</td><td>gridMET daily max at the ignition cell</td></tr>
+        <tr><td><code class="inline">vpd</code></td><td>vpd</td><td>kPa</td><td class="num">2.1%</td><td>vapor-pressure deficit</td></tr>
+        <tr><td><code class="inline">erc</code></td><td>erc</td><td>index</td><td class="num">2.1%</td><td>energy-release component</td></tr>
+        <tr><td><code class="inline">wind</code></td><td>vs</td><td>m/s</td><td class="num">2.1%</td><td>daily mean; cannot see gust events</td></tr>
+        <tr><td><code class="inline">ndvi_1day</code></td><td>NDVI-1day</td><td>unitless</td><td class="num">3.3%</td><td>MODIS-scaled</td></tr>
+        <tr><td><code class="inline">svi</code></td><td>RPL_THEMES</td><td>0-1 percentile</td><td class="num">1.1%</td><td>-999.0 sentinel, masked at reduce</td></tr>
+        <tr><td><code class="inline">population</code></td><td>Population</td><td>UNVERIFIED</td><td class="num">24.8%</td><td>inferred persons/cell; not confirmed</td></tr>
+        <tr><td><code class="inline">road_county_dis</code></td><td>road_county_dis</td><td>UNVERIFIED</td><td class="num">98.2%</td><td><b>DEAD corpus-wide</b></td></tr>
+        <tr><td><code class="inline">elevation</code></td><td>Elevation</td><td>m</td><td class="num">0.0%</td><td>32767 = nodata on non-CONUS rows</td></tr>
+        <tr><td><code class="inline">aspect</code></td><td>Aspect</td><td>degrees</td><td class="num">0.0%</td><td>-1 means flat terrain</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The full table (every cached column, every derived column, every cache file's schema) regenerates deterministically on each audit run:
+    <a href="https://github.com/Along777/along/blob/master/wildfire-return/DATA_DICTIONARY.md">DATA_DICTIONARY.md</a>.
+    One postscript from the re-run after cache v2: the dead-column census grew from two to four,
+    because <code class="inline">mtbs_id</code> and <code class="inline">ics209_id</code> are
+    near-empty corpus-wide. They are the same two identifiers the
+    <a href="modeling.html#leak">modeling stage banned as leaks</a>. Empty for small fires and
+    present for big ones is exactly what makes them dangerous.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 06 MISSINGNESS -->
+<section id="missingness">
+  <div class="secnum">06</div>
+  <h2>Missingness has geography, and eras</h2>
+  <p class="lede">Round 1 declared three columns "dead" after checking two states. The full corpus
+    says: dead is a place, not a property.</p>
+  <figure>
+    <img src="figures/audit_missingness_eras.png" width="1344" height="1100"
+         alt="Heatmap of missing-value share for every audited column across the 29 years.">
+    <figcaption><b>Attributes are joins with coverage eras.</b> Each attribute inherits the calendar of
+      the dataset it was joined from. Satellite vegetation cannot predate its satellite, and
+      administrative layers have their own windows. Solid dark rows are the genuinely dead columns.</figcaption>
+  </figure>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/audit_missingness_geo.png" width="1456" height="644"
+         alt="Heatmap of missing share by state for the twelve most geographically variable columns.">
+    <figcaption><b>The CA/FL blind spot, exposed.</b> <code>ndvi_12m</code> is 100% missing in both states Round 1 examined, and only 25.1% missing corpus-wide, nearly complete in Puerto Rico and
+      New England. Judging a column from two states nearly wrote off usable data. The road-distance
+      columns, by contrast, really are dead everywhere (98.2% / 99.9%).</figcaption>
+  </figure>
+  <div class="co plain">
+    <span class="tag">Plain English</span>
+    <p>This table is a fire registry with thirty other datasets joined onto it, each carrying its own coverage window.
+      Every column you plan to trust needs its own where-and-when map, which the audit now produces for all of them, in one pass.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 07 CAUSE -->
+<section id="cause">
+  <div class="secnum">07</div>
+  <h2>The cause-label mystery</h2>
+  <p class="lede">Who knows <i>what</i> about why fires start turns out to be a story about
+    agencies and years, not about fires.</p>
+  <p>First, the definitions, because the main article quotes three different "missing cause"
+    numbers and they are all correct:</p>
+  <ul>
+    <li><b>Class-missing</b>: the record can't even say Human vs Natural
+      (<code class="inline">NWCG_CAUSE_CLASSIFICATION</code>). National: 8.4%. CA: 15.2%. FL: just 0.4%.</li>
+    <li><b>General-missing</b>: the record knows the class but not the 13-way specific cause
+      (<code class="inline">NWCG_GENERAL_CAUSE</code>). CA: <b>37.8%</b>. FL: <b>13.5%</b>.</li>
+    <li><b>Group-mappable</b>: what survives into the ML buckets, the 30.8% CA+FL figure the
+      main article reports next to its models.</li>
+  </ul>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/audit_cause_forensics.png" width="1568" height="900"
+         alt="Left: per-state bars of class-level vs general-level cause missingness. Right: general-cause missingness by year for the top California and Florida agencies.">
+    <figcaption><b>The two-level gap is the finding.</b> Left: nearly every state shows a long red bar
+      (specific cause unknown) over a short blue one (class known). The hierarchy decays at its
+      bottom level. Puerto Rico and Hawaii barely code cause at all. Right: California's dominant
+      reporting agency held ~30% general-missing for a decade, then collapsed to 43&ndash;68%
+      after 2005 and never recovered, while Florida's agencies stayed in the teens. Same fires,
+      different paperwork cultures.</figcaption>
+  </figure>
+  <div class="co ember">
+    <span class="tag">The punchline</span>
+    <p>California increasingly knows a fire was human-caused without recording <i>what kind of
+      human</i>. That is not a random gap: it concentrates in exactly the arson-vs-equipment-vs-debris
+      distinctions the main article's confusion matrix already flags as its weakest. The missing labels and the hard labels are the same labels. Any cause model trained on this
+      registry inherits an agency's filing habits, and now we can see whose.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 08 DUPLICATES -->
+<section id="duplicates">
+  <div class="secnum">08</div>
+  <h2>One fire, two ledgers</h2>
+  <p class="lede">A registry merged from federal, state, and local systems should contain double
+    entries. The audit went looking, and found something stranger first.</p>
+  <div class="co bug">
+    <span class="tag">The primary key that isn't</span>
+    <p><code class="inline">FOD_ID</code>, the column every join in every downstream analysis would naturally key on, has <b>64</b> collisions. Not double-entered fires: <i>different</i>
+      fires. A contiguous ID block was assigned twice, once to 2019 ICS-209 records in the
+      Southeast, once to 2020 IRWIN records in Alaska. Deduplicating on the key would delete real
+      fires. Nothing in this pipeline joins on FOD_ID globally (the Tubbs lookup is year-scoped),
+      so the fix is a warning label, loudly placed: <b>FOD_ID is not a safe global key.</b></p>
+  </div>
+  <p>Then the actual double-entry scan, run with a rule designed not to fool itself:</p>
+  <pre>tier 1 (headline):  same discovery date + coordinates within ~110 m (3 decimals)
+                    + fire size >= 10 acres + sizes within 10% + different FOD_ID
+tier 2 (ceiling):   same date + place + EXACT size, any size -- dominated by
+                    legitimate batch-reported small burns; a bound, not a count</pre>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/audit_duplicates.png" width="1456" height="546"
+         alt="Left: tier-1 and tier-2 duplicate candidate rows by year. Right: top source-system pairs among tier-1 groups, cross-system in red.">
+    <figcaption><b>The merge residue is real and small.</b> Tier 1 finds 260 groups, 548 rows in 2.3 million (0.02%). Most pairs sit <i>within</i> one reporting system (a state's own batch
+      entries); the cross-system pairs (the documented federal&times;state merge risk) number just a dozen groups. Tier 2's 19,948 rows are the ceiling, mostly same-day debris burns
+      logged at an office's coordinates.</figcaption>
+  </figure>
+  <p><b>Disposition, pre-registered before the scan ran:</b> flag, never drop. A deduplication pass
+    would alter the trend inputs on the strength of a heuristic, without adjudicating which record
+    is authoritative. At 548 candidate rows against 2.3M, the honest move is a documented rule and
+    a documented count, and leaving the ledger alone.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 09 COORDINATES -->
+<section id="coordinates">
+  <div class="secnum">09</div>
+  <h2>Coordinates under the microscope</h2>
+  <p class="lede">The audit reads latitude as a <i>string</i> before it reads it as a number, because the number of decimal places is data about the data.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/audit_coordinates.png" width="1456" height="546"
+         alt="Left: histogram of decimal places in raw latitude strings, low-precision bars highlighted. Right: top fifteen states by coordinate-versus-claimed-state disagreement rate.">
+    <figcaption><b>Mostly GPS, with a residue of desk-entered coordinates.</b> Left: the modern majority carries 4+ decimals
+      (&le;11 m); the red bars (5.3% of fires at &le;2 decimals, including 2,918 at whole degrees) are administrative centroids recorded as though they were measurements. Right: claimed state
+      vs coordinate-derived state disagrees for just 0.06% of fires overall (99.9% agreement), and
+      the worst state tops out at 0.7%, which is border country rather than disorder.</figcaption>
+  </figure>
+  <p>Two practical consequences flow into the other analyses. First, the near-duplicate scan
+    rounds to 3 decimals <i>because</i> the precision histogram says that's where real coordinates
+    live. Second, the centroid tail is exactly why Round 1's maps aggregate to 0.1&deg; cells
+    instead of trusting individual points, a choice made on instinct then and on evidence now.</p>
+  <div class="co tech">
+    <span class="tag">The 47,367-row reveal</span>
+    <p>The coordinate range check is also what unmasked the non-CONUS rows: 47,367 fires with
+      latitudes and longitudes politely outside the lower-48 bounding box, in a dataset whose paper
+      says contiguous US. Alaska, Hawaii, and Puerto Rico ride along as records with empty weather
+      and 32767-filled terrain. That single range check triggered the scope correction described in
+      <a href="#changed">What changed</a>.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 10 INTEGRITY -->
+<section id="integrity">
+  <div class="secnum">10</div>
+  <h2>Time and vocabulary integrity</h2>
+  <p class="lede">The checks most likely to embarrass the source came back cleanest, which is itself worth publishing.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/audit_time_integrity.png" width="1456" height="546"
+         alt="Left: DISCOVERY_DOY disagreement rate by year, flat at zero, with leap years marked. Right: negative burn durations by year, zero everywhere, with containment coverage rising.">
+    <figcaption><b>The promised cross-check, delivered.</b> Left: the dataset's own day-of-year field
+      agrees with its parsed dates in 2,302,521 of 2,302,521 rows, across every leap year.
+      (Our <code>doy_std</code> differs by design: it shifts post-February days in leap years so
+      seasons align.) Right: zero negative burn durations exist; 232 fires ran past 400 days and
+      stay excluded from <code>burn_days</code>; containment dates exist for 61% of rows and coverage
+      climbs over the record.</figcaption>
+  </figure>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/audit_vocab_sizeclass.png" width="1456" height="546"
+         alt="Left: presence matrix of ERC percentile labels by year, fully stable. Right: FIRE_SIZE versus size-class mismatches by boundary.">
+    <figcaption><b>Stable vocabulary, honest bins.</b> Left: the fire-weather percentile labels the main
+      article's 1-in-13 &rarr; 1-in-4 claim depends on use the identical six bins in every year, so the era comparison stands on stable ground (this check previously lived in a throwaway script;
+      now it's in the repo). Right: FIRE_SIZE and its size class disagree 83 times in 2.3M
+      (0.004%), all boundary-rounding cases.</figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 11 WHAT CHANGED -->
+<section id="changed">
+  <div class="secnum">11</div>
+  <h2>What the audit changed</h2>
+  <p class="lede">The gate was written before the findings existed. Here is the rule, verbatim,
+    and every finding's fate.</p>
+  <div class="co why">
+    <span class="tag">The pre-registered rule</span>
+    <p>A finding may change the caches only if <b>(a)</b> the fix is a deterministic, mechanical
+      correction of an objectively impossible value, with no judgment calls; <b>(b)</b> it touches
+      &lt;0.1% of rows or provably cannot change a Round-1 verdict; and <b>(c)</b> it lands as a
+      small, printed-count step in the reduce script. Everything else is documented, not fixed.</p>
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Finding</th><th scope="col">Decision</th><th scope="col">Rationale</th></tr></thead>
+      <tbody>
+        <tr><td>32767 nodata fill in terrain columns</td><td><span class="chip pass">APPLIED</span></td>
+          <td>Added to the sentinel list. Provably cosmetic today: the reduce re-ran and all eight
+            <b>data caches came back byte-identical</b> (SHA-256 for SHA-256), because no lower-48
+            row carries the fill; the only two files that changed are reports whose embedded
+            generation timestamps moved. The gate opened, changed <b>0 rows</b>, and proved it.</td></tr>
+        <tr><td>AK/HI/PR rows in the "CONUS" data</td><td><span class="chip pass">APPLIED</span></td>
+          <td>Analysis-scope fix, not a data fix: the trend lab now excludes AK/HI/PR from CONUS
+            series (matching the WFIGS comparison scope exactly), and the main article's scope
+            claims were corrected. Three numbers shifted; the 2.4&times; headline survived.</td></tr>
+        <tr><td>64 FOD_ID collisions</td><td><span class="chip warn">DOCUMENTED</span></td>
+          <td>The colliding rows are different real fires; dropping either deletes history. Rule (a)
+            fails. Warning label instead: FOD_ID is not a safe global key.</td></tr>
+        <tr><td>548 tier-1 near-duplicate rows</td><td><span class="chip warn">DOCUMENTED</span></td>
+          <td>Pre-registered flag-only: dedup would alter trend inputs without adjudication.</td></tr>
+        <tr><td>83 size-class boundary mismatches</td><td><span class="chip warn">DOCUMENTED</span></td>
+          <td>Rounding at bin edges, not corruption; 0.004% of rows.</td></tr>
+        <tr><td>1,374 state-boundary coordinate disagreements</td><td><span class="chip warn">DOCUMENTED</span></td>
+          <td>Border fires legitimately cross lines; a mismatch is not an error.</td></tr>
+        <tr><td>232 burn durations &gt; 400 days</td><td><span class="chip warn">DOCUMENTED</span></td>
+          <td>Already excluded from <code class="inline">burn_days</code> by design; now counted in public.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Final tally: <b>0 rows</b> of cached data changed. The two applied fixes were a defensive
+    sentinel (proven zero-diff) and an honesty correction to what the analyses <i>claim about
+    their own scope</i>. That is what a cleaning gate is for. Most findings should die at the bar, and the ones that pass should leave receipts.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 12 REVIEW -->
+<section id="review">
+  <div class="secnum">12</div>
+  <h2>Reviewed before handoff</h2>
+  <p class="lede">Before the modeling stage begins, the data stage got a closing code-and-claims
+    review: a cold re-read of every audit module, targeted probes of the things I had asserted
+    but not proven, and a formal handoff contract. One finding changes how the models must be read.</p>
+
+  <h3>The finding that matters: label-selection drift</h3>
+  <p>The main article reported that cause labels are missing for 15.2% of California fires and that
+    excluded rows "sit out." That is true, and incomplete. Cut by the ML temporal splits, the
+    exclusion is a gradient, not a constant:</p>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Split era</th><th scope="col">CA class-label missing</th><th scope="col">CA 7-class label missing</th><th scope="col">Natural share of labeled</th><th scope="col">FL class-label missing</th></tr></thead>
+      <tbody>
+        <tr><td>train &le;2014</td><td class="num">10.1%</td><td class="num">33.9%</td><td class="num">14.3%</td><td class="num">0.4%</td></tr>
+        <tr><td>val 2015&ndash;17</td><td class="num">29.1%</td><td class="num">50.1%</td><td class="num">17.1%</td><td class="num">0.3%</td></tr>
+        <tr><td>test 2018&ndash;20</td><td class="num"><b>41.7%</b></td><td class="num"><b>56.5%</b></td><td class="num">9.8%</td><td class="num">0.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="co ember">
+    <span class="tag">What this means for modeling</span>
+    <p>The cause models' test years evaluate on the fires California still labels, a subset that shrank from 90% to 58% of ignitions and shifted composition (the natural share of labeled
+      fires dropped by a third). This does not invalidate label-conditional evaluation, but every
+      modeling-stage claim must carry it, and comparisons across eras must weight for it. It is the
+      direct downstream consequence of the <a href="#cause">agency filing collapse</a>. The audit's forensics and the models' caveats are the same fact seen twice. The main article's
+      model section now states the gradient.</p>
+  </div>
+
+  <h3>Everything else the review checked</h3>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Item</th><th scope="col">Outcome</th></tr></thead>
+      <tbody>
+        <tr><td>WFIGS complex-child filter, asserted in Round 1 and never proven to bite</td>
+          <td><span class="chip pass">verified</span> filtered vs unfiltered differ exactly where
+            complexes exist (CA 2021: 35 vs 38 fires, 2.18M vs 2.48M acres; the 0.3M gap is
+            the double-count it prevents)</td></tr>
+        <tr><td>Near-duplicates inside the ML caches</td>
+          <td><span class="chip pass">quantified</span> 56 tier-1 rows in the CA cache, 10 in FL, negligible and now joinable: the audit ships a
+            <code class="inline">dup_flags.parquet</code> sidecar so the modeling stage can run
+            with/without-flag sensitivity checks without any row ever being dropped</td></tr>
+        <tr><td>Feature contract lived buried in the ML script</td>
+          <td><span class="chip pass">promoted</span> the at-ignition feature list, the named leak
+            exclusions, and the split boundaries now live in the data module
+            (<code class="inline">wildfire.py</code>) as the stage's formal handoff, echoed into
+            <code class="inline">eda_results.json</code></td></tr>
+        <tr><td>Vocabulary-span figure assumes label-year contiguity</td>
+          <td><span class="chip warn">documented</span> exact for the stable vocabularies it charts;
+            would overstate presence for a label that skipped years</td></tr>
+        <tr><td>Text tooling hazard</td>
+          <td><span class="chip warn">documented</span> Windows PowerShell 5.1 text round-trips
+            corrupt these UTF-8 pages (it mangled two em-dashes during verifier testing, caught and
+            repaired); all page edits now go through Python</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The handoff contract</h3>
+  <p>What the modeling stage inherits, by name: <b>30 numeric + 3 categorical at-ignition
+    features</b> (the dead columns already excluded; the modeling stage's foundry adds a fourth
+    categorical, <code class="inline">evt</code>, from the cache-v2 columns, so its 34-feature base rung is this contract plus that one), five banned post-outcome columns
+    (<code class="inline">fire_size</code>, <code class="inline">size_class</code>,
+    <code class="inline">burn_days</code>, <code class="inline">agency</code>,
+    <code class="inline">owner</code>), a list the modeling stage later extended by name with
+    <code class="inline">has_mtbs</code> and <code class="inline">has_ics209</code>, the
+    metadata-shaped leaks its &sect;10 demonstrates; frozen split boundaries (train &le;2014 &middot; val
+    2015&ndash;17 &middot; test 2018&ndash;20), hash-locked caches, the duplicate-flag sidecar, and
+    the label-drift table above as a mandatory caveat. Stage documents so far:
+    <a href="first_shot.html">the frozen first shot</a> &rarr; this audit &rarr;
+    <a href="modeling.html">the modeling stage</a> &rarr; the <a href="index.html">main report</a>
+    that collects what survives.</p>
+  <p>One thing the modeling stage found that belongs here: this audit hunted sentinels as
+    <i>strings</i> and missed one hiding as a <i>magnitude</i>. The human-modification column
+    carries float32-max (3.4&times;10<sup>38</sup>) as its nodata fill on 367 California rows, and it
+    was already feeding the models. A sentinel census has to cover both.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 13 REPRODUCE -->
+<section id="reproduce">
+  <div class="secnum">13</div>
+  <h2>Reproduce it</h2>
+  <p class="lede">The audit needs the raw corpus (one scripted download); this page's numbers are
+    verifiable offline against the committed <code class="inline">data_audit.json</code>.</p>
+<pre>python fetch_raw.py --yes               # 4.68 GB once (skip if data/raw/ exists)
+python fetch_raw.py --verify-only       # re-hash everything vs Zenodo: 30/30 OK
+python run_data_audit.py                # one ~12 min pass -> data_audit.json,
+                                        #   7 audit figures, DATA_DICTIONARY.md
+python verify_claims.py                 # every number on all three pages == the JSONs</pre>
+  <p><b>Limits of the audit itself:</b> it can only interrogate what the registry recorded. A fire never reported is invisible to every check here. The near-duplicate rule is a heuristic
+    with a deliberately quarantined ceiling. Coordinate-vs-state disagreement includes legitimate
+    border fires. Cause-completeness measures filing behavior, which is evidence about agencies,
+    not about arsonists. And an audit run by the same person who built the pipeline shares that person's blind spots. The checks are in the repo so someone else can add one
+    that embarrasses me.</p>
+</section>
+
+</main>
+
+<footer>
+  <p><b>The Data Expert's Cut</b> &middot; companion to <a href="index.html">Return to Fire</a> &middot; Aaron Long &middot; July 2026</p>
+  <p>
+    <a href="index.html">the main article</a> &middot;
+    <a href="modeling.html">the modeling stage</a> &middot;
+    <a href="first_shot.html">the frozen first shot</a> &middot;
+    <a href="https://github.com/Along777/along/tree/master/wildfire-return">code</a> &middot;
+    <a href="https://github.com/Along777/along/blob/master/wildfire-return/DATA_DICTIONARY.md">data dictionary</a> &middot;
+    <a href="https://along777.github.io/along/">portfolio home</a>
+  </p>
+  <p><a href="#top">back to top</a></p>
+</footer>
+
+</body>
+</html>

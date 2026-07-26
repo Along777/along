@@ -1,0 +1,217 @@
+{
+  "corpus_rows": 2302521,
+  "missing_shares_ca_fl": {
+    "ndvi_12m": 1.0,
+    "road_interstate_dis": 0.9992,
+    "mtbs_id": 0.9943,
+    "ics209_id": 0.9841,
+    "road_county_dis": 0.9824,
+    "cheatgrass": 0.8428,
+    "exotic_grass": 0.8428,
+    "gacc": 0.5359,
+    "burn_days": 0.4634,
+    "cause_group": 0.3075,
+    "population": 0.2882,
+    "county": 0.2839,
+    "fire_name": 0.2658,
+    "firestations_10km": 0.0498,
+    "ndvi_1day": 0.0384,
+    "bi_pctl": 0.0344,
+    "fm1000_normal": 0.0264,
+    "rmin_normal": 0.0264,
+    "wind_pctl": 0.0027,
+    "svi": 0.002,
+    "erc_pctl": 0.0019,
+    "vpd_pctl": 0.0018,
+    "ghm": 0.0014,
+    "fm100_pctl": 0.0011,
+    "sdi": 0.0009,
+    "ecoregion_l3": 0.0008,
+    "vpd_5d_max": 0.0008,
+    "bi": 0.0008,
+    "fm1000": 0.0008,
+    "fm100": 0.0008,
+    "aridity": 0.0008,
+    "rmin": 0.0008,
+    "rmax": 0.0008,
+    "wind_dir": 0.0008,
+    "srad": 0.0008,
+    "sph": 0.0008,
+    "wind": 0.0008,
+    "tmmx_pctl": 0.0008,
+    "wind_dir_5d_max": 0.0008,
+    "wind_5d_max": 0.0008,
+    "precip_5d_mean": 0.0008,
+    "erc": 0.0008,
+    "vpd": 0.0008,
+    "fm100_normal": 0.0008,
+    "bi_normal": 0.0008,
+    "tmmn": 0.0008,
+    "precip": 0.0008,
+    "tmmx": 0.0008,
+    "annual_temp": 0.0008,
+    "vpd_normal": 0.0008,
+    "erc_normal": 0.0008,
+    "precip_normal": 0.0008,
+    "tmmx_normal": 0.0008,
+    "erc_5d_max": 0.0008,
+    "etr": 0.0008
+  },
+  "missing_shares_corpus_keycols": {
+    "cause_general": 0.0,
+    "fire_size": 0.0,
+    "lat": 0.0,
+    "lon": 0.0,
+    "erc": 0.02070035409014728,
+    "vpd": 0.02070035409014728,
+    "ndvi_1day": 0.03316060961007522,
+    "svi": 0.01245070077536752
+  },
+  "cause_class_counts": {
+    "Human": 1781895,
+    "Natural": 327267,
+    "Missing data/not specified/undetermined": 193359
+  },
+  "human_share_of_known": 0.8448,
+  "missing_cause_share": 0.084,
+  "ca_fires_total": 251882,
+  "ca_large_fires": 1484,
+  "ca_large_share_of_acres": 0.9205,
+  "fl_fires_total": 103409,
+  "fl_large_fires": 640,
+  "fl_large_share_of_acres": 0.7057,
+  "peak_month": {
+    "ca_all": 7,
+    "fl_all": 5,
+    "ca_large": 8,
+    "fl_large": 5
+  },
+  "ca_classG_sep_nov_share": 0.2472,
+  "reporting_step_change_states": {
+    "PR": 7.502,
+    "MA": 5.737,
+    "KS": 4.586,
+    "LA": 3.891,
+    "TN": 3.838
+  },
+  "ca_erc_median_small": 60.0,
+  "ca_erc_median_large": 70.0,
+  "ca_vpd_median_small": 1.7,
+  "ca_vpd_median_large": 2.25,
+  "ca_rmin_median_small": 22.3,
+  "ca_rmin_median_large": 17.1,
+  "ca_wind_median_small": 3.0,
+  "ca_wind_median_large": 3.1,
+  "top_feature_correlations_ca": {
+    "cheatgrass x exotic_grass": 1.0,
+    "evc x evh": 0.997,
+    "erc_normal x fm1000_normal": -0.982,
+    "slope x tri": 0.971,
+    "aridity x annual_precip": 0.969,
+    "erc_normal x fm100_normal": -0.961,
+    "fm1000 x erc_5d_max": -0.96,
+    "erc x erc_5d_max": 0.945,
+    "erc_normal x bi_normal": 0.933,
+    "fm100_normal x fm1000_normal": 0.93,
+    "vpd_normal x tmmx_normal": 0.929,
+    "erc x fm1000": -0.917
+  },
+  "modeling_handoff": {
+    "feature_contract": {
+      "numeric": [
+        "lat",
+        "lon",
+        "month",
+        "doy_std",
+        "dow",
+        "tmmx",
+        "rmin",
+        "wind",
+        "precip",
+        "vpd",
+        "erc",
+        "bi",
+        "fm100",
+        "fm1000",
+        "precip_5d_mean",
+        "vpd_5d_max",
+        "erc_5d_max",
+        "wind_5d_max",
+        "vpd_normal",
+        "erc_normal",
+        "ndvi_1day",
+        "elevation",
+        "slope",
+        "aspect",
+        "tpi",
+        "population",
+        "ghm",
+        "firestations_10km",
+        "svi",
+        "aridity"
+      ],
+      "categorical": [
+        "land_cover",
+        "frg",
+        "ecoregion_l3"
+      ],
+      "excluded_leaks": [
+        "fire_size",
+        "size_class",
+        "burn_days",
+        "agency",
+        "owner",
+        "cont_date",
+        "mtbs_id",
+        "ics209_id"
+      ],
+      "splits": {
+        "train": "<= 2014",
+        "val": "2015-2017",
+        "test": "2018-2020"
+      }
+    },
+    "ca_label_by_era": {
+      "train": {
+        "n": 200967,
+        "class_missing": 0.1011,
+        "group_missing": 0.3388,
+        "natural_share_of_labeled": 0.1428
+      },
+      "val": {
+        "n": 24773,
+        "class_missing": 0.2912,
+        "group_missing": 0.5013,
+        "natural_share_of_labeled": 0.171
+      },
+      "test": {
+        "n": 26142,
+        "class_missing": 0.4167,
+        "group_missing": 0.5649,
+        "natural_share_of_labeled": 0.0977
+      }
+    },
+    "fl_label_by_era": {
+      "train": {
+        "n": 88586,
+        "class_missing": 0.0037,
+        "group_missing": 0.1306,
+        "natural_share_of_labeled": 0.2364
+      },
+      "val": {
+        "n": 8698,
+        "class_missing": 0.003,
+        "group_missing": 0.1633,
+        "natural_share_of_labeled": 0.2643
+      },
+      "test": {
+        "n": 6125,
+        "class_missing": 0.0059,
+        "group_missing": 0.1608,
+        "natural_share_of_labeled": 0.1853
+      }
+    },
+    "ca_tier1_dup_rows_in_cache": 56,
+    "fl_tier1_dup_rows_in_cache": 10
+  }
+}

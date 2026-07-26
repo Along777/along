@@ -1,0 +1,456 @@
+{
+  "features": [
+    "lat",
+    "lon",
+    "month",
+    "doy_std",
+    "dow",
+    "tmmx",
+    "rmin",
+    "wind",
+    "precip",
+    "vpd",
+    "erc",
+    "bi",
+    "fm100",
+    "fm1000",
+    "precip_5d_mean",
+    "vpd_5d_max",
+    "erc_5d_max",
+    "wind_5d_max",
+    "vpd_normal",
+    "erc_normal",
+    "ndvi_1day",
+    "elevation",
+    "slope",
+    "aspect",
+    "tpi",
+    "population",
+    "ghm",
+    "firestations_10km",
+    "svi",
+    "aridity",
+    "land_cover",
+    "frg",
+    "ecoregion_l3"
+  ],
+  "excluded_as_leaks": [
+    "fire_size",
+    "size_class",
+    "burn_days",
+    "agency",
+    "owner",
+    "cont_date",
+    "mtbs_id",
+    "ics209_id"
+  ],
+  "museum": {
+    "n_large_fires_1992_2015": 1164,
+    "crosswalk_note": "old 13 classes reconstructed via approximate NWCG crosswalk",
+    "acc13_random_split": 0.4943,
+    "acc13_2020_notebook": 0.6133,
+    "m13_temporal": {
+      "n": 187,
+      "accuracy": 0.5240641711229946,
+      "balanced_accuracy": 0.1704408067190927,
+      "macro_f1": 0.13988468428123602,
+      "per_class_recall": {
+        "Arson": 0.2222222222222222,
+        "Campfire": 0.0,
+        "Debris Burning": 0.0,
+        "Equipment Use": 0.0,
+        "Fireworks": 0.0,
+        "Lightning": 0.8208955223880597,
+        "Miscellaneous": 0.0,
+        "Missing/Undefined": 0.6612903225806451,
+        "Powerline": 0.0,
+        "Railroad": 0.0
+      },
+      "majority_share": 0.3582887700534759
+    },
+    "acc_campfire_random_split": 0.96,
+    "acc_campfire_2020_notebook": 0.9478,
+    "campfire_majority_share_testset": 0.9571
+  },
+  "T1_ca_natural_vs_human": {
+    "n_rows_known_label": 213462,
+    "label_excluded_share": 0.1525,
+    "n_train": 180656,
+    "n_val": 17558,
+    "n_test": 15248,
+    "labels": [
+      "Human",
+      "Natural"
+    ],
+    "test": {
+      "n": 15248,
+      "accuracy": 0.9500262329485835,
+      "balanced_accuracy": 0.894507747048453,
+      "macro_f1": 0.8677811174522594,
+      "per_class_recall": {
+        "Human": 0.9635121383922082,
+        "Natural": 0.825503355704698
+      },
+      "majority_share": 0.9022822665267576,
+      "pr_auc": 0.8522423824442898,
+      "brier": 0.03799057447273712
+    },
+    "baseline_majority": {
+      "n": 15248,
+      "accuracy": 0.9022822665267576,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.47431565882920773,
+      "per_class_recall": {
+        "Human": 1.0,
+        "Natural": 0.0
+      },
+      "majority_share": 0.9022822665267576
+    },
+    "baseline_climatology": {
+      "n": 15248,
+      "accuracy": 0.9272691500524659,
+      "balanced_accuracy": 0.7771671100938466,
+      "macro_f1": 0.786656137517232,
+      "per_class_recall": {
+        "Human": 0.9637301933420556,
+        "Natural": 0.5906040268456376
+      },
+      "majority_share": 0.9022822665267576
+    },
+    "baseline_logistic": {
+      "n": 15248,
+      "accuracy": 0.9221537250786989,
+      "balanced_accuracy": 0.8859444315985525,
+      "macro_f1": 0.8171475059994608,
+      "per_class_recall": {
+        "Human": 0.9309492658816688,
+        "Natural": 0.8409395973154362
+      },
+      "majority_share": 0.9022822665267576
+    },
+    "spatial_cv_macro_f1_mean": 0.8764,
+    "spatial_cv_macro_f1_sd": 0.013
+  },
+  "T1_fl_natural_vs_human": {
+    "n_rows_known_label": 103019,
+    "label_excluded_share": 0.0038,
+    "n_train": 88258,
+    "n_val": 8672,
+    "n_test": 6089,
+    "labels": [
+      "Human",
+      "Natural"
+    ],
+    "test": {
+      "n": 6089,
+      "accuracy": 0.8912793562161274,
+      "balanced_accuracy": 0.8829355676403607,
+      "macro_f1": 0.8392115325211762,
+      "per_class_recall": {
+        "Human": 0.8961902842168917,
+        "Natural": 0.8696808510638298
+      },
+      "majority_share": 0.8147479060601084,
+      "pr_auc": 0.8460328820271631,
+      "brier": 0.07894798232360062
+    },
+    "baseline_majority": {
+      "n": 6089,
+      "accuracy": 0.8147479060601084,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.44895927601809954,
+      "per_class_recall": {
+        "Human": 1.0,
+        "Natural": 0.0
+      },
+      "majority_share": 0.8147479060601084
+    },
+    "baseline_climatology": {
+      "n": 6089,
+      "accuracy": 0.8787978321563475,
+      "balanced_accuracy": 0.7841771312692905,
+      "macro_f1": 0.7929339111073428,
+      "per_class_recall": {
+        "Human": 0.9344890143116307,
+        "Natural": 0.6338652482269503
+      },
+      "majority_share": 0.8147479060601084
+    },
+    "baseline_logistic": {
+      "n": 6089,
+      "accuracy": 0.8873378223025127,
+      "balanced_accuracy": 0.8678450781342699,
+      "macro_f1": 0.831030081030081,
+      "per_class_recall": {
+        "Human": 0.8988107236444265,
+        "Natural": 0.8368794326241135
+      },
+      "majority_share": 0.8147479060601084
+    },
+    "spatial_cv_macro_f1_mean": 0.8579,
+    "spatial_cv_macro_f1_sd": 0.0082
+  },
+  "T2_ca_7class": {
+    "n_rows_known_label": 156617,
+    "label_excluded_share": 0.3782,
+    "n_train": 132889,
+    "n_val": 12354,
+    "n_test": 11374,
+    "labels": [
+      "Arson",
+      "Debris burning",
+      "Equipment & vehicle",
+      "Infrastructure",
+      "Natural",
+      "Other human",
+      "Recreation"
+    ],
+    "test": {
+      "n": 11374,
+      "accuracy": 0.43265342008088625,
+      "balanced_accuracy": 0.4543966735949198,
+      "macro_f1": 0.4295760571760749,
+      "per_class_recall": {
+        "Arson": 0.22966101694915253,
+        "Debris burning": 0.4730290456431535,
+        "Equipment & vehicle": 0.2726495726495726,
+        "Infrastructure": 0.21338912133891214,
+        "Natural": 0.7577181208053692,
+        "Other human": 0.5599743425272611,
+        "Recreation": 0.6743554952510177
+      },
+      "majority_share": 0.2118867592755407
+    },
+    "baseline_majority": {
+      "n": 11374,
+      "accuracy": 0.2057323720766661,
+      "balanced_accuracy": 0.14285714285714285,
+      "macro_f1": 0.048751015646159294,
+      "per_class_recall": {
+        "Arson": 0.0,
+        "Debris burning": 0.0,
+        "Equipment & vehicle": 1.0,
+        "Infrastructure": 0.0,
+        "Natural": 0.0,
+        "Other human": 0.0,
+        "Recreation": 0.0
+      },
+      "majority_share": 0.2118867592755407
+    },
+    "baseline_climatology": {
+      "n": 11374,
+      "accuracy": 0.3930015825567083,
+      "balanced_accuracy": 0.3451629016750694,
+      "macro_f1": 0.3356042199580057,
+      "per_class_recall": {
+        "Arson": 0.22542372881355932,
+        "Debris burning": 0.35352697095435687,
+        "Equipment & vehicle": 0.6628205128205128,
+        "Infrastructure": 0.02510460251046025,
+        "Natural": 0.7583892617449665,
+        "Other human": 0.1276459268762027,
+        "Recreation": 0.26322930800542743
+      },
+      "majority_share": 0.2118867592755407
+    },
+    "baseline_logistic": {
+      "n": 11374,
+      "accuracy": 0.40469491823457004,
+      "balanced_accuracy": 0.42212479170633593,
+      "macro_f1": 0.3914763360360482,
+      "per_class_recall": {
+        "Arson": 0.2838983050847458,
+        "Debris burning": 0.4879668049792531,
+        "Equipment & vehicle": 0.15427350427350428,
+        "Infrastructure": 0.2489539748953975,
+        "Natural": 0.7308724832214765,
+        "Other human": 0.5048107761385503,
+        "Recreation": 0.5440976933514247
+      },
+      "majority_share": 0.2118867592755407
+    },
+    "spatial_cv_macro_f1_mean": 0.4068,
+    "spatial_cv_macro_f1_sd": 0.023
+  },
+  "T3_ca_ge100ac": {
+    "n_rows_known_label": 251882,
+    "label_excluded_share": 0.0,
+    "n_train": 200967,
+    "n_val": 24773,
+    "n_test": 26142,
+    "labels": [
+      "False",
+      "True"
+    ],
+    "test": {
+      "n": 26142,
+      "accuracy": 0.8638206717160125,
+      "balanced_accuracy": 0.7312246895669763,
+      "macro_f1": 0.5389715547955142,
+      "per_class_recall": {
+        "False": 0.869512576159975,
+        "True": 0.5929368029739777
+      },
+      "majority_share": 0.9794200902761839,
+      "pr_auc": 0.12114601086800228,
+      "brier": 0.09627359201634335
+    },
+    "baseline_majority": {
+      "n": 26142,
+      "accuracy": 0.9794200902761839,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.49480153055308623,
+      "per_class_recall": {
+        "False": 1.0,
+        "True": 0.0
+      },
+      "majority_share": 0.9794200902761839
+    },
+    "baseline_climatology": {
+      "n": 26142,
+      "accuracy": 0.9793053324152704,
+      "balanced_accuracy": 0.5026709348969056,
+      "macro_f1": 0.5002560941485128,
+      "per_class_recall": {
+        "False": 0.9997656616153726,
+        "True": 0.0055762081784386614
+      },
+      "majority_share": 0.9794200902761839
+    },
+    "baseline_logistic": {
+      "n": 26142,
+      "accuracy": 0.8087751510978503,
+      "balanced_accuracy": 0.7386073650202194,
+      "macro_f1": 0.5089691254289278,
+      "per_class_recall": {
+        "False": 0.8117872207467584,
+        "True": 0.6654275092936803
+      },
+      "majority_share": 0.9794200902761839
+    },
+    "spatial_cv_macro_f1_mean": 0.4874,
+    "spatial_cv_macro_f1_sd": 0.0126
+  },
+  "falsification_leak_probe": {
+    "honest_macro_f1": 0.8677811174522594,
+    "with_leaked_fire_size_macro_f1": 0.871
+  },
+  "falsification_protocol_gap": {
+    "random_cv_macro_f1": 0.8879,
+    "spatial_cv_macro_f1": 0.8709,
+    "temporal_test_macro_f1": 0.8677811174522594
+  },
+  "falsification_label_shuffle": {
+    "macro_f1": 0.3758
+  },
+  "T2_confusion": {
+    "labels": [
+      "Arson",
+      "Debris burning",
+      "Equipment & vehicle",
+      "Infrastructure",
+      "Natural",
+      "Other human",
+      "Recreation"
+    ],
+    "matrix": [
+      [
+        0.2297,
+        0.1169,
+        0.1089,
+        0.0678,
+        0.0055,
+        0.4284,
+        0.0428
+      ],
+      [
+        0.088,
+        0.473,
+        0.0884,
+        0.0598,
+        0.0075,
+        0.2452,
+        0.0382
+      ],
+      [
+        0.0709,
+        0.106,
+        0.2726,
+        0.1774,
+        0.0226,
+        0.2774,
+        0.0731
+      ],
+      [
+        0.0586,
+        0.1653,
+        0.1695,
+        0.2134,
+        0.0105,
+        0.3305,
+        0.0523
+      ],
+      [
+        0.0141,
+        0.0342,
+        0.0128,
+        0.0342,
+        0.7577,
+        0.053,
+        0.094
+      ],
+      [
+        0.1353,
+        0.0693,
+        0.1026,
+        0.077,
+        0.0058,
+        0.56,
+        0.05
+      ],
+      [
+        0.0421,
+        0.0556,
+        0.0692,
+        0.038,
+        0.0923,
+        0.0285,
+        0.6744
+      ]
+    ]
+  },
+  "T1_permutation_importance_top": {
+    "elevation": 0.0411,
+    "tmmx": 0.0172,
+    "precip_5d_mean": 0.0157,
+    "rmin": 0.0149,
+    "ghm": 0.014,
+    "precip": 0.0113,
+    "ndvi_1day": 0.0097,
+    "doy_std": 0.0079,
+    "aridity": 0.0041,
+    "vpd": 0.0037,
+    "vpd_5d_max": 0.0018,
+    "lat": 0.0008,
+    "fm100": 0.0007,
+    "lon": 0.0005,
+    "erc": 0.0004
+  },
+  "claims": {
+    "museum_campfire_acc": 0.96,
+    "museum_campfire_majority": 0.957,
+    "t1_ca_test_macro_f1": 0.8677811174522594,
+    "t1_ca_test_pr_auc": 0.8522423824442898,
+    "t1_ca_climatology_macro_f1": 0.786656137517232,
+    "t2_ca_test_macro_f1": 0.4295760571760749,
+    "t2_ca_majority_macro_f1": 0.048751015646159294,
+    "t3_pr_auc": 0.12114601086800228,
+    "t3_brier": 0.09627359201634335,
+    "protocol_random_cv": 0.8879,
+    "protocol_spatial_cv": 0.8709,
+    "protocol_temporal": 0.8677811174522594,
+    "leak_probe_f1": 0.871,
+    "label_shuffle_f1": 0.3758,
+    "t1_label_excluded_share": 0.1525
+  }
+}

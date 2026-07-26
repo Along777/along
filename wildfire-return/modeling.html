@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Modeling Stage</title>
+<meta name="description" content="Tuning, feature engineering, calibration and decision analysis on 2.3M wildfire records: a three-way search bake-off, a leak probe that bites, a calibration claim retracted, and the Tubbs Fire scored by a model that never saw 2017.">
+<meta name="author" content="Aaron Long">
+<meta property="og:title" content="The Modeling Stage - Return to Fire">
+<meta property="og:description" content="From 'classify the cause' to 'which of today's ignitions deserves a second engine'. Includes the number I got backwards.">
+<meta property="og:url" content="https://along777.github.io/along/wildfire-return/modeling.html">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --bg:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+    --ink:#0b0b0b; --ink2:#52514e; --muted:#6f6d68;
+    --hair:#e1e0d9; --base:#c3c2b7;
+    --blue:#2a78d6; --blue-soft:#eaf2fc; --red:#e34948; --red-soft:#fdeeee;
+    --green:#1baf7a; --green-soft:#e9f7f1; --gold:#eda100; --gold-soft:#fdf5e3;
+    --fire:#d9481f; --fire-soft:#fdece5;
+    --mono:ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0d0d0d; --surface:#1a1a19; --card:#212120;
+      --ink:#f5f5f2; --ink2:#c3c2b7; --muted:#898781;
+      --hair:#2c2c2a; --base:#383835;
+      --blue:#3987e5; --blue-soft:#14233a; --red:#e66767; --red-soft:#331b1b;
+      --green:#1baf7a; --green-soft:#12291f; --gold:#c98500; --gold-soft:#2b230e;
+      --fire:#f0764a; --fire-soft:#2b160f;
+    }
+    figure{background:#141413}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+  header.hero{background:linear-gradient(180deg,var(--surface),var(--bg));
+    border-bottom:1px solid var(--hair);padding:0 0 36px;text-align:center}
+  .fireband{height:8px;background:linear-gradient(90deg,#eda100 0%,#d9481f 45%,#7a1c0e 100%)}
+  .pipe-wrap{width:100%;max-width:760px;margin:0 auto;padding:10px 16px 0}
+    .pipe{display:block;width:100%;height:auto;max-height:120px}
+  .pipe .inkstroke{stroke:var(--ink)} .pipe .inkfill{fill:var(--ink)}
+  .heroinner{padding:18px 24px 0}
+  .hero .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .hero h1{font-size:clamp(26px,4.6vw,44px);line-height:1.12;margin:12px auto 14px;max-width:880px;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--fire)}
+  .hero .sub{max-width:730px;margin:0 auto;color:var(--ink2);font-size:17.5px}
+  .madeby{margin:14px auto 0;font-size:14px;color:var(--muted)}
+  .herobtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px auto 0}
+  .bigbtn{display:inline-block;background:var(--fire);color:#fff;border-radius:99px;
+    padding:11px 22px;font-size:14.5px;font-weight:700}
+  .bigbtn:hover{text-decoration:none;filter:brightness(1.08)}
+  .bigbtn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+  .kpis{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:26px auto 0;max-width:1000px}
+  .kpi{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 20px;min-width:130px}
+  .kpi b{display:block;font-size:24px;letter-spacing:-.01em}
+  .kpi span{font-size:12.5px;color:var(--muted)}
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);
+      backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+  nav .wrap{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:0 2px;padding:0 12px}
+  nav a{flex:0 0 auto;padding:10px 11px;font-size:13.5px;color:var(--ink2);border-bottom:2px solid transparent;white-space:nowrap}
+  nav a:hover{text-decoration:none;color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  main{max-width:880px;margin:0 auto;padding:8px 24px 80px}
+  section{padding-top:56px;scroll-margin-top:72px}
+  .secnum{font:600 13px var(--mono);color:var(--fire);letter-spacing:.12em}
+  h2{font-size:clamp(24px,3.4vw,34px);margin:6px 0 8px;letter-spacing:-.015em}
+  .lede{color:var(--ink2);font-size:17.5px;margin:0 0 22px}
+  h3{font-size:19px;margin:30px 0 10px}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:1.2em}
+  li{margin:0 0 8px}
+  .divider{text-align:center;color:var(--base);margin:48px 0 -28px;font-size:18px;letter-spacing:.4em}
+  .co{border-radius:12px;padding:16px 18px;margin:18px 0;border:1px solid var(--hair);font-size:15.2px}
+  .co .tag{display:inline-block;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+           padding:4px 9px;border-radius:99px;margin-bottom:9px}
+  .plain{background:var(--blue-soft)} .plain .tag{background:var(--blue);color:#fff}
+  .why{background:var(--gold-soft)} .why .tag{background:var(--gold);color:#fff}
+  .tech{background:var(--green-soft)} .tech .tag{background:var(--green);color:#fff}
+  .bug{background:var(--red-soft)} .bug .tag{background:var(--red);color:#fff}
+  .ember{background:var(--fire-soft)} .ember .tag{background:var(--fire);color:#fff}
+  .co p:last-child{margin-bottom:0}
+  figure{margin:26px 0;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:14px}
+  figure img{width:100%;height:auto;display:block;border-radius:8px}
+  figcaption{font-size:13.5px;color:var(--muted);padding:10px 6px 2px;line-height:1.5}
+  figcaption b{color:var(--ink2)}
+  .tblwrap{overflow-x:auto;margin:18px 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);
+        border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     text-align:left;padding:11px 14px;border-bottom:1px solid var(--hair);background:var(--surface)}
+  td{padding:10px 14px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.num{text-align:right;white-space:nowrap}
+  .chip{display:inline-block;padding:2px 10px;border-radius:99px;font:600 12px var(--mono)}
+  .chip.pass{background:var(--green-soft);color:var(--green)}
+  .chip.warn{background:var(--gold-soft);color:var(--gold)}
+  .chip.fail{background:var(--red-soft);color:var(--red)}
+  .flow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0;counter-reset:step}
+  .step{flex:1 1 160px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px}
+  .step::before{counter-increment:step;content:counter(step,decimal-leading-zero);
+    font:700 12px var(--mono);color:var(--fire)}
+  .step b{display:block;font-size:14.5px;margin:4px 0 4px}
+  .step span{font-size:13px;color:var(--ink2);line-height:1.45}
+  pre,code{font-family:var(--mono);font-size:13px}
+  pre{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;
+      overflow-x:auto;line-height:1.5;color:var(--ink2)}
+  code.inline{background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:1px 6px}
+  .tldrbox{background:var(--card);border:2px solid var(--fire);border-radius:16px;padding:22px 22px 8px;margin:8px 0 24px}
+  .tldrbox h3{margin:0 0 12px;font-size:18px}
+    .note{color:var(--ink2)}
+  .madeby.tight{margin-top:10px}
+  blockquote{border-left:3px solid var(--fire);margin:16px 0;padding:6px 18px;color:var(--ink2)}
+  /* the exhibit rail: four pages, one click apart, current one marked */
+  .rail{border-bottom:1px solid var(--hair);background:var(--surface)}
+  .railwrap{max-width:1160px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px}
+  .raillabel{flex:0 0 auto;align-self:center;font:700 10.5px/1.35 var(--mono);letter-spacing:.14em;
+             text-transform:uppercase;color:var(--muted);max-width:104px;padding-right:4px}
+  .railcard{flex:1 1 168px;padding:9px 12px;border-radius:10px;border:1px solid var(--hair);
+            background:var(--card);color:var(--ink)}
+  .railcard:hover{text-decoration:none;border-color:var(--fire)}
+  .railcard i{font-style:normal;font:700 10px var(--mono);letter-spacing:.1em;color:var(--fire)}
+  .railcard b{display:block;font-size:13.5px;letter-spacing:-.01em;margin-top:1px}
+  .railcard span{display:block;font-size:11.5px;color:var(--ink2);line-height:1.4;margin-top:2px}
+  .railcard.here{background:var(--fire-soft);border-color:var(--fire)}
+  .railcard.here b{color:var(--fire)}
+  @media (max-width:640px){
+    .railwrap{padding:8px 12px;gap:6px}
+    .raillabel{width:100%;max-width:none;padding:0 0 2px}
+    .railcard{flex:1 1 140px;padding:7px 10px}
+    .railcard b{font-size:12.5px}
+    .railcard span{display:none}
+    .railcard.here span{display:block;font-size:11px}
+  }
+
+  footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer a{color:var(--ink2)}
+  @media print{ nav,.rail{display:none} section{break-inside:avoid} }
+</style>
+</head>
+<body>
+<a id="top"></a>
+
+<header class="hero">
+  <div class="fireband" aria-hidden="true"></div>
+  <div class="pipe-wrap" aria-hidden="true">
+    <svg class="pipe" viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ignitions ranked by escalation risk, a triage funnel">
+      <!-- many ignitions -->
+      <g fill="#c3c2b7">
+        <circle cx="40" cy="30" r="4"/><circle cx="62" cy="52" r="4"/><circle cx="34" cy="74" r="4"/>
+        <circle cx="86" cy="28" r="4"/><circle cx="96" cy="64" r="4"/><circle cx="58" cy="90" r="4"/>
+        <circle cx="118" cy="44" r="4"/><circle cx="126" cy="82" r="4"/><circle cx="150" cy="26" r="4"/>
+        <circle cx="152" cy="62" r="4"/><circle cx="178" cy="46" r="4"/><circle cx="186" cy="86" r="4"/>
+      </g>
+      <text x="110" y="14" text-anchor="middle" font-size="10" fill="#898781">every ignition</text>
+      <!-- funnel -->
+      <path d="M235,18 L360,44 L360,66 L235,92 Z" fill="none" stroke="#d9481f" stroke-width="2.5"/>
+      <text x="297" y="106" text-anchor="middle" font-size="10" fill="#898781">ranked by risk</text>
+      <!-- the few that matter -->
+      <g fill="#d9481f">
+        <circle cx="420" cy="55" r="7"/><circle cx="452" cy="40" r="6"/><circle cx="454" cy="72" r="6"/>
+        <circle cx="486" cy="55" r="5"/>
+      </g>
+      <text x="452" y="18" text-anchor="middle" font-size="10" fill="#898781">the top 1%</text>
+      <!-- calibration gauge -->
+      <g transform="translate(560,26)">
+        <path d="M0,52 A52,52 0 0 1 104,52" fill="none" stroke="#e1e0d9" stroke-width="9"/>
+        <path d="M0,52 A52,52 0 0 1 30,10" fill="none" stroke="#1baf7a" stroke-width="9"/>
+        <line class="inkstroke" x1="52" y1="52" x2="26" y2="18" stroke-width="2.5"/>
+        <circle class="inkfill" cx="52" cy="52" r="4"/>
+      </g>
+      <text x="612" y="100" text-anchor="middle" font-size="10" fill="#898781">calibrated probability</text>
+    </svg>
+  </div>
+  <div class="heroinner">
+    <div class="kicker">Return to Fire &middot; the modeling stage &middot; July 2026</div>
+    <h1>Which ignition deserves the <em>second engine</em>?</h1>
+    <p class="sub">Round 1 asked what caused a fire. This round asks the triage question:
+      <b>of the ignitions reported, which few will become something?</b> Tuned, calibrated,
+      stress-tested, hostile-reviewed, and one published claim retracted. (Honesty note from
+      that review: this is a <i>retrospective prototype on reanalysis weather data</i>. The operational version would need forecast/RAWS feeds, and the yesterday-knowledge experiment
+      in &sect;15 measures what that costs.)</p>
+    <p class="madeby">86 engineered features &middot; three search stacks benchmarked &middot; every interval bootstrapped &middot; test-era selection gated to nine scorings, every diagnostic disclosed</p>
+    <div class="herobtns">
+      <a class="bigbtn" href="#tldr">The findings</a>
+      <a class="bigbtn ghost" href="index.html">The main article</a>
+      <a class="bigbtn ghost" href="data.html">The data audit</a>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>0.126</b><span>test AP, system of record &middot; seed sd 0.0023</span></div>
+      <div class="kpi"><b>20.7%</b><span>precision in the top 1% (val-selected calibration)</span></div>
+      <div class="kpi"><b>-3.78 &rarr; +0.053</b><span>Brier skill: the claim I got backwards</span></div>
+      <div class="kpi"><b>97th</b><span>Tubbs percentile vs out-of-sample fires only, model trained &le;2014</span></div>
+    </div>
+    <p class="madeby tight">Every number in this row comes from ONE named model, the tuned HistGradientBoosting <b>system of record</b>. The Round-4 hostile review
+      found the previous version of this row quietly mixed two models; it no longer does.</p>
+  </div>
+</header>
+
+<div class="rail">
+  <div class="railwrap">
+    <span class="raillabel">One project<br>four exhibits</span>
+    <a class="railcard" href="first_shot.html"><i>01</i><b>The first shot</b><span>one prompt, then frozen byte-for-byte with its flaws intact</span></a>
+    <a class="railcard" href="data.html"><i>02</i><b>The data audit</b><span>2.3M rows cross-examined by 29 checks before any trend was trusted</span></a>
+    <span class="railcard here" aria-current="page"><i>03</i><b>The modeling stage</b><span>You are here. The escalation model, tuned and calibrated, then hostilely reviewed</span></span>
+    <a class="railcard" href="index.html"><i>04</i><b>The final report</b><span>the claims that survived all four rounds, each one machine-checked</span></a>
+  </div>
+</div>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a href="#stood">Where I stood</a>
+    <a href="#tldr">TL;DR</a>
+    <a href="#question">The question</a>
+    <a href="#foundry">Features</a>
+    <a href="#bakeoff">Bake-off</a>
+    <a href="#zoo">The zoo</a>
+    <a href="#calibration">Calibration</a>
+    <a href="#decision">Decisions</a>
+    <a href="#ablation">Ablation</a>
+    <a href="#leak">Leakage</a>
+    <a href="#drift">Drift</a>
+    <a href="#generalize">Generalization</a>
+    <a href="#inside">Inside</a>
+    <a href="#tubbs">Tubbs</a>
+    <a href="#negative">Negative results</a>
+    <a href="#redteam">Red team</a>
+    <a href="#reproduce">Reproduce</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================================================ 01 -->
+<section id="stood">
+  <div class="secnum">01</div>
+  <h2>Where the models stood</h2>
+  <p class="lede">Round 1's models were honest about their <i>protocol</i> and untouched by
+    <i>craft</i>. Before improving anything, here is the inventory of what was actually wrong.</p>
+  <ul>
+    <li><b>Nothing had ever been tuned.</b> The model factory accepted hyperparameters and was
+      called with none, at all six call sites. Every published score came from defaults.</li>
+    <li><b>The validation era was computed and thrown away.</b> The 2015&ndash;2017 rows were
+      counted, reported, and never used: a free tuning and calibration surface left idle.</li>
+    <li><b>No interval anywhere.</b> Every number was a bare point estimate. "0.870 beats 0.787"
+      was asserted without asking whether the gap survives resampling.</li>
+    <li><b>The growth-risk model was scored at a threshold that means nothing.</b> On a 2% base
+      rate, <code class="inline">predict()</code> at 0.5 is not a decision rule.</li>
+    <li><b>The leak probe didn't bite</b> (+0.0024), and I framed that as a demonstration of
+      leakage. It wasn't. <a href="#leak">Section 10</a> explains why it was pointed at the wrong task.</li>
+    <li><b>Aspect went in as raw degrees</b>, so a slope facing 359&deg; and one facing 1&deg;
+      looked maximally different to the model.</li>
+  </ul>
+  <div class="co plain">
+    <span class="tag">The pre-registered protocol</span>
+    <p>Everything below obeys one rule, fixed before any model ran:</p>
+<pre>train  &lt;= 2014          model fitting + hyperparameter search (spatial-block CV)
+val    2015-2017        calibration mapping, model choice
+test   2018-2020        scored once per model family FOR SELECTION (gated in code)
+
+search CV = GroupKFold(3) over 1-degree spatial blocks, train era only
+metric    = average precision (the base rate is the no-skill line)</pre>
+    <p><b>Amended by the Round-4 review, because the original text overstated.</b> The
+      <code class="inline">TestGate</code> guards the nine <i>selection-relevant</i> scorings, one per model family in the zoo. The diagnostic sections (threshold ladder, ablation, leak
+      ladder, transfer, permutation importance) also evaluate test-era rows, roughly 330 model
+      evaluations in all, and are <i>reported in full, never selected on</i>, which is the property that protects the headline from multiplicity and the property the text should have
+      claimed. The full accounting is published in <a href="#redteam">the red-team section</a>.
+      The original text also said five CV folds; the search ran three.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 02 -->
+<section id="tldr">
+  <div class="secnum">02</div>
+  <h2>TL;DR</h2>
+  <div class="tldrbox">
+    <h3>What the modeling round actually established</h3>
+    <p><span class="chip fail">RETRACTED</span> <b>The published calibration claim was false.</b>
+      The main article said that when the growth model says 12%, about 12% of those fires reach 100
+      acres. It doesn't. Brier skill score <b>-3.78</b>, substantially <i>worse</i> than forecasting the base rate for every fire, because
+      <code class="inline">class_weight="balanced"</code> inflates probabilities roughly 24&times; on
+      a 2% problem. The ranking was fine; the numbers were not. Fitting a calibration map on the
+      validation era fixes it: <b>+0.053</b>, ECE 0.0035.</p>
+    <p><span class="chip pass">BUILT</span> <b>An operational model, measured operationally.</b>
+      The system of record, the tuned HistGradientBoosting model every downstream section analyzes, scores average precision <b>0.126 &plusmn; 0.0023</b> across five seeds,
+      <b>6.0&times;</b> [4.8&ndash;7.5] the base rate. (LightGBM posts the best single test AP,
+      0.131 [0.111, 0.158], reported, not selected; <a href="#redteam">&sect;15</a> explains
+      why.) In the top 1% of ignitions by risk, <b>20.7%</b> escalate,
+      capturing <b>10.0%</b> of all escalations against a hard ceiling of
+      48.5% that no ranking could beat with that budget.</p>
+    <p><span class="chip warn">HONEST</span> <b>Tuning and feature engineering both mattered less
+      than the story usually goes.</b> The three-track search bake-off (random search vs Optuna's TPE vs LightGBM) spread only 0.0053 average precision across
+      strategies, and tuning beat the Round-1 defaults by +0.0145. The full
+      feature ladder bought +0.0031. Details, with intervals, in
+      <a href="#negative">Negative results</a>.</p>
+    <p><span class="chip fail">CAUGHT</span> <b>A leak that looks like innocent metadata.</b>
+      An MTBS identifier exists only for fires that got big: P(&ge;100&nbsp;acres | has ID) =
+      <b>0.992</b> against 0.016 without. Adding that single "join key" moves average precision from
+      0.124 to <b>0.435</b>. It is not named
+      <code class="inline">fire_size</code> and would survive any "drop the obvious targets" pass.</p>
+    <p><span class="chip fail">CAUGHT</span> <b>A sentinel the data audit missed.</b> The
+      human-modification column carries <b>float32-max</b> (3.4&times;10<sup>38</sup>) as its nodata
+      fill on 367 California rows, and it was already a Round-1 model feature. Round 2 scanned
+      for sentinel <i>strings</i> and never saw a number this large hiding in plain sight.</p>
+    <p class="note">And the Tubbs Fire, scored by a model trained only on data through
+      2014: <b>97th percentile</b> among fires as out-of-sample as itself (the 2015&ndash;2020
+      reference), with a calibrated escalation risk of 9.4% against a 2.1% base rate.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 03 -->
+<section id="question">
+  <div class="secnum">03</div>
+  <h2>Restating the question as a decision</h2>
+  <p class="lede">"Predict the cause" is a classification exercise. "Which of these ignitions will
+    become something" is a resource-allocation problem with a budget, and it is measured differently.</p>
+  <p>California reported <b>26,142</b> ignitions in the 2018&ndash;2020 test era. <b>538</b> of them reached 100 acres, <b>2.06%</b>. That number governs everything downstream: it is the
+    no-skill line for average precision, it makes accuracy meaningless (a model that says "no" to
+    everything scores 97.9%), and it sets hard ceilings on what any ranking can achieve within a
+    fixed response budget.</p>
+  <div class="co why">
+    <span class="tag">Why escalation, and not cause</span>
+    <p>Two reasons, one operational and one statistical. Operationally, cause is mostly known after
+      an investigation, while escalation risk is needed within the hour. Statistically, the
+      escalation label is <b>clean</b>: fire size is essentially never missing, and its base rate is
+      stable across the split boundaries (2.17% train &rarr; 2.06% test). The cause labels are not:
+      the <a href="data.html#cause">data audit</a> found California's cause-label availability
+      collapsing from 10% missing in the training era to 42% in the test era. Modeling a drifting
+      label would have meant fighting the measurement instead of the problem.</p>
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Response budget</th><th scope="col">Ignitions flagged</th><th scope="col">Escalations that exist</th><th scope="col">Best possible recall</th></tr></thead>
+      <tbody>
+        <tr><td>top 1% &middot; &ge;100 ac</td><td class="num">261</td><td class="num">538</td><td class="num">49%</td></tr>
+        <tr><td>top 1% &middot; &ge;300 ac</td><td class="num">261</td><td class="num">303</td><td class="num">86%</td></tr>
+        <tr><td>top 1% &middot; &ge;1,000 ac</td><td class="num">261</td><td class="num">184</td><td class="num">100%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Those ceilings are arithmetic, not modeling: with 261 slots you cannot catch 538 fires. Every
+    recall number in this article is reported against its ceiling, because a model that captures
+    45% of escalations inside a budget whose maximum is 49% is doing something very different from
+    one that scores 45% out of a possible 100%.</p>
+  <figure>
+    <img src="figures/m1_threshold_ladder.png" width="1204" height="588"
+         alt="Average precision and base rate across escalation thresholds of 10, 100, 300 and 1000 acres.">
+    <figcaption><b>Where the bar is set changes the problem.</b> As the escalation threshold rises the
+      target gets rarer faster than it gets harder to rank, which is why the operationally
+      interesting regimes are the larger ones. At &ge;10 acres the base rate is 5.69% and AP is 0.199; at &ge;1000 acres the base rate falls to 0.70% while AP is 0.064, a lift over chance of 9&times; at the top of the ladder.</figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 04 -->
+<section id="foundry">
+  <div class="secnum">04</div>
+  <h2>The feature foundry</h2>
+  <p class="lede">Going back to the 308-column source for what the pipeline never took, then
+    building the variables fire scientists actually use, from 30 raw columns to 86.</p>
+
+  <h3>Cache v2: 29 columns the project had been ignoring</h3>
+  <p>The biggest single omission was <b>wind direction</b>. Wind speed was cached; direction was not, which makes the defining mechanism of California's most destructive fires
+    unmodelable. A Diablo or Santa Ana event is not just "windy": it is wind blowing <i>downslope</i>,
+    aligned with the terrain, dry and warming as it descends. With direction and aspect together
+    that becomes a feature:</p>
+<pre>wind blows TOWARD  = wind_dir + 180
+alignment          = cos(radians(wind_toward - aspect))
+downslope_wind     = alignment x wind_speed x sin(radians(slope))</pre>
+  <p>Also added: climatological normals (so today can be expressed as an anomaly), fine-fuel load
+    (rangeland production, cheatgrass and exotic annual grass cover), vegetation structure
+    (canopy cover, height, type), terrain ruggedness, and the remaining same-day weather needed for
+    published fire-weather indices.</p>
+
+  <div class="co tech">
+    <span class="tag">Technical &middot; the engineered families</span>
+    <p><b>Circular fixes.</b> Aspect became <code class="inline">northness = cos(aspect)</code> and
+      <code class="inline">eastness = sin(aspect)</code>; wind direction became vector components;
+      day-of-year became a sine/cosine pair. Round 1 fed all of these as raw numbers, which asks a
+      tree to learn that 359 and 1 are neighbours.</p>
+    <p><b>Place-relative anomalies.</b> An ERC of 70 means something different in the Mojave than on
+      the north coast. Every fire-weather variable with a published normal got an anomaly twin
+      (<code class="inline">erc - erc_normal</code>), which is what lets one model span regions.</p>
+    <p><b>Operational indices.</b> The <b>Hot-Dry-Windy Index</b> (vapour-pressure deficit &times;
+      wind speed) and the <b>Fosberg Fire Weather Index</b> (temperature, humidity and wind through
+      an equilibrium-moisture-content function), three lines of arithmetic each, and both
+      designed by fire scientists for exactly this regime.</p>
+    <p><b>Leakage-safe fire history.</b> For each ignition: how many fires its 0.25&deg; cell had in
+      the preceding five years, and how long since the cell's last 100-acre fire. Both are
+      knowable at ignition time only if the computation cannot see forward, so the builder ships an
+      assertion that recomputes all three history columns (and, since Round 4, the same-day
+      ignition count) for random rows from strictly-earlier records and requires equality. It fired once during development, on my own test harness, which had
+      subsampled rows after computing history.</p>
+  </div>
+
+  <div class="co bug">
+    <span class="tag">A sentinel hiding as a number</span>
+    <p>Building anomaly features produced infinities, which traced back to
+      <code class="inline">ghm</code>, the global human-modification index, range 0 to 1, carrying <b>3.4&times;10<sup>38</sup></b>, exactly float32-max, on <b>367</b> California rows.
+      It is a nodata fill. It was <i>already a Round-1 model feature</i>, so the published models
+      consumed it as a real measurement.</p>
+    <p>Round 2's audit hunted sentinels as <i>strings</i> (<code class="inline">"-9999"</code>,
+      <code class="inline">"NA"</code>) and never looked for a float too large to be physical. The
+      fix is one rule at reduce time (no quantity in this dataset legitimately reaches 10<sup>30</sup>), and the lesson is that a sentinel census must cover magnitudes as well
+      as spellings.</p>
+  </div>
+
+  <p>Collinearity is severe enough to make single-feature importance meaningless, which is why
+    <a href="#inside">section 13</a> permutes in groups: cheatgrass and exotic annual grass are
+    correlated at <b>1.00</b>, canopy cover and vegetation height at 0.997, slope and terrain
+    ruggedness at 0.971, and 1000-hour fuel moisture against 5-day maximum ERC at &minus;0.96.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 05 -->
+<section id="bakeoff">
+  <div class="secnum">05</div>
+  <h2>Three search stacks, one budget</h2>
+  <p class="lede">The interesting question is not "what are the best hyperparameters" but "does the
+    modern tuning stack beat a plain one when both get the same number of tries?"</p>
+  <p>Same spatial-block cross-validation, same metric, and the same <b>trial count</b> per track, corrected by the Round-4 review from an earlier "wall-clock" claim that was backwards.
+    Two disclosed asymmetries survive: the tracks' actual wall clocks were 6.7 / 8.3 / 9.0 minutes
+    (the winner consumed 35% more compute than the loser), and LightGBM's search space carries a
+    row-subsampling dimension the two HGB tracks have no equivalent for. The bake-off compares
+    <i>stacks as practitioners use them</i>, not perfectly matched estimators:</p>
+  <div class="flow">
+    <div class="step"><b>A &middot; sklearn random search</b><span>The control arm everyone skips. Uniform sampling over the space.</span></div>
+    <div class="step"><b>B &middot; Optuna TPE</b><span>Bayesian sequential search over an identical space, the standard "serious tuning" answer.</span></div>
+    <div class="step"><b>C &middot; LightGBM + Optuna</b><span>A different gradient-boosting library entirely, tuned the same way.</span></div>
+    <div class="step"><b>Reference</b><span>Round 1's untouched defaults, scored under the same CV so the gain from tuning at all is visible.</span></div>
+  </div>
+  <p>All three stacks installed and ran on Python 3.14, worth stating, since two of the three
+    ship no version-specific wheel for it and the run depended on a stable-ABI build and a
+    pure-Python package.</p>
+  <div class="co tech">
+    <span class="tag">One compromise, disclosed</span>
+    <p>The search runs on <b>60,000 of the 200,967 training rows</b>: every one of the 4,366 positives plus a random draw of negatives, which raises prevalence during search from 2.2% to
+      7.3%. That is a real distortion: configurations are ranked on a differently-balanced problem
+      than the one they are finally fitted to. It buys a 25-trial search per track instead of a
+      3-trial one on a six-core laptop, and the winning configuration is <b>refit on the full
+      training set</b> before anything is scored. All three tracks see byte-identical rows, so the comparison between them, which is what this section is about, is unaffected.</p>
+  </div>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m2_tuning_traces.png" width="1204" height="588"
+         alt="Best cross-validated average precision so far against trial number for the three search tracks.">
+    <figcaption><b>Best-so-far cross-validated average precision against trial number.</b> The dotted line is Round 1's untuned configuration.</figcaption>
+  </figure>
+  <div class="co ember">
+    <span class="tag">The finding</span>
+    <p>Each track ran the same 25 trials: random search took 6.7 min, Optuna's TPE 8.3, LightGBM
+      9.0. LightGBM finished top at 0.2688 cross-validated average precision, random search last at 0.2635, a spread of 0.0053, which <b>clears the seed-noise bar</b> (2&times; the
+      0.0023 per-system seed sd = 0.0046) but is dominated by the library change, not the tuner:
+      the Nadeau&ndash;Bengio corrected t-test on the fold vectors gives p = 0.50
+      for Optuna against plain random search, so that null is earned rather than stamped. Tuning at all was worth +0.0290 over Round 1's untouched defaults on the
+      search CV. The choice of <i>search strategy</i> mattered less than the decision to search at
+      all. One more honest number: search CV runs at a 7.3% base rate and the test era at 2.06%, so
+      "CV 0.27 vs test 0.12" is a change of denominator. Normalized, the model scores
+      3.7&times; chance in CV and 6.0&times; on test.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 06 -->
+<section id="zoo">
+  <div class="secnum">06</div>
+  <h2>The zoo, with intervals</h2>
+  <p class="lede">Nine configurations (seven learners and two baselines), each scored once on the test era, each with a spatial-block bootstrap interval, and paired tests that ask whether the gaps are real.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m3_model_zoo.png" width="1204" height="644"
+         alt="Test average precision by model family with bootstrap confidence intervals.">
+    <figcaption><b>Ranking is easy; separating models is not.</b> Intervals come from a bootstrap that
+      resamples 1&deg; spatial blocks rather than rows, because nearby fires are not independent
+      draws and row resampling would understate the uncertainty. The best single test AP is <b>lightgbm tuned</b> at 0.131 (reported, not selected); the &#9733; marks the tuned-HGB <b>system of record</b>. The groupby-climatology baseline sits at 0.043.</figcaption>
+  </figure>
+  <div class="tblwrap">
+    <table><thead><tr><th scope="col">model</th><th scope="col">AP</th><th scope="col">95% CI</th><th scope="col">ROC-AUC</th><th scope="col">Brier skill</th></tr></thead><tbody><tr><td>lightgbm tuned</td><td class="num">0.131</td><td class="num">[0.111, 0.158]</td><td class="num">0.820</td><td class="num">+0.05</td></tr><tr><td>hgb tuned &#9733;</td><td class="num">0.124</td><td class="num">[0.106, 0.148]</td><td class="num">0.817</td><td class="num">+0.05</td></tr><tr><td>extra trees</td><td class="num">0.121</td><td class="num">[0.103, 0.146]</td><td class="num">0.807</td><td class="num">-2.57</td></tr><tr><td>random forest</td><td class="num">0.114</td><td class="num">[0.093, 0.140]</td><td class="num">0.798</td><td class="num">-0.08</td></tr><tr><td>logistic en</td><td class="num">0.111</td><td class="num">[0.095, 0.133]</td><td class="num">0.807</td><td class="num">-5.00</td></tr><tr><td>hgb default unweighted</td><td class="num">0.109</td><td class="num">[0.091, 0.131]</td><td class="num">0.809</td><td class="num">+0.04</td></tr><tr><td>hgb default balanced</td><td class="num">0.106</td><td class="num">[0.091, 0.128]</td><td class="num">0.804</td><td class="num">-1.92</td></tr><tr><td>climatology rate</td><td class="num">0.043</td><td class="num">[0.033, 0.058]</td><td class="num">0.620</td><td class="num">-0.03</td></tr><tr><td>erc only</td><td class="num">0.027</td><td class="num">[0.021, 0.036]</td><td class="num">0.604</td><td class="num">n/a</td></tr></tbody></table>
+  </div>
+  <p>Two baselines are in that table deliberately. <b>Climatology</b> is the historical escalation
+    rate for the fire's own place and month, the number you get from a
+    <code class="inline">groupby</code> with no model at all. <b>ERC-only</b> ranks fires by a single
+    fire-danger index. A model that cannot clear both is not earning its complexity.</p>
+  <div class="co bug">
+    <span class="tag">Two confounds the Round-4 review found in this table</span>
+    <p>The non-GBM families were handicapped twice: they were denied the four categorical features
+      (including <code class="inline">evt</code>, SHAP's #2 feature), and they were fitted with
+      <code class="inline">class_weight="balanced"</code>, the setting &sect;07 demonstrates is broken, while the GBMs ran unweighted, which is why their Brier-skill column reads
+      &minus;0.08 to &minus;5.0. So "GBM beats forest by 0.016" is partly "GBM was given evt and not
+      poisoned." The fair re-runs (encoded categoricals, no weighting) are in
+      <a href="#redteam">&sect;15</a>: Fairly equipped: random forest: 0.107 (was 0.114), BSS +0.04; extra trees: 0.110 (was 0.121), BSS +0.04; ridge logistic: 0.116 (was 0.111), BSS +0.05. The ordering conclusion (GBMs lead) holds, but the confounds cut both ways: the forests actually DROP without class weighting (it had been quietly helping their ranking), while the logistic model rises once given the categorical features. Every Brier-skill score turns positive, confirming the weighting was the calibration poison. And "logistic en" was
+      mislabeled: it is a plain L2 (ridge) logistic regression, no L1 component.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 07 -->
+<section id="calibration">
+  <div class="secnum">07</div>
+  <h2>The number I got backwards</h2>
+  <p class="lede">This section exists because the main article shipped a claim that is not true, and
+    the correction is more interesting than the original claim.</p>
+  <div class="co bug">
+    <span class="tag">The retraction</span>
+    <p>Round 1's article said, under a reliability curve: <i>"When the model says '12% chance this
+      ignition reaches 100 acres,' about 12% do. Calibration is what turns a classifier into a
+      triage tool."</i></p>
+    <p>The Brier skill score of the model actually published is <b>-3.78</b>.
+      A skill score of 0 means "no better than forecasting the base rate for every fire." Negative
+      means worse. Rebuilding that exact configuration here (same class weighting, this round's features) gives <b>-1.92</b>. Either way the sign is what
+      matters: those probabilities were worse than saying "2.1%" to every fire in California.</p>
+  </div>
+  <p>The cause is <code class="inline">class_weight="balanced"</code>. Re-weighting the rare class
+    is a reasonable way to make a model <i>rank</i> well on imbalanced data, and it worked: the ranking metrics were real. But it also tells the model that positives are as common as
+    negatives, so its probabilities come out centred near 0.5 on a problem whose true rate is 2%.
+    A roughly 24-fold systematic overstatement of risk.</p>
+  <p>The reliability curve I published did not catch it because I read the <i>shape</i> and never
+    computed the <i>skill</i>. The curve bends in the right direction; the axis it bends on was
+    wrong by an order of magnitude.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m4_calibration.png" width="1428" height="588"
+         alt="Reliability curves before and after calibration, with the distribution of predicted probabilities.">
+    <figcaption><b>Left: what was published, against what a calibration map produces.</b> Right: the
+      probability distributions that explain it. The raw model spreads its mass across the
+      whole unit interval on a problem where almost every honest answer is below 5%.
+      Raw Brier skill +0.05 against +0.053 after the val-selected isotonic map fitted on the
+      validation era.</figcaption>
+  </figure>
+  <p>The fix uses the era Round 1 discarded: fit the model on training years, learn a mapping from
+    raw scores to honest probabilities on the <b>2015&ndash;2017 validation era</b>, apply it to the
+    test years. The val-selected <b>isotonic</b> mapping moves the Brier skill score from <b>+0.050</b> to <b>+0.053</b> and the expected calibration error from 0.007 to <b>0.0035</b>. It is not free: isotonic's step-function ties cost <b>0.013</b> of AP (0.124 &rarr; 0.111 on the seed-42 fit). Honest probabilities here carry a small ranking price, and both sides of that trade are printed. The calibration slope moves from 0.95 to 0.96 and the intercept from 0.267 to 0.057 (1 and 0 are ideal).</p>
+  <div class="co tech">
+    <span class="tag">Four honesty notes from the Round-4 review</span>
+    <p><b>1.</b> The choice between isotonic and sigmoid was originally made on the test set (a 0.0011 BSS margin, which is noise). Re-selected properly on the validation era in
+      <code class="inline">run_redteam.py</code>: <b>val chooses isotonic</b>, a different map than test-selection picked, which is why selecting on test was wrong, with test BSS +0.053. <b>2.</b> The two maps disagree about the <i>intercept</i>:
+      under sigmoid it barely moved (0.267 &rarr; 0.268); under the val-selected isotonic it drops to 0.057, removing most of the level offset. <b>3.</b> Isotonic is not free: it collapses
+      AP by 0.013 through step-function ties. Sigmoid preserves ranking exactly but calibrated
+      worse on the validation era (BSS 0.040 vs 0.047), and val makes the choice, which is the lesson of this note. <b>4.</b> An ECE of 0.0035 at a 2% base rate is faint
+      praise: a constant base-rate forecast scores 0.000 and pure noise centred on the base rate scores ~0.007. Equal-count bins are mechanically kind at low prevalence. The
+      discriminating calibration evidence is the slope and the tail: in the top 5% of predictions
+      the model says 11.1% against an observed 12.5%, slightly underconfident, which is the safe direction.</p>
+  </div>
+  <div class="co tech">
+    <span class="tag">Why this matters beyond bookkeeping</span>
+    <p>Ranking metrics and probability metrics answer different questions. "Which fires are riskiest"
+      needs only order. "Is this fire's risk worth a crew" needs a number that means what it says, and every cost-benefit calculation in the <a href="#decision">next section</a> is
+      built on probabilities, not ranks. A model can be excellent at the first job and unusable for
+      the second, which is exactly what Round 1 shipped while claiming otherwise.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 08 -->
+<section id="decision">
+  <div class="secnum">08</div>
+  <h2>Decisions, not scores</h2>
+  <p class="lede">With honest probabilities, the model can be evaluated the way it would be used:
+    under a budget, against a cost ratio.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m6_precision_at_k.png" width="1204" height="588"
+         alt="Precision and recall as a function of the share of ignitions flagged, against the perfect-ranking ceiling.">
+    <figcaption><b>The capacity-constrained view</b> (val-selected isotonic probabilities). Flagging the top 1% of ignitions (261 fires) captures 10.0% of all escalations at 20.7% precision, 10.1&times; better than random selection, against a ceiling of 48.5% that perfect ranking could not exceed at that budget.</figcaption>
+  </figure>
+  <div class="tblwrap">
+    <table><thead><tr><th scope="col">budget</th><th scope="col">ignitions flagged</th><th scope="col">precision</th><th scope="col">recall</th><th scope="col">recall ceiling</th><th scope="col">lift</th></tr></thead><tbody><tr><td>top 0.5%</td><td class="num">131</td><td class="num">24.4%</td><td class="num">5.9%</td><td class="num">24.3%</td><td class="num">11.9&times;</td></tr><tr><td>top 1%</td><td class="num">261</td><td class="num">20.7%</td><td class="num">10.0%</td><td class="num">48.5%</td><td class="num">10.1&times;</td></tr><tr><td>top 2%</td><td class="num">523</td><td class="num">17.8%</td><td class="num">17.3%</td><td class="num">97.2%</td><td class="num">8.6&times;</td></tr><tr><td>top 5%</td><td class="num">1,307</td><td class="num">12.5%</td><td class="num">30.5%</td><td class="num">100.0%</td><td class="num">6.1&times;</td></tr></tbody></table>
+  </div>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m5_decision_curve.png" width="1204" height="588"
+         alt="Net benefit of the model against treating every ignition, across risk thresholds.">
+    <figcaption><b>Decision-curve analysis.</b> Net benefit counts escalations caught minus false
+      alarms, weighted by the cost ratio a threshold implies. Above the "treat everything" line, the
+      model is worth consulting; where it converges, it is not. <b>Redone by the Round-4 review:</b>
+      the original plot started at t=0.01 and claimed usefulness out to 0.49 on rows with fewer
+      than 50 flagged fires (its own data went negative at t=0.41). This version reaches down to t=0.001, the plausible wildfire cost-ratio region where missing an escalation costs hundreds of times a false alarm, and truncates where counts are noise.
+      On the honest grid the model beats both references for thresholds 0.001&ndash;0.17.</figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 09 -->
+<section id="ablation">
+  <div class="secnum">09</div>
+  <h2>What the feature work actually bought</h2>
+  <p class="lede">Every engineered family, added one rung at a time, measured with intervals, including the rungs that bought nothing.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m7_ablation.png" width="1204" height="588"
+         alt="Test average precision as feature families are added cumulatively, with confidence bands.">
+    <figcaption><b>The ladder.</b> Best rung is <b>anomalies</b> at 0.125 (54 features); the full ladder moves AP by +0.003 against the 34-feature base rung, a gain the Round-4 seed study places <b>within seed noise</b> (sd 0.0023).</figcaption>
+  </figure>
+  <div class="tblwrap">
+    <table><thead><tr><th scope="col">rung</th><th scope="col">features</th><th scope="col">AP</th><th scope="col">95% CI</th><th scope="col">vs base</th></tr></thead><tbody><tr><td>base</td><td class="num">34</td><td class="num">0.120</td><td class="num">[0.104, 0.147]</td><td class="num">+0.000</td></tr><tr><td>circular</td><td class="num">41</td><td class="num">0.118</td><td class="num">[0.101, 0.145]</td><td class="num">-0.002</td></tr><tr><td>anomalies</td><td class="num">54</td><td class="num">0.125</td><td class="num">[0.106, 0.149]</td><td class="num">+0.005</td></tr><tr><td>indices</td><td class="num">61</td><td class="num">0.121</td><td class="num">[0.105, 0.143]</td><td class="num">+0.001</td></tr><tr><td>windterrain</td><td class="num">71</td><td class="num">0.119</td><td class="num">[0.104, 0.139]</td><td class="num">-0.002</td></tr><tr><td>fuels</td><td class="num">80</td><td class="num">0.120</td><td class="num">[0.104, 0.140]</td><td class="num">-0.000</td></tr><tr><td>history</td><td class="num">86</td><td class="num">0.124</td><td class="num">[0.106, 0.146]</td><td class="num">+0.003</td></tr></tbody></table>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 10 -->
+<section id="leak">
+  <div class="secnum">10</div>
+  <h2>Leakage, properly demonstrated</h2>
+  <p class="lede">Round 1's leak probe moved the score by 0.0024 and I presented it as a warning.
+    It deserves a better demonstration, and an explanation of why the first one was flat.</p>
+
+  <h3>Why the original probe was right to do nothing</h3>
+  <p>That probe added fire size to a model predicting <b>cause</b>. Fire size is not where a cause
+    label comes from, and the model already knew "remote high-country lightning country" through
+    elevation, ecoregion, vegetation and coordinates. Adding one weakly-informative column to a model
+    that already had the information through other channels correctly changed almost nothing. The
+    measurement was right; my framing of it was wrong.</p>
+
+  <h3>A probe that bites</h3>
+  <p>On the escalation task, fire size <i>is</i> the label source, so leakage can be demonstrated
+    properly. The interesting rungs are not the obvious ones:</p>
+  <div class="tblwrap">
+    <table><thead><tr><th scope="col">rung</th><th scope="col">AP</th><th scope="col">what was added</th></tr></thead><tbody><tr><td><code class="inline">L0_honest</code></td><td class="num">0.124</td><td>at-ignition features only</td></tr><tr><td><code class="inline">L1_has_mtbs</code></td><td class="num">0.435</td><td>MTBS maps only large fires -- the ID's existence encodes the outcome</td></tr><tr><td><code class="inline">L2_has_ics209</code></td><td class="num">0.593</td><td>an ICS-209 is filed only for incidents that drew a management team</td></tr><tr><td><code class="inline">L3_burn_days</code></td><td class="num">0.334</td><td>containment minus discovery: only knowable after the fire</td></tr><tr><td><code class="inline">L4_fire_size</code></td><td class="num">0.998</td><td>the label source itself</td></tr></tbody></table>
+  </div>
+  <div class="co ember">
+    <span class="tag">The one worth remembering</span>
+    <p>An <b>MTBS identifier</b> is a join key to a burn-severity mapping programme. It looks like
+      metadata. But MTBS only maps fires above roughly 1,000 acres, so the <i>existence</i> of the
+      identifier is very nearly the label: <b>99.2%</b> of fires that have one reached 100 acres,
+      against <b>1.6%</b> of fires that don't. Same for an ICS-209 report id, which is filed only for
+      incidents that drew a management team.</p>
+    <p>Neither column is named <code class="inline">fire_size</code>. Both would survive
+      "drop the obvious outcome columns." Both are now banned by name, and because name-based bans do not generalise, the pipeline carries an automatic tripwire. The v1 tripwire that shipped with this round (refuse any single feature above 0.90 AUC) was itself a Round-4 casualty: rare presence flags like the MTBS id sail under an AUC threshold, and it ran
+      only on the already-banned matrix. <b>Tripwire v2</b> screens every raw column three ways (single-feature ranking AP above 5&times; base-rate lift, presence-precision above 20&times; base rate, univariate AUC above 0.80), runs <i>before</i> any ban is applied,
+      and raises instead of warning. It catches all four rungs of this ladder and passes the honest
+      set, whose ceiling is 1.72&times; (<a href="#redteam">&sect;15</a>).</p>
+  </div>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m9_leak_ladder.png" width="1204" height="560"
+         alt="Average precision for each rung of the leakage ladder.">
+    <figcaption><b>Leakage is a property of the information path, not of a column name.</b>
+      Honest features score 0.124. Adding only the existence of an MTBS identifier takes it to 0.435.</figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 11 -->
+<section id="drift">
+  <div class="secnum">11</div>
+  <h2>Does it hold up out of sample?</h2>
+  <p class="lede">Two stress tests: across years, and across a completely different fire regime.
+    (The third drift the audit flagged, cause-label availability, is answered in
+    <a href="#question">&sect;03</a> by refusing to model that label at all.)</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m10_drift_transfer.png" width="1428" height="546"
+         alt="Test performance by year, and California-trained model applied to Florida.">
+    <figcaption><b>Left: performance by test year</b>, ranging 0.094 to 0.153. Year-to-year variation on a few hundred positives is large, which is why single-year comparisons are not claims. <b>Right: the transfer test</b>, CA-trained against FL-native on Florida rows (dashed line is Florida's base rate).</figcaption>
+  </figure>
+  <p>The transfer test is the harsh one. Florida's fire regime shares almost nothing with
+    California's: it burns in spring, at high frequency, on flat terrain, with prescribed fire as a
+    dominant land-management practice. A California-trained model applied to Florida is being asked
+    whether it learned fire behaviour or California. The transfer result says California. Transferred AP is 0.180 against 0.293 for a Florida-trained model, still above Florida's 4.29% base rate, so some of what it knows is fire behaviour rather than geography, but the gap is the honest headline.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 12 -->
+<section id="generalize">
+  <div class="secnum">12</div>
+  <h2>What generalizes, and what this model cannot answer</h2>
+  <p class="lede">Two questions a reader is entitled to ask and this project had not
+    answered: how much of the score is memorization, and can any of this predict a fire
+    before it starts.</p>
+
+  <h3>The in-sample gap, measured</h3>
+  <p>Until now every argument here against overfitting was indirect. The direct measurement
+    is one fit scored on all three eras, and it had never been run. Nothing else in this
+    project quotes a training score, which is correct practice, but it also meant the gap
+    was unknown rather than small.</p>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">era</th><th scope="col">fires</th><th scope="col">escalations</th><th scope="col">base rate</th><th scope="col">AP</th><th scope="col">lift</th><th scope="col">ROC-AUC</th></tr></thead>
+      <tbody>
+        <tr><td>train, &le;2014 <i>(in sample)</i></td><td class="num">200,967</td><td class="num">4,366</td><td class="num">2.17%</td><td class="num"><b>0.538</b></td><td class="num">24.8&times;</td><td class="num"><b>0.953</b></td></tr>
+        <tr><td>validation, 2015&ndash;2017</td><td class="num">24,773</td><td class="num">524</td><td class="num">2.12%</td><td class="num"><b>0.099</b></td><td class="num">4.7&times;</td><td class="num"><b>0.813</b></td></tr>
+        <tr><td>test, 2018&ndash;2020</td><td class="num">26,142</td><td class="num">538</td><td class="num">2.06%</td><td class="num"><b>0.124</b></td><td class="num">6.0&times;</td><td class="num"><b>0.817</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The gap is large. Average precision falls from <b>0.538</b> in sample to
+    <b>0.124</b> out of sample, a difference of <b>0.415</b>. A boosted ensemble of 360
+    trees at 61 leaves each has ample capacity to memorize 200,967 rows, and it used it.
+    That is the reason no score in this project is ever quoted from the training era.</p>
+  <p>What matters for deployment is the behaviour of the held-out estimates, and there the
+    picture is stable. The validation era (2015&ndash;2017) and the test era
+    (2018&ndash;2020) are independent future periods at almost identical base rates, and
+    they score <b>0.813</b> and <b>0.817</b> ROC-AUC. A model that had fitted era-specific
+    noise would decay as the evaluation moves further from training. This one does not: the
+    later era scores slightly higher on both metrics. The drop happens once, at the
+    boundary between in-sample and out-of-sample, and then it stops.</p>
+
+  <div class="co bug">
+    <span class="tag">Why the ROC-AUC is not the headline</span>
+    <p>Compare the two columns across the same rows. ROC-AUC moves from 0.953 to 0.817, a
+      decline of 14%. Average precision moves from 0.538 to 0.124, a decline of 77%. The
+      same change in the same model reads as minor on one metric and severe on the other.</p>
+    <p>The reason is the base rate. At 2.06% prevalence, ROC-AUC is computed over all
+      pairs of one escalation and one non-escalation, and the 97.9% majority supplies so
+      many easy negatives that a model can rank most pairs correctly while still being
+      wrong about nearly everything it flags. Average precision is computed where the
+      decisions are, at the top of the ranking, so it registers the loss that ROC-AUC
+      smooths away. This is why the protocol fixed average precision as the metric before
+      any model ran, and why a reader who evaluates this model on its 0.817 alone will
+      overestimate it.</p>
+  </div>
+
+  <h3>The pipeline can still fail</h3>
+  <p>A held-out score means nothing if the evaluation code would produce it from noise.
+    Refitting the same configuration on <b>permuted training labels</b> and scoring the
+    real test era gives AP <b>0.0232</b> against a base rate of 0.0206, a lift of 1.13,
+    and ROC-AUC <b>0.513</b>. Destroying the labels destroys the skill, which is what
+    should happen and had only ever been demonstrated for the Round-1 cause model, not for
+    this one.</p>
+
+  <h3>Can this predict fires before they start?</h3>
+  <p>No, and the reason is structural rather than a matter of accuracy. This model
+    estimates P(escalation | a fire was reported). Every quantity it uses is conditioned on
+    an ignition that already happened and was written down. Predicting <i>ignition</i> is a
+    different estimand: P(a fire starts | this place, this day), and answering it requires
+    the days and places where no fire started.</p>
+  <p>Those rows do not exist in this project. Every cache is fire-conditional. Dividing
+    California into 0.25&deg; cells that recorded at least one fire in 29 years gives 740
+    cells over 10,593 days, or <b>7.8 million</b> cell-days. The caches contain 251,882 of
+    them. The other <b>7.6 million</b> cell-days, the ones where nothing ignited, are
+    absent, and they are exactly the negative class an ignition model would learn from.</p>
+  <p>Rarity is not the obstacle, which was the first thing worth checking. An ignition
+    occurs on <b>3.2%</b> of those cell-days, so the positive class would be about as
+    common as escalation is among reported fires. The obstacles are that the negatives are
+    missing, and that they cannot be manufactured: every weather column here is sampled at
+    the ignition point on the ignition date, so a cell-day with no fire has no covariates
+    to describe it. Building that dataset means pulling gridded daily weather rasters,
+    which is a data acquisition problem rather than a modelling one.</p>
+  <p>A second measurement bounds the question further. California recorded at least one
+    ignition on <b>96.1%</b> of the 10,593 days in this record. The binary question "will a
+    fire start in California today" is answered yes almost every day and is not worth
+    modelling. A useful ignition product would estimate spatial intensity, how many and
+    where, which is a point-process problem rather than the classification this project is
+    built around.</p>
+  <div class="co plain">
+    <span class="tag">What this does support</span>
+    <p>The forecast-time version of <i>this</i> question is reachable. The red team refit
+      the model with all same-day weather removed, keeping only antecedent windows,
+      climatological normals and static terrain, and it scored 0.126, statistically
+      indistinguishable from the full model. So a version that runs on forecast inputs
+      rather than same-day reanalysis loses nothing measurable. It still needs the ignition
+      to have been reported. It ranks fires that exist; it does not anticipate fires that
+      do not.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 13 -->
+<section id="inside">
+  <div class="secnum">13</div>
+  <h2>What the model actually uses</h2>
+  <p class="lede">With features correlated up to 1.00, permuting one at a time measures nothing.
+    The reliable read permutes whole families together.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m8_importance.png" width="1484" height="644"
+         alt="Grouped permutation importance beside single-feature permutation importance.">
+    <figcaption><b>Left is the panel to read.</b> When cheatgrass and exotic grass cover are correlated
+      at 1.00, permuting either alone lets the other stand in, and both look unimportant. Permuting
+      the family together asks the question people think single-feature importance answers.
+      The strongest family is <b>human exposure</b> (0.056 AP lost when permuted), followed by fire weather today and fire history.</figcaption>
+  </figure>
+  <div class="co tech"><span class="tag">SHAP cross-check</span><p>TreeSHAP on 2,000 sampled test rows ranks <code class="inline">ghm</code>, <code class="inline">evt</code>, <code class="inline">pop_x_ghm</code>, <code class="inline">hist_prior_fires_5y</code>, <code class="inline">hdw</code>, <code class="inline">population</code> highest by mean absolute contribution. <b>Disclosure the Round-4 review demanded:</b> this SHAP panel is computed on the LightGBM model while the grouped permutation runs on the HGB system of record, a different method and a different model. That the two agree on what matters is still evidence, but weaker than the original phrasing implied.</p></div>
+  <div class="co ember"><span class="tag">The remoteness question, answered</span>
+    <p>Human-exposure features dominate importance, so the hostile reading is "this is a remoteness
+      lookup: remote fires get big because response is slow." Partly true, and measured: predicted risk correlates negatively with human modification. But the model keeps
+      <b>3.5&times;</b> lift inside the emptiest population tercile and
+      <b>6.5&times;</b> inside the most populated one. A lookup table
+      would collapse to 1&times; within strata; this doesn't. Remoteness is a component of real
+      risk, not the whole model.</p></div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 14 -->
+<section id="tubbs">
+  <div class="secnum">14</div>
+  <h2>Scoring the fire that started this</h2>
+  <p class="lede">The model is trained on data through 2014. The Tubbs Fire ignited on October 8,
+    2017. It is not in the training data, the validation data, or any tuning decision.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m11_tubbs.png" width="1204" height="588"
+         alt="Distribution of escalation risk scores across California ignitions with the Tubbs Fire marked.">
+    <figcaption><b>One row, scored out of sample.</b> The distribution is every California ignition
+      1992-2020 as ranked by a model trained only on fires through 2014; October ignitions are
+      highlighted. Tubbs sits at the 96th percentile of that mixed reference. <b>Round-4
+      correction:</b> ~80% of that reference distribution is the model's own training data, whose
+      in-sample scores sharpen the upper tail. Ranked only against 2015&ndash;2020 fires, rows as out-of-sample as Tubbs itself, it sits at the <b>97th
+      percentile</b>, with a calibrated escalation risk of 9.4% against a
+      2.1% base rate.</figcaption>
+  </figure>
+  <div class="co ember">
+    <span class="tag">What this is and isn't</span>
+    <p>Ranked only against fires as out-of-sample as itself, the 50,915 California ignitions of 2015&ndash;2020, the model places the Tubbs Fire's ignition conditions at the <b>97th percentile</b>, with a calibrated escalation risk of <b>9.4%</b> against a 2.1% base rate. (In the mixed 1992&ndash;2020 reference it ranks 9,884 of 251,882, the 96th percentile, a smaller number that mostly reflects the model's in-sample sharpness on its own training years.) It saw an ERC 26 points above that location's normal, 6.3% humidity, and a Hot-Dry-Windy index of 133. <b>High, but not extreme, and the reason is instructive.</b> The wind-terrain alignment feature reads -0.75 for that day, meaning the <i>daily mean</i> wind was not blowing downslope. The Diablo event that drove Tubbs was a nighttime phenomenon lasting hours, and a 4 km daily average cannot see it. The model ranks Tubbs by the fuel dryness it can measure and misses the wind that did the damage, which is the limitation this project has flagged since Round 1, now quantified on the one fire it most wanted to get right.</p>
+    <p>This is one row, and one row proves nothing statistically. The evidence for the model is the 26,142-ignition test era rather than this fire. But it is the fire this entire project
+      exists because of, and it is worth knowing what the finished model says about the conditions
+      that morning.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 15 -->
+<section id="negative">
+  <div class="secnum">15</div>
+  <h2>Negative results</h2>
+  <p class="lede">Its own section, because "we tried it and it didn't help" is a finding, and because
+    a stage that reports only its wins is incomplete. Every null below carries an interval, because "no effect" and "no power to detect an effect" are different sentences.</p>
+  <div class="co ember"><span class="tag">Tuning helped, but not separably at this sample size</span><p>The tuned configuration scored <b>0.124</b> (seed 42; the 5-seed system-of-record mean is 0.126) against <b>0.109</b> for the same model at default settings, a gain of +0.0145, about 13% relative, and the search's own cross-validated gain over the defaults was larger still (+0.029). But the test intervals are [0.106, 0.148] and [0.091, 0.131]: they overlap across most of their range. With 538 positives in the test era, this is a real point estimate that the data cannot separate from noise. Reporting it as "tuning works" would overclaim; reporting it as "tuning does nothing" would underclaim. It is directionally positive and underpowered, which is a different and more common situation than either.</p><p><span class="chip warn">DIRECTIONAL, UNDERPOWERED</span></p></div>
+  <div class="co ember"><span class="tag">Class-weight balancing: no ranking gain, large calibration cost</span><p>At an identical configuration, <code class="inline">class_weight="balanced"</code> changed average precision by -0.0026 while driving the Brier skill score from +0.037 to -1.92. Round 1's most consequential modeling choice was pure cost, and the direct cause of the retracted calibration claim.</p><p><span class="chip fail">COST, NO BENEFIT</span></p></div>
+  <div class="co ember"><span class="tag">The fancy search stack did not beat random search</span><p>Optuna's TPE and LightGBM were given identical budgets and search spaces as plain random search; the best-of-track scores spanned 0.0053 average precision. The null is specifically <b>Optuna-vs-random on the same library</b> (Nadeau&ndash;Bengio p = 0.50); the cross-library spread clears seed noise but credits the library, not the tuner. Bayesian search is a better tool for expensive objectives than for this one.</p><p><span class="chip warn">CONFIRMED NULL</span></p></div>
+  <div class="co ember"><span class="tag">Most engineered feature families were individually invisible</span><p>The full ladder (circular encodings, anomalies, published fire-weather indices, wind-terrain alignment, fuels, fire history) moved test average precision by +0.0031 in total, and several individual rungs moved it by less than their own confidence interval. Domain features earn their place in interpretability and in transfer, not necessarily on the headline metric.</p><p><span class="chip warn">CONFIRMED NULL</span></p></div>
+  <div class="co ember"><span class="tag">The California model does not transfer to Florida</span><p>Applied to Florida, the CA-trained model scores 0.180 against 0.293 for a Florida-trained one on the same rows. Different fire regime, different drivers. The model learned California, and says so.</p><p><span class="chip fail">CONFIRMED NULL</span></p></div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 16 -->
+<section id="redteam">
+  <div class="secnum">16</div>
+  <h2>Red team: the hostile review</h2>
+  <p class="lede">Before this page went anywhere near a stakeholder, a fresh-context adversarial
+    reviewer audited every line of the Round-3 code with instructions to be merciless. It returned
+    <b>35 findings</b>. This section is the triage of what was broken and fixed, what was overstated and amended, and what was checked and held, with every new number produced by
+    <code class="inline">run_redteam.py</code> and enforced by the verifier like everything else.</p>
+
+  <h3>The four that mattered most</h3>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Finding</th><th scope="col">Severity</th><th scope="col">What happened</th></tr></thead>
+      <tbody>
+        <tr><td>The KPI row mixed two models: the headline AP was LightGBM's, while everything
+          calibrated, ablated, and Tubbs-scored was the tuned HGB, and the "champion" was picked as a max over nine test scores (winner's curse), with the runner-up not
+          statistically separable (q=0.085)</td>
+          <td><span class="chip fail">BLOCKER</span></td>
+          <td>Re-keyed. The tuned HGB is the named <b>system of record</b>, the pre-committed, fully analyzed model. Its 5-seed test AP is <b>0.126 &plusmn;
+            0.0023</b>; LightGBM's 0.132 &plusmn;
+            0.0022 is reported, not selected. The search-CV winner and the
+            max-on-test winner happened to coincide; the procedure no longer relies on that luck.</td></tr>
+        <tr><td>The calibration map (isotonic vs sigmoid) was chosen on TEST Brier skill, which is circular and load-bearing for every decision number</td>
+          <td><span class="chip fail">BLOCKER</span></td>
+          <td>Re-selected on the validation era. The val-selected map's test numbers:
+            BSS <b>+0.053</b>, slope 0.96, precision@1%
+            <b>20.7%</b>.</td></tr>
+        <tr><td>The v1 leak tripwire could not catch three of the four leaks the article showcases
+          (rare presence flags sail under an AUC threshold), ran on the post-ban matrix (circular
+          by construction), and "refuses" enforced nothing</td>
+          <td><span class="chip fail">BLOCKER</span></td>
+          <td>Tripwire v2: three complementary criteria with thresholds calibrated from measured
+            margins (honest ceiling 1.72&times; AP lift; weakest leak 7.1&times;), run on the raw
+            frame, with an actual <code class="inline">raise</code>. Demonstrated catching
+            <b>all four</b> ladder rungs while passing the honest set.</td></tr>
+        <tr><td>"Test scored ONCE per family, enforced in code", when the gate covered 9 selection scorings while ~330 diagnostic evaluations ran ungated</td>
+          <td><span class="chip fail">BLOCKER</span></td>
+          <td>Protocol text amended (see &sect;01); the full accounting is published below. The defense that holds, diagnostics reported in full and never selected on, is now the stated one.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The experiments the review demanded</h3>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/r1_redteam.png" width="1484" height="588"
+         alt="Red-team refits: full model, no-geography, yesterday-knowledge, same-day load and embargoed history; and lift within population terciles.">
+    <figcaption><b>Every hard question, answered with a refit.</b> Left: the system-of-record config
+      refit under each red-team scenario (no-skill line dashed; seed sd shown in the title).
+      Right: ranking lift within population terciles, the answer to "is this just a remoteness lookup?"</figcaption>
+  </figure>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Question</th><th scope="col">Experiment</th><th scope="col">Answer</th></tr></thead>
+      <tbody>
+        <tr><td>Are the fine-grained Round-3 verdicts bigger than seed noise? (Nothing had ever
+          been run twice.)</td>
+          <td>5 seeds &times; both systems</td>
+          <td>Seed sd 0.0023 (HGB) / 0.0022 (LightGBM).
+            Verdicts: the champion margin (+0.0070) SURVIVES seed noise; the tuner spread (+0.0053) SURVIVES seed noise; the feature gain (+0.0031) is WITHIN seed noise.</td></tr>
+        <tr><td>How much is memorized geography?</td>
+          <td>Refit without lat/lon, ecoregion, and all fire-history features</td>
+          <td>AP 0.124 against its same-seed baseline 0.124 (&Delta; +0.0006). Place identity turns out to carry little the physics did not already encode</td></tr>
+        <tr><td>Could it ever run operationally, given that same-day gridMET values (a day's MAX
+          temperature) don't exist at decision time?</td>
+          <td>Yesterday-knowledge refit: all same-day weather dropped, antecedents/normals/statics kept</td>
+          <td>AP <b>0.126</b>, +0.0029 <i>above</i> its same-seed baseline and within seed noise. An operational version restricted to yesterday-knowable weather loses nothing</td></tr>
+        <tr><td>The review's own feature idea: "how many other fires ignited in this cell today"
+          (28.7% of rows share a cell-day; resource competition is real)</td>
+          <td>+<code class="inline">same_day_cell_ignitions</code>, refit</td>
+          <td>&Delta;AP +0.0012, no material lift (paired p=0.769). The operationally appealing feature is, on this data, a confirmed null</td></tr>
+        <tr><td>Is the fire-history feature deployment-honest? (A prior fire still burning is not
+          yet KNOWN to be large.)</td>
+          <td>Embargoed variant: prior fires count as large only once contained</td>
+          <td>&Delta;AP +0.0023. The causality assertion now verifies all three history columns rather than one</td></tr>
+        <tr><td>Was the zoo fair? (RF/ET/logistic were denied four categorical features incl.
+          SHAP's #2, and handed the class weighting &sect;07 proves is broken.)</td>
+          <td>Fair re-runs: encoded categoricals, no weighting</td>
+          <td>Fairly equipped: random forest: 0.107 (was 0.114), BSS +0.04; extra trees: 0.110 (was 0.121), BSS +0.04; ridge logistic: 0.116 (was 0.111), BSS +0.05. The ordering conclusion (GBMs lead) holds, but the confounds cut both ways: the forests actually DROP without class weighting (it had been quietly helping their ranking), while the logistic model rises once given the categorical features. Every Brier-skill score turns positive, confirming the weighting was the calibration poison.</td></tr>
+        <tr><td>Do the flagged near-duplicate rows move anything? (66 flagged across both caches;
+          4 land in the test era. Promised in Round 2, never run.)</td>
+          <td>Rescore the test era without them</td>
+          <td>&Delta;AP +0.0006. Receipt delivered.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Every refit above is a single seed-42 run compared against its own
+    seed-42 baseline (AP 0.124); the 5-seed system-of-record mean is 0.126.</p>
+
+  <h3>Questions your boss will ask</h3>
+  <div class="co plain">
+    <span class="tag">"Your CV said 0.27 and your test says 0.12. That's a 50% overfit."</span>
+    <p>It's a change of denominator, not a loss of skill. The search ran on a subsample at a
+      <b>7.3%</b> base rate; the test era's base rate is <b>2.06%</b>, and average precision scales
+      with prevalence. On the base-rate-normalized scale the model scores <b>3.7&times;</b> chance
+      in CV and <b>6.0&times;</b> [4.8&ndash;7.5] on test, relatively <i>better</i> out of sample than in search.</p>
+  </div>
+  <div class="co plain">
+    <span class="tag">"Isn't your test era just the freak 2020 season?"</span>
+    <p>2020 supplies <b>49%</b> of the test positives, and it was the
+      easiest year (AP 0.153 vs 0.094 in 2019). Leaving 2020 out entirely, the pooled test AP is <b>0.106</b>. That is the number a 2021 deployment would have seen,
+      and it is printed here so nobody has to ask.</p>
+  </div>
+  <div class="co plain">
+    <span class="tag">"Is this a fire model or a remoteness lookup?"</span>
+    <p>Partly the latter, measurably the former. Predicted risk does correlate with remoteness
+      (that is real information: remote fires get big because response is slow). But the model
+      retains <b>3.5&times;</b> lift in the emptiest population tercile
+      and <b>6.5&times;</b> in the most populated one. It ranks well <i>within</i> every stratum, which a lookup table could not.</p>
+  </div>
+  <div class="co plain">
+    <span class="tag">"Why is the headline the HGB and not your best test score?"</span>
+    <p>Because the best test score was found by taking a max over nine test evaluations, a winner's-curse procedure, and its margin over the HGB, while real (it clears seed
+      noise), is not statistically separable after multiplicity control (FDR q=0.085). The HGB is
+      the model we committed to analyzing, calibrated on the validation era, and can deploy with
+      zero extra dependencies. Reporting the max would overstate what was established; reporting the pre-committed system does not.</p>
+  </div>
+
+  <h3>The full accounting</h3>
+  <p>Gated selection touches of the test era: <b>9</b> (one per zoo family). Diagnostic
+    evaluations, reported in full and never selected on: calibration variants 3, threshold ladder
+    4, ablation 7, leak ladder 5, by-year 3, transfer 2, grouped permutation 40, single-feature
+    permutation 258, SHAP 1, Tubbs 1, and this red team's own refits, same rule. The earned
+    null the review demanded: Nadeau&ndash;Bengio corrected t on the bake-off fold vectors gives
+    p = 0.50 for Optuna-vs-random, so the "the tuner didn't matter" claim now has a test behind it rather than a stamp. Of the 35 findings: the four blockers above fixed,
+    the remainder amended in place (protocol text, budget wording, labels, captions) or checked and held, each traceable in the repository. The full list ships in the repository.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 17 -->
+<section id="reproduce">
+  <div class="secnum">17</div>
+  <h2>Reproduce, and limits</h2>
+<pre>python reduce_raw.py            # cache v2: 29 added columns, overflow sentinels masked
+python tuning.py --probe        # which of sklearn / optuna / lightgbm / shap are importable
+python run_modeling.py          # the whole stage: bake-off, zoo, calibration, decisions
+python run_redteam.py           # the hostile review: seed studies, refits, tripwire v2 (s15)
+python run_final_figures.py     # re-render the calibration + precision-at-k panels (val-selected map)
+python verify_claims.py         # every number on all three pages == the results JSONs</pre>
+  <p><b>Limits, stated plainly.</b></p>
+  <ul>
+    <li><b>Daily weather cannot see gusts.</b> The wind values are 4&nbsp;km daily means. The
+      nighttime downslope wind events that drive the most destructive fires are exactly what a daily mean smooths away. The wind-alignment feature is a direction-and-terrain proxy rather than a gust measurement.</li>
+    <li><b>No suppression data.</b> Whether a fire escalates depends heavily on what was sent to it
+      and how fast. None of that is in this dataset, so part of what the model calls "risk" is
+      really "risk given the response that actually happened."</li>
+    <li><b>Five days is the whole drought memory.</b> The antecedent window in this dataset stops at
+      five days; multi-season drought enters only through the climatological normals.</li>
+    <li><b>California only for the headline.</b> The transfer test says what happens elsewhere;
+      it does not make this a national model.</li>
+    <li><b>Reported ignitions, not all ignitions</b>: the standing caveat from
+      <a href="data.html">the data audit</a>, which applies to every model here.</li>
+    <li><b>One analyst, one pipeline.</b> These checks are the ones I thought to run. The code is in
+      the repository so someone else can run the one I didn't.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <p><b>The Modeling Stage</b> &middot; part of <a href="index.html">Return to Fire</a> &middot; Aaron Long &middot; July 2026</p>
+  <p>
+    <a href="index.html">the main article</a> &middot;
+    <a href="data.html">the data audit</a> &middot;
+    <a href="first_shot.html">the frozen first shot</a> &middot;
+    <a href="https://github.com/Along777/along/tree/master/wildfire-return">code</a> &middot;
+    <a href="https://along777.github.io/along/">portfolio home</a>
+  </p>
+  <p><a href="#top">back to top</a></p>
+</footer>
+
+</body>
+</html>

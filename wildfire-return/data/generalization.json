@@ -1,0 +1,69 @@
+{
+ "generated_utc": "2026-07-26T04:31:50+00:00",
+ "system_of_record": "hgb_tuned",
+ "seed": 42,
+ "generalization": {
+  "train": {
+   "ap": 0.538074942816429,
+   "roc_auc": 0.9527786166578976,
+   "base_rate": 0.02172495981927381,
+   "n": 200967,
+   "positives": 4366,
+   "lift": 24.767592082681926
+  },
+  "val": {
+   "ap": 0.09902361252403344,
+   "roc_auc": 0.8132282310217246,
+   "base_rate": 0.021152060711258226,
+   "n": 24773,
+   "positives": 524,
+   "lift": 4.681511360797481
+  },
+  "test": {
+   "ap": 0.12356669966533709,
+   "roc_auc": 0.816762446794733,
+   "base_rate": 0.02057990972381608,
+   "n": 26142,
+   "positives": 538,
+   "lift": 6.004239149909373
+  }
+ },
+ "shuffled_label_null": {
+  "test_ap": 0.023190713398126776,
+  "test_roc_auc": 0.5131181582338726,
+  "test_base_rate": 0.02057990972381608,
+  "lift": 1.1268617651558182
+ },
+ "ignition_question": {
+  "n_fires": 251882,
+  "span_days": 10593,
+  "days_with_at_least_one_fire": 10179,
+  "share_of_days_with_fire": 0.9609175870858114,
+  "cells_deg": 0.25,
+  "cells_with_fire_history": 740,
+  "cell_day_universe": 7838820,
+  "ignition_rate_per_cell_day": 0.03213264241301624,
+  "escalation_base_rate_test": 0.02057990972381608,
+  "missing_negative_cell_days": 7586938,
+  "note": "cells are 0.25deg squares that recorded at least one fire in 29 years. Rarity is NOT the obstacle: an ignition is about as common per cell-day as an escalation is per reported fire. The obstacle is that the negative rows do not exist in any cache, and there is no gridded daily weather with which to describe them, so they cannot be constructed either."
+ },
+ "claims": {
+  "train_ap": 0.538,
+  "train_auc": 0.953,
+  "val_ap": 0.099,
+  "val_auc": 0.813,
+  "test_ap": 0.124,
+  "test_auc": 0.817,
+  "train_test_ap_gap": 0.415,
+  "null_ap": 0.0232,
+  "null_auc": 0.513,
+  "days_with_fire_pct": 96.1,
+  "cell_days_millions": 7.8,
+  "missing_negatives_millions": 7.6,
+  "ignition_rate_per_cell_day": 0.032,
+  "train_lift": 24.8,
+  "test_lift": 6.0,
+  "val_lift": 4.7
+ },
+ "runtime_minutes": 0.8
+}

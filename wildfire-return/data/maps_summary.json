@@ -1,0 +1,19 @@
+{
+  "conus_cells": 69148,
+  "ca_large_n": 1484,
+  "ca_fall_share": 0.2136,
+  "ca_fall_acres_share": 0.2636,
+  "tubbs": {
+    "lat": 38.60895,
+    "lon": -122.62879,
+    "acres": 36807.0,
+    "date": "2017-10-08"
+  },
+  "biggest_ca": {
+    "name": "DOE",
+    "acres": 589368.0,
+    "year": 2020
+  },
+  "fl_large_n": 640,
+  "fl_spring_share": 0.5687
+}

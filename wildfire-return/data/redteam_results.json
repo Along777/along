@@ -1,0 +1,800 @@
+{
+ "generated_utc": "2026-07-26T01:32:42+00:00",
+ "system_of_record": "hgb_tuned",
+ "why": "the model that was calibrated, ablated, leak-probed, transferred and Tubbs-scored in Round 3; zero extra dependencies; LightGBM's higher single test AP is reported, not selected (q=0.085, not separable)",
+ "configs": {
+  "hgb": {
+   "learning_rate": 0.01598451086157344,
+   "max_leaf_nodes": 61,
+   "min_samples_leaf": 108,
+   "l2_regularization": 0.025862000456164682,
+   "max_features": 0.4162238849520497,
+   "max_iter": 360
+  },
+  "lgbm": {
+   "learning_rate": 0.014772954438846495,
+   "num_leaves": 61,
+   "min_child_samples": 175,
+   "reg_lambda": 0.2708103169265348,
+   "colsample_bytree": 0.4486761518783509,
+   "subsample": 0.867869638763201,
+   "n_estimators": 333,
+   "subsample_freq": 1
+  }
+ },
+ "champion_procedure": {
+  "search_cv_winner": "C_lightgbm_optuna",
+  "max_on_test_winner": "lightgbm_tuned",
+  "coincide": true,
+  "note": "Round 3's champion function took a max over 9 test scores (winner's curse); it happened to coincide with the pre-test search winner. Round 4 re-keys the headline to the pre-committed, fully-analyzed system instead."
+ },
+ "history_causality": {
+  "checked": 120,
+  "violations": 0,
+  "columns_verified": 3,
+  "note": "all three history columns + same-day count recomputed from strictly-earlier/same-day rows and matched"
+ },
+ "tripwire_v2": {
+  "honest_passed": true,
+  "honest_top": [
+   {
+    "feature": "hist_prior_fires_5y",
+    "ap_lift": 1.63,
+    "auc": 0.627,
+    "presence_rate": 1.0,
+    "presence_lift": null,
+    "flagged": false
+   },
+   {
+    "feature": "ghm",
+    "ap_lift": 1.62,
+    "auc": 0.663,
+    "presence_rate": 0.9984,
+    "presence_lift": null,
+    "flagged": false
+   },
+   {
+    "feature": "evc_lifeform",
+    "ap_lift": 1.6,
+    "auc": 0.591,
+    "presence_rate": 0.5155,
+    "presence_lift": null,
+    "flagged": false
+   },
+   {
+    "feature": "evh_height",
+    "ap_lift": 1.56,
+    "auc": 0.575,
+    "presence_rate": 0.5155,
+    "presence_lift": null,
+    "flagged": false
+   }
+  ],
+  "leaks_caught": [
+   "burn_days",
+   "fire_size",
+   "has_ics209",
+   "has_mtbs"
+  ],
+  "thresholds": {
+   "ap_lift": 5.0,
+   "presence_lift": 20.0,
+   "auc": 0.8
+  },
+  "calibration_note": "thresholds set from measured margins: honest ceiling 1.72x AP lift / 0.68 AUC; weakest leak 7.1x / 0.80"
+ },
+ "seed_stability": {
+  "hgb": {
+   "ap_by_seed": [
+    0.12356669966533709,
+    0.12834207310862078,
+    0.12715150654841126,
+    0.1285353401595395,
+    0.12441266562176741
+   ],
+   "mean": 0.1264016570207352,
+   "sd": 0.002284357822080015
+  },
+  "lgbm": {
+   "ap_by_seed": [
+    0.13056580119445677,
+    0.13430720694644135,
+    0.12870306876484483,
+    0.13213590308155,
+    0.13300157423494186
+   ],
+   "mean": 0.13174271084444694,
+   "sd": 0.002176035255040623
+  },
+  "verdicts": {
+   "champion_margin_0p0070": "exceeds 2 seed-sd",
+   "tuner_spread_0p0053": "exceeds 2 seed-sd",
+   "feature_gain_0p0031": "within noise"
+  }
+ },
+ "subsample_transfer_check": {
+  "val_ap": {
+   "hgb_tuned": 0.09902361252403344,
+   "lgbm_tuned": 0.1015643023688283,
+   "hgb_default": 0.08875753039811732
+  },
+  "tuned_beats_default_on_val": true,
+  "lgbm_vs_hgb_order_held": true,
+  "note": "the search (7.3%-prevalence subsample) ranked lgbm >= hgb_tuned >> default; this is the same ordering question asked on full-data val-era AP"
+ },
+ "calibration_v2": {
+  "hgb": {
+   "selected_on_val": "isotonic",
+   "val_bss": {
+    "isotonic": 0.04708398174721429,
+    "sigmoid": 0.04030544473352127
+   },
+   "test": {
+    "bss": 0.053057448901084325,
+    "ece": 0.0034606369421011176,
+    "ap": 0.11094903584849805,
+    "slope": 0.9570954858364586,
+    "intercept": 0.05655613242914251,
+    "mean_pred": 0.017119272781714965
+   },
+   "precision_at_1pct": 0.20689655172413793,
+   "recall_at_1pct": 0.10037174721189591,
+   "topk": [
+    {
+     "k": 0.005,
+     "n_selected": 131,
+     "precision": 0.24427480916030533,
+     "recall": 0.05947955390334572,
+     "lift": 11.869576321689038,
+     "ceiling_precision": 1.0,
+     "ceiling_recall": 0.24349442379182157
+    },
+    {
+     "k": 0.01,
+     "n_selected": 261,
+     "precision": 0.20689655172413793,
+     "recall": 0.10037174721189591,
+     "lift": 10.053326496603,
+     "ceiling_precision": 1.0,
+     "ceiling_recall": 0.4851301115241636
+    },
+    {
+     "k": 0.02,
+     "n_selected": 523,
+     "precision": 0.17782026768642448,
+     "recall": 0.17286245353159851,
+     "lift": 8.640478509030686,
+     "ceiling_precision": 1.0,
+     "ceiling_recall": 0.9721189591078067
+    },
+    {
+     "k": 0.05,
+     "n_selected": 1307,
+     "precision": 0.12547819433817903,
+     "recall": 0.3048327137546468,
+     "lift": 6.0971207367819265,
+     "ceiling_precision": 0.41162968630451413,
+     "ceiling_recall": 1.0
+    }
+   ]
+  },
+  "lgbm": {
+   "selected_on_val": "isotonic",
+   "val_bss": {
+    "isotonic": 0.04863930771387659,
+    "sigmoid": 0.042416220357322953
+   },
+   "test": {
+    "bss": 0.05652537247065437,
+    "ece": 0.003438433514564264,
+    "ap": 0.11941135446800384,
+    "slope": 0.9608046828766079,
+    "intercept": 0.06952395841210206,
+    "mean_pred": 0.017141573701963442
+   },
+   "precision_at_1pct": 0.210727969348659,
+   "recall_at_1pct": 0.10223048327137546,
+   "topk": [
+    {
+     "k": 0.005,
+     "n_selected": 131,
+     "precision": 0.26717557251908397,
+     "recall": 0.06505576208178439,
+     "lift": 12.982349101847385,
+     "ceiling_precision": 1.0,
+     "ceiling_recall": 0.24349442379182157
+    },
+    {
+     "k": 0.01,
+     "n_selected": 261,
+     "precision": 0.210727969348659,
+     "recall": 0.10223048327137546,
+     "lift": 10.239499209503055,
+     "ceiling_precision": 1.0,
+     "ceiling_recall": 0.4851301115241636
+    },
+    {
+     "k": 0.02,
+     "n_selected": 523,
+     "precision": 0.18164435946462715,
+     "recall": 0.17657992565055763,
+     "lift": 8.826295251160378,
+     "ceiling_precision": 1.0,
+     "ceiling_recall": 0.9721189591078067
+    },
+    {
+     "k": 0.05,
+     "n_selected": 1307,
+     "precision": 0.14307574598316755,
+     "recall": 0.3475836431226766,
+     "lift": 6.952204742550124,
+     "ceiling_precision": 0.41162968630451413,
+     "ceiling_recall": 1.0
+    }
+   ]
+  }
+ },
+ "ece_references": {
+  "constant_base_rate": 0.0,
+  "pure_noise_near_base": 0.007271913621261829,
+  "system_of_record": 0.0034606369421011176,
+  "note": "equal-count-bin ECE is mechanically small when predictions concentrate near a 2% base rate; slope/intercept are the discriminating metrics"
+ },
+ "tail_reliability": {
+  "top_share": 0.05,
+  "n": 1307,
+  "mean_predicted": 0.11095942394508905,
+  "observed_rate": 0.12547819433817903,
+  "ece_top5pct": 0.01642840055914519
+ },
+ "experiments": {
+  "baseline_seed42": 0.12356669966533709,
+  "no_geography": {
+   "ap": 0.12420716675815974,
+   "delta": 0.0006404670928226441,
+   "dropped": [
+    "ecoregion_l3",
+    "hist_has_prior_large",
+    "hist_prior_fires_5y",
+    "hist_years_since_large",
+    "lat",
+    "lon"
+   ]
+  },
+  "yesterday_knowledge": {
+   "ap": 0.1264924145720868,
+   "delta": 0.002925714906749699,
+   "n_dropped": 32
+  },
+  "same_day_load": {
+   "ap": 0.12478813167030046,
+   "delta": 0.0012214320049633715,
+   "paired": {
+    "diff": 0.0012214320049633715,
+    "lo": -0.00641648707353437,
+    "hi": 0.006588213638553131,
+    "p": 0.7692307692307693,
+    "n_boot": 1000
+   },
+   "note": "post-hoc feature suggested by the red team; date-resolution simultaneity caveat applies"
+  },
+  "embargoed_history": {
+   "ap": 0.12591351051091032,
+   "delta": 0.0023468108455732273
+  }
+ },
+ "fair_zoo": {
+  "note": "same features as the GBMs (ordinal-encoded categoricals), no class weighting -- Round 3 denied these models 4 features incl. evt and handed them the broken balanced weighting",
+  "families": {
+   "random_forest": {
+    "ap": 0.10714414276718785,
+    "bss": 0.0430686146506869,
+    "round3_ap": 0.11442578726405553
+   },
+   "extra_trees": {
+    "ap": 0.11031861523780644,
+    "bss": 0.036644327873179505,
+    "round3_ap": 0.12060767842572798
+   },
+   "ridge_logistic": {
+    "ap": 0.1162760217385873,
+    "bss": 0.04679220261189676,
+    "round3_ap": 0.11080350913914065
+   }
+  }
+ },
+ "dup_sensitivity": {
+  "n_flagged_in_test": 4,
+  "ap_all": 0.12356669966533709,
+  "ap_without_flagged": 0.12420176346095092,
+  "delta": 0.00063506379561383
+ },
+ "concentration_2020": {
+  "by_year": {
+   "2018": {
+    "n": 9488,
+    "positives": 161,
+    "ap": 0.1280517671904547
+   },
+   "2019": {
+    "n": 6454,
+    "positives": 113,
+    "ap": 0.09357032666401169
+   },
+   "2020": {
+    "n": 10200,
+    "positives": 264,
+    "ap": 0.1525420964047695
+   }
+  },
+  "macro_avg_ap": 0.12472139675307863,
+  "pooled_ap": 0.12356669966533709,
+  "leave_2020_out_ap": 0.10632872961026367,
+  "share_of_positives_2020": 0.49070631970260226
+ },
+ "lift_ci": {
+  "n_blocks": 63,
+  "n_singleton_blocks": 6,
+  "ap_ci": [
+   0.10609692032719893,
+   0.14761638718539202
+  ],
+  "lift_point": 6.004239149909373,
+  "lift_ci": [
+   4.80846873695757,
+   7.476671349175638
+  ],
+  "note": "the raw AP interval mixes ranking uncertainty with base-rate resampling (prevalence swings ~\u00b112% across 63-block resamples); the lift interval cancels the base-rate component"
+ },
+ "earned_nulls": {
+  "note": "3 spatial folds on the 60k search subsample; approximation stated",
+  "optuna_vs_random": {
+   "t": 0.8212774799732677,
+   "p": 0.4978090509284807,
+   "df": 2,
+   "mean_diff": 0.002795705985547736
+  },
+  "lightgbm_vs_random": {
+   "t": 1.4626212254904356,
+   "p": 0.2810967057264518,
+   "df": 2,
+   "mean_diff": 0.005302660415665276
+  }
+ },
+ "remoteness": {
+  "terciles": {
+   "low_pop": {
+    "n": 7160,
+    "positives": 219,
+    "prevalence": 0.03058659217877095,
+    "ap": 0.10557411602749746,
+    "lift": 3.4516468984332502
+   },
+   "mid_pop": {
+    "n": 2720,
+    "positives": 143,
+    "prevalence": 0.052573529411764706,
+    "ap": 0.23765420141698745,
+    "lift": 4.520415579400041
+   },
+   "high_pop": {
+    "n": 16262,
+    "positives": 176,
+    "prevalence": 0.01082277702619604,
+    "ap": 0.07000266966350886,
+    "lift": 6.46808757993171
+   }
+  },
+  "corr_risk_ghm": -0.4203987580427722,
+  "corr_risk_logpop": -0.2893054076999452,
+  "note": "negative correlations = higher predicted risk in remoter, emptier places; the model still ranks well WITHIN every tercile (lift column), so it is not merely a remoteness lookup -- but remoteness is a real component"
+ },
+ "tubbs_v2": {
+  "reference": "CA ignitions 2015-2020 only (out-of-sample for the <=2014 model)",
+  "n_reference": 50915,
+  "percentile_oos": 97.35245016203477,
+  "percentile_october_oos": 97.7236146240515,
+  "calibrated_risk": 0.09407665505226481,
+  "round3_percentile_mixed_sample": 96.07594032126154
+ },
+ "decision_v2": {
+  "rows": [
+   {
+    "threshold": 0.001,
+    "net_benefit_model": 0.019605444324287565,
+    "net_benefit_treat_all": 0.01959950923304913,
+    "n_flagged": 25987
+   },
+   {
+    "threshold": 0.00139,
+    "net_benefit_model": 0.0192248738254781,
+    "net_benefit_treat_all": 0.019216620826765285,
+    "n_flagged": 25987
+   },
+   {
+    "threshold": 0.00193,
+    "net_benefit_model": 0.018697439052551595,
+    "net_benefit_treat_all": 0.018685973652966304,
+    "n_flagged": 25987
+   },
+   {
+    "threshold": 0.00268,
+    "net_benefit_model": 0.017901546644586715,
+    "net_benefit_treat_all": 0.017948010391665745,
+    "n_flagged": 20997
+   },
+   {
+    "threshold": 0.00373,
+    "net_benefit_model": 0.01693981929538499,
+    "net_benefit_treat_all": 0.016912995195896775,
+    "n_flagged": 18448
+   },
+   {
+    "threshold": 0.00518,
+    "net_benefit_model": 0.015834177723339667,
+    "net_benefit_treat_all": 0.01548009662433011,
+    "n_flagged": 15484
+   },
+   {
+    "threshold": 0.0072,
+    "net_benefit_model": 0.0143482157294898,
+    "net_benefit_treat_all": 0.013476943718589929,
+    "n_flagged": 9668
+   },
+   {
+    "threshold": 0.01,
+    "net_benefit_model": 0.013275204806074671,
+    "net_benefit_treat_all": 0.010686777498804121,
+    "n_flagged": 8843
+   },
+   {
+    "threshold": 0.02,
+    "net_benefit_model": 0.010616273133076962,
+    "net_benefit_treat_all": 0.0005917446161388569,
+    "n_flagged": 6551
+   },
+   {
+    "threshold": 0.03,
+    "net_benefit_model": 0.008427407174298657,
+    "net_benefit_treat_all": -0.009711433274416412,
+    "n_flagged": 4110
+   },
+   {
+    "threshold": 0.04,
+    "net_benefit_model": 0.00725843470277714,
+    "net_benefit_treat_all": -0.020229260704358255,
+    "n_flagged": 3571
+   },
+   {
+    "threshold": 0.05,
+    "net_benefit_model": 0.0058023185114496134,
+    "net_benefit_treat_all": -0.030968516080193607,
+    "n_flagged": 2978
+   },
+   {
+    "threshold": 0.06,
+    "net_benefit_model": 0.004491020400854906,
+    "net_benefit_treat_all": -0.041936266251259485,
+    "n_flagged": 2044
+   },
+   {
+    "threshold": 0.07,
+    "net_benefit_model": 0.003810043246026868,
+    "net_benefit_treat_all": -0.05313988201740208,
+    "n_flagged": 1691
+   },
+   {
+    "threshold": 0.08,
+    "net_benefit_model": 0.003108441189091019,
+    "net_benefit_treat_all": -0.064587054648026,
+    "n_flagged": 1628
+   },
+   {
+    "threshold": 0.09,
+    "net_benefit_model": 0.0020542918178906248,
+    "net_benefit_treat_all": -0.076285813490312,
+    "n_flagged": 657
+   },
+   {
+    "threshold": 0.1,
+    "net_benefit_model": 0.001806373736600957,
+    "net_benefit_treat_all": -0.08824454475131548,
+    "n_flagged": 455
+   },
+   {
+    "threshold": 0.11,
+    "net_benefit_model": 0.0011527362658049942,
+    "net_benefit_treat_all": -0.10047201154627407,
+    "n_flagged": 338
+   },
+   {
+    "threshold": 0.12,
+    "net_benefit_model": 0.0010189107044741657,
+    "net_benefit_treat_all": -0.11297737531384534,
+    "n_flagged": 338
+   },
+   {
+    "threshold": 0.13,
+    "net_benefit_model": 0.0009114676079449372,
+    "net_benefit_treat_all": -0.12577021870825741,
+    "n_flagged": 279
+   },
+   {
+    "threshold": 0.14,
+    "net_benefit_model": 0.0007979674514680998,
+    "net_benefit_treat_all": -0.138860570088586,
+    "n_flagged": 279
+   },
+   {
+    "threshold": 0.15,
+    "net_benefit_model": 0.0007358004023275593,
+    "net_benefit_treat_all": -0.15225892973668698,
+    "n_flagged": 271
+   },
+   {
+    "threshold": 0.16,
+    "net_benefit_model": 0.0006211496916110181,
+    "net_benefit_treat_all": -0.16597629794783803,
+    "n_flagged": 271
+   },
+   {
+    "threshold": 0.17,
+    "net_benefit_model": 0.0004954405641846708,
+    "net_benefit_treat_all": -0.18002420515202885,
+    "n_flagged": 225
+   },
+   {
+    "threshold": 0.18,
+    "net_benefit_model": 0.00029669105504458767,
+    "net_benefit_treat_all": -0.19441474423924868,
+    "n_flagged": 48
+   },
+   {
+    "threshold": 0.19,
+    "net_benefit_model": 0.000277685688136304,
+    "net_benefit_treat_all": -0.2091606052792394,
+    "n_flagged": 48
+   },
+   {
+    "threshold": 0.2,
+    "net_benefit_model": 0.0002582051870553133,
+    "net_benefit_treat_all": -0.2242751128452299,
+    "n_flagged": 48
+   },
+   {
+    "threshold": 0.21,
+    "net_benefit_model": 0.0002382315087317659,
+    "net_benefit_treat_all": -0.23977226617238467,
+    "n_flagged": 48
+   },
+   {
+    "threshold": 0.22,
+    "net_benefit_model": 0.00022853488540888132,
+    "net_benefit_treat_all": -0.255666782405364,
+    "n_flagged": 47
+   },
+   {
+    "threshold": 0.23,
+    "net_benefit_model": 0.00021113459258972228,
+    "net_benefit_treat_all": -0.27197414321582325,
+    "n_flagged": 25
+   },
+   {
+    "threshold": 0.24,
+    "net_benefit_model": 0.000213409355382949,
+    "net_benefit_treat_all": -0.28871064510024197,
+    "n_flagged": 24
+   },
+   {
+    "threshold": 0.25,
+    "net_benefit_model": 0.00020401397495728457,
+    "net_benefit_treat_all": -0.30589345370157855,
+    "n_flagged": 24
+   },
+   {
+    "threshold": 0.26,
+    "net_benefit_model": 0.0001943646653309265,
+    "net_benefit_treat_all": -0.3235406625353837,
+    "n_flagged": 24
+   },
+   {
+    "threshold": 0.27,
+    "net_benefit_model": 0.00018445099105727096,
+    "net_benefit_treat_all": -0.34167135654271774,
+    "n_flagged": 24
+   },
+   {
+    "threshold": 0.28,
+    "net_benefit_model": 0.00017426193694268052,
+    "net_benefit_treat_all": -0.3603056809391444,
+    "n_flagged": 24
+   },
+   {
+    "threshold": 0.29,
+    "net_benefit_model": 0.0001724061760202405,
+    "net_benefit_treat_all": -0.3794649158819492,
+    "n_flagged": 20
+   },
+   {
+    "threshold": 0.3,
+    "net_benefit_model": 0.00018033378143545692,
+    "net_benefit_treat_all": -0.39917155753740563,
+    "n_flagged": 19
+   },
+   {
+    "threshold": 0.31,
+    "net_benefit_model": 0.00017241398427096603,
+    "net_benefit_treat_all": -0.4194494061973681,
+    "n_flagged": 19
+   },
+   {
+    "threshold": 0.32,
+    "net_benefit_model": 0.00016426125189575487,
+    "net_benefit_treat_all": -0.4403236621708588,
+    "n_flagged": 19
+   },
+   {
+    "threshold": 0.33,
+    "net_benefit_model": 0.00015586515437501498,
+    "net_benefit_treat_all": -0.4618210302629612,
+    "n_flagged": 19
+   },
+   {
+    "threshold": 0.34,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.4839698337517939,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.35,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.5068001388864368,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.36,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.5303438910565373,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.37,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.5546350639304507,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.38,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.5797098230261031,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.39,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.6056067053707934,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.4,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.6323668171269733,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.41,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.6600340513155658,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.42,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.6886553280623859,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.43,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.7182808601336559,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.44,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.748964446921757,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.45,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.7807638005021525,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.46,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.8137409079188591,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.47,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.8479624344833658,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.48,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.883500173608046,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.49,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.9204315495611449,
+    "n_flagged": 0
+   },
+   {
+    "threshold": 0.5,
+    "net_benefit_model": 0.0,
+    "net_benefit_treat_all": -0.9588401805523679,
+    "n_flagged": 0
+   }
+  ],
+  "truncated_at_n_flagged": 50,
+  "useful_range": [
+   0.001,
+   0.17
+  ],
+  "note": "Round 3's grid started at 0.01 and claimed usefulness to 0.49 on rows with <50 flagged fires; this version reaches down to 0.001 (the plausible wildfire cost-ratio region) and truncates where counts are noise"
+ },
+ "test_touch_accounting": {
+  "gated_selection_touches": 9,
+  "diagnostic_evaluations_enumerated": {
+   "calibration_variants": 3,
+   "threshold_ladder": 4,
+   "ablation": 7,
+   "leak_ladder": 5,
+   "by_year": 3,
+   "transfer": 2,
+   "grouped_permutation": 40,
+   "single_permutation": 258,
+   "shap": 1,
+   "tubbs": 1
+  },
+  "defense": "diagnostics are reported in full and never selected on; the Round-3 protocol text ('scored once per family, enforced') described only the selection path and has been amended",
+  "round4_note": "this red-team runner adds further enumerated diagnostic evaluations of the test era (seed refits, ablation refits, terciles); same rule: reported in full, nothing selected on them"
+ },
+ "claims": {
+  "sor_test_ap": 0.1264,
+  "sor_seed_sd": 0.0023,
+  "lgbm_test_ap": 0.1317,
+  "lgbm_seed_sd": 0.0022,
+  "sor_bss": 0.053,
+  "sor_slope": 0.96,
+  "sor_precision_at_1pct": 0.207,
+  "lgbm_precision_at_1pct": 0.211,
+  "no_geography_ap": 0.1242,
+  "yesterday_ap": 0.1265,
+  "same_day_delta": 0.0012,
+  "embargo_delta": 0.0023,
+  "dup_delta": 0.0006,
+  "leave_2020_out_ap": 0.1063,
+  "share_positives_2020": 0.491,
+  "lift_point": 6.0,
+  "lift_lo": 4.8,
+  "lift_hi": 7.5,
+  "n_blocks": 63,
+  "nb_t_optuna_p": 0.498,
+  "low_pop_lift": 3.5,
+  "high_pop_lift": 6.5,
+  "tubbs_oos_percentile": 97.4,
+  "tubbs_calibrated_risk": 0.094,
+  "published_round1_bss": -3.78,
+  "tail_predicted": 0.111,
+  "tail_observed": 0.125,
+  "findings_total": 35
+ },
+ "runtime_minutes": 10.6
+}

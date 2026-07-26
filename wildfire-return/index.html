@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Return to Fire</title>
+<meta name="description" content="The 2017 Tubbs Fire took our home. In 2020, at the start of my data science career, fires had to be my first subject. Six years later I came back: 2.3 million fires, 308 attributes each, honest models, and the row that was past the edge of the old data.">
+<meta name="author" content="Aaron Long">
+<meta property="og:title" content="Return to Fire">
+<meta property="og:description" content="Not more fires -- bigger fires. Six years after my first data science project, an AI rebuild with receipts: 2.3M fires, an audited ledger, a red-teamed escalation model, one retracted claim rebuilt honestly, the first attempt frozen on the record -- and the Tubbs Fire, finally in the data.">
+<meta property="og:url" content="https://along777.github.io/along/wildfire-return/">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --bg:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+    --ink:#0b0b0b; --ink2:#52514e; --muted:#6f6d68;
+    --hair:#e1e0d9; --base:#c3c2b7;
+    --blue:#2a78d6; --blue-soft:#eaf2fc; --red:#e34948; --red-soft:#fdeeee;
+    --green:#1baf7a; --green-soft:#e9f7f1; --gold:#eda100; --gold-soft:#fdf5e3;
+    --fire:#d9481f; --fire-soft:#fdece5;
+    --mono:ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0d0d0d; --surface:#1a1a19; --card:#212120;
+      --ink:#f5f5f2; --ink2:#c3c2b7; --muted:#898781;
+      --hair:#2c2c2a; --base:#383835;
+      --blue:#3987e5; --blue-soft:#14233a; --red:#e66767; --red-soft:#331b1b;
+      --green:#1baf7a; --green-soft:#12291f; --gold:#c98500; --gold-soft:#2b230e;
+      --fire:#f0764a; --fire-soft:#2b160f;
+    }
+    figure{background:#141413}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+
+  header.hero{background:linear-gradient(180deg,var(--surface),var(--bg));
+    border-bottom:1px solid var(--hair);padding:0 0 44px;text-align:center}
+  .fireband{height:8px;background:linear-gradient(90deg,#eda100 0%,#d9481f 45%,#7a1c0e 100%)}
+  .ridge-wrap{position:relative;width:100%;max-width:920px;margin:0 auto;padding:0 16px;overflow:hidden}
+  .ridge{display:block;width:100%;height:auto;max-height:160px}
+  .ridge .sky-a{stop-color:#2c4a6e} .ridge .sky-b{stop-color:#e8a04a} .ridge .sky-c{stop-color:#d9481f}
+  .ridge .wind{stroke:#ffe9d2}
+  .ridge .r1{fill:#5a3020} .ridge .r2{fill:#3a1c10} .ridge .r3{fill:#20100a}
+  .ridge .emberdot{fill:#ffb26b}
+  .ridge .star{fill:#ffffff}
+  @media (prefers-color-scheme: dark){
+    .ridge .sky-a{stop-color:#0d1626} .ridge .sky-b{stop-color:#6e3517} .ridge .sky-c{stop-color:#88280f}
+    .ridge .wind{stroke:#c9a078}
+    .ridge .r1{fill:#241108} .ridge .r2{fill:#160a05} .ridge .r3{fill:#0a0503}
+    .ridge .emberdot{fill:#ff9d4d}
+  }
+  .heroinner{padding:28px 24px 0}
+  .hero .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .hero h1{font-size:clamp(28px,5.2vw,50px);line-height:1.12;margin:14px auto 16px;max-width:920px;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--fire)}
+  .hero .sub{max-width:740px;margin:0 auto;color:var(--ink2);font-size:18px}
+  .madeby{margin:16px auto 0;font-size:14px;color:var(--muted)}
+  .herobtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:20px auto 0}
+  .bigbtn{display:inline-block;background:var(--fire);color:#fff;border-radius:99px;
+    padding:11px 22px;font-size:14.5px;font-weight:700}
+  .bigbtn:hover{text-decoration:none;filter:brightness(1.08)}
+  .bigbtn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+  .kpis{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:32px auto 0;max-width:1000px}
+  .kpi{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 20px;min-width:140px}
+  .kpi b{display:block;font-size:24px;letter-spacing:-.01em}
+  .kpi span{font-size:12.5px;color:var(--muted)}
+
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);
+      backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+  nav .wrap{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:0 2px;padding:0 12px}
+  nav a{flex:0 0 auto;padding:10px 11px;font-size:13.5px;color:var(--ink2);border-bottom:2px solid transparent;white-space:nowrap}
+  nav a:hover{text-decoration:none;color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+  main{max-width:880px;margin:0 auto;padding:8px 24px 80px}
+  section{padding-top:56px;scroll-margin-top:72px}
+  .secnum{font:600 13px var(--mono);color:var(--fire);letter-spacing:.12em}
+  h2{font-size:clamp(24px,3.4vw,34px);margin:6px 0 8px;letter-spacing:-.015em}
+  .lede{color:var(--ink2);font-size:17.5px;margin:0 0 22px}
+  h3{font-size:19px;margin:30px 0 10px}
+  p{margin:0 0 14px}
+  ul{margin:0 0 16px;padding-left:1.2em}
+  li{margin:0 0 8px}
+  .divider{text-align:center;color:var(--base);margin:48px 0 -28px;font-size:18px;letter-spacing:.4em}
+
+  .co{border-radius:12px;padding:16px 18px;margin:18px 0;border:1px solid var(--hair);font-size:15.2px}
+  .co .tag{display:inline-block;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+           padding:4px 9px;border-radius:99px;margin-bottom:9px}
+  .plain{background:var(--blue-soft)} .plain .tag{background:var(--blue);color:#fff}
+  .why{background:var(--gold-soft)} .why .tag{background:var(--gold);color:#fff}
+  .tech{background:var(--green-soft)} .tech .tag{background:var(--green);color:#fff}
+  .bug{background:var(--red-soft)} .bug .tag{background:var(--red);color:#fff}
+  .ember{background:var(--fire-soft)} .ember .tag{background:var(--fire);color:#fff}
+  .co p:last-child{margin-bottom:0}
+
+  figure{margin:26px 0;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:14px}
+  figure img{width:100%;height:auto;display:block;border-radius:8px}
+  figcaption{font-size:13.5px;color:var(--muted);padding:10px 6px 2px;line-height:1.5}
+  figcaption b{color:var(--ink2)}
+  .photo-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:24px 0}
+  .photo-row figure{margin:0}
+
+  .tblwrap{overflow-x:auto;margin:18px 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);
+        border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     text-align:left;padding:11px 14px;border-bottom:1px solid var(--hair);background:var(--surface)}
+  td{padding:10px 14px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.num{text-align:right;white-space:nowrap}
+  .chip{display:inline-block;padding:2px 10px;border-radius:99px;font:600 12px var(--mono)}
+  .chip.pass{background:var(--green-soft);color:var(--green)}
+  .chip.warn{background:var(--gold-soft);color:var(--gold)}
+  .chip.fail{background:var(--red-soft);color:var(--red)}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:20px 0}
+  .card{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:18px}
+    .card h3{margin:0 0 8px;font-size:15.5px}
+  .card h3.good{color:var(--green)} .card h3.fix{color:var(--fire)}
+  .card ul{font-size:14px;color:var(--ink2)}
+  .card .verdict + p{margin-top:8px}
+  .card p{font-size:14px;color:var(--ink2);margin:0 0 6px}
+  .card .verdict{display:inline-block;margin-top:8px;font:600 11.5px var(--mono);letter-spacing:.06em;
+                 padding:3px 10px;border-radius:99px}
+  .v-win{background:var(--green);color:#fff}
+  .v-split{background:var(--gold);color:#fff}
+  .v-loss{background:var(--red);color:#fff}
+
+  .flow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0;counter-reset:step}
+  .step{flex:1 1 160px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px}
+  .step::before{counter-increment:step;content:counter(step,decimal-leading-zero);
+    font:700 12px var(--mono);color:var(--fire)}
+  .step b{display:block;font-size:14.5px;margin:4px 0 4px}
+  .step span{font-size:13px;color:var(--ink2);line-height:1.45}
+
+  pre,code{font-family:var(--mono);font-size:13px}
+  pre{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;
+      overflow-x:auto;line-height:1.5;color:var(--ink2)}
+  code.inline{background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:1px 6px}
+
+  .tldrbox{background:var(--card);border:2px solid var(--fire);border-radius:16px;padding:22px 22px 8px;margin:8px 0 24px}
+  .tldrbox h3{margin:0 0 12px;font-size:18px}
+  .retro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:20px 0}
+    .note{color:var(--ink2)}
+  .madeby.tight{margin-top:10px}
+  blockquote{border-left:3px solid var(--fire);margin:16px 0;padding:6px 18px;color:var(--ink2)}
+  /* the exhibit rail: four pages, one click apart, current one marked */
+  .rail{border-bottom:1px solid var(--hair);background:var(--surface)}
+  .railwrap{max-width:1160px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px}
+  .raillabel{flex:0 0 auto;align-self:center;font:700 10.5px/1.35 var(--mono);letter-spacing:.14em;
+             text-transform:uppercase;color:var(--muted);max-width:104px;padding-right:4px}
+  .railcard{flex:1 1 168px;padding:9px 12px;border-radius:10px;border:1px solid var(--hair);
+            background:var(--card);color:var(--ink)}
+  .railcard:hover{text-decoration:none;border-color:var(--fire)}
+  .railcard i{font-style:normal;font:700 10px var(--mono);letter-spacing:.1em;color:var(--fire)}
+  .railcard b{display:block;font-size:13.5px;letter-spacing:-.01em;margin-top:1px}
+  .railcard span{display:block;font-size:11.5px;color:var(--ink2);line-height:1.4;margin-top:2px}
+  .railcard.here{background:var(--fire-soft);border-color:var(--fire)}
+  .railcard.here b{color:var(--fire)}
+  @media (max-width:640px){
+    .railwrap{padding:8px 12px;gap:6px}
+    .raillabel{width:100%;max-width:none;padding:0 0 2px}
+    .railcard{flex:1 1 140px;padding:7px 10px}
+    .railcard b{font-size:12.5px}
+    .railcard span{display:none}
+    .railcard.here span{display:block;font-size:11px}
+  }
+
+  footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer a{color:var(--ink2)}
+  @media print{
+    nav,.rail{display:none}
+    section{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<a id="top"></a>
+
+<header class="hero">
+  <div class="fireband" aria-hidden="true"></div>
+  <div class="ridge-wrap" aria-hidden="true">
+    <svg class="ridge" viewBox="0 0 920 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="California ridgelines at dusk under fire weather">
+      <defs>
+        <linearGradient id="duskSky" x1="0" y1="0" x2="0" y2="1">
+          <stop class="sky-a" offset="0%"/>
+          <stop class="sky-b" offset="55%"/>
+          <stop class="sky-c" offset="100%"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="920" height="150" fill="url(#duskSky)"/>
+      <!-- wind streaks (Diablo, from the northeast) -->
+      <g class="wind" stroke-width="2" opacity=".5" stroke-linecap="round">
+        <line x1="640" y1="26" x2="780" y2="22"/>
+        <line x1="560" y1="44" x2="740" y2="38"/>
+        <line x1="700" y1="60" x2="850" y2="55"/>
+      </g>
+      <!-- back ridge -->
+      <path class="r1" d="M0,96 L70,72 L150,90 L235,58 L330,92 L420,66 L520,95 L610,70 L710,92 L800,64 L920,90 L920,150 L0,150 Z"
+            opacity=".55"/>
+      <!-- mid ridge -->
+      <path class="r2" d="M0,112 L90,88 L180,108 L280,80 L380,110 L470,86 L570,112 L680,88 L790,110 L920,84 L920,150 L0,150 Z"
+            opacity=".8"/>
+      <!-- front ridge -->
+      <path class="r3" d="M0,132 L110,110 L210,130 L320,104 L430,132 L540,110 L660,134 L780,112 L920,132 L920,150 L0,150 Z"/>
+      <!-- embers -->
+      <g class="emberdot">
+        <circle cx="300" cy="70" r="2"/>
+        <circle cx="318" cy="56" r="1.4"/>
+        <circle cx="332" cy="64" r="1.1"/>
+        <circle cx="640" cy="78" r="1.8"/>
+        <circle cx="655" cy="66" r="1.2"/>
+      </g>
+      <!-- the one point that matters: a star over the North Bay -->
+      <g transform="translate(150,84)">
+        <path class="star" d="M0,-9 L2.4,-2.8 L9,-2.8 L3.7,1.4 L5.8,8 L0,4 L-5.8,8 L-3.7,1.4 L-9,-2.8 L-2.4,-2.8 Z"
+              opacity=".92"/>
+      </g>
+    </svg>
+  </div>
+  <div class="heroinner">
+    <div class="kicker">Return to Fire &middot; the final report &middot; July 2026</div>
+    <h1>Return to <em>Fire</em></h1>
+    <p class="sub">The 2017 Tubbs Fire took our home. When I started my data science career in 2020,
+      fires had to be my first subject. Six years later I came back with an AI collaborator and
+      rebuilt it end to end: <b>2.3 million fires</b>, <b>308 attributes each</b>, an audited
+      ledger, a tuned and red-teamed model, and every stage published, including the first attempt,
+      frozen with its flaws.</p>
+    <p class="madeby">Portfolio analysis &middot; public data &middot; no API keys &middot; offline after first download &middot; every number machine-checked</p>
+    <div class="herobtns">
+      <a class="bigbtn" href="#tldr">Start with the TL;DR</a>
+      <a class="bigbtn ghost" href="data.html">The data audit</a>
+      <a class="bigbtn ghost" href="modeling.html">The modeling stage</a>
+      <a class="bigbtn ghost" href="first_shot.html">The frozen first shot</a>
+      <a class="bigbtn ghost" href="https://github.com/Along777/along/blob/master/wildfire-return/README.md">Code walkthrough (GitHub)</a>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>2.30M</b><span>fires &middot; 1992&ndash;2020 &middot; 308 columns</span></div>
+      <div class="kpi"><b>2.4&times;</b><span>national burned acres, 1990s vs late 2010s</span></div>
+      <div class="kpi"><b>1 in 4</b><span>CA ignitions now on top-decile fire-weather days (was 1 in 13)</span></div>
+      <div class="kpi"><b>0.126</b><span>test AP, escalation model &middot; 6.0&times; the base rate</span></div>
+      <div class="kpi"><b>97th</b><span>Tubbs percentile, out of sample, model trained &le;2014</span></div>
+    </div>
+    <p class="madeby tight">Every number on this page is verified against the
+      computation by <code class="inline">verify_claims.py</code>, and the numbers the review
+      rounds retired are <b>banned</b>: a stale claim reappearing anywhere is a build failure.
+      One published claim was retracted, rebuilt honestly, and re-verified.
+      <a href="#journey">The whole journey is below.</a></p>
+  </div>
+</header>
+
+<div class="rail">
+  <div class="railwrap">
+    <span class="raillabel">One project<br>four exhibits</span>
+    <a class="railcard" href="first_shot.html"><i>01</i><b>The first shot</b><span>one prompt, then frozen byte-for-byte with its flaws intact</span></a>
+    <a class="railcard" href="data.html"><i>02</i><b>The data audit</b><span>2.3M rows cross-examined by 29 checks before any trend was trusted</span></a>
+    <a class="railcard" href="modeling.html"><i>03</i><b>The modeling stage</b><span>the escalation model, tuned and calibrated, then hostilely reviewed</span></a>
+    <span class="railcard here" aria-current="page"><i>04</i><b>The final report</b><span>You are here. The claims that survived all four rounds, each one machine-checked</span></span>
+  </div>
+</div>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a href="#story">Story</a>
+    <a href="#journey">Journey</a>
+    <a href="#tldr">TL;DR</a>
+    <a href="#then">2020</a>
+    <a href="#data">Data</a>
+    <a href="#eda">EDA</a>
+    <a href="#bets">Bets</a>
+    <a href="#california">California</a>
+    <a href="#tubbs">The Row</a>
+    <a href="#florida">Florida</a>
+    <a href="#national">National</a>
+    <a href="#ml">Models</a>
+    <a href="#defense">Defense</a>
+    <a href="#scorecard">Scorecard</a>
+    <a href="#retro">Six Years</a>
+    <a href="#limits">Limits</a>
+    <a href="#reproduce">Reproduce</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================================================ 01 STORY -->
+<section id="story">
+  <div class="secnum">01</div>
+  <h2>Where this began</h2>
+  <p class="lede">On October 8, 2017, the Tubbs Fire came over the ridge into Santa Rosa.
+    By morning our house was a chimney and a set of stone steps.</p>
+
+  <div class="photo-row">
+    <figure>
+      <img src="figures/story_house_before.jpg" width="1600" height="1200"
+           alt="A green two-story house with stone retaining walls, curved front steps, and a round tree planter.">
+      <figcaption><b>Before.</b> Our home before the Tubbs Fire: stone walls, curved steps, the tree in its round planter.</figcaption>
+    </figure>
+    <figure>
+      <img loading="lazy" decoding="async" src="figures/story_house_after.jpg" width="1224" height="918"
+           alt="The same lot after the Tubbs Fire: ash and rubble, a lone brick chimney, the same curved steps and stone walls in the foreground, smoke haze.">
+      <figcaption><b>October 2017, days after the fire.</b> The same curved steps. The same stone walls. Everything between them, gone. We lost about 95% of what we owned.</figcaption>
+    </figure>
+    <figure>
+      <img loading="lazy" decoding="async" src="figures/story_house_rebuild.jpg" width="1600" height="1200"
+           alt="New floor joists on a fresh foundation at the same lot, with neighboring houses under construction.">
+      <figcaption><b>2019, after the fire: the rebuild begins.</b> Floor joists on a new foundation, a neighborhood rebuilding around us.</figcaption>
+    </figure>
+  </div>
+
+  <p>That fire did not make me a data scientist. I already loved this work, the pull of a question you can actually check. But when I sat down in early 2020 to build my first real
+    project, at the very start of my career, there was never a question about the subject.
+    It had to be fires.</p>
+  <p>I found the biggest wildfire dataset I could: 1.88 million US fires in a SQLite database.
+    I wrote R by hand. I wrote Python by hand. I made maps, bar charts, a random forest. I published
+    a three-part series and was proud of it, and I am still proud of it. It is where the work started.</p>
+  <p><b>Here is the detail I did not dwell on at the time:</b> that dataset ended in 2015. The fire
+    that had just burned through my family's life was 22 months past the edge of the data. I was
+    analyzing 1.88 million fires, and the one that mattered most to me could not, by construction,
+    be one of them.</p>
+  <p>The database has since been updated through 2020, and a research team bolted 270 new columns onto every record: the weather at each ignition, the dryness of the fuels, the terrain, the
+    people nearby. Somewhere in those 2.3 million rows is a row named TUBBS.
+    <a href="#tubbs">We will get to it.</a></p>
+  <div class="co why">
+    <span class="tag">Why this project</span>
+    <p>This is a return to the same questions with better tools. The 2020 series was beginner work done with care, at the
+      speed hand-written code allowed. Six years later I can think out loud with an AI collaborator
+      and watch the analysis keep pace. The subject and the person are the same and the tools are not, which raises the question this project exists to answer: <i>what does a defensible version of my first project look like?</i></p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 02 JOURNEY -->
+<section id="journey">
+  <div class="secnum">02</div>
+  <h2>How this was rebuilt: five rounds, four exhibits</h2>
+  <p class="lede">This page is the finished report, but it was not written in one pass. It was built
+    the way an analysis team works (draft, audit, model, hostile review, final), and every stage shipped as its own page that is still up. Every claim below is meant to be checked rather than taken on trust.</p>
+  <div class="flow">
+    <div class="step"><b>The first shot</b><span>One prompt: my 2020 files in, a full 2026 rebuild out, then <a href="first_shot.html">frozen byte-for-byte</a>, flaws included. The
+      verifier re-hashes it on every run; if that page ever changes, the build fails.</span></div>
+    <div class="step"><b>The data expert's cut</b><span>2.30M rows cross-examined in
+      <a href="data.html">a 29-check streaming audit</a> before any trend was trusted. It caught
+      47,367 non-CONUS rows hiding in the "CONUS" data, and three first-shot numbers were
+      corrected in public.</span></div>
+    <div class="step"><b>The modeling stage</b><span><a href="modeling.html">An operational
+      escalation-risk model</a>, tuned three ways and calibrated on the era the first shot threw away, plus the retraction of a claim I had published as true.</span></div>
+    <div class="step"><b>The red team</b><span>A fresh-context hostile reviewer with orders to be
+      merciless: <a href="modeling.html#redteam">35 findings</a>. Four blockers fixed;
+      everything else amended in print or defended with a number.</span></div>
+    <div class="step"><b>The final report</b><span>This page: the survivors. Everything above that
+      held up, re-keyed to the reviewed numbers, with the superseded ones banned from ever
+      coming back.</span></div>
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Round</th><th scope="col">What it shipped</th><th scope="col">The receipt</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 &middot; First shot</b></td>
+          <td>The whole rebuild in one prompt: fetch &rarr; reduce &rarr; four labs &rarr; article &rarr; verifier</td>
+          <td><a href="first_shot.html">first_shot.html</a>, byte-frozen; its SHA-256 is recorded and re-checked on every verify run</td></tr>
+        <tr><td><b>2 &middot; Data audit</b></td>
+          <td>29 checks streamed over 4.68&nbsp;GB of raw records; a pre-registered cleaning gate that changed <b>0 rows</b></td>
+          <td><a href="data.html">data.html</a> &middot; an auto-generated data dictionary &middot; a near-duplicate sidecar the model stage later used</td></tr>
+        <tr><td><b>3 &middot; Modeling</b></td>
+          <td>The escalation model: three-stack tuning bake-off, spatial-block intervals, calibration, decision curves, and a published claim retracted</td>
+          <td><a href="modeling.html">modeling.html</a> &middot; every interval bootstrapped &middot; the retraction printed in its own section</td></tr>
+        <tr><td><b>4 &middot; Red team</b></td>
+          <td><b>35 findings</b> from a fresh-context adversarial review; the headline re-keyed to a pre-committed system of record; calibration re-selected on the validation era, which changed the answer</td>
+          <td><a href="modeling.html#redteam">the red-team section</a>, every experiment's number enforced by the verifier</td></tr>
+        <tr><td><b>5 &middot; Final report</b></td>
+          <td>Every page swept for numbers the reviews had superseded; the stale ones fixed, then <i>banned</i></td>
+          <td>this page &middot; <code class="inline">verify_claims.py</code> needles all three pages and fails the build if a retired number reappears</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="co plain">
+    <span class="tag">The rule that made it honest</span>
+    <p>One script is the referee. Every load-bearing number on this page, the audit, and the
+      modeling stage must appear <i>exactly</i> as the results JSONs print it, or
+      <code class="inline">verify_claims.py</code> exits 1. The frozen first shot is re-hashed on
+      every run. And since the hostile review, the check runs in both directions: numbers the reviews retired (the old model headline, the broken calibration claim, even a mislabeled photo caption) are banned strings. A stale number reappearing anywhere fails the build.</p>
+  </div>
+  <div class="co why">
+    <span class="tag">Why publish the messy middle</span>
+    <p>The 2020 series shipped as three polished parts with its mistakes baked in, invisible. This
+      version inverts that: the first attempt is frozen where anyone can read it, the audit that
+      corrected it is a page, the review that attacked it is a section. The mistakes turned out to be the most useful part of the record. Six years ago that would have felt like
+      weakness. With a verifier standing behind every number, it is just what the work looks
+      like.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 03 TLDR -->
+<section id="tldr">
+  <div class="secnum">03</div>
+  <h2>TL;DR</h2>
+  <div class="tldrbox">
+    <h3>Eight bullets, each with a number attached</h3>
+    <p><b>1 &middot; America is not having more fires. It is having bigger ones.</b> Reported ignitions are
+      flat-to-noisy (Mann-Kendall p&nbsp;=&nbsp;0.564 on the CONUS series), while burned area rose
+      <b>2.4&times;</b> between the early 1990s and the late 2010s, and fires over 5,000 acres increased by
+      about <b>+3 per year</b> in the lower 48 (p&nbsp;=&nbsp;0.027).</p>
+    <p><b>2 &middot; The acres live in the giants.</b> Fires of 1,000+ acres are <b>0.6%</b> of California
+      ignitions and <b>92%</b> of California's burned area. Any chart that draws every fire the same size, as my 2020 maps did, hides the entire story.</p>
+    <p><b>3 &middot; California's fire calendar is stretching; Florida's is not.</b> CA's season lengthened by
+      <b>~18 days per decade</b> (147&nbsp;&rarr;&nbsp;180 days holding the middle 80% of ignitions);
+      Florida's spring-peak season is stable-to-shrinking. My 2020 self extrapolated one state's
+      trend to the other. The data says they are different regimes.</p>
+    <p><b>4 &middot; Fire weather at ignition shifted where it counts: the extremes.</b> In the 1990s,
+      <b>1 in 13</b> CA ignitions happened on a top-decile fire-weather day (local ERC percentile).
+      In 2006&ndash;2020 it was <b>1 in 4</b>. That is an association consistent with a warming, drying West. This project does not do causal climate attribution, and says so plainly.</p>
+    <p><b>5 &middot; Humans light the fires; lightning burns the acres.</b> People start <b>84.6%</b> of
+      known-cause fires, but natural ignitions account for <b>65%</b> of Western burned area.</p>
+    <p><b>6 &middot; My 2020 model's 94.7% was mostly a majority class plus memorized coordinates.</b>
+      Rebuilt faithfully, its celebrated campfire accuracy (96.0%) sits next to a
+      guess-the-majority baseline of 95.7%. The 2026 cause model (at-ignition features only, tested on years it never saw) scores macro-F1 0.868 against a climatology
+      baseline of 0.787. And one thing this project published about that model was <b>wrong</b>:
+      I claimed its probabilities were calibrated. They were not. They were inflated roughly 24&times;, a Brier skill score of <b>-3.78</b>. The claim is retracted in
+      <a href="#ml">the model lab</a> and rebuilt properly in
+      <a href="modeling.html">the modeling stage</a>.</p>
+    <p><b>7 &middot; The model, in one line, and what it gets right.</b> Gradient-boosted trees over
+      <b>86 at-ignition features</b> (fire weather, fuel dryness, terrain, vegetation, human
+      exposure) estimating the probability that a reported California ignition reaches 100 acres.
+      Fitted on 1992&ndash;2014, then scored on the 2018&ndash;2020 fires it had never seen: among
+      the 1% of ignitions it ranks riskiest, <b>20.7%</b> escalate past 100 acres, against
+      <b>2.06%</b> across the era. That is roughly <b>ten times</b> the base rate, and it holds on
+      a future the model was never shown (ROC-AUC <b>0.817</b>).</p>
+    <p><b>8 &middot; The 2026 escalation model is the piece 2020 never had: operational, calibrated,
+      and red-teamed.</b> Average precision <b>0.126 &plusmn; 0.0023</b> across five seeds,
+      <b>6.0&times;</b> [4.8&ndash;7.5] the base rate, with probabilities calibrated honestly at
+      last (Brier skill <b>+0.053</b>, fixed on the validation era). The whole thing survived a
+      <b>35-finding</b> hostile review whose every experiment is published.</p>
+    <p class="note">And the row exists now. Discovery date 2017-10-08, Napa County,
+      36,807 acres, minimum humidity 6.3%, ERC above the 90th local percentile. The data caught up
+      to the story.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 04 THEN -->
+<section id="then">
+  <div class="secnum">04</div>
+  <h2>What 2020-me built</h2>
+  <p class="lede">Three parts, written by hand at the start of a career: an R/ggplot exploration, a
+    leaflet map tour, and a scikit-learn random forest. The originals stay online, unedited.</p>
+
+  <p>Respect first, because it is deserved. 2020-me picked a hard dataset (1.88M rows in SQLite, not a tutorial CSV) and handled the database boundary correctly, closing
+    connections and explaining why. Every figure got a paragraph of interpretation; nothing was
+    dumped and abandoned. The maps used a proper Albers equal-area projection, which plenty of
+    working analysts skip. And buried in Part III is one sentence of real instinct:</p>
+  <blockquote>
+    "I am going to drop a lot of the variables that are known after the fire. I want to see if we
+    can predict the cause of fire by just the Latitude, Longitude, Month, year, and day of week."
+  </blockquote>
+  <p>That is leakage awareness, unprompted, self-taught, in 2020. The instinct was right. It was not applied everywhere, and the features it trusted were quietly broken. Which brings us to
+    the bug.</p>
+
+  <div class="co bug">
+    <span class="tag">The bug that ate two features</span>
+    <p>Part III's notebook says, in prose: <i>"DISCOVERY_DATE variable is in the Julian Date format.
+      I want to convert this variable to Gregorian dates."</i> The very next cell runs:</p>
+    <pre>df['DATE'] = pd.to_datetime(df['DISCOVERY_DATE'])
+df['MONTH'] = pd.DatetimeIndex(df['DATE']).month
+df['DAY_OF_WEEK'] = df['DATE'].dt.dayofweek</pre>
+    <p><code class="inline">pd.to_datetime</code> read those Julian day numbers (~2,453,000) as
+      <b>nanoseconds since 1970</b>. Every fire in the dataset became January 1, 1970, a Thursday.
+      MONTH was 1 for every row; DAY_OF_WEEK was 3 for every row. Two of the five features feeding
+      every model were constants, and nothing errored. The fix was one argument:
+      <code class="inline">pd.to_datetime(col, unit="D", origin="julian")</code>. The stated intent sat
+      one cell above the code that betrayed it.</p>
+  </div>
+
+  <p>The other 2020 problems, briefly and specifically:</p>
+  <ul>
+    <li><b>The headline conclusion outran the analysis.</b> "It does seem climate change is a strong
+      cause of this" rested on one straight trend line through raw annual counts. No climate variable existed anywhere in the data, and (as we will see) raw counts partly measure paperwork.</li>
+    <li><b>The 94.7% was never questioned.</b> A random 70/30 split let the model memorize
+      coordinates; campfires were rare enough that guessing "not campfire" scored ~93%. Two other
+      models landed on exactly 0.9000 and the notebook celebrated rather than squinted.</li>
+    <li><b>Model 1 leaked.</b> Predicting cause with FIRE_SIZE and containment dates in the feature
+      set is using the aftermath to predict the beginning.</li>
+    <li><b>Every fire was the same dot.</b> A 1,200-acre fire and a 300,000-acre fire rendered
+      identically on every map.</li>
+    <li><b>The Florida section had a header, a figure, and zero sentences.</b> It gets its words
+      <a href="#florida">this time</a>.</li>
+  </ul>
+  <p>None of this is disqualifying for a first project. It is a starting line. The rest of this page
+    is the same questions, asked the way I would ask them now.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 05 DATA -->
+<section id="data">
+  <div class="secnum">05</div>
+  <h2>The data, upgraded</h2>
+  <p class="lede">Same national fire registry, two major versions later, plus 270 new columns of
+    physics, fuels, terrain, and people attached to every single fire.</p>
+
+  <p>The backbone is the <b>Fire Program Analysis Fire-Occurrence Database</b> (FPA-FOD), the
+    interagency registry of every reported wildfire in the US. My 2020 project used its 2015 edition
+    via Kaggle. The current 6th edition runs <b>1992&ndash;2020</b> with 2.3 million fires. On top of it,
+    the <b>FPA FOD-Attributes</b> dataset (Pourmohamad et&nbsp;al., 2024; Zenodo
+    <a href="https://zenodo.org/records/8381129">10.5281/zenodo.8381129</a>, CC-BY) attaches ~270
+    attributes to each record: gridMET fire weather on the discovery day (temperature, humidity,
+    wind, vapor-pressure deficit, ERC), 5-day antecedent windows, local climatological percentiles,
+    NDVI and land cover, elevation/slope/aspect, population, social-vulnerability indices, distances
+    to fire stations. It is 29 annual CSVs, 4.68&nbsp;GB raw, 308 columns wide.</p>
+
+  <div class="flow">
+    <div class="step"><b>Download once</b><span>29 per-year CSVs from Zenodo, md5-verified, resumable. The 5&nbsp;GB blob variant is skipped on purpose.</span></div>
+    <div class="step"><b>Discover columns</b><span>Every curated column is verified present in every year file before any row is read. Missing &rarr; loud failure, not a guess.</span></div>
+    <div class="step"><b>Stream-reduce</b><span>250k-row chunks &rarr; curated columns &rarr; small caches (~33&nbsp;MB total, 85 columns since cache v2). Runs offline forever after.</span></div>
+    <div class="step"><b>Lock with hashes</b><span>Every cache is SHA-256-manifested. Silent drift fails loud, a lesson the 1970 bug taught for free.</span></div>
+    <div class="step"><b>Assert the bug away</b><span>Parsed dates must span 12 months and 7 weekdays and match FIRE_YEAR. The 2020 degeneracy is now a crash, not a surprise.</span></div>
+  </div>
+
+  <div class="co tech">
+    <span class="tag">Technical</span>
+    <p>The reducer re-derives month, weekday, and a leap-safe day-of-year from properly parsed dates
+      (checked: 12/12 months, 7/7 weekdays, year-mismatch 0.0017%). If DISCOVERY_DATE ever arrives
+      as Julian day numbers again, the pipeline applies
+      <code class="inline">pd.to_datetime(col, unit="D", origin="julian")</code>, the one-argument fix, and still runs the assertions. Sentinel values (-9999) become NaN. The full resolved
+      column mapping ships in <code class="inline">data/reduce_report.json</code>.</p>
+  </div>
+
+  <p><b>The 2021&ndash;2025 extension.</b> FPA-FOD ends in 2020, which would leave this rebuild six years
+    behind the present. For the large-fire context series only, I pull annual aggregates (counts and
+    acres of 1,000+ acre wildfires) from NIFC's WFIGS perimeter service. It is a different reporting
+    system with different completeness, so it is drawn as a dashed, visibly separate segment, never
+    mixed into the models, and never used for trend tests across the seam.</p>
+  <p><b>Honest scope notes (corrected by the Round-2 audit):</b> I originally wrote here that Alaska
+    and Hawaii were absent from this dataset. The data audit proved that wrong. Their fire <i>records</i> are present (AK: 15,195 fires and 36.65M acres; HI: 9,970; PR: 22,202); what's
+    absent is their <i>attributes</i> (weather is empty, terrain carries a 32767 nodata fill). All
+    "CONUS" series on this page now genuinely exclude AK/HI/PR. Cause is missing or undetermined
+    for 8.4% of fires nationally, and for <b>30.8%</b> of California-plus-Florida fires, which
+    constrains every cause model downstream.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/eda_reporting_coverage.png" width="1000" height="1036"
+         alt="Heatmap of reported fires by state and year, 1992 to 2020, log scale, with step changes flagged in several states.">
+    <figcaption><b>The raw count series partly measures paperwork.</b> Reported fires by state and year. The flagged rows show the problem: several states' counts jump or collapse in
+      single years (TN, LA, PR, KS, MA), which is reporting-system change, not fire behaviour. This
+      is why the headline trends are restricted to large fires, where reporting has always been
+      complete, and why the step-change states get a sensitivity test.</figcaption>
+  </figure>
+
+  <p>The table itself got a full forensic cross-examination in Round 2, a 29-check streaming audit covering missingness geography, duplicate candidates, coordinate microscopy, and the
+    cause-label mystery: <a href="data.html"><b>The Data Expert's Cut</b></a>.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 06 EDA -->
+<section id="eda">
+  <div class="secnum">06</div>
+  <h2>The full look</h2>
+  <p class="lede">Part I's job, done the 2026 way: before any model exists, characterize what the table actually delivers, including what is missing, and where the registry itself changes shape.</p>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/eda_missingness.png" width="1204" height="800"
+         alt="Horizontal bar chart of missing-value shares for curated attribute columns in CA and FL fire records.">
+    <figcaption><b>Trust, but verify the columns.</b> Three advertised attributes are effectively dead in CA/FL
+      (12-month NDVI 100% missing; both road-distance columns &gt;98%) and were dropped from all models.
+      Weather attributes are near-complete (&lt;0.1% missing). Cause is the big honest gap: 30.8% of
+      CA+FL fires have no usable cause label.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/eda_cause_taxonomy.png" width="1204" height="728"
+         alt="Bar chart of the 13 NWCG general fire causes colored by human, natural, and unknown class.">
+    <figcaption><b>The taxonomy changed under the project.</b> The 2015-era 13 causes (Campfire, Children,
+      Powerline...) were retired for NWCG's classification. Debris burning leads, lightning is the
+      only natural cause, and "missing/undetermined" is large enough that any cause model must
+      report what it excluded.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/eda_size_distribution.png" width="1204" height="644"
+         alt="Log-log survival curves of fire sizes for California and Florida with class F and G thresholds marked.">
+    <figcaption><b>The heavy tail carries the entire result.</b> Straight-ish lines on log-log axes across five
+      orders of magnitude. Large fires (1,000+ acres) are 0.6% of CA ignitions, and 92% of CA burned acres (71% in FL). This single chart indicts every equal-dot map I made in 2020.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/eda_seasonality.png" width="1204" height="588"
+         alt="Weekly ignition density across the year for California and Florida, all fires and large fires.">
+    <figcaption><b>Two states, two calendars.</b> Florida burns in spring (May peak); California peaks in
+      July&ndash;August, and its <i>large</i> fires skew later into the fall wind season. This two-regime
+      structure is why extrapolating CA conclusions to FL failed in 2020.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/eda_weather_by_size.png" width="1188" height="770"
+         alt="Distributions of ERC, vapor-pressure deficit, minimum humidity, and daily-mean wind speed on ignition days, small fires versus large fires, California.">
+    <figcaption><b>The fires that got big started on different days.</b> Drier fuels (ERC
+      shifted right), thirstier air (VPD shifted right), lower minimum humidity. And one telling
+      exception: the <i>daily-mean</i> wind distributions are nearly identical, because the wind
+      that drives catastrophic fires blows in gusts and at night, which a daily average cannot see.
+      That blind spot returns as a measured limitation in
+      <a href="modeling.html">the modeling stage</a>.</figcaption>
+  </figure>
+
+  <div class="co plain">
+    <span class="tag">Plain English</span>
+    <p>Before asking "are fires increasing?", we checked what the ledger can honestly answer. The
+      weather physics attached to each fire is nearly complete and trustworthy. The cause labels are
+      good but gappy. And the number of <i>reported</i> small fires depends partly on who was doing
+      the reporting in a given state and year, which is where 2020-me got burned.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 07 BETS -->
+<section id="bets">
+  <div class="secnum">07</div>
+  <h2>Six bets, placed before the verdicts</h2>
+  <p class="lede">Each hypothesis was written down with a decision rule; the lab fills in the verdict
+    chips from <code class="inline">trend_lab_results.json</code>. Not all of them survived, including two claims 2020-me treated as obvious.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>H1 &middot; "Wildfires are increasing in the US"</h3>
+      <p>2020's framing premise, tested on counts <i>and</i> burned area.</p>
+      <span class="verdict v-split">SPLIT</span>
+      <p>Ignition counts: flat (MK p=0.564). Burned area: up 2.4&times;. More fire, not more fires.</p>
+    </div>
+    <div class="card">
+      <h3>H2 &middot; The West is burning bigger</h3>
+      <p>Burned area and large-fire activity across 11 Western states.</p>
+      <span class="verdict v-win">CONFIRMED</span>
+      <p>West acres up (MK p=0.018); 5,000+ acre fires up +3.1/yr in the lower 48 (p=0.027); West large-fire counts up in the panel model (IRR 1.14/decade, p=0.007).</p>
+    </div>
+    <div class="card">
+      <h3>H3 &middot; CA ignitions on increasingly extreme fire-weather days</h3>
+      <p>Association rather than attribution, measured at the extremes.</p>
+      <span class="verdict v-win">CONFIRMED</span>
+      <p>Top-decile-ERC ignitions: 7.7% &rarr; 28.2% era-over-era (3.6&times;); ERC median 58 &rarr; 62 (KS p&lt;10&#8315;&sup1;&#8309;).</p>
+    </div>
+    <div class="card">
+      <h3>H4 &middot; Humans start most fires</h3>
+      <p>True by count. Count is not consequence.</p>
+      <span class="verdict v-split">SPLIT</span>
+      <p>84.6% of known-cause ignitions are human; 65.4% of Western burned acres are lightning-started.</p>
+    </div>
+    <div class="card">
+      <h3>H5 &middot; Fire season is lengthening</h3>
+      <p>Season = the day-of-year window holding the middle 80% of ignitions.</p>
+      <span class="verdict v-split">SPLIT</span>
+      <p>California: +1.8 days/yr (p=0.0002), 147 &rarr; 180 days. Florida: &minus;0.6 days/yr, not significant. Regimes differ.</p>
+    </div>
+    <div class="card">
+      <h3>H6 &middot; "Large fires are increasing everywhere, including Florida"</h3>
+      <p>2020's extrapolation from California to Florida.</p>
+      <span class="verdict v-loss">REJECTED</span>
+      <p>FL large-fire trend: IRR 0.99/decade (CI 0.72&ndash;1.36), MK p=0.612. Florida is a different fire regime.</p>
+    </div>
+  </div>
+  <div class="co why">
+    <span class="tag">Why bets</span>
+    <p>Writing hypotheses before results is cheap insurance against narrating whatever the charts
+      happen to show. Two rules were revised once, on principle, after the first run. That story is told openly in <a href="#defense">the defense section</a>, because it is exactly the kind of
+      thing a skeptical reviewer should get to see.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 08 CALIFORNIA -->
+<section id="california">
+  <div class="secnum">08</div>
+  <h2>California: not more fires, more fire</h2>
+  <p class="lede">The state's large-fire <i>count</i> trend is statistically unremarkable. Everything
+    else about its fire behavior changed.</p>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_ca_trends.png" width="1344" height="546"
+         alt="Two panels: California large fire counts per year with WFIGS 2021-2025 extension, and California burned acres on a log scale.">
+    <figcaption><b>Counts stay flat and noisy; acres rise sharply.</b> Left: CA fires &ge;1,000 acres per year (IRR 1.07/decade,
+      CI 0.89&ndash;1.29, not a significant count trend), with the 2021&ndash;2025 WFIGS series dashed and
+      separate. Right: burned acres on a log scale. 2020 alone burned <b>4.27M acres</b>, and the
+      Theil-Sen slope is +21k acres/yr (MK p=0.018).</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_season_length.png" width="1204" height="560"
+         alt="Fire season length per year for California and Florida with trend lines.">
+    <figcaption><b>The stretching calendar.</b> The window holding the middle 80% of CA ignitions grew from
+      ~147 days (early 1990s) to ~180 days (late 2010s): <b>+17.8 days per decade</b> (MK p=0.0002).
+      Florida, plotted on the same axes, drifts the other way.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_fireweather_shift.png" width="1344" height="518"
+         alt="ERC and VPD distributions at ignition for the 1992-2005 and 2006-2020 eras in California.">
+    <figcaption><b>The extremes moved; the middle mostly didn't.</b> ERC at ignition shifted right (median
+      58 &rarr; 62) and the top-decile share nearly quadrupled, while the VPD <i>median</i> barely moved.
+      ERC integrates weeks of fuel drying, a measure of drought memory, which is what California's
+      2012&ndash;2020 stretch supplied.</figcaption>
+  </figure>
+
+  <div class="co plain">
+    <span class="tag">Plain English</span>
+    <p>Think of it this way: California is not getting struck by more matches. The matches are
+      landing on a landscape that spends far more of the year ready to burn, and when one lands on the wrong autumn day, wind does the rest. That is the story the next section's map tells.</p>
+  </div>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_map_ca_october.png" width="1064" height="1204"
+         alt="Map of California large fires 1992-2020, colored by season, sized by acreage, with the Tubbs Fire starred.">
+    <figcaption><b>Every dot's area is its acreage, the fix my 2020 maps needed.</b> Summer lightning fires
+      (gold) fill the Sierra and the north; the fall wind season (orange-red) hugs the coast ranges
+      and Southern California. Fall fires are 21% of CA's large fires but 26% of their acres, and
+      they are the ones that reach towns. The star is Tubbs. The Doe Fire annotation is a data
+      detail worth knowing: the FOD records the August Complex as its component fires.</figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 09 TUBBS -->
+<section id="tubbs">
+  <div class="secnum">09</div>
+  <h2>The row</h2>
+  <p class="lede">FOD_ID 400015986. In 2020 this record did not exist to be found. Here is what the
+    database now holds for the night everything burned.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Field</th><th scope="col">Value</th><th scope="col">What it means</th></tr></thead>
+      <tbody>
+        <tr><td>FIRE_NAME</td><td class="num"><b>TUBBS</b></td><td>one row among 2,302,521</td></tr>
+        <tr><td>DISCOVERY_DATE</td><td class="num">2017-10-08</td><td>day 281, deep in the wind season</td></tr>
+        <tr><td>FIRE_SIZE</td><td class="num">36,807 acres</td><td>class G; 20 days to containment</td></tr>
+        <tr><td>ignition point</td><td class="num">38.60895, &minus;122.62879</td><td>Napa County, near Calistoga; it crossed into Sonoma and came down on Santa Rosa</td></tr>
+        <tr><td>NWCG cause</td><td class="num">Human / undetermined</td><td>see note below</td></tr>
+        <tr><td>rmin</td><td class="num"><b>6.3%</b></td><td>minimum relative humidity that day, desert-dry air in wine country</td></tr>
+        <tr><td>vpd</td><td class="num"><b>2.22 kPa</b></td><td>vapor-pressure deficit far above the CA ignition median (1.71)</td></tr>
+        <tr><td>erc / percentile</td><td class="num"><b>77 &middot; &gt;90%</b></td><td>energy-release component in the top decile of that location's own climatology</td></tr>
+        <tr><td>tmmx</td><td class="num">86&deg;F</td><td>a warm day, not a heat record; the drivers were dryness and wind</td></tr>
+        <tr><td>wind (daily mean)</td><td class="num">6.0 m/s</td><td>gridMET is a daily 4-km average; the Diablo gusts that night ran far higher, and the row cannot see them</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Read the weather columns again. Bone-dry air, fuels at a top-decile energy state, and a wind
+    field the daily average can only hint at. The row is the Diablo-wind signature written into a database, the same pattern the seasonal map shows for nearly every autumn disaster on the
+    California coast ranges.</p>
+  <div class="co ember">
+    <span class="tag">On the cause field</span>
+    <p>The database says Human / undetermined. CAL FIRE's 2019 investigation attributed the ignition
+      to a private electrical system beside a residence, consistent with "human" and never resolved to
+      a specific NWCG category in this registry. My 2020 writeup once garbled this into a sentence
+      about lightning. The record, and the correction, both stand here.</p>
+  </div>
+  <div class="co plain">
+    <span class="tag">What the 2026 model says about that morning</span>
+    <p>The escalation model from <a href="modeling.html">the modeling stage</a> is trained only on fires through 2014, so Tubbs is out of sample by three years. Ranked against the 50,915
+      California ignitions that are as out-of-sample as it is, the model puts the Tubbs Fire's
+      ignition conditions at the <b>97th percentile</b>, with a calibrated escalation risk of
+      <b>9.4%</b> against a 2.1% base rate: on paper, one of the most dangerous ignition days it
+      was ever asked to score. The limitation is what it <i>missed</i>: the daily-mean wind column reads calm, because the Diablo event was a nighttime, hours-long phenomenon a
+      daily average cannot see. The model ranks Tubbs on fuel dryness alone and still puts it near
+      the top. <a href="modeling.html#tubbs">The full scoring, and the limitation, are quantified
+      there.</a></p>
+  </div>
+  <p>You can print this row yourself, offline, in one command:
+    <code class="inline">python examples/find_tubbs.py</code>.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 10 FLORIDA -->
+<section id="florida">
+  <div class="secnum">10</div>
+  <h2>Florida, which finally gets its paragraphs</h2>
+  <p class="lede">In 2020 the Florida section was a header and an unexamined image. It deserved
+    better: Florida is the clearest counterexample to every "fires are exploding everywhere" take.</p>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_map_fl_spring.png" width="1148" height="924"
+         alt="Map of Florida large fires 1992-2020 colored by spring versus rest of year, sized by acreage.">
+    <figcaption><b>A spring story, flat over time.</b> 57% of Florida's 640 large fires ignite February&ndash;May,
+      between the dry season's end and the summer rains, concentrated in the interior flatwoods and
+      the Everglades margins.</figcaption>
+  </figure>
+
+  <p>Florida burns constantly and on purpose: it runs one of the country's largest prescribed-burn
+    programs, and its ecosystems are built to burn frequently and lightly. Its large-fire count
+    trend over 29 years is a flat line (IRR 0.99/decade, MK p=0.612); its burned-area trend is
+    indistinguishable from noise (MK p=0.468); and its fire season, if anything, contracted
+    (257 &rarr; 228 days era-over-era, not significant).</p>
+  <p>So H6, the 2020 claim that large wildfires were rising "across the U.S. and across California
+    and Florida", is <b>rejected</b>. The rejection carries the finding: the American fire problem is not a uniform national trend. It is a Western drying story, and Florida's stability is the
+    control group that proves the point.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 11 NATIONAL -->
+<section id="national">
+  <div class="secnum">11</div>
+  <h2>The national picture, with the paperwork removed</h2>
+  <p class="lede">2020-me fit one line through national counts and read climate into it. The honest
+    version has to separate physics from reporting first.</p>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_trend_counts_vs_area.png" width="1344" height="546"
+         alt="Two panels: national reported ignitions per year, and national burned acres with WFIGS extension.">
+    <figcaption><b>The claim 2020-me should have made.</b> Left: reported ignitions, flat-to-noisy.
+      Right: burned area, from ~3.0M acres/yr (1992&ndash;96) to ~7.0M (2016&ndash;20), with 2021&ndash;2025
+      dashed from a different source and not used in any test. True lower-48 series: the Round-2
+      data audit found AK/HI/PR records hiding in the "CONUS" dataset and they are excluded here.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/article_map_conus_pair.png" width="1316" height="1512"
+         alt="Two CONUS maps in Albers projection: ignition counts per 0.1-degree cell, and burned acres in the same cells.">
+    <figcaption><b>Where fires start vs where the acres are.</b> By count, the Southeast dominates, a dense sequence of small human ignitions. By acreage, the map inverts and the interior West
+      lights up. Same cells and same projection, opposite stories: the count/consequence distinction
+      my 2020 choropleths could not draw.</figcaption>
+  </figure>
+
+  <div class="co bug">
+    <span class="tag">Data detail that mattered</span>
+    <p>The state-level panel model says ignition counts rose (+24%/decade) while the CONUS summed
+      series says flat (MK p=0.564). Both are computing honestly. The panel is dominated by states whose <i>reporting</i> grew. Massachusetts, Kansas, Louisiana, and Tennessee show
+      step-changes of 40&ndash;300&times; in year-over-year reported counts; Puerto Rico's series is so
+      discontinuous it is excluded from every national figure on this page. A trend you can flip by
+      changing which paperwork you count is not a physical trend.</p>
+  </div>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/f2_sensitivity_exclusions.png" width="1188" height="484"
+         alt="Dot-and-interval chart of the national count trend IRR per decade under three specifications: all sizes, dropping step-change states, and large fires only.">
+    <figcaption><b>The same trend, three ways of counting.</b> The national all-sizes trend is the
+      biggest and the most reporting-contaminated; drop the step-change states and it shrinks;
+      restrict to large fires, the series reporting cannot inflate, and it shrinks again. The ordering is the finding: the more paperwork you remove, the smaller the
+      "increase" gets.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/f1_west_east_large.png" width="1024" height="512"
+         alt="Yearly counts of fires of 1,000 acres or more, Western 11 states versus the rest of the country, 1992 to 2020.">
+    <figcaption><b>Not everywhere: the large-fire rise is a Western story.</b> West (11 states)
+      against everywhere else, fires &ge;1,000 acres per year. The West carries both the level and the growth, which is why extrapolating national claims to Florida failed
+      (<a href="#florida">and gets its own section</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/f3_threshold_ladder.png" width="1204" height="504"
+         alt="National trend IRR per decade at four fire-size thresholds with confidence intervals.">
+    <figcaption><b>Same country, opposite answers by size class.</b> The national count trend is large and
+      positive for all sizes (reporting-sensitive), shrinks as the size floor rises, and what remains at 5,000+ acres, where reporting has always been complete, is the physical signal: about
+      +3.1 giant fires per year (p=0.027).</figcaption>
+  </figure>
+
+  <p>The 2021&ndash;2025 extension adds current-events context without contaminating the statistics: the
+    WFIGS years include the quiet 2022&ndash;2023 lull and the ferocious 2024; January 2025's Los Angeles
+    fires (Palisades, Eaton) barely register in <i>acres</i>, and were among the costliest disasters
+    in state history, a reminder this page returns to in <a href="#limits">Limits</a>: burned area is
+    not damage.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 12 ML -->
+<section id="ml">
+  <div class="secnum">12</div>
+  <h2>The model lab: a museum piece and an honest machine</h2>
+  <p class="lede">First rebuild the 2020 random forest exactly as it was (dead features, leaked outcome, random split), then sit it next to models evaluated the way 2026 requires.</p>
+
+  <h3>The museum piece</h3>
+  <p>Faithfully reconstructed on 1992&ndash;2015 California large fires (the old 13 cause classes
+    approximated from NWCG's new taxonomy): the same RandomForest settings, the same random 70/30
+    split, MONTH pinned to 1 and DAY_OF_WEEK to Thursday exactly as the Julian bug left them, and
+    FIRE_SIZE left in the features exactly as the leak allowed. It scores
+    <b>49.4%</b> on the 13-class task (the 2020 notebook reported 61.3%) and
+    <b>96.0%</b> on the celebrated campfire binary (2020: 94.7%), against a guess-the-majority baseline of <b>95.7%</b>. Re-scored under a temporal split, the
+    13-class museum model's macro-F1 is <b>0.14</b>.</p>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/g2_museum_vs_honest.png" width="1204" height="588"
+         alt="Bar chart comparing the 2020 models under random splits, their baselines, and the honest 2026 model under a temporal split.">
+    <figcaption><b>What the 94.7% was actually made of.</b> Mostly prevalence, plus coordinates the random
+      split let the forest memorize. The honest bar is a different metric on a harder question.</figcaption>
+  </figure>
+
+  <h3>The honest machine</h3>
+  <p>Gradient boosting (scikit-learn's HistGradientBoosting, which handles missing values and categoricals natively with no extra dependencies) on <b>at-ignition features only</b>: location, calendar
+    (computed correctly this time), the fire weather of the day, fuel moisture, vegetation, terrain,
+    and human presence. Named and excluded: FIRE_SIZE, size class, containment anything, agency, owner. If it is not knowable at ignition, it is not a feature. Cause labels are missing for
+    <b>15.2%</b> of CA fires overall, but not evenly: the Round-2 review found the exclusion
+    is <b>10.1%</b> in the training era and <b>41.7%</b> in the 2018&ndash;2020 test era, because
+    California's cause-labeling collapsed over time (see <a href="data.html#cause">the data
+    audit</a>). Test-era scores are therefore measured on the shrinking subset of fires the state still labels, a selection caveat reported rather than hidden.</p>
+  <p>Protocol: train &le;2014, validate 2015&ndash;2017, <b>test 2018&ndash;2020</b>. The model never sees the era containing Tubbs. Inside the training era, 5-fold spatial-block cross-validation
+    (1&deg;&times;1&deg; blocks) checks that scores survive when nearby fires can't leak across folds.
+    Three baselines every model must beat: majority class, a groupby climatology (majority cause per
+    0.2&deg; cell &times; month), and a linear model.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Task</th><th scope="col">Test macro-F1</th><th scope="col">Climatology</th><th scope="col">Majority</th><th scope="col">Extras</th></tr></thead>
+      <tbody>
+        <tr><td>T1 &middot; Natural vs Human (CA)</td><td class="num"><b>0.868</b></td><td class="num">0.787</td><td class="num">0.474</td><td>PR-AUC 0.852</td></tr>
+        <tr><td>T1 &middot; Natural vs Human (FL)</td><td class="num"><b>0.839</b></td><td class="num">0.793</td><td class="num">0.449</td><td>different regime, same protocol</td></tr>
+        <tr><td>T2 &middot; 7-class cause (CA)</td><td class="num"><b>0.430</b></td><td class="num">0.336</td><td class="num">0.049</td><td>confusion matrix below</td></tr>
+        <tr><td>T3 &middot; P(reaches 100+ acres) (CA)</td><td class="num"><b>0.539</b></td><td class="num">0.500</td><td class="num">0.495</td><td>PR-AUC 0.121 vs 0.021 prevalence floor (5.9&times; lift) &middot; Brier 0.096; see the retraction below; <b>superseded</b> by the modeling stage's system of record</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/g1_confusion.png" width="1064" height="896"
+         alt="Row-normalized confusion matrix for the 7-class cause model on the 2018-2020 test years.">
+    <figcaption><b>Where cause prediction is honest about its limits.</b> Lightning separates cleanly from
+      people (weather and terrain give it away). Distinguishing arson from debris burning from equipment (different humans with different matches) is where the signal thins, as the 2020 notebook's 61.3% (leaks and all) should have hinted.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/g3_permutation_importance.png" width="1204" height="728"
+         alt="Permutation importance of features for the natural-versus-human model on the temporal test set.">
+    <figcaption><b>What the model actually uses.</b> Location and calendar carry cause separation; fire
+      weather and fuel moisture matter and share credit (ERC, its 5-day maximum, and fuel moistures
+      are correlated at |r| &gt; 0.87, so importance spreads among them).</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/g4_pdp_top.png" width="1288" height="504"
+         alt="Partial dependence of the probability of natural cause along the top features.">
+    <figcaption><b>Directions a fire scientist would recognize.</b> P(Natural) climbs with elevation and
+      summer timing and falls with human presence, recovered from data alone.</figcaption>
+  </figure>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/g5_calibration.png" width="756" height="644"
+         alt="Calibration curve for the probability that a California ignition reaches 100 acres.">
+    <figcaption><b>This figure was published with a false caption.</b> It originally read "when the model
+      says 12%, about 12% do." That is not true of this model, and the correction is in the callout
+      below.</figcaption>
+  </figure>
+
+  <div class="co bug">
+    <span class="tag">Retracted &middot; the number I got backwards</span>
+    <p>The growth-risk model above ranks fires well and its probabilities are <b>not</b> calibrated.
+      Its Brier skill score is <b>&minus;3.78</b>, meaning its Brier error is <b>4.8&times;</b> that
+      of simply forecasting the base rate for every fire, because <code class="inline">class_weight="balanced"</code> tells the model that escalations are as
+      common as non-escalations, so it emits probabilities near 0.5 on a problem whose true rate is
+      2%. I read the shape of the reliability curve and never computed its skill.</p>
+    <p>The <a href="modeling.html#calibration">modeling stage</a> retracts this properly, shows that
+      removing the class weighting fixes most of it at the source, and rebuilds the model as
+      something you could actually put in front of a duty officer.</p>
+  </div>
+
+  <h3>The 2026 operational model, the piece 2020 never had</h3>
+  <p>The cause lab above answers a scientist's question. The
+    <a href="modeling.html">modeling stage</a> asks the one a duty officer has: <b>of the
+    ignitions reported, which few will become something?</b> Its label is clean where cause is drifting (fire size is essentially never missing), and its protocol was fixed
+    before any model ran: train &le;2014, calibrate on 2015&ndash;2017, test on 2018&ndash;2020,
+    spatial-block CV inside the training era, test-set selection gated in code.</p>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m3_model_zoo.png" width="1204" height="644"
+         alt="Test average precision by model family with spatial-block bootstrap confidence intervals.">
+    <figcaption><b>The zoo, with intervals.</b> The system of record, a tuned HistGradientBoosting model committed to <i>before</i> test scoring, reaches test average precision <b>0.126 &plusmn; 0.0023</b> across five seeds, <b>6.0&times;</b>
+      [4.8&ndash;7.5] the 2.06% base rate; in the top 1% of ignitions by risk, <b>20.7%</b>
+      escalate. LightGBM's 0.131 is the best single test score, reported, not selected, for reasons <a href="modeling.html#redteam">the red team spells out</a>. Its probabilities
+      are calibrated the honest way now: Brier skill <b>+0.053</b>, map chosen on the validation
+      era.</figcaption>
+  </figure>
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/m9_leak_ladder.png" width="1204" height="560"
+         alt="Average precision for each rung of the leakage ladder, from honest features to the label source.">
+    <figcaption><b>The leak that looks like innocent metadata.</b> Honest features score 0.124.
+      Adding only the <i>existence</i> of an MTBS identifier, a join key to a burn-severity programme that only maps big fires, takes it to <b>0.435</b>. Neither column is named
+      fire_size; both are banned by name, and a three-criteria tripwire now screens every raw
+      column before any model sees it.</figcaption>
+  </figure>
+  <p>And because a stakeholder would ask: leaving the freak 2020 season out entirely, the pooled
+    test score is <b>0.106</b>, printed rather than buried; the model keeps 3.5&times; lift even in
+    the emptiest population tercile, so it is not a remoteness lookup; and transferred to Florida
+    it drops to 0.180 against 0.293 for a Florida-native model. It learned California, and says so. Every one of those numbers comes from
+    <a href="modeling.html#redteam">the 35-finding hostile review</a>, which is its own
+    exhibit.</p>
+
+  <h3>Is it overfit, and can it predict fires before they start?</h3>
+  <p>Two questions worth answering directly. On the first, the model was scored on all three
+    eras: average precision <b>0.538</b> on the training years it fitted, <b>0.099</b> on the
+    2015&ndash;2017 validation era, <b>0.124</b> on the 2018&ndash;2020 test era. The in-sample
+    gap is large, which is what a 360-tree ensemble does with 200,967 rows, and it is why no
+    score in this project is ever quoted from the training era. The part that matters is that
+    the two held-out eras agree with each other: ROC-AUC <b>0.813</b> and <b>0.817</b>, with
+    the later, more distant era scoring slightly higher. Skill that decayed with distance from
+    training would look different. Refit on shuffled labels, the same pipeline collapses to
+    AP <b>0.0232</b> against a 0.0206 base rate, so the ranking is not an artifact of the
+    evaluation code.</p>
+  <p>That 0.817 ROC-AUC deserves a caveat rather than a victory lap. Between the training era
+    and the test era, ROC-AUC falls 14% while average precision falls 77%. On a 2% problem,
+    ROC-AUC is dominated by the 97.9% of easy negatives and reads far more forgiving than the
+    metric that governs a real response budget.</p>
+  <p>On the second question the answer is no, for a structural reason. This model estimates the
+    probability that a <i>reported</i> fire escalates. Predicting ignition itself needs the
+    places and days where nothing burned, and those rows exist in no cache here: 740
+    fire-prone 0.25&deg; California cells across 10,593 days give 7.8 million cell-days, of
+    which the data holds 251,882. The missing <b>7.6 million</b> are the negative class an
+    ignition model would need, and there is no gridded daily weather with which to describe
+    them. <a href="modeling.html#generalize">The full accounting is in the modeling stage.</a></p>
+
+  <div class="co bug">
+    <span class="tag">The 2020 sins, re-run on purpose</span>
+    <p>Every evaluation shortcut from Part III re-run as a controlled experiment (figure below), and the result is more interesting than the script I expected. On a leakage-free feature set
+      the shortcuts barely matter: random CV 0.888, spatial CV 0.871, temporal test 0.868, and
+      re-adding the leaked FIRE_SIZE moves the binary task by just +0.003. The damage lives where
+      2020 actually lived: the museum's 13-class model falls from 0.494 (random split) to
+      <b>0.14 macro-F1</b> under a temporal split, and its campfire trick was pure prevalence.
+      Protocol-robustness is a property good features buy you. The shuffled-label null (0.376,
+      against 0.868 real) proves the pipeline still knows how to fail when it should.
+      <a href="modeling.html#leak">The modeling stage</a> builds a probe that does bite.</p>
+  </div>
+
+  <figure>
+    <img loading="lazy" decoding="async" src="figures/f4_protocols_and_leaks.png" width="1204" height="532"
+         alt="Bar chart of macro-F1 under label shuffle, temporal test, spatial CV, random CV, and with a leaked feature.">
+    <figcaption><b>Five protocols, one dataset.</b> Scores are manufactured by evaluation choices long before
+      they are earned by models. 2020-me lived three bars to the right of honest.</figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 13 DEFENSE -->
+<section id="defense">
+  <div class="secnum">13</div>
+  <h2>Defend it</h2>
+  <p class="lede">Every headline claim on this page, against the strongest objection I could aim at
+    it. Objections that partially land are conceded, in print.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Objection</th><th scope="col">Answer</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"Your count trends are reporting artifacts."</td>
+          <td>Agreed. That is a finding rather than a flaw. Headline claims live in the &ge;1,000-acre stratum
+            where reporting is complete; the threshold ladder shows the flip; PR and four step-change
+            states are excluded or sensitivity-tested; the panel-vs-sum divergence is displayed, not
+            hidden.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+        <tr>
+          <td>"The 95th-percentile fire size <i>fell</i>. Doesn't that contradict 'bigger fires'?"</td>
+          <td>The naive p95 across all reported fires declines because small-fire <i>reporting</i> grew,
+            diluting the distribution. Size-floor-fixed measures, counts of 5,000+ acre fires (+3.1/yr, p=0.027) and total acres (2.4&times;), are the reliable instruments. The trap is
+            documented so the next person doesn't step in it.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+        <tr>
+          <td>"You changed your hypothesis rules after seeing results."</td>
+          <td>Once, disclosed: H1 was re-scoped from counts-only to counts+area (it is an activity
+            claim) and H3 from medians to the top-decile share (it is an extremes claim). The
+            numbers never moved; the rules were made faithful to the claims' plain meaning. v1 rules
+            and the revision note ship in the results JSON.</td>
+          <td><span class="chip warn">conceded &amp; disclosed</span></td>
+        </tr>
+        <tr>
+          <td>"The ERC percentile shift could be an encoding artifact."</td>
+          <td>Checked: the label vocabulary is identical across eras, and raw ERC values inside the
+            &gt;90% label are consistent (median 72 early, 75 late). The month-mix shift is far too
+            small to produce a 3.6&times; tail change.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+        <tr>
+          <td>"Your 2021&ndash;2025 extension mixes incompatible sources."</td>
+          <td>It is drawn dashed, labeled as a different system, restricted to like-for-like
+            &ge;1,000-acre series, and used in zero statistical tests. The WFIGS years also sit
+            <i>lower</i> than 2016&ndash;2020 FPA years, partly source completeness and partly the quiet 2022&ndash;23, which is why no cross-seam claim appears anywhere on this page.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+        <tr>
+          <td>"The old-13-class museum comparison uses an approximate crosswalk."</td>
+          <td>Correct, and unavoidable: the taxonomy was retired. The crosswalk is printed in the
+            code, marked approximate everywhere it appears, and the museum's headline punchline
+            (majority baseline &asymp; celebrated accuracy) survives any reasonable mapping.</td>
+          <td><span class="chip warn">conceded &amp; bounded</span></td>
+        </tr>
+        <tr>
+          <td>"Cause labels are missing for a third of CA fires, so your cause models are biased."</td>
+          <td>The exclusion share is reported next to every result; undetermined causes skew toward
+            exactly the hard human-vs-human distinctions the confusion matrix already flags as weak.
+            Claims are scoped to known-cause fires, explicitly.</td>
+          <td><span class="chip warn">conceded &amp; scoped</span></td>
+        </tr>
+        <tr>
+          <td>"Could the pipeline itself be broken?"</td>
+          <td>The label-shuffle null collapses to 0.376 (chance), the spatial-block and
+            temporal protocols behave as theory predicts, dates are asserted to span 12 months and 7
+            weekdays (the 2020 failure mode is now a crash), and every cache is hash-locked with
+            <code class="inline">verify_claims.py</code> needling every number on all three pages
+            against the results JSONs, and banning the numbers the reviews retired.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+        <tr>
+          <td>"Your model headline was picked by looking at the test set." <i>(red team)</i></td>
+          <td>It was. Round 3's champion was a max over nine test scores. Fixed by re-keying
+            to the pre-committed system of record (its margin to the max is inside FDR control at
+            q=0.085), and the winner's-curse procedure is documented as a caught finding.</td>
+          <td><span class="chip warn">conceded &amp; fixed</span></td>
+        </tr>
+        <tr>
+          <td>"Your calibration map was chosen on test data." <i>(red team)</i></td>
+          <td>It was. Re-selected on the validation era, which chose a <i>different</i> map, and every decision number was recomputed under the clean
+            choice (Brier skill +0.053).</td>
+          <td><span class="chip warn">conceded &amp; fixed</span></td>
+        </tr>
+        <tr>
+          <td>"Your test era is just the freak 2020 season." <i>(red team)</i></td>
+          <td>2020 supplies 49% of the test positives. Leave it out entirely and the pooled score is 0.106, printed in the report so nobody has to ask.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+        <tr>
+          <td>"CV said 0.27, test says 0.13. That's overfitting." <i>(red team)</i></td>
+          <td>A change of denominator, not a loss of skill: the search ran at a 7.3% base rate, the
+            test era at 2.06%, and average precision scales with prevalence. Normalized, the model
+            scores 3.7&times; chance in CV and <b>6.0&times;</b> on test, relatively <i>better</i> out of sample.</td>
+          <td><span class="chip pass">handled</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The full adversarial review (35 findings, the four blockers, and every experiment it demanded) is published as
+    <a href="modeling.html#redteam">its own section of the modeling stage</a>.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 14 SCORECARD -->
+<section id="scorecard">
+  <div class="secnum">14</div>
+  <h2>Scoreboard</h2>
+  <p class="lede">Six bets on the science, two on the craft. One number each.</p>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Bet</th><th scope="col">Verdict</th><th scope="col">The number</th></tr></thead>
+      <tbody>
+        <tr><td>H1 &middot; US wildfires increasing</td><td><span class="chip warn">SPLIT</span></td><td>counts MK p=0.564; acres 2.4&times;</td></tr>
+        <tr><td>H2 &middot; West burning bigger</td><td><span class="chip pass">CONFIRMED</span></td><td>+3.1 giant fires/yr, lower 48 (p=0.027); West acres up (p=0.018)</td></tr>
+        <tr><td>H3 &middot; Extreme-weather ignitions rising (CA)</td><td><span class="chip pass">CONFIRMED</span></td><td>top-decile share 7.7% &rarr; 28.2%</td></tr>
+        <tr><td>H4 &middot; Humans start most fires</td><td><span class="chip warn">SPLIT</span></td><td>84.6% of ignitions; 65.4% of Western burned acres are lightning-started</td></tr>
+        <tr><td>H5 &middot; Season lengthening</td><td><span class="chip warn">SPLIT</span></td><td>CA +17.8 d/decade (p=0.0002); FL n.s.</td></tr>
+        <tr><td>H6 &middot; "Everywhere, including Florida"</td><td><span class="chip fail">REJECTED</span></td><td>FL IRR 0.99/decade, p=0.612</td></tr>
+        <tr><td>The escalation model &middot; operational, calibrated, red-teamed</td><td><span class="chip pass">SHIPPED</span></td><td>test AP 0.126 &plusmn; 0.0023 &middot; 6.0&times; base rate &middot; 20.7% precision at 1%</td></tr>
+        <tr><td>Round 1's calibration claim &middot; "when it says 12%, about 12% do"</td><td><span class="chip fail">RETRACTED</span></td><td>Brier skill &minus;3.78 as published &rarr; rebuilt at +0.053 on the validation era</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 15 RETRO -->
+<section id="retro">
+  <div class="secnum">15</div>
+  <h2>Six years later</h2>
+  <p class="lede">What the beginner got right, what the rebuild fixed, and what changed in between.</p>
+
+  <div class="retro-grid">
+    <div class="card">
+      <h3 class="good">What 2020-me got right</h3>
+      <ul>
+        <li>Chose a hard, real dataset over a toy</li>
+        <li>Interpreted every figure rather than chart-dumping</li>
+        <li>Reached for Albers when flat maps would have passed</li>
+        <li>Spotted feature leakage <i>unprompted</i> and said so</li>
+        <li>Scoped a trilogy instead of one sprawling notebook</li>
+        <li>Led with the truth of why the subject mattered</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="fix">What 2026 fixed</h3>
+      <ul>
+        <li>One trend line &rarr; NB2 GLMs + Theil-Sen + Mann-Kendall, stratified by size</li>
+        <li>Raw counts &rarr; reporting-aware strata; the paperwork made visible</li>
+        <li>Random splits &rarr; temporal holdout + spatial blocks; baselines mandatory</li>
+        <li>Silent date bug &rarr; assertions that make it a crash</li>
+        <li>Equal dots &rarr; acreage-sized, season-colored maps</li>
+        <li>"Climate is a strong cause" &rarr; a measured extreme-weather association, attribution explicitly out of scope</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>The deeper change is speed of thought. In 2020, every idea cost an evening of hand-written
+    code, so ideas went untested and enthusiasm attached to whatever numbers appeared. In 2026 I can
+    spend that same evening trying twelve ideas, discarding nine, stress-testing three. The thinking is still mine; the friction is gone. This rebuild took a fraction of the original's
+    calendar time and did roughly a hundred times the work.</p>
+  <p>You can see the six years in the artifacts themselves. The 2020 series is three pandoc-default knitr renders: megabytes of base64-inlined screenshots, no design system,
+    the mistakes baked in and invisible. The 2026 version is four hand-tokened, zero-JavaScript
+    pages that share one stylesheet, a frozen first draft anyone can diff against this one, and a
+    verifier that fails the build if a single number drifts from the computation, or if a retired one reappears. The 2026 pages can be checked against the computation behind them. The 2020 pages could only be believed.</p>
+  <p>The original trilogy stays online, unedited, exactly as a first project should:
+    <a href="https://along777.github.io/along/projects/wildfiresp1.html">Part I</a> &middot;
+    <a href="https://along777.github.io/along/projects/wildfiresp2.html">Part II</a> &middot;
+    <a href="https://github.com/Along777/along/blob/master/projects/randomforest.ipynb">Part III</a>.
+    It was a first project, and it reads like one.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 16 LIMITS -->
+<section id="limits">
+  <div class="secnum">16</div>
+  <h2>Limits, stated plainly</h2>
+  <ul>
+    <li><b>Reported ignitions are not fire risk.</b> This registry sees fires that got reported; its
+      small-fire completeness varies by state and era, and several analyses here exist specifically
+      to route around that.</li>
+    <li><b>Association is not attribution.</b> The extreme-fire-weather shift at ignition is
+      consistent with a warming, drying West; formal climate attribution requires counterfactual
+      modeling this project does not attempt.</li>
+    <li><b>Burned area is not damage.</b> January 2025's Los Angeles fires were small in acres and
+      catastrophic in loss. Acres are the measurable proxy here, not the human cost.</li>
+    <li><b>Lower 48 by choice, not by dataset.</b> The Round-2 audit found AK/HI/PR fire records in
+      the data (attribute-less); the CONUS series here exclude them deliberately. National acreage
+      figures therefore understate the US total; Alaska alone adds ~37M acres over the period.</li>
+    <li><b>Daily 4-km weather.</b> gridMET cannot see nighttime wind events like the one that drove
+      Tubbs; the row's 6.0 m/s daily mean is the floor of that night's truth, not the story.</li>
+    <li><b>Cause labels are incomplete and reclassified.</b> A third of CA/FL records carry no usable
+      cause; the old-13 museum crosswalk is approximate by construction.</li>
+    <li><b>One fire anchors the narrative.</b> The Tubbs row is one record given personal weight; the
+      statistics never depend on it.</li>
+    <li><b>The escalation model is a retrospective prototype.</b> It runs on reanalysis weather that
+      does not exist at decision time; an operational version needs forecast or station feeds. The
+      red team measured what that costs: a forecast-free variant restricted to yesterday-knowable weather loses essentially nothing. The distinction is stated here as well as there.</li>
+  </ul>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 17 REPRODUCE -->
+<section id="reproduce">
+  <div class="secnum">17</div>
+  <h2>Reproduce it</h2>
+  <p class="lede">Everything on this page, and on the audit, the modeling stage, and the red-team section, regenerates from public data with plain Python. One network step,
+    offline forever after.</p>
+  <div class="co plain">
+    <span class="tag">Story vs code</span>
+    <p>These pages are the write-up. The Python path lives in the
+      <a href="https://github.com/Along777/along/tree/master/wildfire-return">GitHub folder</a>
+      with a <a href="https://github.com/Along777/along/blob/master/wildfire-return/README.md">follow-along README</a>. Run it top to bottom and <code class="inline">verify_claims.py</code> will tell you
+      whether these three pages and your computation still agree.</p>
+  </div>
+<pre>python -m venv .venv
+.venv\Scripts\activate                  # Windows
+pip install -r requirements.txt         # + lightgbm / optuna / shap for the modeling stage
+
+python fetch_raw.py --yes               # ~5 GB, once (or --years 2015-2020 to start smaller)
+python fetch_recent.py                  # WFIGS 2021-2025 aggregates (seconds)
+python reduce_raw.py                    # 4.68 GB -> ~33 MB of hash-locked caches (~10 min)
+
+python examples\find_tubbs.py           # the row, offline, instant
+python examples\headline_trend.py       # the headline IRRs, offline, instant
+
+python run_eda.py                       # dataset anatomy
+python run_trend_lab.py                 # H1-H6 verdicts + trend figures
+python run_ml_lab.py                    # museum replica + honest cause models (~20 min)
+python run_maps.py                      # the three maps
+python run_data_audit.py                # the 29-check corpus audit + data dictionary (~12 min)
+
+python tuning.py --probe                # which of sklearn / optuna / lightgbm / shap import
+python run_modeling.py                  # the escalation model: bake-off, zoo, calibration (~45 min)
+python run_redteam.py                   # the 35-finding hostile review's experiments (~10 min)
+python run_final_figures.py             # calibration figures re-rendered from the val-selected map
+
+python verify_claims.py                 # every number on ALL THREE pages == the JSONs, or exit 1</pre>
+  <p>Sources: <a href="https://zenodo.org/records/8381129">FPA FOD-Attributes</a> (CC-BY 4.0;
+    Pourmohamad et al. 2024, <a href="https://essd.copernicus.org/articles/16/3045/2024/">ESSD</a>) &middot;
+    FPA-FOD v6 (Short, USFS RDS-2013-0009.6) &middot; NIFC WFIGS perimeters (public domain) &middot;
+    US Census cartographic boundaries (public domain).</p>
+</section>
+
+</main>
+
+<footer>
+  <p><b>Return to Fire</b> &middot; Aaron Long &middot; July 2026 &middot; built with an AI collaborator, verified by scripts</p>
+  <p>
+    <a href="data.html">the data audit</a> &middot;
+    <a href="modeling.html">the modeling stage</a> &middot;
+    <a href="first_shot.html">the frozen first shot</a> &middot;
+    <a href="https://github.com/Along777/along/tree/master/wildfire-return">code</a> &middot;
+    <a href="https://github.com/Along777/along/blob/master/wildfire-return/README.md">walkthrough</a> &middot;
+    <a href="https://along777.github.io/along/heat-and-crime/">heat &amp; crime</a> &middot;
+    <a href="https://along777.github.io/along/world-panel-ekc/">world panel EKC</a> &middot;
+    <a href="https://along777.github.io/along/ufo-news-cycle/">ufo news cycle</a> &middot;
+    <a href="https://along777.github.io/along/">portfolio home</a>
+  </p>
+  <p><a href="#top">back to top</a></p>
+</footer>
+
+</body>
+</html>

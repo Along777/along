@@ -1,0 +1,57 @@
+{
+  "created_utc": "2026-07-25T22:56:21+00:00",
+  "project": "wildfire-return",
+  "source": {
+    "zenodo_doi": "10.5281/zenodo.8381129",
+    "dataset": "FPA FOD-Attributes (FPA-FOD v6 + ~270 attributes), 1992-2020, CONUS",
+    "license": "CC-BY-4.0",
+    "boundaries": "US Census cb_2023_us_state_20m (public domain)",
+    "recent": "NIFC WFIGS Interagency Fire Perimeters aggregates, 2021-2025 (public domain)"
+  },
+  "files": {
+    "national_annual.csv": {
+      "bytes": 534222,
+      "sha256": "5268c090572a8fac932ed0c9d6db356578c8c6565c93c14f5c52fdd22633080a"
+    },
+    "national_monthly.csv": {
+      "bytes": 717738,
+      "sha256": "34a3e7b1e37b7dfd5886d4c1d6abd9c75509d7c3c6c96bfa392f595ac5012e66"
+    },
+    "conus_grid.parquet": {
+      "bytes": 886317,
+      "sha256": "4ed394d861fc870513222bb7870a93d7bb8fc9d775f9d3605e6d5a7f85842e7a"
+    },
+    "ca_fires.parquet": {
+      "bytes": 22913480,
+      "sha256": "942e8db289777f21a3511a4f27da08590ab050df273dbcea2c18722ead69ddb0"
+    },
+    "fl_fires.parquet": {
+      "bytes": 8791343,
+      "sha256": "9f769f7883232a084db48b06b1fbe1feccdc2bc0949e6397cba683e5e0c31abb"
+    },
+    "tubbs_record.json": {
+      "bytes": 11270,
+      "sha256": "62a2732e6e7fa90bca802cbb268cc0f0a921250ce91c9ec20e1a221b1eba4e51"
+    },
+    "reduce_report.json": {
+      "bytes": 6911,
+      "sha256": "3b40664eb11ecbc40dcc41c0a090e056d03fe9d35cc0aeb6cbe8046f0fc0a38d"
+    },
+    "geo/us_states_20m.json": {
+      "bytes": 234816,
+      "sha256": "a03379343e9167ed558d26091ea5ef37e2b4cf557f2d0488edaee6a6ef749f18"
+    },
+    "recent_annual.csv": {
+      "bytes": 1017,
+      "sha256": "91515944871e60c1d5cf5bb06cf31a15fcb0ff43374725ba34ee6ca8e33f01a3"
+    },
+    "recent_annual_meta.json": {
+      "bytes": 7782,
+      "sha256": "b80397c38f48f7b7247940c70e32b43885632133bc528a30072a48127cb4408d"
+    },
+    "dup_flags.parquet": {
+      "bytes": 126791,
+      "sha256": "e68b4e591e5dbc79fd88afeb961a94ec1980b6701283dc407cbc40e00139ce46"
+    }
+  }
+}
