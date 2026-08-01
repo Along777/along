@@ -143,6 +143,18 @@
   footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
   footer a{color:var(--ink2)}
   @media print{ nav,.rail{display:none} section{break-inside:avoid} }
+
+/* ---- persistent link home ---- */
+#home-link{position:fixed;right:18px;bottom:18px;z-index:200;height:44px;padding:0 15px;
+  border-radius:22px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  background:var(--card);color:var(--ink);border:1px solid var(--hair);
+  box-shadow:0 4px 14px rgba(0,0,0,.16);font:600 14px/1 inherit}
+#home-link:hover{filter:brightness(1.08);text-decoration:none}
+#home-link:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#home-link svg{width:17px;height:17px;flex:0 0 auto;fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:560px){#home-link span{display:none} #home-link{padding:0;width:44px;justify-content:center}}
+@media print{#home-link{display:none}}
 </style>
 </head>
 <body>
@@ -708,5 +720,9 @@ python verify_claims.py                 # every number on all three pages == the
   <p><a href="#top">back to top</a></p>
 </footer>
 
+<a id="home-link" href="https://along777.github.io/along/" aria-label="Back to the portfolio home page">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+<span>Home</span>
+</a>
 </body>
 </html>
