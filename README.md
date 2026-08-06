@@ -1,6 +1,6 @@
 # Aaron Long — Data Scientist
 
-**Live site: [along777.github.io/along](https://along777.github.io/along/)** · [LinkedIn](https://www.linkedin.com/in/aaron-long-403644a7/) · [Résumé (PDF)](https://along777.github.io/along/aaron-long-resume.pdf) · Orlando, Florida
+**Live site: [along777.github.io/along](https://along777.github.io/along/)** · [LinkedIn](https://www.linkedin.com/in/aaron-l-403644a7/) · [Résumé (PDF)](https://along777.github.io/along/aaron-long-resume.pdf) · Orlando, Florida
 
 This repository is my portfolio. It holds the site itself plus the full source for every project on it: code, figures, and write-ups.
 
@@ -95,4 +95,4 @@ python <the run script named in that README>
 
 ## Contact
 
-**[along1929@gmail.com](mailto:along1929@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/aaron-long-403644a7/) · [github.com/Along777](https://github.com/Along777)
+**[along1929@gmail.com](mailto:along1929@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/aaron-l-403644a7/) · [github.com/Along777](https://github.com/Along777)
