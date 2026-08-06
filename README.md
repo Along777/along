@@ -38,6 +38,14 @@ The honesty tooling matters more than the model choice. *Return to Fire* ships a
 
 ---
 
+## Working papers
+
+AI-assisted research beyond code. Four working papers in four fields — physics, economics/politics, economics advocacy, and art history — each written with AI, built by one Python pipeline (every paper is a program that prints its own PDF), and put through a commissioned hostile review (attack → defense → verdict) before revision. Drafts, not peer-reviewed publications, and labeled as such.
+
+**Browse:** [along777.github.io/ai-working-papers](https://along777.github.io/ai-working-papers/) · [source repo](https://github.com/Along777/ai-working-papers)
+
+---
+
 ## Foundational projects (2019–2021)
 
 The classical work that built the fundamentals: Python, R, EDA, and traditional ML. These stay online unedited. *Return to Fire* revisits the wildfire trilogy honestly rather than quietly replacing it.
