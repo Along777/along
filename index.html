@@ -470,6 +470,13 @@
                         <i class="fa-solid fa-magic"></i>
                         <span>AI-Powered</span>
                     </button>
+                    <!-- Not a filter: jumps to the Working Papers section below the grid -->
+                    <a href="#papers"
+                       class="px-5 py-2 text-sm font-medium rounded-3xl border border-amber-500/40 text-amber-400 hover:bg-slate-800 flex items-center gap-x-2">
+                        <i class="fa-solid fa-scroll"></i>
+                        <span>Working Papers</span>
+                        <i class="fa-solid fa-arrow-down text-xs"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -712,6 +719,40 @@
                         <div class="text-emerald-400 font-medium">Built with Grok 4.5 • public data, no industry funding</div>
                         <a href="https://along777.github.io/along/diet-soda-analysis/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI PROJECT: the working-papers index itself -->
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
+                <div class="h-2 bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-400"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <div class="uppercase text-[10px] tracking-widest text-amber-400 font-medium">2026 • AI-ASSISTED RESEARCH</div>
+                                <span class="px-2 py-px text-[10px] font-bold bg-amber-500/10 text-amber-400 rounded">AI</span>
+                            </div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Four Working Papers. One Pipeline.</h3>
+                        </div>
+                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Python</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">Research beyond code: working papers in physics, economics, politics, and art history, written with AI and built by one shared pipeline where every paper is a Python program that prints its own PDF. Each draft faces a commissioned hostile review (attack, defense, verdict) before revision, and ships its research notes, data file, and figure scripts. Drafts, not peer-reviewed publications, and labeled as such.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Python → PDF pipeline</span>
+                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">reportlab</span>
+                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">matplotlib</span>
+                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Hostile review</span>
+                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">4 fields</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex items-center justify-between text-xs">
+                        <a href="#papers" class="text-amber-400 hover:text-amber-300 font-medium">The four papers, below ↓</a>
+                        <a href="https://along777.github.io/ai-working-papers/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                            Browse the paper index <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
                     </div>
                 </div>
