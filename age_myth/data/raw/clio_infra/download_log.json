@@ -2,7 +2,7 @@
   "attempts": [],
   "success": {
     "url": "https://datasets.iisg.amsterdam/api/access/datafile/181",
-    "path": "C:\\Users\\ccvar\\grok_projects\\age_myth\\data\\raw\\clio_infra\\zijdeman_life_expectancy_at_birth.xlsx",
+    "path": "data/raw/clio_infra/zijdeman_life_expectancy_at_birth.xlsx",
     "bytes": 141411,
     "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; name=\"Total_life_expectancy-historical.xlsx\";charset=UTF-8"
   },

@@ -1,6 +1,6 @@
 {
   "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/demo_mlexpec?format=SDMX-CSV&compressed=false",
-  "path": "C:\\Users\\ccvar\\grok_projects\\age_myth\\data\\raw\\eurostat\\demo_mlexpec.csv",
+  "path": "data/raw/eurostat/demo_mlexpec.csv",
   "bytes": 36386935,
   "sha256": "774ec3e0b1bf1cd5c77fb016d8c89f37d3769d9d92d3111f96d5b76134e1e32c",
   "retrieved_at": "2026-07-26T02:28:31.324350+00:00"
