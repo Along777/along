@@ -1,6 +1,6 @@
 # Aaron Long — Data Scientist
 
-**Live site: [along777.github.io/along](https://along777.github.io/along/)** · [Résumé (PDF)](https://along777.github.io/along/aaron-long-resume.pdf) · Orlando, Florida
+**Live site: [along777.github.io/along](https://along777.github.io/along/)** · Orlando, Florida
 
 This repository is my portfolio. It holds the site itself plus the full source for every project on it: code, figures, and write-ups.
 
@@ -67,7 +67,6 @@ The classical work that built the fundamentals: Python, R, EDA, and traditional 
 
 ```
 index.html              the portfolio site (single file, Tailwind via CDN)
-aaron-long-resume.pdf    résumé
 wildfire-return/         Return to Fire: 4 pages, verifier, full pipeline
 heat-and-crime/          Heat and Crime: article + code + cached data
 age_myth/                Age myth: article, src/, tests
