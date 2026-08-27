@@ -40,7 +40,7 @@ The honesty tooling matters more than the model choice. *Return to Fire* ships a
 
 ## Working papers
 
-AI-assisted research beyond code. Five working papers across four fields — physics, economics and political economy (including a companion pair on AI and labor), declared economic advocacy, and art history — each written with AI, built by one Python pipeline (every paper is a program that prints its own PDF), and put through a commissioned hostile review (attack → defense → verdict) before revision. Drafts, not peer-reviewed publications, and labeled as such.
+AI-assisted research beyond code. A growing shelf of working papers — physics, economics and political economy, quantum and blockchain security, comparative culture, psychology, art history — each written with AI, built by one Python pipeline (every paper is a program that prints its own PDF), and put through a commissioned hostile review (attack → defense → verdict) before revision. Drafts, not peer-reviewed publications, and labeled as such.
 
 **Browse:** [along777.github.io/ai-working-papers](https://along777.github.io/ai-working-papers/) · [source repo](https://github.com/Along777/ai-working-papers)
 
