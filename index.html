@@ -207,6 +207,35 @@
         :root[data-theme="light"] .border-emerald-900\/50 { border-color: rgb(4 120 87 / .25); }
 
         #theme-toggle { cursor: pointer; }
+
+        /* ===== Card taxonomy: colour = project type, chip = build model ===== */
+        .type-systems { --t: #10b981; --t-ink: #10b981; --t-dim: #10b98122; }
+        :root[data-theme="light"] .type-systems { --t-ink: #047857; --t-dim: #10b9811f; }
+        .type-analysis { --t: #0ea5e9; --t-ink: #0ea5e9; --t-dim: #0ea5e922; }
+        :root[data-theme="light"] .type-analysis { --t-ink: #0369a1; --t-dim: #0ea5e91f; }
+        .type-ml { --t: #8b5cf6; --t-ink: #8b5cf6; --t-dim: #8b5cf622; }
+        :root[data-theme="light"] .type-ml { --t-ink: #6d28d9; --t-dim: #8b5cf61f; }
+        .type-viz { --t: #f43f5e; --t-ink: #f43f5e; --t-dim: #f43f5e22; }
+        :root[data-theme="light"] .type-viz { --t-ink: #be123c; --t-dim: #f43f5e1f; }
+        .type-pipeline { --t: #f59e0b; --t-ink: #f59e0b; --t-dim: #f59e0b22; }
+        :root[data-theme="light"] .type-pipeline { --t-ink: #b45309; --t-dim: #f59e0b1f; }
+
+        .project-card[data-type] { border-left: 4px solid var(--t); }
+        .type-bar { height: .5rem; background: linear-gradient(90deg, var(--t), transparent 88%); }
+        .type-kicker { color: var(--t-ink); }
+        .type-pill { background: var(--t-dim); color: var(--t-ink); }
+        .type-badge { background: var(--t-dim); color: var(--t-ink); border: 1px solid var(--t-dim); }
+        .type-tagline { color: var(--t-ink); }
+        .model-chip {
+            display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap;
+            font-size: .7rem; font-weight: 600; padding: .2rem .6rem; border-radius: 9999px;
+            background: rgba(148,163,184,.10); color: #94a3b8; border: 1px solid rgba(148,163,184,.28);
+        }
+        :root[data-theme="light"] .model-chip { color: #475569; }
+        .filter-dot { width: .55rem; height: .55rem; border-radius: 9999px; display: inline-block; }
+        .filter-group-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #64748b; }
+        #filter-empty { display: none; }
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200">
@@ -437,36 +466,32 @@
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-y-4">
                 <div>
                     <h2 class="section-header tracking-tighter">Featured Projects</h2>
-                    <p class="text-slate-400 mt-2 max-w-md">Foundational work that built my core skills, plus newer projects that lean into modern AI and automation.</p>
+                    <p class="text-slate-400 mt-2 max-w-md">Foundational work that built my core skills, plus newer projects that lean into modern AI and automation. <span class="text-slate-500">Colour marks the kind of work; the chip on each card marks what built it.</span></p>
                 </div>
 
                 <!-- Filter Buttons -->
-                <div class="flex flex-wrap gap-2" id="filter-buttons">
-                    <button onclick="filterProjects('all')"
-                            class="filter-btn active px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"
-                            data-filter="all">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>All</span>
-                    </button>
-                    <button onclick="filterProjects('legacy')"
-                            class="filter-btn px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 hover:bg-slate-800 flex items-center gap-x-2"
-                            data-filter="legacy">
-                        <i class="fa-solid fa-history"></i>
-                        <span>Foundational</span>
-                    </button>
-                    <button onclick="filterProjects('ai')"
-                            class="filter-btn px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 hover:bg-slate-800 flex items-center gap-x-2"
-                            data-filter="ai">
-                        <i class="fa-solid fa-magic"></i>
-                        <span>AI-Powered</span>
-                    </button>
-                    <!-- Not a filter: jumps to the Working Papers section below the grid -->
-                    <a href="#papers"
-                       class="px-5 py-2 text-sm font-medium rounded-3xl border border-amber-500/40 text-amber-400 hover:bg-slate-800 flex items-center gap-x-2">
-                        <i class="fa-solid fa-scroll"></i>
-                        <span>Working Papers</span>
-                        <i class="fa-solid fa-arrow-down text-xs"></i>
-                    </a>
+                <div class="flex flex-col gap-y-3 md:items-end" id="filter-buttons">
+                    <div class="flex flex-wrap items-center gap-2 md:justify-end">
+                        <span class="filter-group-label mr-1">Kind of work</span>
+                        <button data-group="type" data-value="all" class="filter-btn active px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-layer-group text-xs"></i><span>All</span></button>
+                        <button data-group="type" data-value="systems" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><span class="filter-dot" style="background:#10b981"></span><span>AI Systems</span></button>
+                        <button data-group="type" data-value="analysis" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><span class="filter-dot" style="background:#0ea5e9"></span><span>Data Investigation</span></button>
+                        <button data-group="type" data-value="ml" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><span class="filter-dot" style="background:#8b5cf6"></span><span>ML &amp; Prediction</span></button>
+                        <button data-group="type" data-value="viz" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><span class="filter-dot" style="background:#f43f5e"></span><span>Viz &amp; Dashboards</span></button>
+                        <button data-group="type" data-value="pipeline" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><span class="filter-dot" style="background:#f59e0b"></span><span>Pipelines &amp; Tooling</span></button>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 md:justify-end">
+                        <span class="filter-group-label mr-1">Built with</span>
+                        <button data-group="model" data-value="all" class="filter-btn active px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-asterisk text-xs"></i><span>Any</span></button>
+                        <button data-group="model" data-value="claude" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-robot text-xs"></i><span>Claude</span></button>
+                        <button data-group="model" data-value="grok" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-bolt text-xs"></i><span>Grok 4.5</span></button>
+                        <button data-group="model" data-value="multi" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-code-branch text-xs"></i><span>Multi-model</span></button>
+                        <button data-group="model" data-value="human" class="filter-btn px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-screwdriver-wrench text-xs"></i><span>Hand-built</span></button>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 md:justify-end pt-1">
+                        <span id="filter-count" class="text-xs text-slate-500"></span>
+                        <a href="#papers" class="px-4 py-1.5 text-sm font-medium rounded-3xl border border-amber-500/40 text-amber-400 hover:bg-slate-800 flex items-center gap-x-2"><i class="fa-solid fa-scroll"></i><span>Working Papers</span><i class="fa-solid fa-arrow-down text-xs"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -477,28 +502,25 @@
             <!-- ============ AI-POWERED PROJECTS ============ -->
 
             <!-- AI PROJECT: the working-papers index itself -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-pipeline" data-category="ai" data-type="pipeline" data-model="multi">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-amber-400 font-medium">2026 • AI-ASSISTED RESEARCH</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-amber-500/10 text-amber-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • AI-ASSISTED RESEARCH</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Pipelines &amp; Tooling</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">The Working-Paper Shelf. One Pipeline.</h3>
                         </div>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-code-branch"></i>Multi-model</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Research beyond code: working papers in physics, economics, politics, and art history, written with AI and built by one shared pipeline where every paper is a Python program that prints its own PDF. Each draft faces a commissioned hostile review (attack, defense, verdict) before revision, and ships its research notes, data file, and figure scripts. Drafts, not peer-reviewed publications, and labeled as such.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Python → PDF pipeline</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">reportlab</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">matplotlib</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Hostile review</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">9 papers &amp; growing</span>
+                        <span class="tech-badge type-badge">Python → PDF pipeline</span>
+                        <span class="tech-badge type-badge">reportlab</span>
+                        <span class="tech-badge type-badge">matplotlib</span>
+                        <span class="tech-badge type-badge">Hostile review</span>
+                        <span class="tech-badge type-badge">9 papers &amp; growing</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
@@ -511,32 +533,29 @@
             </div>
 
             <!-- AI PROJECT: rag_engine v3 — refereed local RAG on the new machine -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-systems" data-category="ai" data-type="systems" data-model="claude">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-emerald-400 font-medium">2026 • LOCAL LLM / RAG • V3 ON THE NEW MACHINE</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-emerald-500/10 text-emerald-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • LOCAL LLM / RAG • V3 ON THE NEW MACHINE</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">AI Systems</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">rag_engine v3: A Local RAG That Proves Its Answers</h3>
                         </div>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">The laptop RAG below, rebuilt eight weeks later on an RTX 5090 machine I put together — 3B model to 27B, and every answer now retrieved, graded, cited, judged, and metered. Layered hallucination defenses with a calibration-tested LLM judge (scores planted lies 0.0, names them), 10 local models benchmarked on one index with cross-model refereed finals so no model grades its own homework, and per-query telemetry: tokens, watts, °C, and dollars. An answer costs ~$0.0002 of electricity — 71–108× under hosted-API rates at my real token mix — and the house runs on solar. Every number reproducible from the audit database.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">qwen3.6:27b</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">LangGraph</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">10-model benchmark</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Cross-model refereeing</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">GPU energy telemetry</span>
+                        <span class="tech-badge type-badge">qwen3.6:27b</span>
+                        <span class="tech-badge type-badge">LangGraph</span>
+                        <span class="tech-badge type-badge">10-model benchmark</span>
+                        <span class="tech-badge type-badge">Cross-model refereeing</span>
+                        <span class="tech-badge type-badge">GPU energy telemetry</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-emerald-400 font-medium">RTX 5090 • $0.0002/answer • solar-powered</div>
+                        <div class="type-tagline font-medium">RTX 5090 • $0.0002/answer • solar-powered</div>
                         <a href="https://along777.github.io/along/rag_engine/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -545,32 +564,29 @@
             </div>
 
             <!-- AI PROJECT: Local RAG over a 148-book library -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-systems" data-category="ai" data-type="systems" data-model="multi">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">2026 • LOCAL LLM / RAG</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • LOCAL LLM / RAG</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">AI Systems</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Local RAG over a 148-Book Library</h3>
                         </div>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-code-branch"></i>Multi-model</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">A fully local, private RAG system that turns 148 technical PDFs (~48,800 pages, 96,546 searchable chunks) into a citation-grounded chatbot running entirely on a laptop with no cloud and no API cost. Hybrid retrieval (vector + BM25 fused with Reciprocal Rank Fusion), a LangGraph pipeline with query rewriting and deterministic citation guardrails, and a Gradio web UI.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">LangGraph</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">ChromaDB</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Ollama</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">BM25 + RRF</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Gradio</span>
+                        <span class="tech-badge type-badge">LangGraph</span>
+                        <span class="tech-badge type-badge">ChromaDB</span>
+                        <span class="tech-badge type-badge">Ollama</span>
+                        <span class="tech-badge type-badge">BM25 + RRF</span>
+                        <span class="tech-badge type-badge">Gradio</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-indigo-400 font-medium">Fully local &amp; private • $0 cost</div>
+                        <div class="type-tagline font-medium">Fully local &amp; private • $0 cost</div>
                         <a href="https://along777.github.io/along/rag_books/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -579,32 +595,29 @@
             </div>
 
             <!-- AI PROJECT: Heat and Crime / two models -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-orange-500 via-red-500 to-rose-600"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="multi">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-orange-400 font-medium">2026 • CLAUDE FABLE 5 + GROK 4.5</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-orange-500/10 text-orange-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • CLAUDE FABLE 5 + GROK 4.5</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">A Tale of Two AI Minds: Heat, Crime, and Chicago</h3>
                         </div>
-                        <span class="tech-badge bg-orange-950 text-orange-300 border border-orange-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-code-branch"></i>Multi-model</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">2.76 million Chicago crime reports, 2015–2025, joined to ERA5 weather. After comparing days inside the same month and year, a +10°F hotter day lines up with about +5.6% more reported violent crime (property ~+3.7%). Battery drives the violent result; hot spells compound to ~+6.1%; the curve flattens near 80°F rather than inverting. Claude Fable 5 built the first complete notebook in two prompts. Grok 4.5 took the handoff and ran the audit, model lab, and seven falsification tests (leads, permutation, FDR). Hand-written article, not a notebook dump.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-orange-950 text-orange-300 border border-orange-800">Claude Fable 5</span>
-                        <span class="tech-badge bg-orange-950 text-orange-300 border border-orange-800">Grok 4.5</span>
-                        <span class="tech-badge bg-orange-950 text-orange-300 border border-orange-800">Multi-model handoff</span>
-                        <span class="tech-badge bg-orange-950 text-orange-300 border border-orange-800">AI-built pipeline</span>
-                        <span class="tech-badge bg-orange-950 text-orange-300 border border-orange-800">Prompt engineering</span>
+                        <span class="tech-badge type-badge">Claude Fable 5</span>
+                        <span class="tech-badge type-badge">Grok 4.5</span>
+                        <span class="tech-badge type-badge">Multi-model handoff</span>
+                        <span class="tech-badge type-badge">AI-built pipeline</span>
+                        <span class="tech-badge type-badge">Prompt engineering</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-orange-400 font-medium">Claude Fable 5 (2 prompts) + Grok 4.5 (audit &amp; lab) • July 2026</div>
+                        <div class="type-tagline font-medium">Claude Fable 5 (2 prompts) + Grok 4.5 (audit &amp; lab) • July 2026</div>
                         <a href="https://along777.github.io/along/heat-and-crime/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -613,32 +626,29 @@
             </div>
 
             <!-- AI PROJECT: UFO reports vs the news cycle -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="claude">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">2026 • 100% AI-BUILT EXPERIMENT</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • 100% AI-BUILT EXPERIMENT</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Do UFOs Follow the News Cycle?</h3>
                         </div>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">618,316 UFO sighting reports from six databases, treated as behavioral data: what actually makes people report? Built end-to-end by Claude from seven prompts, directed only through prompts. Findings: fireworks run 5x, Starlink launches spike "formation" reports 1.7x on SpaceX's published schedule, and congressional hearings create zero new sightings but double the filings of decades-old ones. The 20 strangest days in 30 years get named one by one — a fact-check even solved a 28-year-old mystery (a Russian rocket stage) — leaving exactly one unexplained night. Includes a 14-attack red team and a claims ledger that machine-verifies every headline number.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">pandas</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">statsmodels</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">scikit-learn</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">SQLite</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">US Census</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">statsmodels</span>
+                        <span class="tech-badge type-badge">scikit-learn</span>
+                        <span class="tech-badge type-badge">SQLite</span>
+                        <span class="tech-badge type-badge">US Census</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-indigo-400 font-medium">Built by Claude • 7 prompts • 21 numbers machine-verified</div>
+                        <div class="type-tagline font-medium">Built by Claude • 7 prompts • 21 numbers machine-verified</div>
                         <a href="https://along777.github.io/along/ufo-news-cycle/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -647,32 +657,29 @@
             </div>
 
             <!-- AI PROJECT: World-panel econometrics — Does Growth Have to Cost the Planet? -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="claude">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">2026 • 100% AI-BUILT EXPERIMENT</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • 100% AI-BUILT EXPERIMENT</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Does Growth Have to Cost the Planet?</h3>
                         </div>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">An experiment: can AI run a real data-science project by itself? This entire econometric pipeline — 217 economies, 30 years of World Bank data — was built end-to-end by Claude, directed only through prompts, with zero hand-written code. It tests the famous Environmental Kuznets Curve and finds it isn't there; what the data shows instead is "two-speed decarbonization." Panel fixed effects, bootstrap inference, a fair ML benchmark that lost to a naive baseline (on purpose), and an 8-objection red team — with the AI catching three of its own bugs along the way.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">pandas</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">statsmodels</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">linearmodels</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">scikit-learn</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">World Bank API</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">statsmodels</span>
+                        <span class="tech-badge type-badge">linearmodels</span>
+                        <span class="tech-badge type-badge">scikit-learn</span>
+                        <span class="tech-badge type-badge">World Bank API</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-indigo-400 font-medium">Built by Claude • prompts only • 0 lines hand-written</div>
+                        <div class="type-tagline font-medium">Built by Claude • prompts only • 0 lines hand-written</div>
                         <a href="https://along777.github.io/along/world-panel-ekc/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -681,32 +688,29 @@
             </div>
 
             <!-- AI PROJECT: Return to Fire — the 2020 wildfire trilogy, rebuilt -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="claude">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">2026 • 100% AI-BUILT REBUILD</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • 100% AI-BUILT REBUILD</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Return to Fire</h3>
                         </div>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">My first-ever data science project — the 2020 wildfire trilogy, born after the Tubbs Fire took my family's home — rebuilt six years later on 2.3M fires with 308 attributes each, in five rounds that are all still published: a frozen first draft, a 29-check data audit, a tuned and calibrated escalation model, a 35-finding hostile red-team review, and the final report. The 2020 random forest is reconstructed bugs-and-all as a museum piece (the replica's 96.0% sat 0.3 points above guessing-the-majority), one published claim is retracted and rebuilt in print, and the verdict on "wildfires are increasing" lands as a SPLIT: not more fires — bigger fires. The old dataset ended in 2015; the new one finally contains the fire, as a single database row the finished model scores at the 97th percentile.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Claude Fable 5</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Claude Opus 5</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">5-round AI pipeline</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">Verifier-enforced claims</span>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">LightGBM · Optuna · SHAP</span>
+                        <span class="tech-badge type-badge">Claude Fable 5</span>
+                        <span class="tech-badge type-badge">Claude Opus 5</span>
+                        <span class="tech-badge type-badge">5-round AI pipeline</span>
+                        <span class="tech-badge type-badge">Verifier-enforced claims</span>
+                        <span class="tech-badge type-badge">LightGBM · Optuna · SHAP</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-indigo-400 font-medium">Built by Claude • 112 claims machine-verified • one claim retracted, rebuilt, re-verified</div>
+                        <div class="type-tagline font-medium">Built by Claude • 112 claims machine-verified • one claim retracted, rebuilt, re-verified</div>
                         <a href="https://along777.github.io/along/wildfire-return/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -715,32 +719,29 @@
             </div>
 
             <!-- AI PROJECT: Age Myth — Grok 4.5 solo build -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="grok">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-emerald-400 font-medium">2026 • GROK 4.5 SOLO</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-emerald-500/10 text-emerald-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • GROK 4.5 SOLO</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Life Expectancy Was 35. Almost Nobody Died at 35.</h3>
                         </div>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-bolt"></i>Grok 4.5</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Testing the classic age myth against open historical life tables. The number is real, the story is wrong: when life expectancy at birth was under 40, people who reached 65 still expected to live to about 75.4 across 211 country-years in 11 countries. Infant mortality (196 deaths per 1,000, median) crushed the average. A second myth falls too, since remaining life at 65 rose about 8.5 years from pre-1900 to post-2000. Built end to end by Grok 4.5 alone, my first solo-model project.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Grok 4.5</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Single-model build</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">AI-built pipeline</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Human Mortality Database</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Historical demography</span>
+                        <span class="tech-badge type-badge">Grok 4.5</span>
+                        <span class="tech-badge type-badge">Single-model build</span>
+                        <span class="tech-badge type-badge">AI-built pipeline</span>
+                        <span class="tech-badge type-badge">Human Mortality Database</span>
+                        <span class="tech-badge type-badge">Historical demography</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-emerald-400 font-medium">Grok 4.5, no Claude in the loop • July 2026</div>
+                        <div class="type-tagline font-medium">Grok 4.5, no Claude in the loop • July 2026</div>
                         <a href="https://along777.github.io/along/age_myth/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -749,32 +750,29 @@
             </div>
 
             <!-- AI PROJECT: Diet Soda Myths — Grok 4.5 build -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="grok">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-emerald-400 font-medium">2026 • GROK 4.5</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-emerald-500/10 text-emerald-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • GROK 4.5</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Diet Soda Did Not Give You Cancer</h3>
                         </div>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-bolt"></i>Grok 4.5</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Testing the diet soda myths on public NHANES 2011-2018 plus NCHS mortality. Who drinks it writes most of the scare: diet-soda drinkers are older, heavier, and about twice as diabetic (31% vs 14%), so crude charts read like the can caused the disease. The blood-sugar gap mostly dissolves once known diabetics are dropped (HbA1c +0.30 to +0.05), the cancer-mortality signal is not significant (HR 0.77, CI 0.51-1.15, about 27 deaths), and BMI stays higher at +2.5 as an association, not a proven cause.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Grok 4.5</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">AI-built pipeline</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">NHANES</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Survey weighting</span>
-                        <span class="tech-badge bg-emerald-950 text-emerald-300 border border-emerald-800">Confounding &amp; selection</span>
+                        <span class="tech-badge type-badge">Grok 4.5</span>
+                        <span class="tech-badge type-badge">AI-built pipeline</span>
+                        <span class="tech-badge type-badge">NHANES</span>
+                        <span class="tech-badge type-badge">Survey weighting</span>
+                        <span class="tech-badge type-badge">Confounding &amp; selection</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-emerald-400 font-medium">Built with Grok 4.5 • public data, no industry funding</div>
+                        <div class="type-tagline font-medium">Built with Grok 4.5 • public data, no industry funding</div>
                         <a href="https://along777.github.io/along/diet-soda-analysis/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the write-up <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -783,27 +781,31 @@
             </div>
 
             <!--
-            TEMPLATE: copy this block to add a new AI project card, then fill in the [BRACKETED] parts.
+            TEMPLATE: copy this block to add a new project card, then fill in the [BRACKETED] parts.
 
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            data-type  (sets the colour) : systems | analysis | ml | viz | pipeline
+            data-model (sets the chip)   : claude | grok | multi | human
+            Keep the class `type-<data-type>` in sync with the attribute, and use the
+            matching pill label: AI Systems / Data Investigation / ML &amp; Prediction /
+            Viz &amp; Dashboards / Pipelines &amp; Tooling.
+            Model chip icons: claude fa-robot · grok fa-bolt · multi fa-code-branch · human fa-screwdriver-wrench
+
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="ai" data-type="analysis" data-model="claude">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-indigo-400 font-medium">[YEAR] • [STATUS]</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-indigo-500/10 text-indigo-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">[YEAR] • [KICKER]</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">[PROJECT TITLE]</h3>
                         </div>
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">[PRIMARY TECH]</span>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
                     </div>
-                    <p class="text-slate-400 text-sm flex-1">[2–3 sentence description of the problem, approach, and result.]</p>
+                    <p class="text-slate-400 text-sm flex-1">[2-3 sentence description of the problem, approach, and result.]</p>
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-indigo-950 text-indigo-300 border border-indigo-800">[BADGE]</span>
+                        <span class="tech-badge type-badge">[BADGE]</span>
                     </div>
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-indigo-400 font-medium">[SHORT TAGLINE]</div>
+                        <div class="type-tagline font-medium">[SHORT TAGLINE]</div>
                         <a href="[LINK]" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View project <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -815,28 +817,28 @@
             <!-- ============ FOUNDATIONAL / LEGACY PROJECTS ============ -->
 
             <!-- LEGACY: Wildfire Random Forest -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-ml" data-category="legacy" data-type="ml" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • CLASSIC ML</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2020 • CLASSIC ML</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">ML &amp; Prediction</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Wildfire Prediction with Random Forest</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Built Random Forest classifiers on the 1.88M US Wildfires dataset to predict fire cause — SQL extraction from SQLite and scikit-learn classification, the ML chapter of a three-part wildfire series and one of the first projects of my career, preserved as written in 2020. Honestly revisited in 2026 as <a href="https://along777.github.io/along/wildfire-return/" class="text-sky-400 hover:text-sky-300">Return to Fire</a>.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">scikit-learn</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">SQLite</span>
+                        <span class="tech-badge type-badge">scikit-learn</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">numpy</span>
+                        <span class="tech-badge type-badge">SQLite</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Traditional ML • No generative AI</div>
+                        <div class="type-tagline font-medium">Traditional ML • No generative AI</div>
                         <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/randomforest.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -845,28 +847,28 @@
             </div>
 
             <!-- LEGACY: Wildfire Analysis Part I -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="legacy" data-type="analysis" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • EDA &amp; MAPPING</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2020 • EDA &amp; MAPPING</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Wildfire Analysis Part I</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">A personal project born from losing my family's home in the 2017 Tubbs Fire. Explored 1.88 million US wildfires (1992–2015) with ggplot2 map visualizations, focusing on the largest fire classes in California and Florida.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">ggplot2</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">dbplyr</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">maps</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">ggthemes</span>
+                        <span class="tech-badge type-badge">ggplot2</span>
+                        <span class="tech-badge type-badge">dbplyr</span>
+                        <span class="tech-badge type-badge">maps</span>
+                        <span class="tech-badge type-badge">ggthemes</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Exploratory analysis with a story</div>
+                        <div class="type-tagline font-medium">Exploratory analysis with a story</div>
                         <a href="https://along777.github.io/along/projects/wildfiresp1.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View report <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -875,26 +877,26 @@
             </div>
 
             <!-- LEGACY: Wildfire Analysis Part II -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-viz" data-category="legacy" data-type="viz" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • GEOSPATIAL VIZ</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2020 • GEOSPATIAL VIZ</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Viz &amp; Dashboards</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Wildfire Analysis Part II</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Interactive leaflet maps of US wildfires. Hover any fire to see its name, acres burned, cause, and duration. Turned a static analysis into an explorable geospatial experience.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">leaflet</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">R Markdown</span>
+                        <span class="tech-badge type-badge">leaflet</span>
+                        <span class="tech-badge type-badge">R Markdown</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Interactive mapping</div>
+                        <div class="type-tagline font-medium">Interactive mapping</div>
                         <a href="https://along777.github.io/along/projects/wildfiresp2.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View report <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -903,28 +905,28 @@
             </div>
 
             <!-- LEGACY: Bitcoin Regression -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-ml" data-category="legacy" data-type="ml" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2021 • REGRESSION</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2021 • REGRESSION</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">ML &amp; Prediction</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Bitcoin Price Regression Analysis</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Quantitative machine learning regression on Bitcoin prices, covering feature selection, residual diagnostics, and comparison of statsmodels and scikit-learn approaches against baseline models.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">statsmodels</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">scikit-learn</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
+                        <span class="tech-badge type-badge">statsmodels</span>
+                        <span class="tech-badge type-badge">scikit-learn</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">numpy</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Foundational econometrics + ML</div>
+                        <div class="type-tagline font-medium">Foundational econometrics + ML</div>
                         <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/BitcoinRegression.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -933,28 +935,28 @@
             </div>
 
             <!-- LEGACY: PDF Parsing with Regex -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-pipeline" data-category="legacy" data-type="pipeline" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2021 • DATA ENGINEERING</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2021 • DATA ENGINEERING</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Pipelines &amp; Tooling</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">PDF Parsing with Regex → SQL Server</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">An extraction pipeline that turns unstructured PDFs into clean dataframes using regular expressions, then loads them into SQL Server. The kind of unglamorous data plumbing that real analytics depends on.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pdfplumber</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">re</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pyodbc</span>
+                        <span class="tech-badge type-badge">pdfplumber</span>
+                        <span class="tech-badge type-badge">re</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">pyodbc</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">ETL fundamentals</div>
+                        <div class="type-tagline font-medium">ETL fundamentals</div>
                         <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Regex.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -963,28 +965,28 @@
             </div>
 
             <!-- LEGACY: YouTube EDA -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="legacy" data-type="analysis" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2019 • EDA</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2019 • EDA</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">YouTube Trending Videos Analysis</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Comprehensive exploratory data analysis on trending YouTube videos. Uncovered patterns in engagement, category performance, publishing timing, and title characteristics using visualization and statistical summaries.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">seaborn</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">matplotlib</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">seaborn</span>
+                        <span class="tech-badge type-badge">matplotlib</span>
+                        <span class="tech-badge type-badge">numpy</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Strong EDA &amp; visualization foundation</div>
+                        <div class="type-tagline font-medium">Strong EDA &amp; visualization foundation</div>
                         <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/Youtube.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -993,28 +995,28 @@
             </div>
 
             <!-- LEGACY: Python for Pivot Tables -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-analysis" data-category="legacy" data-type="analysis" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • ANALYTICS</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2020 • ANALYTICS</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Data Investigation</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Python for Pivot Tables</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Recreated Excel's pivot table workflows in Python with pandas, showing how programmatic aggregation scales past spreadsheet limits while staying familiar to Excel users.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">pandas</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">numpy</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">matplotlib</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">Excel</span>
+                        <span class="tech-badge type-badge">pandas</span>
+                        <span class="tech-badge type-badge">numpy</span>
+                        <span class="tech-badge type-badge">matplotlib</span>
+                        <span class="tech-badge type-badge">Excel</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Excel-to-Python bridge</div>
+                        <div class="type-tagline font-medium">Excel-to-Python bridge</div>
                         <a href="https://nbviewer.jupyter.org/github/Along777/along/blob/master/actualProjects/PivotTables.ipynb" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View notebook <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -1023,26 +1025,26 @@
             </div>
 
             <!-- LEGACY: Flex Dashboard -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-viz" data-category="legacy" data-type="viz" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • DASHBOARD</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2020 • DASHBOARD</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Viz &amp; Dashboards</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Flex Dashboard — US Accidents</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Interactive flexdashboard analyzing US traffic accidents (2016–2019) with a focus on Orange County, Florida. Combines tree map, pie, and bar charts built with highcharter into a single shareable page.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">flexdashboard</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">highcharter</span>
+                        <span class="tech-badge type-badge">flexdashboard</span>
+                        <span class="tech-badge type-badge">highcharter</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Dashboarding before Power BI</div>
+                        <div class="type-tagline font-medium">Dashboarding before Power BI</div>
                         <a href="https://along777.github.io/along/projects/flexdashboard.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View dashboard <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -1051,27 +1053,27 @@
             </div>
 
             <!-- LEGACY: Stock Analysis with Highcharter -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col legacy-accent" data-category="legacy">
-                <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-400"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-viz" data-category="legacy" data-type="viz" data-model="human">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="uppercase text-[10px] tracking-widest text-slate-500 font-medium">2020 • FINANCIAL VIZ</div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2020 • FINANCIAL VIZ</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Viz &amp; Dashboards</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">Stock Analysis with Highcharter</h3>
                         </div>
-                        <span class="tech-badge bg-slate-800 text-slate-400 border border-slate-700">R</span>
+                        <span class="model-chip"><i class="fa-solid fa-screwdriver-wrench"></i>Hand-built</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">Interactive technical charts for stocks and cryptocurrencies using highcharter (the R wrapper for Highcharts), with quantmod and TTR supplying the price data and technical indicators.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">highcharter</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">quantmod</span>
-                        <span class="tech-badge bg-slate-800 text-emerald-300 border border-emerald-900/50">TTR</span>
+                        <span class="tech-badge type-badge">highcharter</span>
+                        <span class="tech-badge type-badge">quantmod</span>
+                        <span class="tech-badge type-badge">TTR</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-slate-500">Finance + interactive charting</div>
+                        <div class="type-tagline font-medium">Finance + interactive charting</div>
                         <a href="https://along777.github.io/along/projects/highstocks.html" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             View charts <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
@@ -1079,6 +1081,14 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- Shown only when a filter pair matches nothing -->
+        <div id="filter-empty" class="text-center py-16">
+            <p class="text-slate-400">No projects match that combination.</p>
+            <button onclick="resetFilters()" class="mt-4 px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800">
+                Clear filters
+            </button>
         </div>
     </section>
 
@@ -1265,24 +1275,52 @@
     </footer>
 
     <script>
-        // Project filtering
-        function filterProjects(category) {
+        // Project filtering: two independent dimensions (kind of work AND build model)
+        const activeFilters = { type: 'all', model: 'all' };
+
+        function applyFilters() {
             const cards = document.querySelectorAll('#projects-grid .project-card');
-            const buttons = document.querySelectorAll('#filter-buttons .filter-btn');
-
-            buttons.forEach(btn => {
-                const isActive = btn.dataset.filter === category;
-                btn.classList.toggle('active', isActive);
-                btn.classList.toggle('bg-sky-500', isActive);
-                btn.classList.toggle('text-white', isActive);
-                btn.classList.toggle('border-sky-500', isActive);
-                btn.classList.toggle('border-slate-700', !isActive);
-                btn.classList.toggle('bg-slate-900', !isActive);
-            });
-
+            let shown = 0;
             cards.forEach(card => {
-                card.style.display = (category === 'all' || card.dataset.category === category) ? 'flex' : 'none';
+                const okType = activeFilters.type === 'all' || card.dataset.type === activeFilters.type;
+                const okModel = activeFilters.model === 'all' || card.dataset.model === activeFilters.model;
+                const show = okType && okModel;
+                card.style.display = show ? 'flex' : 'none';
+                if (show) shown++;
             });
+
+            const count = document.getElementById('filter-count');
+            if (count) {
+                const filtered = activeFilters.type !== 'all' || activeFilters.model !== 'all';
+                count.textContent = filtered
+                    ? shown + ' of ' + cards.length + ' projects'
+                    : cards.length + ' projects';
+            }
+            const empty = document.getElementById('filter-empty');
+            if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
+        }
+
+        function setFilter(group, value) {
+            activeFilters[group] = value;
+            document.querySelectorAll('#filter-buttons .filter-btn[data-group="' + group + '"]').forEach(btn => {
+                const on = btn.dataset.value === value;
+                btn.classList.toggle('active', on);
+                btn.setAttribute('aria-pressed', String(on));
+            });
+            applyFilters();
+        }
+
+        function resetFilters() {
+            setFilter('type', 'all');
+            setFilter('model', 'all');
+        }
+
+        function setupFilters() {
+            document.querySelectorAll('#filter-buttons .filter-btn').forEach(btn => {
+                btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
+                btn.addEventListener('click', () => setFilter(btn.dataset.group, btn.dataset.value));
+            });
+            applyFilters();
         }
 
         // Mobile menu toggle
@@ -1329,14 +1367,13 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === '/' && document.activeElement.tagName === 'BODY') {
                     e.preventDefault();
-                    const allBtn = document.querySelector('[data-filter="all"]');
-                    if (allBtn) allBtn.click();
+                    resetFilters();
                 }
             });
 
             const filterContainer = document.getElementById('filter-buttons');
             if (filterContainer) {
-                filterContainer.setAttribute('title', 'Press / to show all projects');
+                filterContainer.setAttribute('title', 'Press / to clear all filters');
             }
         }
 
@@ -1380,6 +1417,7 @@
             setupThemeToggle();
             setupMobileMenu();
             setupSmoothScroll();
+            setupFilters();
             setupKeyboardFilters();
         }
 
