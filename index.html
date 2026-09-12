@@ -568,32 +568,29 @@
             </div>
 
             <!-- AI PROJECT: along7 gallery, the NFT archive build story -->
-            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col ai-accent" data-category="ai">
-                <div class="h-2 bg-gradient-to-r from-stone-600 via-amber-400 to-yellow-200"></div>
+            <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-pipeline" data-category="ai" data-type="pipeline" data-model="claude">
+                <div class="type-bar"></div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <div class="flex items-center gap-x-2">
-                                <div class="uppercase text-[10px] tracking-widest text-amber-400 font-medium">2026 • EIGHT-WEEK AI BUILD • DATA ENGINEERING</div>
-                                <span class="px-2 py-px text-[10px] font-bold bg-amber-500/10 text-amber-400 rounded">AI</span>
-                            </div>
+                            <div class="flex items-center gap-x-2 flex-wrap"><div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 • EIGHT-WEEK AI BUILD • DATA ENGINEERING</div><span class="type-pill px-2 py-px text-[10px] font-bold rounded">Pipelines &amp; Tooling</span></div>
                             <h3 class="font-semibold text-xl tracking-tight mt-1">A Database With Good Lighting</h3>
                         </div>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Python</span>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
                     </div>
 
                     <p class="text-slate-400 text-sm flex-1">An NFT does not store the art, so I built a museum that does. <a href="https://along7gallery.xyz" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">along7gallery.xyz</a> holds 3,735 works by 839 artists across six blockchains: every original file rescued from the source the artist declared (not a marketplace preview), verified by magic bytes and SHA-256, and every ownership history replayed from 80,161 on-chain events. One SQLite database, a Python pipeline with one command per stage, and a 5,925-page static site that costs about a dollar a month to host. 99 automated checks gate every deploy: links, venue proofs, custody, privacy, prices, even prose drift. Built with three Claude models in a running conversation; the collector made every call taste decides and caught the bugs the audit could not.</p>
 
                     <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">SQLite</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Etherscan • TzKT • OpenSea</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Jinja2 static site</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">Cloudflare R2</span>
-                        <span class="tech-badge bg-amber-950 text-amber-300 border border-amber-800">99-check audit gate</span>
+                        <span class="tech-badge type-badge">SQLite</span>
+                        <span class="tech-badge type-badge">Etherscan • TzKT • OpenSea</span>
+                        <span class="tech-badge type-badge">Jinja2 static site</span>
+                        <span class="tech-badge type-badge">Cloudflare R2</span>
+                        <span class="tech-badge type-badge">99-check audit gate</span>
                     </div>
 
                     <div class="mt-auto pt-6 flex items-center justify-between text-xs">
-                        <div class="text-amber-400 font-medium">Built with Claude • 64 GB of originals • 0 FAIL on every deploy</div>
+                        <div class="type-tagline font-medium">Built with Claude • 64 GB of originals • 0 FAIL on every deploy</div>
                         <a href="https://along777.github.io/along/along7-gallery/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
                             Read the build story <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
                         </a>
