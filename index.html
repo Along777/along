@@ -236,6 +236,16 @@
         .filter-group-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #64748b; }
         #filter-empty { display: none; }
 
+        /* Hero banner slideshow */
+        #hero-banner .slide { opacity: 0; transition: opacity .6s ease; pointer-events: none; }
+        #hero-banner .slide.active { opacity: 1; pointer-events: auto; }
+        #hero-banner .dot {
+            width: 9px; height: 9px; border-radius: 9999px; border: 0; padding: 0;
+            background: rgba(148, 163, 184, .55); cursor: pointer;
+        }
+        #hero-banner .dot.active { background: #0ea5e9; }
+        :root[data-theme="light"] #hero-banner .dot { background: rgba(71, 85, 105, .4); }
+        :root[data-theme="light"] #hero-banner .dot.active { background: #0369a1; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200">
@@ -300,7 +310,7 @@
     <header class="pt-16 pb-20 border-b border-slate-800 bg-slate-950">
         <div class="max-w-screen-2xl mx-auto px-8">
             <div class="grid md:grid-cols-12 gap-12 items-center">
-                <div class="md:col-span-9">
+                <div class="md:col-span-7">
                     <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-3xl bg-slate-900 border border-slate-800 mb-6">
                         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                         <span class="text-emerald-400 text-sm font-medium tracking-wide">Open to opportunities &amp; collaborations</span>
@@ -334,18 +344,76 @@
                     </div>
                 </div>
 
-                <a href="https://along7gallery.xyz" target="_blank" rel="noopener"
-                   class="md:col-span-3 block group" aria-label="along7 gallery, my digital art collection">
-                    <div class="rounded-3xl overflow-hidden border border-slate-700 bg-slate-950 project-card">
-                        <img src="images/clover.jpg" width="892" height="900" decoding="async"
-                             class="w-full h-auto block"
-                             alt="Clover: an illustration of a man in a black beanie holding a black-and-white border collie puppy, one of the works I have worn as my profile picture">
-                        <div class="px-4 py-3 text-xs">
-                            <div class="uppercase tracking-widest text-amber-400 font-semibold">along7gallery.xyz</div>
-                            <div class="text-slate-400 mt-0.5">My digital art collection, archived for good. <span class="text-sky-400 group-hover:text-sky-300">Enter the gallery →</span></div>
+                <!-- Rotating hero banner: art + project highlights. Each slide links to its own home. -->
+                <div id="hero-banner" class="md:col-span-5 relative aspect-square rounded-3xl overflow-hidden border border-slate-700 bg-slate-950 project-card">
+
+                    <a href="https://along7gallery.xyz" target="_blank" rel="noopener"
+                       class="slide active absolute inset-0 flex flex-col group" aria-label="along7 gallery, my digital art collection">
+                        <div class="flex-1 min-h-0">
+                            <img src="images/clover.jpg" width="892" height="900" decoding="async"
+                                 class="w-full h-full object-cover"
+                                 alt="Clover: an illustration of a man in a black beanie holding a black-and-white border collie puppy, one of the works I have worn as my profile picture">
                         </div>
-                    </div>
-                </a>
+                        <div class="px-4 py-3 text-xs bg-slate-950">
+                            <div class="uppercase tracking-widest text-amber-400 font-semibold">along7gallery.xyz</div>
+                            <div class="text-slate-400 mt-0.5">Clover, from my digital art collection, archived for good. <span class="text-sky-400 group-hover:text-sky-300">Enter the gallery →</span></div>
+                        </div>
+                    </a>
+
+                    <a href="https://along777.github.io/along/heat-and-crime/"
+                       class="slide absolute inset-0 flex flex-col group" aria-hidden="true" aria-label="Heat, Crime, and Chicago: the study">
+                        <div class="flex-1 min-h-0 bg-white">
+                            <img src="heat-and-crime/figures/article_seasonality.png" width="1400" height="784" decoding="async" loading="lazy"
+                                 class="w-full h-full object-contain"
+                                 alt="Chart of Chicago crime seasonality against temperature across eleven years">
+                        </div>
+                        <div class="px-4 py-3 text-xs bg-slate-950">
+                            <div class="uppercase tracking-widest text-orange-400 font-semibold">Heat, Crime, and Chicago</div>
+                            <div class="text-slate-400 mt-0.5">2.76M crime reports against eleven years of weather. <span class="text-sky-400 group-hover:text-sky-300">Read the study →</span></div>
+                        </div>
+                    </a>
+
+                    <a href="https://along777.github.io/along/wildfire-return/"
+                       class="slide absolute inset-0 flex flex-col group" aria-hidden="true" aria-label="Return to Fire: the report">
+                        <div class="flex-1 min-h-0 bg-white">
+                            <img src="wildfire-return/figures/eda_seasonality.png" width="1029" height="539" decoding="async" loading="lazy"
+                                 class="w-full h-full object-contain"
+                                 alt="Chart of the seasonality of United States wildfire ignitions">
+                        </div>
+                        <div class="px-4 py-3 text-xs bg-slate-950">
+                            <div class="uppercase tracking-widest text-indigo-400 font-semibold">Return to Fire</div>
+                            <div class="text-slate-400 mt-0.5">The 2020 wildfire trilogy, rebuilt against 2.3M fires. <span class="text-sky-400 group-hover:text-sky-300">Read the report →</span></div>
+                        </div>
+                    </a>
+
+                    <a href="https://along777.github.io/along/age_myth/"
+                       class="slide absolute inset-0 flex flex-col group" aria-hidden="true" aria-label="The age myth, tested">
+                        <div class="flex-1 min-h-0 bg-white">
+                            <img src="age_myth/outputs/figures/definitive/D1_sweden_storyboard.png" width="1696" height="813" decoding="async" loading="lazy"
+                                 class="w-full h-full object-contain"
+                                 alt="Sweden life-table storyboard: birth life expectancy versus expected age at 65">
+                        </div>
+                        <div class="px-4 py-3 text-xs bg-slate-950">
+                            <div class="uppercase tracking-widest text-emerald-400 font-semibold">Life Expectancy Was 35</div>
+                            <div class="text-slate-400 mt-0.5">Almost nobody died at 35. Infant mortality wrote the average. <span class="text-sky-400 group-hover:text-sky-300">See the proof →</span></div>
+                        </div>
+                    </a>
+
+                    <a href="https://along777.github.io/along/world-panel-ekc/"
+                       class="slide absolute inset-0 flex flex-col group" aria-hidden="true" aria-label="Does growth have to cost the planet?">
+                        <div class="flex-1 min-h-0 bg-white">
+                            <img src="world-panel-ekc/notebooks/output/ekc/decoupling_trends.png" width="1040" height="650" decoding="async" loading="lazy"
+                                 class="w-full h-full object-contain"
+                                 alt="Decoupling trends of emissions against income across economies">
+                        </div>
+                        <div class="px-4 py-3 text-xs bg-slate-950">
+                            <div class="uppercase tracking-widest text-sky-400 font-semibold">Growth vs the Planet</div>
+                            <div class="text-slate-400 mt-0.5">The Kuznets curve tested across 217 economies. <span class="text-sky-400 group-hover:text-sky-300">Read the project →</span></div>
+                        </div>
+                    </a>
+
+                    <div id="hero-banner-dots" class="absolute top-3 right-3 z-10 flex gap-1.5" role="tablist" aria-label="Banner slides"></div>
+                </div>
 
             </div>
         </div>
@@ -1505,8 +1573,51 @@
             paint();
         }
 
+        // Hero banner: rotate slides, pause on hover/focus, honor reduced motion.
+        function setupHeroBanner() {
+            const root = document.getElementById('hero-banner');
+            if (!root) return;
+            const slides = Array.from(root.querySelectorAll('.slide'));
+            const dotsWrap = document.getElementById('hero-banner-dots');
+            if (slides.length < 2 || !dotsWrap) return;
+
+            const reduced = window.matchMedia &&
+                window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let current = 0, timer = null;
+
+            const dots = slides.map((_, n) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'dot' + (n === 0 ? ' active' : '');
+                b.setAttribute('aria-label', 'Show banner slide ' + (n + 1) + ' of ' + slides.length);
+                b.addEventListener('click', (e) => { e.preventDefault(); show(n); restart(); });
+                dotsWrap.appendChild(b);
+                return b;
+            });
+
+            function show(n) {
+                slides[current].classList.remove('active');
+                slides[current].setAttribute('aria-hidden', 'true');
+                dots[current].classList.remove('active');
+                current = n % slides.length;
+                slides[current].classList.add('active');
+                slides[current].removeAttribute('aria-hidden');
+                dots[current].classList.add('active');
+            }
+            function start() { if (!reduced && !timer) timer = setInterval(() => show((current + 1) % slides.length), 5500); }
+            function stop() { clearInterval(timer); timer = null; }
+            function restart() { stop(); start(); }
+
+            root.addEventListener('mouseenter', stop);
+            root.addEventListener('mouseleave', start);
+            root.addEventListener('focusin', stop);
+            root.addEventListener('focusout', start);
+            start();
+        }
+
         function init() {
             setupThemeToggle();
+            setupHeroBanner();
             setupMobileMenu();
             setupSmoothScroll();
             setupFilters();
