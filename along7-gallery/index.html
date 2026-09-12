@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Database With Good Lighting</title>
+<meta name="description" content="How along7gallery.xyz was built: 3,735 NFT artworks by 839 artists across six blockchains, every original file rescued from the artist-declared source, provenance replayed from the chain, and a 5,925-page static museum gated by 99 automated checks. Written for artists and programmers, with the art running through it.">
+<meta name="author" content="Aaron Long">
+<meta property="og:title" content="A Database With Good Lighting">
+<meta property="og:description" content="The build story of along7gallery.xyz, for artists and programmers: what happens to a work after it is collected, how the files get rescued, how the chain proves the history, and how a museum gets built out of a database.">
+<meta property="og:url" content="https://along777.github.io/along/along7-gallery/">
+<meta property="og:image" content="https://along777.github.io/along/along7-gallery/art/banner-og.jpg">
+<meta property="og:image:alt" content="The along7 gallery banner: fifteen works from the collection under the gallery's brand plate">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --bg:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+    --ink:#0b0b0b; --ink2:#52514e; --muted:#6f6d68;
+    --hair:#e1e0d9; --base:#c3c2b7;
+    --blue:#2a78d6; --blue-soft:#eaf2fc; --red:#e34948; --red-soft:#fdeeee;
+    --green:#1baf7a; --green-soft:#e9f7f1; --gold:#b8862b; --gold-soft:#faf3e3;
+    --brass:#a9782f; --brass-soft:#f6efe0; --wall:#1a1713;
+    --mono:ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+      --bg:#0d0d0d; --surface:#1a1a19; --card:#212120;
+      --ink:#f5f5f2; --ink2:#c3c2b7; --muted:#898781;
+      --hair:#2c2c2a; --base:#383835;
+      --blue:#3987e5; --blue-soft:#14233a; --red:#e66767; --red-soft:#331b1b;
+      --green:#1baf7a; --green-soft:#12291f; --gold:#d3a54a; --gold-soft:#2b230e;
+      --brass:#c8a25c; --brass-soft:#2a2214; --wall:#0a0908;
+    }:root:not([data-theme="light"]) figure{background:#141413}
+  }
+  :root[data-theme="dark"]{
+      --bg:#0d0d0d; --surface:#1a1a19; --card:#212120;
+      --ink:#f5f5f2; --ink2:#c3c2b7; --muted:#898781;
+      --hair:#2c2c2a; --base:#383835;
+      --blue:#3987e5; --blue-soft:#14233a; --red:#e66767; --red-soft:#331b1b;
+      --green:#1baf7a; --green-soft:#12291f; --gold:#d3a54a; --gold-soft:#2b230e;
+      --brass:#c8a25c; --brass-soft:#2a2214; --wall:#0a0908;
+    }:root[data-theme="dark"] figure{background:#141413}
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+
+  header.hero{background:linear-gradient(180deg,var(--surface),var(--bg));
+    border-bottom:1px solid var(--hair);padding:0 0 44px;text-align:center}
+  .brassband{height:8px;background:linear-gradient(90deg,#3b2a12 0%,#a9782f 45%,#e8c777 100%)}
+  .banner-wrap{max-width:1160px;margin:0 auto;padding:18px 16px 0}
+  .banner{margin:0;border:1px solid var(--hair);border-radius:12px;overflow:hidden;background:#0d0d10}
+  .banner img{display:block;width:100%;height:auto}
+  .heroinner{padding:28px 24px 0}
+  .hero .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .hero h1{font-size:clamp(28px,5.2vw,50px);line-height:1.12;margin:14px auto 16px;max-width:920px;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--brass)}
+  .hero .sub{max-width:760px;margin:0 auto;color:var(--ink2);font-size:18px}
+  .madeby{margin:16px auto 0;font-size:14px;color:var(--muted);max-width:760px}
+  .herobtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:20px auto 0}
+  .bigbtn{display:inline-block;background:var(--brass);color:#fff;border-radius:99px;
+    padding:11px 22px;font-size:14.5px;font-weight:700}
+  .bigbtn:hover{text-decoration:none;filter:brightness(1.08)}
+  .bigbtn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+  .kpis{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:32px auto 0;max-width:1000px}
+  .kpi{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 20px;min-width:140px}
+  .kpi b{display:block;font-size:24px;letter-spacing:-.01em}
+  .kpi span{font-size:12.5px;color:var(--muted)}
+
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+  nav .wrap{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:0 2px;padding:0 12px}
+  nav a{flex:0 0 auto;padding:10px 11px;font-size:13.5px;color:var(--ink2);border-bottom:2px solid transparent;white-space:nowrap}
+  nav a:hover{text-decoration:none;color:var(--ink)}
+
+  main{max-width:880px;margin:0 auto;padding:8px 24px 80px}
+  section{padding-top:56px;scroll-margin-top:72px}
+  .secnum{font:600 13px var(--mono);color:var(--brass);letter-spacing:.12em}
+  h2{font-size:clamp(24px,3.4vw,34px);margin:6px 0 8px;letter-spacing:-.015em}
+  .lede{color:var(--ink2);font-size:17.5px;margin:0 0 22px}
+  h3{font-size:19px;margin:30px 0 10px}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:1.2em}
+  li{margin:0 0 8px}
+  .divider{text-align:center;color:var(--base);margin:48px 0 -28px;font-size:18px;letter-spacing:.4em}
+
+  .co{border-radius:12px;padding:16px 18px;margin:18px 0;border:1px solid var(--hair);font-size:15.2px}
+  .co .tag{display:inline-block;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+           padding:4px 9px;border-radius:99px;margin-bottom:9px}
+  .plain{background:var(--blue-soft)} .plain .tag{background:var(--blue);color:#fff}
+  .why{background:var(--gold-soft)} .why .tag{background:var(--gold);color:#fff}
+  .tech{background:var(--green-soft)} .tech .tag{background:var(--green);color:#fff}
+  .bug{background:var(--red-soft)} .bug .tag{background:var(--red);color:#fff}
+  .brassbox{background:var(--brass-soft)} .brassbox .tag{background:var(--brass);color:#fff}
+  .co p:last-child,.co ul:last-child,.co ol:last-child{margin-bottom:0}
+  .co pre{margin:10px 0 0}
+
+  figure{margin:26px 0;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:14px}
+  figure img{width:100%;height:auto;display:block;border-radius:8px}
+  figcaption{font-size:13.5px;color:var(--muted);padding:10px 6px 2px;line-height:1.5}
+  figcaption b{color:var(--ink2)}
+  figure.art{padding:10px}
+  figure.art img{border-radius:8px;background:#0d0d10}
+  figure.art figcaption .t{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-style:italic;font-size:15.5px;color:var(--ink)}
+  figure.art figcaption .prov{display:block;margin-top:4px}
+  figure.art figcaption .prov b{color:var(--brass)}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:26px 0}
+  .pair figure{margin:0}
+  @media (max-width:640px){.pair{grid-template-columns:1fr}}
+  .pipe svg{display:block;width:100%;height:auto}
+  .pipe .b{fill:var(--surface);stroke:var(--hair);stroke-width:1.5}
+  .pipe .hot{fill:var(--brass-soft);stroke:var(--brass);stroke-width:2}
+  .pipe .t{fill:var(--ink);font-weight:700;font-size:14px;font-family:system-ui,sans-serif}
+  .pipe .s{fill:var(--muted);font-size:11.5px;font-family:system-ui,sans-serif}
+  .pipe .ln{stroke:var(--brass);stroke-width:1.6;fill:none}
+  .pipe .ar{fill:var(--brass)}
+
+  .tblwrap{overflow-x:auto;margin:18px 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);
+        border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     text-align:left;padding:11px 14px;border-bottom:1px solid var(--hair);background:var(--surface)}
+  td{padding:10px 14px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.num{text-align:right;white-space:nowrap}
+  .chip{display:inline-block;padding:2px 10px;border-radius:99px;font:600 12px var(--mono)}
+  .chip.pass{background:var(--green-soft);color:var(--green)}
+  .chip.warn{background:var(--gold-soft);color:var(--gold)}
+  .chip.fail{background:var(--red-soft);color:var(--red)}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:20px 0}
+  .card{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:18px}
+  .card h4{margin:0 0 8px;font-size:15.5px}
+  .card p{font-size:14px;color:var(--ink2);margin:0 0 6px}
+  .card .verdict{display:inline-block;margin-top:8px;font:600 11.5px var(--mono);letter-spacing:.06em;
+                 padding:3px 10px;border-radius:99px}
+  .v-pilot{background:var(--blue);color:#fff}
+  .v-audit{background:var(--green);color:#fff}
+  .v-backup{background:var(--gold);color:#fff}
+  .v-human{background:var(--brass);color:#fff}
+  .v-fresh{background:var(--red);color:#fff}
+
+  .flow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0;counter-reset:step}
+  .step{flex:1 1 160px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px}
+  .step::before{counter-increment:step;content:counter(step,decimal-leading-zero);
+    font:700 12px var(--mono);color:var(--brass)}
+  .step b{display:block;font-size:14.5px;margin:4px 0 4px}
+  .step span{font-size:13px;color:var(--ink2);line-height:1.45}
+
+  pre,code{font-family:var(--mono);font-size:13px}
+  pre{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;
+      overflow-x:auto;line-height:1.5;color:var(--ink2)}
+  code.inline{background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:1px 6px}
+
+  .tldrbox{background:var(--card);border:2px solid var(--brass);border-radius:16px;padding:22px 22px 8px;margin:8px 0 24px}
+  .tldrbox h3{margin:0 0 12px;font-size:18px}
+  blockquote{border-left:3px solid var(--brass);margin:16px 0;padding:6px 18px;color:var(--ink2)}
+  blockquote cite{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:6px}
+  .note{color:var(--ink2)}
+
+  /* the wall: the fifteen, in grid order */
+  .wallgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0 6px}
+  .tile{position:relative;display:block;border-radius:9px;overflow:hidden;border:1px solid var(--hair);
+        background:var(--surface);transition:transform .16s ease,box-shadow .16s ease}
+  .tile:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.22);text-decoration:none}
+  .tile img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+  .tile .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;font-size:11px;letter-spacing:.02em;
+             color:#fff;background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,0));opacity:0;transition:opacity .16s ease}
+  .tile:hover .cap{opacity:1}
+  @media (max-width:640px){.wallgrid{grid-template-columns:repeat(3,1fr)}}
+
+  footer{border-top:1px solid var(--hair);padding:28px 24px 48px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer a{color:var(--ink2)}
+  @media print{nav{display:none} section{break-inside:avoid}}
+
+  #theme-toggle{position:fixed;right:18px;bottom:18px;z-index:200;width:44px;height:44px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    background:var(--card,#fff);color:var(--ink,#111);border:1px solid var(--hair,#ccc);
+    box-shadow:0 4px 14px rgba(0,0,0,.16);padding:0}
+  #theme-toggle:hover{filter:brightness(1.08)}
+  #theme-toggle:focus-visible{outline:2px solid var(--blue,#2a78d6);outline-offset:2px}
+  #theme-toggle svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  #theme-toggle .i-sun{display:none}
+  #theme-toggle .i-moon{display:block}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) #theme-toggle .i-sun{display:block}
+    :root:not([data-theme="light"]) #theme-toggle .i-moon{display:none}
+  }
+  :root[data-theme="dark"] #theme-toggle .i-sun{display:block}
+  :root[data-theme="dark"] #theme-toggle .i-moon{display:none}
+  :root[data-theme="light"] #theme-toggle .i-sun{display:none}
+  :root[data-theme="light"] #theme-toggle .i-moon{display:block}
+  @media print{#theme-toggle{display:none}}
+
+  #home-link{position:fixed;right:70px;bottom:18px;z-index:200;height:44px;padding:0 15px;
+    border-radius:22px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    background:var(--card);color:var(--ink);border:1px solid var(--hair);
+    box-shadow:0 4px 14px rgba(0,0,0,.16);font:600 14px/1 inherit}
+  #home-link:hover{filter:brightness(1.08);text-decoration:none}
+  #home-link:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  #home-link svg{width:17px;height:17px;flex:0 0 auto;fill:none;stroke:currentColor;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  @media (max-width:560px){#home-link span{display:none} #home-link{padding:0;width:44px;justify-content:center}}
+  @media print{#home-link{display:none}}
+</style>
+<script>
+(function(){try{var t=localStorage.getItem('theme');
+if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();
+</script>
+</head>
+<body>
+<a id="top"></a>
+
+<header class="hero">
+  <div class="brassband" aria-hidden="true"></div>
+  <div class="banner-wrap">
+    <figure class="banner">
+      <img src="art/banner.jpg" width="2400" height="1200" decoding="async" alt="The along7 gallery banner: fifteen artworks in a five by three grid under the gallery's brand plate, which reads along7 gallery, the market sells it, the gallery keeps it.">
+    </figure>
+  </div>
+  <div class="heroinner">
+    <div class="kicker">along7 gallery &middot; the build story &middot; July to September 2026</div>
+    <h1>A Database With <em>Good Lighting</em></h1>
+    <p class="sub">I collect digital art on the blockchain. The token is permanent; the picture it points to is not.
+      So over eight weeks a data scientist and an AI turned a wallet into a museum: <b>3,735 works</b> by
+      <b>839 artists</b> across <b>six chains</b>, every original file rescued from the source the artist
+      declared, every ownership history replayed from the ledger, and <b>99 automated checks</b> standing
+      between the database and the public.</p>
+    <p class="madeby">Written for two readers at once. If you make art, this is what happens to a work after someone collects it, and what you can do so it survives. If you write code, this is how a museum gets built out of one SQLite file. The fifteen works in the banner above run through the whole page, each one placed where its own story explains the machine.</p>
+    <div class="herobtns">
+      <a class="bigbtn" href="#tldr">Start with the TL;DR</a>
+      <a class="bigbtn ghost" href="https://along7gallery.xyz">Visit the gallery</a>
+      <a class="bigbtn ghost" href="https://along7gallery.xyz/stats/">The vault in numbers</a>
+      <a class="bigbtn ghost" href="#wall">The fifteen</a>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>3,735</b><span>works &middot; 839 artists &middot; 6 chains</span></div>
+      <div class="kpi"><b>64 GB</b><span>4,665 verified originals, 99.5% from the artist's source</span></div>
+      <div class="kpi"><b>80,161</b><span>on-chain events replayed into provenance</span></div>
+      <div class="kpi"><b>5,925</b><span>static pages, no server, no CDN, no trackers</span></div>
+      <div class="kpi"><b>99 / 0</b><span>audit checks / failures allowed per deploy</span></div>
+      <div class="kpi"><b>~$1</b><span>a month to host, no server to keep alive</span></div>
+    </div>
+    <p class="madeby">Counted 2026-09-03. These numbers are recomputed on every build of the gallery and drift upward; the live ones are on <a href="https://along7gallery.xyz/stats/">the stats page</a>. All fifteen artworks on this page remain the property and copyright of their artists.</p>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a href="#story">Story</a>
+    <a href="#journey">Journey</a>
+    <a href="#tldr">TL;DR</a>
+    <a href="#data">Data model</a>
+    <a href="#files">Files</a>
+    <a href="#chain">Chain</a>
+    <a href="#truth">Truth machine</a>
+    <a href="#bugs">Bugs</a>
+    <a href="#two-hands">Two hands</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#limits">Limits</a>
+    <a href="#reproduce">Reproduce</a>
+    <a href="#wall">The fifteen</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================================================ 01 STORY -->
+<section id="story">
+  <div class="secnum">01</div>
+  <h2>Where this began</h2>
+  <p class="lede">On July 9, 2026 at 3:37 in the morning, an empty folder, an OpenSea API key in a text file, and one prompt.</p>
+
+  <blockquote>"Help plan out database collection and download of my NFT art vault. I will give you my opensea link. Lets create a database of the images (this will be hard many different file types, inspect ways to find original file, the address associated with like mints transfer, whatever etc."
+  <cite>The opening message, verbatim, typos and all. The only thing in the folder was the key.</cite></blockquote>
+
+  <p>I loved art long before I loved crypto. I bought my first Bitcoin at eighteen in 2013, was around for the first NFTs in 2017 and walked away because I did not like the pictures, and it took until 2025 for that to change. When it changed, it changed hard: a game, a guild, then one artist's project on an AI art app, then a thousand works in a year. The picture that did it is the one below.</p>
+
+  <figure class="art">
+    <img src="art/04-the-grid-deltasauce.jpg" width="1400" height="784" decoding="async" alt="the grid by DeltaSauce: a blurred white figure rising out of a dark floor ruled into a grid of red points, arms lifted, dissolving into static at the edges">
+    <figcaption><span class="t">the grid</span> &middot; DeltaSauce, from the FEED series
+      <span class="prov"><b>How it got here:</b> won at auction on Fellowship, June 18, 2025. The first NFT I ever actually wanted, after a decade of not wanting any. A figure made of noise climbs out of a grid, and the picture sits exactly where DeltaSauce likes to work, on the line between a memory and static; he builds the FEED series from the glow of dead bedroom televisions and calls himself a curator of nostalgia. This one hangs first because everything else followed it.</span></figcaption>
+  </figure>
+
+  <p>Here is the part nobody warns you about, on either side of the transaction. <b>An NFT does not store the art.</b> The token is a permanent line on a blockchain. The picture it points to is a guest on IPFS, or Arweave, or an artist's web host, or a marketplace's cache, and any of those can go dark when the rent stops. When it does, the token is still yours. It just points at nothing. The artist's work is what actually disappears.</p>
+
+  <div class="co plain">
+    <span class="tag">For artists</span>
+    <p>An NFT is a museum plaque with a photo of the painting printed on it. The plaque is bolted to the wall for good. The painting is in a rented warehouse across town. If the warehouse closes, your collector owns a very nice plaque, and your work is gone from the record. Most of this page is about keeping the warehouse from mattering.</p>
+  </div>
+
+  <div class="co tech">
+    <span class="tag">For programmers</span>
+    <p>Concretely: a token's <code class="inline">tokenURI()</code> returns a URL to a JSON document; that document's <code class="inline">image</code> or <code class="inline">animation_url</code> field is another URL; the bytes at that second URL are the art. Two hops, both of them somebody else's server, and only the first hop is on-chain. Every host in the chain can rot independently. The whole project is a cache of the second hop with a checksum, plus a ledger of who owned the token when.</p>
+  </div>
+
+  <p>This was not a thought experiment. When the pipeline first pulled the original file for every piece I owned, <b>twelve were already gone</b>, the hosts dead. For nine of them, a marketplace's cached thumbnail was the only copy left anywhere. I found that inside my own collection, the one I thought was safe.</p>
+
+  <p>What is in there matters, because this is not a spreadsheet of tokens. <b>1,934 stills, 1,194 motion pieces, 296 films, and 293 works of live code</b> that run in the browser, by 839 artists on every continent (the four who chose anonymity are filed under Antarctica). A year of Justin Aversano's daily polaroid auctions. Work from 112 of the 500 flagship Art Blocks projects. And the artists' own words: 1,118 lines recovered from public conversation, each with a permalink, sitting beside the works they were about. The database exists to keep all of that intact after the marketplaces move on.</p>
+
+  <div class="co why">
+    <span class="tag">Why this project</span>
+    <p>I am a data scientist. The problem in front of me was not an art problem, it was a data problem: an inventory nobody had counted, files scattered across hosts that lie about what they are serving, a ledger that is authoritative but awkward to read, and a marketplace API that quietly drops rows. The answer was a database. The gallery is what the database looks like with good lighting.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 02 JOURNEY -->
+<section id="journey">
+  <div class="secnum">02</div>
+  <h2>How this was built: eight weeks, sixty-three versions</h2>
+  <p class="lede">Version one shipped in a day. Then the conversation kept going. Every version below passed the same gate before it went live: zero audit failures, zero leaks of the private wallet.</p>
+
+  <div class="flow">
+    <div class="step"><b>Day one</b><span>Inventory, a 25-work pilot, the fake-video catch, the first gallery, live on a domain by hour fourteen.</span></div>
+    <div class="step"><b>Weeks one and two</b><span>The wiki layer, the timeline, the world map, the stories, the artists' recovered voices, the first security review.</span></div>
+    <div class="step"><b>The vault upgrade</b><span>The collection doubled, went to four chains, gained backups, and survived its first self-inflicted disaster.</span></div>
+    <div class="step"><b>Hardening</b><span>Security lockdown, structured data, an open CC0 dataset, an end-to-end QA pass that found nothing to fix.</span></div>
+    <div class="step"><b>The TV and Tezos</b><span>A slideshow that plays the whole collection on a television, then the other half of the collection: 1,958 Tezos works.</span></div>
+    <div class="step"><b>Fresh eyes</b><span>A new model re-read the chain, the prose, the indexes, and the database. It found stale numbers everywhere and one real API bug.</span></div>
+  </div>
+
+  <figure class="art">
+    <img src="art/06-march-21st-justin-aversano.jpg" width="1400" height="1050" decoding="async" alt="March 21st by Justin Aversano: a grainy film photograph of two women embracing in front of the Sphinx and a pyramid at Giza, a light leak running down the left edge">
+    <figcaption><span class="t">March 21st</span> &middot; Justin Aversano, from Moments of the Unknown
+      <span class="prov"><b>How it got here:</b> won at a daily auction on Transient, March 22, 2026. One photograph a day for a year, strangers and friends caught in a single frame, each auctioned the day it was shot; this one is two women holding each other in front of the Sphinx. I bid my way into just over two hundred of them. The gallery's Timeline page exists because of runs like this: the marketplace remembers the day a token moved to cold storage, the chain remembers the night the auction actually closed, and only the second one is the real collecting date.</span></figcaption>
+  </figure>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">When</th><th scope="col">What shipped</th><th scope="col">The receipt</th></tr></thead>
+      <tbody>
+        <tr><td><b>Jul 9 to 10</b><br><span class="note">day one</span></td>
+          <td>893 NFTs across 339 contracts catalogued in the first hour. A random 25-work pilot proved tokenURI &rarr; metadata &rarr; original file across IPFS, Arweave, and artist servers. 18,110 on-chain events from three sources. 893 originals, 1,078 files, 15.4 GB. Site live on Cloudflare R2.</td>
+          <td>The pilot review caught the marketplace lying (14 fake "videos" that were image stubs). A hostile review under two hats, senior web dev then gallery curator, found 17 holes; all fixed before the full push.</td></tr>
+        <tr><td><b>Jul 11 to 22</b><br><span class="note">the wiki run</span></td>
+          <td>Artist rooms with bios and locations, a timeline of true collecting dates traced through the hot wallet, marketplace forensics from transaction receipts, a globe of where the artists live, sixteen stories in the collector's voice, and the collector's own X archive mined for what artists said at the time.</td>
+          <td>The audit harness grew from 21 checks to 74. Two full reviews were written as reports rather than fixes, a truth audit and an end-of-day "good night review," before the next feature was allowed in.</td></tr>
+        <tr><td><b>Jul 17 to 18</b><br><span class="note">the vault upgrade</span></td>
+          <td>987 &rarr; 1,708 works, one chain &rarr; four (Base, Abstract, Polygon), 286 &rarr; 420 artists. A chain-first recount caught works the marketplace API had silently dropped. First 3-2-1 backup.</td>
+          <td>A cleanup script deleted 890 legitimate files. The audit failed the build on the spot (2,255 broken references); the day-old backup restored everything in minutes. <a href="#bugs">The story is below.</a></td></tr>
+        <tr><td><b>Jul 21 to 22</b><br><span class="note">hardening</span></td>
+          <td>A full <code class="inline">default-src 'self'</code> content security policy, artist-authored interactive works sandboxed at the edge, JSON-LD on every page, a CC0 dataset of the facts, llms.txt, a robots.txt that welcomes AI crawlers on purpose.</td>
+          <td>80 audit checks. A "max auditor" pass walked 2,979 pages and reported zero defects, and said so instead of inventing work.</td></tr>
+        <tr><td><b>Aug 13 to 14</b><br><span class="note">the TV</span></td>
+          <td>A /tv page that plays the whole collection: films stream a 1080p transcode tier, gifs loop, live-code pieces run in per-slide sandboxes. Plus a local tool that pushes stills to a Samsung Frame's Art Mode.</td>
+          <td>358 transcodes, 2.35 GB, zero corrupt. An adversarial review caught 12 real bugs before the first deploy and 4 more before the second.</td></tr>
+        <tr><td><b>Aug 26 to 29</b><br><span class="note">Tezos</span></td>
+          <td>The other half of the collection ingested from a second blockchain: 1,958 works, about 40 GB, via TzKT and objkt. 476 creators materialized as artist rooms; cross-chain identities folded by handle, website, and name. A complete Spanish mirror was built, audited to zero failures, and parked the same day.</td>
+          <td>Public IPFS gateways throttled the bulk download after ~270 files and denylisted whole artists. Slower waves, gateway rotation, and a fallback to objkt's CDN brought it to 0 failed downloads.</td></tr>
+        <tr><td><b>Sep 2</b><br><span class="note">fresh eyes</span></td>
+          <td>A new model reviewed five fronts. New <code class="inline">factcheck</code> stage re-verifies chain facts into a ledger: custody for all 3,735 works, sampled ownership, deployers, editions, ENS. Prose numbers became build-time tokens. Build time 916s &rarr; ~100s.</td>
+          <td>26 bios and every collection-scale count in the essays were stale. An Etherscan rate-limit response had been indistinguishable from a reverted call. "160 duplicate events" turned out to be 3. 99 checks, 0 FAIL.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="co brassbox">
+    <span class="tag">The rule that made it honest</span>
+    <p>Nothing deploys unless a program says it can. The audit runs about a hundred named checks against the built site on every release, and a second grep confirms a private wallet address appears zero times in the output. Both gates are absolute and loud. Twice a deploy was silently blocked by a single failing check while the script still exited 0, so the rule grew a corollary: a deploy is confirmed by fetching the live versioned asset, never by an exit code and never by a cacheable URL.</p>
+  </div>
+
+  <div class="co why">
+    <span class="tag">Why publish the messy middle</span>
+    <p>The gallery itself is polished. This page is not, on purpose. The deleted files, the fake videos, the stale numbers, the wrong wallet: those taught more than the features did, and a data science portfolio that only shows the wins is showing half the job.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 03 TLDR -->
+<section id="tldr">
+  <div class="secnum">03</div>
+  <h2>TL;DR</h2>
+  <div class="tldrbox">
+    <h3>Eight bullets, each with a number attached</h3>
+    <p><b>1 &middot; The artist's file is the only source of truth.</b> Every work's metadata is read from its own on-chain <code class="inline">tokenURI</code>, and the file is fetched from the link the artist put there, never from a marketplace preview. Today <b>99.5%</b> of works are archived from that source: 3,251 files from IPFS, 651 from artist-run servers, 326 from Arweave, 22 fully on-chain. The <b>127</b> that survive only as marketplace caches are labeled as exactly that.</p>
+    <p><b>2 &middot; Bytes, not labels.</b> Every file's type comes from its magic bytes and it is stored with a SHA-256. Content-Type headers lied often enough that trusting them was the first bug of the project.</p>
+    <p><b>3 &middot; Provenance is replayed, not guessed.</b> <b>80,161</b> transfer and sale events from two independent sources give <b>3,652</b> works a verified mint record and every work a collecting history. Where a piece was bought, the transaction receipt names the marketplace that actually settled it: <b>3,003</b> acquisitions traced.</p>
+    <p><b>4 &middot; Auctions are reconstructed bid by bid.</b> <b>740</b> bids across <b>215</b> auctions read straight from calldata, including a sealed-bid drop with 202 bids from 73 collectors. Houses that settle bidding off-chain leave no trail, so the site says "won at auction" more often than it can show bids, and says why.</p>
+    <p><b>5 &middot; The database is the product.</b> One SQLite file: works, contracts, collections, artists, events, sales, market events, media files, profiles, fact checks, page hashes. The attribution chain is a join, and a hand-authored curation layer overrides it where the chain cannot know.</p>
+    <p><b>6 &middot; The site is disposable, the archive is not.</b> 5,925 pages render from the database and files in about a hundred seconds. No app server, no CDN, no trackers, no external fonts. Lose the site and one command rebuilds it; lose the database and the chain plus the files rebuild most of it.</p>
+    <p><b>7 &middot; Every deploy is audited like a bank, not proofread like a blog.</b> 99 named checks, 0 failures allowed. Links, venue proofs, custody, privacy, prices, schema, prose drift, even em dashes.</p>
+    <p><b>8 &middot; The AI did the engineering; a human did the seeing.</b> Three Claude models over eight weeks wrote nearly all of the code, read three blockchains, and reconstructed auctions from raw calldata. The collector made every call taste decides and caught what no check could: a lightbox opening the wrong work, an artist's room holding other people's projects, prose that sounded like a machine.</p>
+    <p class="note">And the vault holds. The custody check reads the latest transfer of every one of the 3,735 works and confirms it lands in a tracked wallet. As of September 2, zero have left.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 04 DATA MODEL -->
+<section id="data">
+  <div class="secnum">04</div>
+  <h2>The data model</h2>
+  <p class="lede">A Python package with one command per stage, each idempotent and resumable, all writing into one SQLite file. The hard part is not storage. It is answering "who made this?" without a column that says so.</p>
+
+  <figure class="pipe">
+    <svg viewBox="0 0 680 404" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Architecture: OpenSea, Etherscan and TzKT, and IPFS or Arweave feed a Python pipeline, which writes SQLite and verified media, which a static site generator turns into pages on Cloudflare R2. A curation layer feeds the generator too.">
+      <defs>
+        <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path class="ar" d="M0,0 L7,3 L0,6 Z"/>
+        </marker>
+      </defs>
+      <rect class="b" x="14"  y="14" width="180" height="52" rx="9"/>
+      <text class="t" x="104" y="38" text-anchor="middle">OpenSea &middot; objkt</text>
+      <text class="s" x="104" y="55" text-anchor="middle">catalog + metadata</text>
+      <rect class="b" x="250" y="14" width="180" height="52" rx="9"/>
+      <text class="t" x="340" y="38" text-anchor="middle">Etherscan &middot; TzKT</text>
+      <text class="s" x="340" y="55" text-anchor="middle">transfers + receipts + logs</text>
+      <rect class="b" x="486" y="14" width="180" height="52" rx="9"/>
+      <text class="t" x="576" y="38" text-anchor="middle">IPFS &middot; Arweave &middot; artist hosts</text>
+      <text class="s" x="576" y="55" text-anchor="middle">the artist's real files</text>
+      <path class="ln" d="M104,66 C104,96 300,92 330,118" marker-end="url(#ar)"/>
+      <path class="ln" d="M340,66 L340,118" marker-end="url(#ar)"/>
+      <path class="ln" d="M576,66 C576,96 380,92 350,118" marker-end="url(#ar)"/>
+      <rect class="hot" x="220" y="122" width="240" height="54" rx="9"/>
+      <text class="t" x="340" y="146" text-anchor="middle">py -m vault &lt;stage&gt;</text>
+      <text class="s" x="340" y="164" text-anchor="middle">sync &middot; metadata &middot; provenance &middot; download &middot; factcheck</text>
+      <path class="ln" d="M300,176 C300,196 210,196 210,214" marker-end="url(#ar)"/>
+      <path class="ln" d="M380,176 C380,196 470,196 470,214" marker-end="url(#ar)"/>
+      <rect class="b" x="120" y="218" width="180" height="52" rx="9"/>
+      <text class="t" x="210" y="242" text-anchor="middle">vault.db (SQLite)</text>
+      <text class="s" x="210" y="259" text-anchor="middle">works &middot; artists &middot; events &middot; checks</text>
+      <rect class="b" x="380" y="218" width="180" height="52" rx="9"/>
+      <text class="t" x="470" y="242" text-anchor="middle">media/ (64 GB)</text>
+      <text class="s" x="470" y="259" text-anchor="middle">originals + checksums + derivatives</text>
+      <rect class="b" x="14" y="306" width="150" height="52" rx="9"/>
+      <text class="t" x="89" y="330" text-anchor="middle">curation/</text>
+      <text class="s" x="89" y="347" text-anchor="middle">human judgment, JSON + md</text>
+      <path class="ln" d="M210,270 C210,290 320,290 330,302" marker-end="url(#ar)"/>
+      <path class="ln" d="M470,270 C470,290 360,290 350,302" marker-end="url(#ar)"/>
+      <path class="ln" d="M164,332 L196,332" marker-end="url(#ar)"/>
+      <rect class="b" x="200" y="306" width="280" height="52" rx="9"/>
+      <text class="t" x="340" y="330" text-anchor="middle">Static site generator (Jinja2)</text>
+      <text class="s" x="340" y="347" text-anchor="middle">5,925 pages &middot; audit &middot; privacy grep</text>
+      <path class="ln" d="M340,358 L340,374" marker-end="url(#ar)"/>
+      <rect class="hot" x="230" y="378" width="220" height="24" rx="9"/>
+      <text class="t" x="340" y="394" text-anchor="middle" style="font-size:12.5px">Cloudflare R2 &middot; rclone sync site/ only</text>
+    </svg>
+    <figcaption>Every arrow points away from something fragile toward something the collector controls. Only the built <code class="inline">site/</code> folder ever leaves the machine; the database, the curation layer, and the notes never do.</figcaption>
+  </figure>
+
+  <h3>The attribution chain</h3>
+  <p>A token row has no artist column. That is the single most important fact about NFT data, and it explains half the wrong attributions you see on marketplaces. The token belongs to a contract; the contract maps to a collection; the collection has an owner address; the owner address is the artist. Except when it is not, which is often.</p>
+
+  <div class="co tech">
+    <span class="tag">For programmers</span>
+    <p>The whole gallery hangs off one view. The per-token collection field beats the contract-level one, because a shared contract can hold hundreds of projects by different people:</p>
+    <pre><code>CREATE VIEW v_main AS
+SELECT n.id, n.name AS title, n.contract_address, n.token_id, n.chain,
+       COALESCE(n.collection_slug, c.opensea_slug) AS collection,   -- per-token beats per-contract
+       col.owner_address                            AS artist_key,   -- the artist, usually
+       n.minted_at, n.collected_at, n.collected_via, n.acquire_market
+FROM nfts n
+LEFT JOIN contracts   c   ON c.address = n.contract_address
+LEFT JOIN collections col ON col.slug  = COALESCE(n.collection_slug, c.opensea_slug);
+-- then: curation/overrides.json wins over every row above</code></pre>
+  </div>
+
+  <ul>
+    <li><b>One contract, many artists.</b> Art Blocks and fx(hash) host hundreds of projects under a handful of shared contracts. Each token's own metadata names its project, so the per-token collection field is what keeps a generative drop together and credited to the right person.</li>
+    <li><b>Platform-owned collections.</b> SuperRare-style contracts where the "owner" is the platform. Attribution falls to the minter, or to an "Artist" trait, or to parsing "by NAME" out of the collection title, depending on the venue. Each mode is a named override.</li>
+    <li><b>Tezos.</b> Attribution always follows the per-token creator recorded by the indexer, never the contract, because per-artist contracts there often have no owner at all. Learning that healed about 114 artist rooms in one fix.</li>
+    <li><b>Humans.</b> A curation layer of JSON overrides (merges, collaborations, platform accounts that are not artists, works to hide, captions that are the artist's recovered words) wins over everything above. It is the only place taste is allowed to override the chain.</li>
+  </ul>
+
+  <figure class="art">
+    <img src="art/11-beverly-hills-sigmax.jpg" width="1400" height="741" decoding="async" alt="Beverly Hills by SigmaX: a pink hotel with a dark green tower and a looping script sign reading The Beverly Hills, palms and a pink car in front, drawn with an architect's precision">
+    <figcaption><span class="t">Beverly Hills</span> &middot; SigmaX, from What Cities Hold
+      <span class="prov"><b>Why it is here:</b> a one-of-one from a generative drop on 8NAP, where every mint came out different and the rarest cities were scattered at random through the run. SigmaX trained as an architect and builds these the way an architect builds, structure first, feeling arriving through precision. A drop like this is exactly the case the per-token collection field exists for: dozens of unique pieces, one contract, one artist, and a marketplace that would happily file them under the contract's name instead of his.</span></figcaption>
+  </figure>
+
+  <div class="co plain">
+    <span class="tag">For artists</span>
+    <p>If you want to be credited correctly by every archive that ever indexes your work, mint from a contract you deployed yourself, or make sure the token's own metadata carries your name. The archive can prove you made a contract from the chain (the deployer address is a fact). It can only guess at a name in a title.</p>
+  </div>
+
+  <h3>The canonical run, in order</h3>
+  <pre><code>py -m vault sync                 # inventory the wallet (captures per-token collection)
+py -m vault metadata --all       # each token's own metadata document
+py -m vault artists --all        # collections + artist accounts
+py -m vault provenance --all     # events from the marketplace index + the chain ledger
+py -m vault enrich               # derive collected_at / collected_from / sales / classes
+py -m vault origin               # mint + acquire venue   (MUST run after enrich)
+py -m vault market               # receipt forensics: which marketplace really settled it
+py -m vault editions             # true per-token edition size from the contract
+py -m vault bids --platform auction   # reconstruct the bidding from calldata
+py -m vault download --all       # originals, gateway rotation, sha-256, magic bytes
+py -m vault site --base-url https://along7gallery.xyz
+py -m vault factcheck            # re-verify chain facts into a ledger
+py -m vault audit                # ~100 checks; 0 FAIL required to ship
+py -m vault deploy               # rclone sync of site/ only, after the privacy grep</code></pre>
+  <p>Order matters and the order was learned the hard way. <code class="inline">origin</code> labels a work "from the artist" only when the collector received it directly from the minter, and <code class="inline">enrich</code> is what fills in who the collector received it from. Run them backwards and a whole batch of gifts quietly become "unknown."</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 05 FILES -->
+<section id="files">
+  <div class="secnum">05</div>
+  <h2>Getting the real files</h2>
+  <p class="lede">The lazy way is to save whatever image the marketplace shows. That is wrong twice: it is a re-rendered copy, and it can differ from, or outlast, the artist's file.</p>
+
+  <figure class="art">
+    <img src="art/02-deluge-ex-mortal.jpg" width="1400" height="1008" decoding="async" alt="deluge by ex_mortal: a single frame of a video work, pink blossoms rising out of dark moonlit water, the image breaking into square blocks of digital noise">
+    <figcaption><span class="t">_ d e l u g e _</span> &middot; ex_mortal, one frame of a moving work
+      <span class="prov"><b>How it got here:</b> won at auction on SuperRare, November 25, 2025. ex_mortal makes video out of dying hardware, circuit-bent devices and modular video synthesis, in Florida. Video is the fragile end of the whole collection: a still can survive as a thumbnail somewhere, a loop that lives on a dead host is simply gone. So the archive keeps the file he actually published, not a preview of it, and this frame is the only still version that exists.</span></figcaption>
+  </figure>
+
+  <div class="co tech">
+    <span class="tag">For programmers</span>
+    <p>The heart of the downloader, simplified. Two lines carry the weight: gateway rotation works because IPFS is content-addressed (the same hash returns the same bytes from any gateway), and the type sniffer reads the file's opening bytes instead of the server's label, because that label lies more than you would guess.</p>
+    <pre><code>for nft in wallet_nfts(address):
+    meta = fetch(nft.token_uri)                       # the token's own record
+    url  = meta.get("animation_url") or meta["image"] # the artist's declared source
+    data = fetch_with_gateway_rotation(url)           # ipfs:// -> several gateways, politely
+    ext  = sniff_type(data[:64])                      # trust the bytes, not the header
+    save(f"{contract}/{token}.{ext}", data, sha256(data))
+
+def sniff_type(head: bytes) -> str:
+    if head[:3] == b"\xff\xd8\xff":                return "jpg"
+    if head[:8] == b"\x89PNG\r\n\x1a\n":           return "png"
+    if head[:6] in (b"GIF87a", b"GIF89a"):         return "gif"
+    if head[:4] == b"RIFF" and head[8:12] == b"WEBP": return "webp"
+    if head[4:8] == b"ftyp":                       # ISO-BMFF: video OR an AVIF still
+        return "avif" if head[8:12] in (b"avif", b"heic") else "mp4"
+    return puremagic_guess(head)                   # everything else, last</code></pre>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Where the originals live</th><th class="num" scope="col">Files</th><th scope="col">Note</th></tr></thead>
+      <tbody>
+        <tr><td>IPFS (content-addressed)</td><td class="num">3,251</td><td>any gateway, any time, if the pin survives</td></tr>
+        <tr><td>Artist-run servers</td><td class="num">651</td><td>the most fragile class; a domain lapse ends them</td></tr>
+        <tr><td>Arweave (permanent storage)</td><td class="num">326</td><td>paid-once, meant to last</td></tr>
+        <tr><td>Marketplace cache only</td><td class="num">127</td><td>the original host is already dead; labeled honestly on the wall</td></tr>
+        <tr><td>Fully on-chain</td><td class="num">22</td><td>the art is the token; a <code class="inline">data:</code> URI inside the metadata</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="co plain">
+    <span class="tag">For artists: how to make your work survivable</span>
+    <ol>
+      <li><b>Put the real file on IPFS or Arweave,</b> not only on your website. Arweave is paid once and meant to last; IPFS lasts as long as someone pins it, so pin it in two places.</li>
+      <li><b>Make the token's own metadata point at that file.</b> The <code class="inline">image</code> field is the still; if the work moves, put the moving file in <code class="inline">animation_url</code>. Archives read those two fields, nothing else.</li>
+      <li><b>Keep the master.</b> The archive can only keep what was published. If you rendered at 8K and published a 1080p, the 1080p is the work forever.</li>
+      <li><b>Mint from your own contract when you can,</b> or through a platform that writes your address as the minter. That is what proves authorship later, not your name in a title.</li>
+      <li><b>Say who you are somewhere permanent.</b> Half the artists in this archive have a bio only because they wrote it in a marketplace profile that still happened to be up when the pipeline ran. Nine of them sent theirs directly; those are the ones that will not rot.</li>
+    </ol>
+  </div>
+
+  <div class="co bug">
+    <span class="tag">Bug caught on day one</span>
+    <p>The pilot "saved" a batch of videos that were really tiny image stubs. For static works the marketplace serves a preview from its image CDN: an <b>AVIF still inside an ISO-BMFF container</b>, and naive sniffers see the <code class="inline">ftyp</code> box at offset 4 and call it MP4. The brand bytes at offset 8 say <code class="inline">avif</code>. Fourteen fake videos were purged and the rule that fell out of it became the whole philosophy: trust only what the artist declared, verify the bytes, and label anything you had to swap in. The collector spotted it first, by eye, in the 25-work pilot.</p>
+  </div>
+
+  <div class="co bug">
+    <span class="tag">Bug caught in week eight</span>
+    <p>Two real JPEGs with Exif headers were sniffed as <code class="inline">.db</code> files because the general-purpose type library's confidence ordering misfired. They became undisplayable and their pages shipped a literal <code class="inline">src="None"</code>, which the internal-reference audit caught. The sniffer above now decides the core image types from first-class magic bytes before it consults anything else.</p>
+  </div>
+
+  <h3>The 403 wall</h3>
+  <p>The Tezos ingest was the first truly bulk download, about 2,100 files. At a quarter-second between requests, the public IPFS gateways throttled the IP after roughly 270 files: uniform 403s from three gateways and 429s from a fourth, on every row, including rows that had worked minutes earlier. A naive retry loop would have marked live art as permanently failed at the three-attempt cap.</p>
+  <div class="flow">
+    <div class="step"><b>Read the error, not the count</b><span>Rows carrying the wall's signature got their attempt counter reset. Throttle victims are not dead pins.</span></div>
+    <div class="step"><b>Slow down and rotate</b><span>Politeness raised to 1.2s, the gateway list rotated per wave, ten-minute cooldowns, stop after two waves with no progress.</span></div>
+    <div class="step"><b>Characterize the residue</b><span>About 173 files still 403'd from every gateway on any IP: a flagged artist's whole collection on a shared denylist, not throttling.</span></div>
+    <div class="step"><b>Find another door</b><span>objkt's own CDN serves the same content by CID. Added as the last candidate for bare-CID URIs: 0 failed downloads.</span></div>
+  </div>
+
+  <figure class="art">
+    <img src="art/13-coming-home-to-finite-mizuyokaii.jpg" width="1400" height="974" decoding="async" alt="Coming Home To Finite by Mizuyokaii: a diptych, a figure of liquid metal and flowers sitting in a meadow under a starry dusk sky, beside a handwritten poem of the same title">
+    <figcaption><span class="t">Coming Home To Finite</span> &middot; Mizuyokaii
+      <span class="prov"><b>How it got here:</b> sent by the artist on November 12, 2025, the day after I collected its sibling. Mizuyokaii's name joins mizu, water, and yokai, spirit; the figures are built from liquid, smoke, and light and are always on the way to being something else. This one ships as a diptych, the picture beside the poem it grew from, in her own handwriting: maybe forever is not about duration, maybe it is about depth. The file came at 6,625 by 4,608 pixels. That is the master, and it is why the "keep the master" rule above is not theoretical: the archived copy is exactly this, checksummed, and no marketplace ever served it at that size.</span></figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 06 CHAIN -->
+<section id="chain">
+  <div class="secnum">06</div>
+  <h2>Reading the chain twice</h2>
+  <p class="lede">A marketplace can relist a piece, hide it, or lose its history. The chain cannot. So provenance is replayed from the events the ledger wrote, not the story a website tells today.</p>
+
+  <p>Every work's transfer history is read from two independent sources, the marketplace's event index and the chain explorer's account ledger, and merged. A mint is simply the first transfer, sent from the zero address. Purchases go one layer deeper: the transaction receipt and its logs name the marketplace contract that actually settled the sale, which is how a wall label can say where a piece was <i>minted</i> and where it was <i>collected</i> and mean both.</p>
+
+  <figure class="art">
+    <img src="art/05-mountain-dew-daze-desultor.jpg" width="1400" height="1400" decoding="async" alt="mountain dew daze by Desultor: a skull painted in thick acrylic strokes of soda green, magenta, and yellow, paint dripping from the jaw, the artist's round stamp in the corner">
+    <figcaption><span class="t">mountain dew daze</span> &middot; Desultor, from drive-thru daydreams
+      <span class="prov"><b>How it got here:</b> won at auction on SuperRare, October 6, 2025. A skull the exact green of the soda, in acrylic thick enough to drip, and a token of the painting, and then the painting itself in the mail, because Desultor pairs the physical work with the NFT. His line for it: a file can become a painting, a token can become an object. The auction is one of the 215 the archive rebuilt bid by bid from calldata, so the wall label can show who else was bidding that night, not just that I won.</span></figcaption>
+  </figure>
+
+  <div class="cards">
+    <div class="card">
+      <h4>True collecting dates</h4>
+      <p>Cold vaults receive; hot wallets collect. On day one every work's history ended at the moment it moved into cold storage. Tracing each one back through the collector's hot wallet gave 884 works their real collecting date: 530 mints, 54 purchases, 300 transfers.</p>
+      <span class="verdict v-human">TRACED THROUGH THE HOT WALLET</span>
+    </div>
+    <div class="card">
+      <h4>Editions from the contract</h4>
+      <p>"Edition of N" is per token, not per collection. The archive calls <code class="inline">totalSupply(id)</code> where the contract implements it and sums mint events where it does not. A polaroid that once read "Edition of 4,290" now reads "Edition of 25."</p>
+      <span class="verdict v-human">CAUGHT BY EYE, FIXED BY CLASS</span>
+    </div>
+    <div class="card">
+      <h4>Bids from calldata</h4>
+      <p>Working backward from each auction win, scanning transactions to the settling contract whose calldata carries both the token id and the contract, and carry ETH. Fully captures SuperRare and Transient; a sealed-bid drop needed its own selector scan.</p>
+      <span class="verdict v-audit">740 BIDS &middot; 215 AUCTIONS</span>
+    </div>
+    <div class="card">
+      <h4>Custody, all 3,735 works</h4>
+      <p>Offline, from the ledger: does the latest transfer land in a tracked wallet? For multi-edition tokens the test is net balance, because other collectors keep trading the same token id after our copy arrived. The "latest hop" version raised 1,249 false alarms.</p>
+      <span class="verdict v-fresh">0 LEFT THE VAULT</span>
+    </div>
+  </div>
+
+  <div class="co tech">
+    <span class="tag">For programmers</span>
+    <p>The custody test, as SQL over the merged event table. Single-copy tokens ask where the last hop landed; multi-edition tokens ask whether the wallets' net balance is still positive, because on an ERC-1155 the "latest transfer" of a token id is usually someone else's copy changing hands:</p>
+    <pre><code>-- ERC-721 / FA2 one-of-ones: the last hop must land in a tracked wallet
+SELECT n.id FROM nfts n
+JOIN events e ON e.contract = n.contract_address AND e.token_id = n.token_id
+WHERE e.ts = (SELECT MAX(ts) FROM events WHERE contract = e.contract AND token_id = e.token_id)
+  AND lower(e.to_address) NOT IN (SELECT address FROM wallets);          -- these have LEFT
+
+-- ERC-1155 editions: net balance across the tracked wallets must stay above zero
+SELECT contract, token_id,
+       SUM(CASE WHEN lower(to_address)   IN (SELECT address FROM wallets) THEN quantity ELSE 0 END)
+     - SUM(CASE WHEN lower(from_address) IN (SELECT address FROM wallets) THEN quantity ELSE 0 END) AS held
+FROM events GROUP BY contract, token_id HAVING held &lt;= 0;                 -- these have LEFT</code></pre>
+  </div>
+
+  <div class="co bug">
+    <span class="tag">The bug that looked like a fact</span>
+    <p>The chain-explorer client returned <code class="inline">None</code> for a reverted <code class="inline">eth_call</code>. It also returned <code class="inline">None</code> for a rate-limited one, because the throttle envelope is a well-formed JSON response with a status of 0 and its result was being passed through unread. So a stage could record "this contract has no totalSupply" as a fact while being rate-limited. The fix: the throttle now raises its own exception, calls retry with exponential backoff, and the fact-check ledger records a throttle as "inconclusive," never as a result. Found by the fresh-eyes review in week eight; it had been there since day one.</p>
+  </div>
+
+  <div class="co plain">
+    <span class="tag">For artists</span>
+    <p>If you ask a busy clerk for a file and they say "come back later," you have not learned that the file does not exist. The old code wrote down "file does not exist." The same thing happens to your work on marketplaces every day: a listing that says "no history" or "unknown creator" is usually a summary that gave up, not the chain. The chain still knows. Authorship in this archive is proven by one fact, that the wallet which deployed the contract is yours, and 462 artist contracts checked that way had 0 mismatches.</p>
+  </div>
+
+  <div class="co tech">
+    <span class="tag">Technical</span>
+    <p>Public RPC <code class="inline">eth_getLogs</code> caps block ranges at 50k or worse, so full-history mint lookups go through a keyless indexer instead. Authorship is proven by <code class="inline">getcontractcreation</code> (deployer == artist wallet), never by name match or "the wallet touched the contract," which sweeps in art the artist merely collected. On Tezos, the indexer's token transfers carry only a transaction id; operation hashes are batch-resolved separately, and mints appear as transfers from <code class="inline">null</code>, which the pipeline maps onto its one mint signal, the zero address.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 07 TRUTH -->
+<section id="truth">
+  <div class="secnum">07</div>
+  <h2>The truth machine</h2>
+  <p class="lede">A museum should be able to prove what it puts on the wall. So a program checks every build before it ships, and a failed check blocks the release.</p>
+
+  <figure class="art">
+    <img src="art/01-creation-gul-yildiz.jpg" width="1400" height="932" decoding="async" alt="Creation by Gül Yıldız: Michelangelo's reclining Adam reaches from a rocky hillside toward a man in a bowler hat and black suit who holds out a green apple, carried on a brown cloud by two angels under a blue sky">
+    <figcaption><span class="t">Creation</span> &middot; Gül Yıldız
+      <span class="prov"><b>How it got here:</b> won at auction on Ninfa, July 12, 2026. Michelangelo's Adam reaching for a green apple held out by a bowler-hatted Magritte figure: two art histories shaking hands. Gül studied engineering before photography, is an Official Fujifilm Photographer, and has taught art history alongside her own practice, which is the kind of background that makes a joke like this land. Her wall label says "collected on Ninfa" because the transaction receipt names Ninfa's contract, and the audit will not let a venue appear on any label unless the address behind it is proven. That is check A3, and it fails the build on a single unproven word.</span></figcaption>
+  </figure>
+
+  <p>The audit started on day one with 21 checks and now runs 99, in numbered families. A sample of what they assert, each one born from something that actually went wrong:</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Check</th><th scope="col">What it asserts</th><th scope="col">Why it exists</th><th scope="col">Now</th></tr></thead>
+      <tbody>
+        <tr><td><b>A5 internal</b></td><td>Every internal reference resolves (328,073 checked)</td><td>The cleanup that deleted 890 files</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A3 venue proofs</b></td><td>Every "minted on X" traces to a proven contract address</td><td>Labels once came from names</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A4 no amounts</b></td><td>No purchase or bid amount anywhere on the public site</td><td>A museum, not a storefront</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A6 stub tripwire</b></td><td>No sub-20 KB CDN file posing as an original</td><td>The AVIF fake videos</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A20 AB tiers</b></td><td>The Art Blocks tier a stage derived is still there after every other stage ran</td><td>The blind-stamp regression</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A21 dataset privacy</b></td><td>The CC0 export and the llms files carry no price and no private wallet</td><td>Bulk download industrializes a leak</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A23 custody</b></td><td>Every shown work's latest transfer lands in a tracked wallet</td><td>Nothing had ever re-read the chain</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A23 mint proof</b></td><td>Sampled mint receipts agree with the stored mint timestamp</td><td>4 minter-semantics mismatches, no data errors</td><td><span class="chip warn">WARN</span></td></tr>
+        <tr><td><b>A1 prose drift</b></td><td>Number words in the essays match the census</td><td>"Seventeen hundred works. Four chains." vs 3,735 and six</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A11 no em dash</b></td><td>No em dashes in any editorial text, template, or shipped script</td><td>House style, and a tell for machine prose</td><td><span class="chip pass">PASS</span></td></tr>
+        <tr><td><b>A24 dangling refs</b></td><td>Orphan rows and dangling aliases stay at or below a baseline</td><td>One unmerged duplicate artist profile</td><td><span class="chip warn">WARN</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="co tech">
+    <span class="tag">For programmers</span>
+    <p>A check is twenty lines, and the harness is a list of them. The shape that made this sustainable: every check has a stable id, a one-line claim, and a failure message that names the offending rows, so the audit report reads like a changelog of what the site promises. This is the venue-proof check, roughly as it runs:</p>
+    <pre><code>def a3_venue_proofs(conn, check):
+    proven = {r[0] for r in conn.execute(
+        "SELECT lower(address) FROM address_book WHERE kind IN ('marketplace','platform')")}
+    bad = [(r["title"], r["mint_venue"]) for r in conn.execute(
+        "SELECT title, mint_venue, mint_venue_addr FROM v_main WHERE mint_venue IS NOT NULL")
+        if (r["mint_venue_addr"] or "").lower() not in proven]
+    check(not bad, "A3-venue-proofs",
+          "every venue label traces to a proven contract address",
+          f"{len(bad)} unproven venue labels: {bad[:5]}")
+
+# ...99 of these; one FAIL and `py -m vault deploy` refuses to run</code></pre>
+  </div>
+
+  <div class="co brassbox">
+    <span class="tag">Numbers as tokens</span>
+    <p>The most data-science-flavored fix was the least glamorous. Sixteen essays and three dozen bios said things like "seventeen hundred works, four hundred artists, four chains" while the census said 3,735, 839, and six. The prose now writes <code class="inline">{{n_works}}</code>, <code class="inline">{{n_chains}}</code>, <code class="inline">{{artist_tdxl}}</code>, and the build renders them as words for small numbers and digits above that. Historical mentions that must not update ("the first day catalogued 893 works") go in an allowlist, and the drift gate parses number words back out of the live prose and compares. Prose is data. Treat it like data.</p>
+  </div>
+
+  <div class="co plain">
+    <span class="tag">For artists</span>
+    <p>What this means on your wall label: nothing there is typed in. The venue, the mint date, the edition size, the collecting date, and the count of your works in the vault all come from the chain or the database, and a program re-checks them before every release. If a label about your work is wrong, it is wrong in the data, and the fix is one row, not one page.</p>
+  </div>
+
+  <p>After a deploy, the checks run again against the live pages, because green on a laptop and green on the open internet are two different facts. The CDN caches the bare asset URL for hours and a plain fetch can hit an edge that has the fix when the origin does not; the only proof that counts is a cache-busted fetch of the versioned asset the live HTML actually references.</p>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 08 BUGS -->
+<section id="bugs">
+  <div class="secnum">08</div>
+  <h2>Bugs worth keeping</h2>
+  <p class="lede">Each of these is now a gotcha in the project's working notes, so it never has to be relearned. The chip says what caught it.</p>
+
+  <figure class="art">
+    <img src="art/07-rise-of-the-immortals-1dontknows.jpg" width="933" height="1400" decoding="async" alt="Rise of the Immortals by 1dontknows: a tall collage of old-master paintings, a youth in red on a rearing white horse, winged Father Time with a scythe above, a golden clock face, a hummingbird, and below them a tiger, a crocodile, and cherubs in the water">
+    <figcaption><span class="t">Rise of the Immortals</span> &middot; 1dontknows
+      <span class="prov"><b>How it got here:</b> won at auction on SuperRare, September 20, 2025. 1dontknows never studied art; he studied languages, lost a design job to COVID, and started rebuilding public-domain Renaissance paintings into new worlds. He leaves a clue in a corner of every picture and I am still looking for this one. Bugs hide the same way, in the corner of a thing that looks finished, which is why every one below has a chip saying who finally noticed.</span></figcaption>
+  </figure>
+
+  <div class="cards">
+    <div class="card">
+      <h4>LIMIT 1 returned the wrong wallet</h4>
+      <p><code class="inline">SELECT address FROM wallets LIMIT 1</code> walked the primary-key index, which is alphabetical order, and picked the wrong wallet as "the vault." When which row matters, say so in SQL.</p>
+      <span class="verdict v-pilot">PILOT REVIEW</span>
+    </div>
+    <div class="card">
+      <h4>A collection named in math-italic Unicode</h4>
+      <p>Produced a 260-character URL-encoded slug and broke Windows MAX_PATH mid-build. Slugs are now NFKC-normalized and every path segment is capped with a hash.</p>
+      <span class="verdict v-pilot">DAY ONE</span>
+    </div>
+    <div class="card">
+      <h4>The marketplace drops rows</h4>
+      <p>The account API silently omits delisted or flagged works, and a fresh sync never re-adds them. Diffing the chain explorer's authoritative list against the database found 41 works sitting in the vault the whole time. The chain is the only inventory.</p>
+      <span class="verdict v-human">THE COLLECTOR NOTICED A MISSING WORK</span>
+    </div>
+    <div class="card">
+      <h4>The near-disaster</h4>
+      <p>An orphan sweep keyed on one table deleted 890 files owned by four others: avatars, logos, hero videos, video posters. The audit failed the build with 2,255 broken references; the day-old backup restored 2,337 files from R2 in minutes. True orphans: 70 files, 33 MB.</p>
+      <span class="verdict v-backup">AUDIT + BACKUP</span>
+    </div>
+    <div class="card">
+      <h4>The catch-all artist</h4>
+      <p>One artist's room showed 34 works and 4 were his. A shared Art Blocks deployer wallet "owned" every project it hosted, so the build synthesized one fake artist from whichever title sorted first. The fix was a diagnostic query that found all three deployers with the same flaw.</p>
+      <span class="verdict v-human">THE COLLECTOR KNEW THE ARTIST</span>
+    </div>
+    <div class="card">
+      <h4>Click one work, get another</h4>
+      <p>CSS specificity: <code class="inline">.masonry .card</code> outranked <code class="inline">.hidden-card</code>, so "show more" cards rendered visible while still classed hidden, and the lightbox, which excludes hidden cards, opened index 0. The collector narrowed it down from scroll position alone; a browser probe confirmed it.</p>
+      <span class="verdict v-human">THE COLLECTOR'S EYE + A CSS PROBE</span>
+    </div>
+    <div class="card">
+      <h4>Consolidated works lost their past</h4>
+      <p>A piece won at auction on the hot wallet then moved to the vault kept only the internal hop in the marketplace's per-token history, hiding the auction. Backfilling the full transfer history from the chain brought 35 auctions and their bids back.</p>
+      <span class="verdict v-human">THE COLLECTOR REMEMBERED THE BIDDING</span>
+    </div>
+    <div class="card">
+      <h4>160 duplicates that weren't</h4>
+      <p>A first-pass analysis flagged 160 duplicate events. 80 groups were partial ERC-1155 transfers in one transaction with different quantities; 3 were bundle buys with different prices. True duplicates: 3. Identity must include quantity and price.</p>
+      <span class="verdict v-fresh">FRESH EYES, THEN SELF-CORRECTED</span>
+    </div>
+    <div class="card">
+      <h4>A sealed-bid auction with no token id</h4>
+      <p>One drop's <code class="inline">placeBid()</code> and <code class="inline">revealAndBid()</code> carry empty calldata, so no bid names a piece. Recovered by scanning the contract's transaction list for those selectors: 202 bids from 73 collectors, stored at the collection level and never asserted per piece.</p>
+      <span class="verdict v-human">THE COLLECTOR HAD BID IN IT</span>
+    </div>
+  </div>
+
+  <div class="co why">
+    <span class="tag">The pattern</span>
+    <p>Diagnose the class, not the instance. The Tanimoto page was a symptom; the query "collection owners hosting two or more distinct bylines that are not flagged as platforms" was the fix, and it left a reusable diagnostic behind. Same shape for the consolidated works, the sealed-bid recovery, and the duplicate events. The instance is the clue.</p>
+  </div>
+
+  <figure class="art">
+    <img src="art/08-impermanent-embrace-adamtastic.jpg" width="1400" height="1050" decoding="async" alt="Impermanent Embrace by Adamtastic: an abstract of red and pink washes with orange flame strokes at the top and a band of blue along the base, threaded with white and black doodled lines">
+    <figcaption><span class="t">Impermanent Embrace</span> &middot; Adamtastic
+      <span class="prov"><b>How it got here:</b> won at auction on SuperRare, November 14, 2025. Adamtastic is a creative director whose stated goal is to spread joy, and the painting is a warm cloud of red and pink with a fire on top and a sea underneath, held together by scribbles. In the banner it is the cell behind the brand plate, mostly covered by my own choice, which felt right for a piece called impermanent. His room is also where two profiles turned out to be one person and had to be folded by hand: the kind of thing no query can decide.</span></figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 09 TWO HANDS -->
+<section id="two-hands">
+  <div class="secnum">09</div>
+  <h2>Two hands on the keyboard</h2>
+  <p class="lede">One human directing. Three Claude models across eight weeks. The AI did the engineering; the human made every call taste decides and did the seeing.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Model</th><th scope="col">When</th><th scope="col">What that pass shipped</th></tr></thead>
+      <tbody>
+        <tr><td><b>Claude Fable 5</b></td>
+          <td>Day one, and the mid-July vault upgrade</td>
+          <td>The archiver, the database, the first gallery, the pilot-first method, the multi-chain expansion, the backups, the Art Blocks layer.</td></tr>
+        <tr><td><b>Claude Opus 4.8</b></td>
+          <td>The wiki run through the hardening sprint, then the TV and Tezos</td>
+          <td>The wiki layer, stories, timeline, globe, the artists' recovered voices, marketplace forensics, bid capture, the security lockdown, the SEO and dataset layer, the /tv engine, the second blockchain.</td></tr>
+        <tr><td><b>Claude Fable 5.1</b></td>
+          <td>September 2</td>
+          <td>Re-read the chain, the prose, the indexes, and the database with no memory of having written them. The fact-check ledger, the prose-drift gate, the throttle bug, the 9x build speedup.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>What the AI could do</h3>
+  <p>The honest headline is speed at scale. A working archive, database, and public gallery existed by the end of the first day. Over the following weeks the same conversation learned to read three blockchains' APIs and one explorer's quirks, reconstruct auctions from raw calldata, transcode three hundred films for a television, fold duplicate artist identities across chains by handle and website and name, and render a 5,925-page site in about a hundred seconds. It built and audited a complete Spanish translation of the whole gallery, thirty thousand words, in one day. And eight weeks in, a fresh model found a bug that had been in the chain client since the first hour, because it read the code the way a reviewer would rather than the way an author does.</p>
+
+  <div class="pair">
+    <figure class="art">
+      <img src="art/03-forget-me-not-lorenipsum.jpg" width="1400" height="1400" decoding="async" alt="Forget Me Not by Lorenipsum: a painterly figure in a pink hat and coat, face left blank, crossing a city street collaged from newspaper, a yellow taxi behind; a frame of an animated work">
+      <figcaption><span class="t">Forget Me Not</span> &middot; Lorenipsum
+        <span class="prov"><b>How it got here:</b> won at auction on Foundation, July 17, 2025, one of the first auctions I ever won. Lorenipsum took the placeholder text as a name and the faceless figure as a signature: an empty vessel for whatever you pour in.</span></figcaption>
+    </figure>
+    <figure class="art">
+      <img src="art/09-napkin-woman-josenarciso.jpg" width="1115" height="1400" decoding="async" alt="Napkin Woman by josenarciso: a bouquet of flat red, pink, blue, and yellow flowers on black stems in a white vase printed with a pixel-style cartoon figure, two grey circles on the floor beside it">
+      <figcaption><span class="t">Napkin Woman</span> &middot; josenarciso
+        <span class="prov"><b>How it got here:</b> won at auction on SuperRare, August 25, 2025. A Brazilian mixed-media artist; the woman is the pixelated figure printed on the vase, under a bouquet in four flat colours. In the banner it sits beside the brand plate, because its tall shape fought the wide cells everywhere else.</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="co plain">
+    <span class="tag">The habit that held it together</span>
+    <p>Make the machine prove things. When something was in doubt the answer was never "trust me," it was to write the check that settles it and read the check back. "The map sends you to the wrong piece" became a script that verifies which work every map point links to. "Are the numbers in the essays right?" became a parser that reads number words out of the prose. Treat verification as the deliverable, not the chore after it, and a project of this length stops collapsing under its own weight.</p>
+  </div>
+
+  <h3>What only a human could do</h3>
+  <p>None of the checks know what art is. The collector knew, from a thumbnail, that a "video" was a still. He knew which artist actually made a piece filed under a shared contract, which acquisition was a private deal the receipt forensics had mislabeled as a marketplace buy, which wallet must never appear on the site, and which of two identically named accounts was the real person. He read a room of 34 works and saw that 30 belonged to other people. He decided there would be no prices on the walls, that the artists' words belong next to the art, and that the whole thing should sound like a person and not a product. Every one of those decisions is now encoded in a curation file or a check, so the machine can hold the line he drew.</p>
+
+  <div class="co bug">
+    <span class="tag">What the AI got wrong, honestly</span>
+    <ul>
+      <li>It deleted 890 files because a cleanup script knew one table's view of a directory that four tables share.</li>
+      <li>It blind-stamped a generic category over hand-derived Art Blocks tiers on every run, and the live site lost them for a day before the collector noticed.</li>
+      <li>It wrote prose that sounded like a machine. The em-dash ban is now an audit check because the tell kept creeping back.</li>
+      <li>It let 26 bios and every collection-scale count in the essays go stale for weeks, because nothing compared hand-written numbers to the census until week eight.</li>
+      <li>It fixed a curated fact in the database three times before fixing it at the seed file, and the fact regressed three times.</li>
+      <li>It auto-linked the word "photography" inside an artist's own bio to a stranger's collection. Bios and artist statements no longer link out to other art at all.</li>
+    </ul>
+  </div>
+
+  <div class="co why">
+    <span class="tag">Why a fresh model at the end</span>
+    <p>Every existing gate compared the database to the built HTML. Nothing re-read the chain and nothing checked the hand-written numbers, and the model that had written both was the least likely to notice. A model with no memory of the project read it the way a reviewer would, and the first thing it found was that the site's own essays disagreed with the site's own statistics page. The second-pass pattern from the wildfire and heat projects held here too: the second pass finds the bug the first pass structurally cannot.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 10 PRIVACY -->
+<section id="privacy">
+  <div class="secnum">10</div>
+  <h2>Privacy by design</h2>
+  <p>Open and private only fight if you never draw the line. The collection is public art, so the art is public, all of it, and the facts about it are published as a CC0 dataset. But:</p>
+  <ul>
+    <li><b>Quiet wallets stay quiet.</b> The pipeline knows which addresses are the collector's private ones, treats their activity as internal plumbing, suppresses them as minters, skips their bids, and a grep for the address across the built site must return zero hits before any deploy.</li>
+    <li><b>No prices, anywhere.</b> Sales history lives in the database because it is provenance. The walls show venues, dates, and counts. A check fails the build on any amount, including inside story prose, with a two-item allowlist for a memoir's public numbers.</li>
+    <li><b>Only the built site leaves the machine.</b> The database, the curation layer, the notes, the collector's own art files, and the API keys never ship. The dataset builder can only emit fields already public on the pages, so a leak would have to be visible on a wall first.</li>
+    <li><b>Artist code cannot touch the gallery.</b> 293 interactive HTML works and 28 SVGs ship on the apex origin, because hosting the real interactive art is the point. They run in a sandboxed iframe without same-origin, and the edge serves a <code class="inline">sandbox</code> CSP on the media path, so even direct navigation loads them in an opaque origin.</li>
+  </ul>
+
+  <figure class="art">
+    <img src="art/15-ill-ask-chatgpt-vestica.jpg" width="1395" height="1400" decoding="async" alt="I'll ask ChatGPT by vestica: a drawing of a person seen from behind typing at a laptop whose screen shows ChatGPT asking how can I help you, potted plants on the windowsill">
+    <figcaption><span class="t">I'll ask ChatGPT</span> &middot; vestica
+      <span class="prov"><b>How it got here:</b> won at auction on Transient, June 30, 2026, the same night as its sibling, Doodling while AI codes my salary. vestica translates inexplicable world concepts into relatable visuals, and lists their location as Everywhere. A fair piece to hang in the privacy section of a page about a museum an AI built: the joke is on all of us, and the wall label still shows no price.</span></figcaption>
+  </figure>
+
+  <div class="co why">
+    <span class="tag">Why it works</span>
+    <p>Privacy here is a property of the pipeline, not of carefulness in the moment. The scrub is structural and the tripwires run on every audit, so the one price string that did surface in the machine files was already public, editorial, and flagged rather than silently "fixed." The gates define what a leak is; prose does not get to redefine it.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 11 LIMITS -->
+<section id="limits">
+  <div class="secnum">11</div>
+  <h2>Limits, stated plainly</h2>
+  <ul>
+    <li><b>Some bids are invisible by design.</b> Foundation packs its auction state into events that need the verified ABI to decode; Ninfa settles via a generic signed-order call with off-chain bids. The site counts those as auctions won and does not invent bids for them.</li>
+    <li><b>Tezos venue proofs are labels, not addresses.</b> Acquisition venues on Tezos come from the indexer's sale records and a marketplace-contract map; the proof column stays empty and the audit exempts it on purpose.</li>
+    <li><b>"Minter" is a blend.</b> For most works it is the mint transaction's sender; for auction-house mints it is the first real owner. The fact-check treats a minter mismatch as a warning and only a block-timestamp disagreement as a failure.</li>
+    <li><b>127 works are cache copies.</b> Their original hosts are dead. Nothing can bring the artist's file back; the label says so.</li>
+    <li><b>Layer-2 editions may stay unknown.</b> The free explorer tier serves Ethereum log history but blocks it on Base and Polygon, so some edition sizes there are honestly null.</li>
+    <li><b>Curation debt is human debt.</b> 17 artist bios are still stubs, 11 works are unattributed in a declared section, and one duplicate profile is waiting on a merge. The audit shows these as warnings, not failures, because they are decisions, not defects.</li>
+    <li><b>The ledger goes stale between runs.</b> The chain fact-checks carry a date; a check older than 30 days warns. The custody claim above is true as of the date on it, not forever.</li>
+    <li><b>The pipeline is private.</b> This page documents the method and the numbers; the production code, the curation layer, and the database stay on one machine. What ships publicly is the gallery and its CC0 dataset of facts.</li>
+  </ul>
+
+  <figure class="art">
+    <img src="art/14-coronal-revelations-intrepid.jpg" width="1120" height="1400" decoding="async" alt="Coronal Revelations by intrepid: a photograph of a total solar eclipse, the black disc of the moon ringed by the sun's white corona against a black sky">
+    <figcaption><span class="t">Coronal Revelations</span> &middot; intrepid
+      <span class="prov"><b>How it got here:</b> won at auction on SuperRare, June 2, 2026, and the fifteenth cell of the banner, filled late when another artist could not send a file. A photograph of the corona, which you can only see for the minutes the moon covers everything else. Most of the limits above are that kind of limit: the truth is there, the window to read it is narrow, and the honest thing is to say when the window was.</span></figcaption>
+  </figure>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 12 REPRODUCE -->
+<section id="reproduce">
+  <div class="secnum">12</div>
+  <h2>Reproduce the idea</h2>
+  <div class="co plain">
+    <span class="tag">Story vs code</span>
+    <p>This page is the write-up. The production pipeline stays private for now; what is public is the method above, the numbers, and the gallery itself. The shape of it in one screen, for anyone who wants to build their own:</p>
+  </div>
+  <pre><code>for nft in wallet_nfts(address):                      # 1. inventory: count before you save
+    meta = fetch(nft.token_uri)                       # 2. the token's OWN metadata document
+    url  = meta.get("animation_url") or meta["image"] # 3. the artist's declared source, never a preview
+    data = fetch_with_gateway_rotation(url)           # 4. ipfs:// -> several gateways, politely
+    ext  = sniff_type(data[:64])                      # 5. trust the bytes, not the header
+    save(f"{contract}/{token}.{ext}", data, sha256(data))
+    events = replay_transfers(contract, token)        # 6. provenance from the chain, not the site
+audit(site)                                           # 7. nothing ships with a failing check</code></pre>
+  <p>Some downloads will fail because the original host is already gone. That is not a bug; it is the entire reason to do this.</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th scope="col">Choice</th><th scope="col">Why</th></tr></thead>
+      <tbody>
+        <tr><td>SQLite, one file</td><td>The whole archive is a database and a folder. It backs up with a copy, rolls back with a copy, and needs no server to query.</td></tr>
+        <tr><td>Pilot on 25 before committing a gigabyte</td><td>The pilot caught the fake-video problem when it was 14 files instead of 400.</td></tr>
+        <tr><td>Static HTML, no framework, no CDN</td><td>The site folder is as archival as the vault. It works on a USB stick in thirty years.</td></tr>
+        <tr><td>Cloudflare R2 over GitHub Pages or Vercel</td><td>200 files exceed their size caps (largest film: 288 MB). R2 has zero egress fees; 64 GB costs about a dollar a month.</td></tr>
+        <tr><td>Hand-authored curation as JSON, never as SQL updates</td><td>Seeds re-import the curation files every run; a fact fixed only in the database regresses on the next seed. It regressed three times before this stuck.</td></tr>
+        <tr><td>Every stage idempotent with a checked-at marker</td><td>Any stage reruns alone; incremental by default, forced by flag. A killed build never leaves a truncated cache (encode to <code class="inline">.part</code>, then atomic rename).</td></tr>
+        <tr><td>Audit gate plus privacy grep, no exceptions</td><td>A gate that can fail quietly is decoration. Both gates are absolute, loud, and confirmed against the live site.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="co plain">
+    <span class="tag">For artists, the short version</span>
+    <p>You do not need any of this code to protect your own work. Put the file on permanent storage, point the token's metadata at it, mint from an address that is yours, keep your masters, and write your bio somewhere that will still be up in ten years. Everything on this page is a collector doing, after the fact and at scale, what those five habits do for free at the moment of minting.</p>
+  </div>
+</section>
+<div class="divider" aria-hidden="true">&middot; &middot; &middot;</div>
+
+<!-- ============================================================ 13 THE WALL -->
+<section id="wall">
+  <div class="secnum">13</div>
+  <h2>The fifteen</h2>
+  <p class="lede">The banner at the top of this page, cell by cell, left to right and top to bottom. Each artist sent the file at full resolution; each tile links to the artist's room in the gallery.</p>
+  <div class="wallgrid">
+    <a class="tile" href="https://along7gallery.xyz/artists/gul-yildiz/" title="Creation by Gül Yıldız"><img loading="lazy" decoding="async" width="400" height="400" src="art/01-creation-gul-yildiz.jpg" alt="Creation by Gül Yıldız"><span class="cap">Creation &middot; Gül Yıldız</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/ex-mortal/" title="deluge by ex_mortal"><img loading="lazy" decoding="async" width="400" height="400" src="art/02-deluge-ex-mortal.jpg" alt="deluge by ex_mortal, one frame of the moving work"><span class="cap">deluge &middot; ex_mortal</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/lorenipsum/" title="Forget Me Not by Lorenipsum"><img loading="lazy" decoding="async" width="400" height="400" src="art/03-forget-me-not-lorenipsum.jpg" alt="Forget Me Not by Lorenipsum"><span class="cap">Forget Me Not &middot; Lorenipsum</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/deltasauce/" title="the grid by DeltaSauce"><img loading="lazy" decoding="async" width="400" height="400" src="art/04-the-grid-deltasauce.jpg" alt="the grid by DeltaSauce"><span class="cap">the grid &middot; DeltaSauce</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/desultor/" title="mountain dew daze by Desultor"><img loading="lazy" decoding="async" width="400" height="400" src="art/05-mountain-dew-daze-desultor.jpg" alt="mountain dew daze by Desultor"><span class="cap">mountain dew daze &middot; Desultor</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/justin-aversano/" title="March 21st by Justin Aversano"><img loading="lazy" decoding="async" width="400" height="400" src="art/06-march-21st-justin-aversano.jpg" alt="March 21st by Justin Aversano"><span class="cap">March 21st &middot; Justin Aversano</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/1dontknows/" title="Rise of the Immortals by 1dontknows"><img loading="lazy" decoding="async" width="400" height="400" src="art/07-rise-of-the-immortals-1dontknows.jpg" alt="Rise of the Immortals by 1dontknows"><span class="cap">Rise of the Immortals &middot; 1dontknows</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/adamtastic/" title="Impermanent Embrace by Adamtastic"><img loading="lazy" decoding="async" width="400" height="400" src="art/08-impermanent-embrace-adamtastic.jpg" alt="Impermanent Embrace by Adamtastic"><span class="cap">Impermanent Embrace &middot; Adamtastic</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/josenarciso/" title="Napkin Woman by josenarciso"><img loading="lazy" decoding="async" width="400" height="400" src="art/09-napkin-woman-josenarciso.jpg" alt="Napkin Woman by josenarciso"><span class="cap">Napkin Woman &middot; josenarciso</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/rebeccarose/" title="Rijksmuseum 13 by Rebecca Rose"><img loading="lazy" decoding="async" width="400" height="400" src="art/10-rijksmuseum-13-rebecca-rose.jpg" alt="Rijksmuseum 13 by Rebecca Rose"><span class="cap">Rijksmuseum 13 &middot; Rebecca Rose</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/sigma-x/" title="Beverly Hills, from What Cities Hold, by SigmaX"><img loading="lazy" decoding="async" width="400" height="400" src="art/11-beverly-hills-sigmax.jpg" alt="Beverly Hills, from What Cities Hold, by SigmaX"><span class="cap">Beverly Hills &middot; SigmaX</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/boredjosei/" title="Untitled by BoredJosei"><img loading="lazy" decoding="async" width="400" height="400" src="art/12-boredjosei.jpg" alt="Untitled by BoredJosei"><span class="cap">Untitled &middot; BoredJosei</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/mizuyokaii/" title="Coming Home To Finite by Mizuyokaii"><img loading="lazy" decoding="async" width="400" height="400" src="art/13-coming-home-to-finite-mizuyokaii.jpg" alt="Coming Home To Finite by Mizuyokaii"><span class="cap">Coming Home To Finite &middot; Mizuyokaii</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/intrepidphotos/" title="Coronal Revelations by intrepid"><img loading="lazy" decoding="async" width="400" height="400" src="art/14-coronal-revelations-intrepid.jpg" alt="Coronal Revelations by intrepid"><span class="cap">Coronal Revelations &middot; intrepid</span></a>
+    <a class="tile" href="https://along7gallery.xyz/artists/vestica/" title="I'll ask ChatGPT by vestica"><img loading="lazy" decoding="async" width="400" height="400" src="art/15-ill-ask-chatgpt-vestica.jpg" alt="I'll ask ChatGPT by vestica"><span class="cap">I'll ask ChatGPT &middot; vestica</span></a>
+  </div>
+  <div class="pair">
+    <figure class="art">
+      <img src="art/10-rijksmuseum-13-rebecca-rose.jpg" width="1400" height="788" decoding="async" alt="Rijksmuseum 13 by Rebecca Rose: a collage of the Rijksmuseum's great hall, stained glass and brass chandeliers, marble statues, a dog on the carpet, and cut-out figures from old portraits with their faces removed">
+      <figcaption><span class="t">Rijksmuseum 13</span> &middot; Rebecca Rose
+        <span class="prov"><b>Why it is here:</b> her pick for the banner from a folder of eleven variants. Rebecca Rose is a collage artist, forever cutting and kitbashing things together, and this is a museum kitbashed into a museum, which felt right for the wall of a page about building one.</span></figcaption>
+    </figure>
+    <figure class="art">
+      <img src="art/12-boredjosei.jpg" width="1400" height="1400" decoding="async" alt="Untitled by BoredJosei: a figure drawn entirely in loops of coloured scribble on black, holding up a phone whose screen glows with a city in red and blue">
+      <figcaption><span class="t">Untitled</span> &middot; BoredJosei
+        <span class="prov"><b>Why it is here:</b> the file BoredJosei sent for the banner: a figure made of nothing but coloured scribble, lit by the phone in its hand. An Indonesian artist also known as 0xJosei, working across Fragments, Garden of Shapes, and more, and one of the artists this collection keeps returning to.</span></figcaption>
+    </figure>
+  </div>
+  <p class="note">All fifteen artworks remain the property and copyright of their artists. They appear here as part of the collection's record, not as anything for sale. <a href="#top">Back to the top</a></p>
+</section>
+
+</main>
+
+<footer>
+  <p>A Database With Good Lighting &middot; the build story of along7gallery.xyz &middot; July to September 2026</p>
+  <p>Data: the collector's own wallets, read through OpenSea, Etherscan, TzKT, and objkt &middot; originals from IPFS, Arweave, and artist-declared hosts &middot; all artworks remain the property and copyright of their artists</p>
+  <p>
+    <a href="https://along7gallery.xyz">The gallery</a>
+    &middot; <a href="https://along7gallery.xyz/archive/">How this was made (the short version, on the gallery)</a>
+    &middot; <a href="https://along7gallery.xyz/data/">Open dataset (CC0)</a>
+    &middot; <a href="https://github.com/Along777/along/tree/master/along7-gallery">This page on GitHub</a>
+    &middot; <a href="https://along777.github.io/along/">Portfolio home</a>
+  </p>
+</footer>
+
+<button type="button" id="theme-toggle" aria-label="Switch between light and dark theme" title="Switch theme">
+<svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+<svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+</button>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  if(!btn) return;
+  function current(){
+    var a=root.getAttribute('data-theme');
+    if(a==='light'||a==='dark') return a;
+    return (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+  }
+  function sync(){ btn.setAttribute('aria-pressed', String(current()==='dark')); }
+  btn.addEventListener('click', function(){
+    var next = current()==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next); }catch(e){}
+    sync();
+  });
+  sync();
+})();
+</script>
+<a id="home-link" href="https://along777.github.io/along/" aria-label="Back to the portfolio home page">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+<span>Home</span>
+</a>
+</body>
+</html>

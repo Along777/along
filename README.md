@@ -22,6 +22,7 @@ Each of these is an end-to-end study built with AI as the engineering partner, p
 
 | Project | What it asks | Built with |
 |---|---|---|
+| **[A Database With Good Lighting](https://along777.github.io/along/along7-gallery/)** | An NFT does not store the art, so I built a museum that does. [along7gallery.xyz](https://along7gallery.xyz): 3,735 works by 839 artists across six chains, every original rescued from the artist-declared source, provenance replayed from 80,161 on-chain events, 99 audit checks gating every deploy. The build story, the data model, and the bugs worth keeping. | Claude Fable 5 + Opus 4.8 + Fable 5.1 |
 | **[Return to Fire](https://along777.github.io/along/wildfire-return/)** | The 2017 Tubbs Fire took my family's home, and fires became the first subject of my career in 2020. Six years later I rebuilt that work against 2.3M fires and modern methods. Five rounds, four exhibits, including a published claim I had to retract and rebuild. | Claude Fable 5 + Opus 5 |
 | **[A Tale of Two AI Minds: Heat, Crime, and Chicago](https://along777.github.io/along/heat-and-crime/)** | Does heat drive crime? 2.76M Chicago reports joined to weather: a day 10°F hotter than others in the same month shows about 5.6% more reported violent crime. | Claude Fable 5 + Grok 4.5 |
 | **[Do UFOs Follow the News Cycle?](https://along777.github.io/along/ufo-news-cycle/)** | 618,316 sighting reports, two databases, 384 SpaceX launches, one adversarial audit. Fireworks and Starlink move reports; congressional hearings do not. | Claude |
@@ -67,6 +68,7 @@ The classical work that built the fundamentals: Python, R, EDA, and traditional 
 
 ```
 index.html              the portfolio site (single file, Tailwind via CDN)
+along7-gallery/          the NFT archive build story + a 3-script starter kit
 wildfire-return/         Return to Fire: 4 pages, verifier, full pipeline
 heat-and-crime/          Heat and Crime: article + code + cached data
 age_myth/                Age myth: article, src/, tests
