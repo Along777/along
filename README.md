@@ -16,6 +16,18 @@ Since the first ChatGPT models in 2022 I've worked hands-on with generative AI a
 
 ---
 
+## Art: along7gallery
+
+<a href="https://along7gallery.xyz"><img src="images/clover.jpg" width="260" align="right" alt="Clover, one of the works I have worn as a profile picture"></a>
+
+I collect digital art on the blockchain, and I built the collection a permanent home: **[along7gallery.xyz](https://along7gallery.xyz)**, a self-hosted museum of 3,700+ works by 800+ artists across six chains. Every original file is archived from the source the artist declared, every ownership history is replayed from the chain, and nothing on the walls is for sale. Artist rooms with the statements the artists sent, stories with the art woven through them, a timeline, a world map, a TV channel that plays the whole collection, and an open CC0 dataset of the facts.
+
+It is also the biggest data project in this repo: one SQLite database, a Python pipeline with one command per stage, a 5,900-page static site, and 99 automated checks gating every deploy. The build story, written for artists and programmers with the collection's master banner and fifteen of its works, is **[A Database With Good Lighting](https://along777.github.io/along/along7-gallery/)** ([folder](along7-gallery/)).
+
+<br clear="right">
+
+---
+
 ## AI-powered projects (2026)
 
 Each of these is an end-to-end study built with AI as the engineering partner, published as a hand-written article rather than a notebook dump. Every one uses public data and states its own limits.
