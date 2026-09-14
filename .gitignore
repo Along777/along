@@ -2,3 +2,6 @@
 Aaron Long Resume*.docx
 Aaron Long Resume*.pdf
 aaron-long-resume.pdf
+
+# Resume build script stays local too
+/build_resume.py
