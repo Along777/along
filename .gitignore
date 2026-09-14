@@ -1,7 +1,6 @@
-# Resume files stay local; nothing resume-related is committed or served.
+# Resume sources stay local; only the published aaron-long-resume.pdf is committed.
 Aaron Long Resume*.docx
 Aaron Long Resume*.pdf
-aaron-long-resume.pdf
 
 # Resume build script stays local too
 /build_resume.py

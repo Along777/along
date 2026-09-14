@@ -1,6 +1,6 @@
 # Aaron Long — Data Scientist
 
-**Live site: [along777.github.io/along](https://along777.github.io/along/)** · Orlando, Florida
+**Live site: [along777.github.io/along](https://along777.github.io/along/)** · [Résumé (PDF)](https://along777.github.io/along/aaron-long-resume.pdf) · Orlando, Florida
 
 This repository is my portfolio. It holds the site itself plus the full source for every project on it: code, figures, and write-ups.
 
