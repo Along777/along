@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Fly Trace Rave. A subgraph of the MaleCNS fly connectome watches music videos and leaves 52 abstract plates. How it works, where the colour comes from, and the full gallery.">
+<meta name="author" content="Aaron Long">
+<title>Fly Trace Rave | How the fly makes art</title>
+<meta property="og:title" content="Fly Trace Rave. How the fly makes art">
+<meta property="og:description" content="A music video is light. A documented circuit walks. One playthrough makes one plate. 52 plates, 1976 to 2026.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://along777.github.io/along/fly-trace-rave/">
+<link rel="canonical" href="https://along777.github.io/along/fly-trace-rave/">
+<meta property="og:image" content="https://along777.github.io/along/fly-trace-rave/guide-assets/social-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A fly walks on a paper plate between two screens: its live neural activity on one, a music video on the other">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fly Trace Rave. How the fly makes art">
+<meta name="twitter:description" content="A music video is light. A documented circuit walks. One playthrough makes one plate. 52 plates, 1976 to 2026.">
+<meta name="twitter:image" content="https://along777.github.io/along/fly-trace-rave/guide-assets/social-card.jpg">
+<script>
+    // Resolve the theme before first paint so there is no flash of the wrong one.
+    (function () {
+        var t;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root { --primary: #0ea5e9; }
+
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; }
+
+    .section-header {
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 2.25rem; line-height: 2.5rem; font-weight: 700; letter-spacing: -0.025em;
+    }
+    .kicker {
+        font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+        font-weight: 600; color: #64748b;
+    }
+    .portfolio-container { max-width: 1280px; margin: 0 auto; }
+    .prose-col { max-width: 46rem; }
+    .modern-shadow { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+    .stat-number { font-variant-numeric: tabular-nums; font-family: 'Space Grotesk', sans-serif; }
+    .gradient-text {
+        background: linear-gradient(90deg, #0ea5e9, #6366f1);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #0ea5e9; }
+
+    .card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+
+    .tech-badge { font-size: 0.75rem; padding: 0.125rem 0.625rem; border-radius: 9999px; font-weight: 500; }
+    .filter-btn { transition: all 0.2s ease; }
+    .filter-btn.active { background-color: #0ea5e9; color: white; border-color: #0ea5e9; }
+    .filter-dot { width: .55rem; height: .55rem; border-radius: 9999px; display: inline-block; }
+
+    /* ---- decade taxonomy: colour = decade, same idea as project type ---- */
+    .d1970 { --t: #f59e0b; --t-ink: #f59e0b; --t-dim: #f59e0b22; }
+    .d1980 { --t: #f43f5e; --t-ink: #f43f5e; --t-dim: #f43f5e22; }
+    .d1990 { --t: #8b5cf6; --t-ink: #8b5cf6; --t-dim: #8b5cf622; }
+    .d2000 { --t: #0ea5e9; --t-ink: #0ea5e9; --t-dim: #0ea5e922; }
+    .d2010 { --t: #10b981; --t-ink: #10b981; --t-dim: #10b98122; }
+    .d2020 { --t: #ec4899; --t-ink: #ec4899; --t-dim: #ec489922; }
+    :root[data-theme="light"] .d1970 { --t-ink: #b45309; --t-dim: #f59e0b1f; }
+    :root[data-theme="light"] .d1980 { --t-ink: #be123c; --t-dim: #f43f5e1f; }
+    :root[data-theme="light"] .d1990 { --t-ink: #6d28d9; --t-dim: #8b5cf61f; }
+    :root[data-theme="light"] .d2000 { --t-ink: #0369a1; --t-dim: #0ea5e91f; }
+    :root[data-theme="light"] .d2010 { --t-ink: #047857; --t-dim: #10b9811f; }
+    :root[data-theme="light"] .d2020 { --t-ink: #be185d; --t-dim: #ec48991f; }
+    .plate-card { border-left: 4px solid var(--t); }
+    .type-pill { background: var(--t-dim); color: var(--t-ink); }
+    .type-kicker { color: var(--t-ink); }
+
+    figure figcaption { font-size: .85rem; color: #64748b; margin-top: .6rem; line-height: 1.55; }
+    .callout { border-left: 3px solid #0ea5e9; }
+    .callout-warn { border-left: 3px solid #f43f5e; }
+    .callout-ok { border-left: 3px solid #10b981; }
+
+    /* border-color must be explicit: `border-bottom: 1px solid` alone resolves to
+       currentColor, so each row would take the tint of its own text. */
+    table.data { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    table.data th {
+        text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+        font-weight: 600; color: #64748b; padding: .5rem .7rem;
+        border-bottom: 1px solid #1e293b;
+    }
+    table.data td { padding: .5rem .7rem; border-bottom: 1px solid #1e293b; vertical-align: top; }
+    table.data td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', monospace; font-size: .85rem; }
+
+    details.faq { border-bottom: 1px solid; }
+    details.faq summary {
+        cursor: pointer; padding: 1rem 0; font-weight: 500; list-style: none;
+        display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+    }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq summary::after {
+        content: '+'; font-family: 'JetBrains Mono', monospace; font-size: 1.25rem;
+        color: #0ea5e9; flex-shrink: 0; line-height: 1;
+    }
+    details.faq[open] summary::after { content: '\2212'; }
+    details.faq .answer { padding-bottom: 1.25rem; font-size: .97rem; line-height: 1.7; }
+
+    .step-num {
+        width: 2rem; height: 2rem; border-radius: 9999px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem;
+    }
+
+    /* ---------- Light theme: markup is authored dark, remap the slate utilities ---------- */
+    :root[data-theme="light"] { color-scheme: light; }
+    :root[data-theme="light"] body { background-color: #f8fafc; color: #1e293b; }
+    :root[data-theme="light"] .bg-slate-950 { background-color: #ffffff; }
+    :root[data-theme="light"] .bg-slate-950\/95 { background-color: rgba(255,255,255,.95); }
+    :root[data-theme="light"] .bg-slate-900 { background-color: #f1f5f9; }
+    :root[data-theme="light"] .bg-slate-900\/60 { background-color: rgba(241,245,249,.7); }
+    :root[data-theme="light"] .bg-slate-800 { background-color: #e2e8f0; }
+    :root[data-theme="light"] .border-slate-700 { border-color: #cbd5e1; }
+    :root[data-theme="light"] .border-slate-800, :root[data-theme="light"] .border-slate-900 { border-color: #e2e8f0; }
+    :root[data-theme="light"] .text-slate-200 { color: #1e293b; }
+    :root[data-theme="light"] .text-slate-300 { color: #334155; }
+    :root[data-theme="light"] .text-slate-400 { color: #475569; }
+    :root[data-theme="light"] .text-slate-500 { color: #5b6675; }
+    :root[data-theme="light"] .text-sky-400 { color: #0369a1; }
+    :root[data-theme="light"] .text-sky-300, :root[data-theme="light"] .hover\:text-sky-300:hover { color: #075985; }
+    :root[data-theme="light"] .text-indigo-400 { color: #4338ca; }
+    :root[data-theme="light"] .text-emerald-400 { color: #047857; }
+    :root[data-theme="light"] .text-rose-400 { color: #be123c; }
+    :root[data-theme="light"] .text-amber-400 { color: #b45309; }
+    :root[data-theme="light"] .bg-white { background-color: #0f172a; }
+    :root[data-theme="light"] .text-slate-950 { color: #ffffff; }
+    :root[data-theme="light"] .hover\:bg-slate-800:hover { background-color: #cbd5e1; }
+    :root[data-theme="light"] .gradient-text { background-image: linear-gradient(90deg, #0369a1, #4338ca); }
+    :root[data-theme="light"] .card:hover { box-shadow: 0 20px 25px -5px rgb(15 23 42 / .12), 0 8px 10px -6px rgb(15 23 42 / .10); }
+    :root[data-theme="light"] table.data th, :root[data-theme="light"] table.data td { border-color: #e2e8f0; }
+    :root[data-theme="light"] details.faq { border-color: #e2e8f0; }
+    #theme-toggle { cursor: pointer; }
+
+    /* Some people get motion sick from the card lift and the looping film. */
+    @media (prefers-reduced-motion: reduce) {
+        * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        .card:hover { transform: none; }
+    }
+
+    /* ---- lightbox ---- */
+    #lb {
+        position: fixed; inset: 0; z-index: 100; display: none;
+        background: rgba(2, 6, 23, .94); padding: 2rem;
+        align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+    }
+    #lb.open { display: flex; }
+    #lb img { max-width: min(1200px, 92vw); max-height: 78vh; border-radius: .5rem; }
+    #lb .lb-meta { color: #cbd5e1; font-size: .9rem; text-align: center; }
+    #lb .lb-close {
+        position: absolute; top: 1.25rem; right: 1.5rem; color: #94a3b8;
+        font-size: 1.5rem; background: none; border: 0; cursor: pointer; line-height: 1;
+    }
+    #lb .lb-nav {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        background: rgba(148,163,184,.12); border: 0; color: #e2e8f0; cursor: pointer;
+        width: 2.75rem; height: 2.75rem; border-radius: 9999px; font-size: 1.1rem;
+    }
+    #lb .lb-prev { left: 1.25rem; } #lb .lb-next { right: 1.25rem; }
+    .plate-btn { display: block; width: 100%; border: 0; padding: 0; background: none; cursor: zoom-in; }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-300 antialiased">
+
+<!-- ============================ NAV ============================ -->
+<nav class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800">
+  <div class="portfolio-container px-6 py-3 flex items-center justify-between">
+    <a href="#top" class="font-display text-slate-200 text-sm tracking-tight">
+      Fly&nbsp;Trace&nbsp;Rave
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-slate-400">
+      <a href="#loop" class="nav-link">The loop</a>
+      <a href="#frame" class="nav-link">One frame</a>
+      <a href="#circuit" class="nav-link">The circuit</a>
+      <a href="#colour" class="nav-link">Colour</a>
+      <a href="#marks" class="nav-link">The marks</a>
+      <a href="#films" class="nav-link">Films</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+    </div>
+    <div class="flex items-center gap-1">
+      <button id="nav-toggle" aria-label="Menu" aria-expanded="false"
+              class="md:hidden text-slate-400 hover:text-sky-300 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-800">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <button id="theme-toggle" aria-label="Toggle theme"
+              class="text-slate-400 hover:text-sky-300 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-800">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+      </button>
+    </div>
+  </div>
+  <div id="nav-mobile" class="hidden md:hidden border-t border-slate-800 px-6 py-3 flex flex-col gap-3 text-sm text-slate-400">
+    <a href="#loop" class="nav-link">The loop</a>
+    <a href="#frame" class="nav-link">One frame</a>
+    <a href="#circuit" class="nav-link">The circuit</a>
+    <a href="#colour" class="nav-link">Colour</a>
+    <a href="#marks" class="nav-link">The marks</a>
+    <a href="#films" class="nav-link">Films</a>
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header id="top" class="portfolio-container px-6 pt-16 pb-12">
+  <p class="kicker mb-4">Field guide · 17 September 2026 · Abstract Fly Walk</p>
+  <h1 class="font-display text-4xl md:text-6xl leading-[1.05] tracking-tight text-slate-200 mb-6">
+    How the fly<br><span class="gradient-text">makes art</span>
+  </h1>
+  <p class="prose-col text-lg md:text-xl text-slate-400 leading-relaxed mb-4">
+    A music video is light. A documented circuit walks on a sheet of paper.
+    Six feet leave the pigment. One playthrough makes one plate, and the fly
+    did not compose any of it.
+  </p>
+  <p class="prose-col text-slate-500 mb-10">
+    I wanted to know what a real fly's wiring would do if you sat it in front of
+    fifty years of music video. This page is the whole explanation. How the
+    circuit works, where every colour comes from, why no two plates look alike,
+    and the things I won't claim about any of it. Every number here I measured
+    off the actual files rather than guessing.
+  </p>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-3xl text-slate-200">52</div>
+      <div class="text-xs text-slate-500 mt-1">plates, one per year from 1976 to 2026</div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-3xl text-slate-200">2.55<span class="text-lg text-slate-400">M</span></div>
+      <div class="text-xs text-slate-500 mt-1">pigment marks laid by six tarsi</div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-3xl text-slate-200">7,346</div>
+      <div class="text-xs text-slate-500 mt-1">neurons in the running subgraph</div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-3xl text-slate-200">4.2<span class="text-lg text-slate-400">h</span></div>
+      <div class="text-xs text-slate-500 mt-1">of music video watched start to finish</div>
+    </div>
+  </div>
+
+  <figure>
+    <img src="guide-assets/stills/stage-2.jpg" alt="The stage: neural activity panel on the left, music video on the right, the fly walking on a paper plate between them"
+         class="w-full rounded-xl border border-slate-800 modern-shadow">
+    <figcaption>
+      The stage, partway through a song. On the left is the live activity of the
+      MaleCNS subgraph: the fly's visual field on its real retinotopic lattice, the
+      descending pool, and six blocks of leg motor neurons. On the right is the clip
+      the eyes are reading. In the middle is the fly, and the plate as it stood at
+      that second. All of it renders in one WebGL canvas, which is the reason the
+      panel shows up in recordings when a browser overlay never could.
+    </figcaption>
+  </figure>
+</header>
+
+<!-- ============================ THE LOOP ============================ -->
+<section id="loop" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">01 / Premise</p>
+  <h2 class="section-header text-slate-200 mb-6">The loop</h2>
+
+  <div class="prose-col space-y-5 text-slate-400 leading-relaxed">
+    <p>
+      The piece is a loop with three stops, and nothing skips a stop.
+      <b class="text-slate-300">Culture</b> goes in as a music video. A
+      <b class="text-slate-300">documented circuit</b> reads it and walks. What
+      comes out the other end is <b class="text-slate-300">residue</b>.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4 my-10">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="kicker mb-2" style="color:#f59e0b">Culture</div>
+      <div class="font-display text-slate-200 text-lg mb-2">A music video</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        Fetched as a local file, then drawn to an offscreen canvas. Never an
+        embed. An iframe is CORS opaque, so you can't read its pixels at all.
+      </p>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="kicker mb-2" style="color:#0ea5e9">Circuit</div>
+      <div class="font-display text-slate-200 text-lg mb-2">MaleCNS subgraph</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        7,346 real neurons wired by 238,189 real synaptic edges, run as a leaky
+        rate model. Light goes in one end, steering comes out the other.
+      </p>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="kicker mb-2" style="color:#ec4899">Residue</div>
+      <div class="font-display text-slate-200 text-lg mb-2">The plate</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        6144 by 4608 pixels of piled up footprints. No composition step, no
+        target image, no model of the canvas. Just where the feet were.
+      </p>
+    </div>
+  </div>
+
+  <div class="prose-col callout bg-slate-900/60 rounded-r-lg p-5 my-8">
+    <p class="text-slate-300 leading-relaxed">
+      <b>Because the light differs, the plates differ.</b> A brown 1978 film gives
+      brown ropes. Blue monochrome war footage gives a midnight plate. A short pale
+      video gives a sparse one. I could flatten all that out and make everything
+      match, but then the instrument would be lying about the songs. There's no
+      house style here and I don't want one.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ ONE FRAME ============================ -->
+<section id="frame" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">02 / Mechanism</p>
+  <h2 class="section-header text-slate-200 mb-6">What happens in one frame</h2>
+  <p class="prose-col text-slate-400 leading-relaxed mb-10">
+    The same six steps run every frame, about forty times a second. None of them
+    ever look at the painting, and none of them plan ahead.
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="flex gap-4">
+      <div class="step-num bg-slate-800 text-sky-400">1</div>
+      <div>
+        <h3 class="font-display text-slate-200 mb-1">The clip gets drawn</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Onto an offscreen 960 by 540 canvas. This is the only thing the eyes ever
+          read. Not the plate, not the 3D scene, not the interface.
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="step-num bg-slate-800 text-sky-400">2</div>
+      <div>
+        <h3 class="font-display text-slate-200 mb-1">Twelve rays sample it</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Six per eye, fanned around a gaze column that slides left and right with
+          the fly's heading. Each side gives back a colour, a brightness and a
+          saturation. How much the brightness changed since last frame is flicker.
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="step-num bg-slate-800 text-sky-400">3</div>
+      <div>
+        <h3 class="font-display text-slate-200 mb-1">Light enters the connectome</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          It goes into the 1,477 cells that carry a real retinotopic coordinate.
+          Each one samples its own point of the frame, and the two eyes sit offset
+          so there's a left to right difference in the first place.
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="step-num bg-slate-800 text-sky-400">4</div>
+      <div>
+        <h3 class="font-display text-slate-200 mb-1">The circuit steps</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          One leaky rate tick through 238,189 edges. Then the descending steering
+          population gets read back as a left versus right contrast.
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="step-num bg-slate-800 text-sky-400">5</div>
+      <div>
+        <h3 class="font-display text-slate-200 mb-1">The walk integrates</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          That steering, plus the walk's own saccades, dwell and edge fence, turns
+          into a new position and heading on the sheet.
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="step-num bg-slate-800 text-sky-400">6</div>
+      <div>
+        <h3 class="font-display text-slate-200 mb-1">Six feet land or lift</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Any tarsus touching the sheet lays one bead of whatever pigment that side
+          is carrying. Once it's down it stays down.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose-col callout-warn bg-slate-900/60 rounded-r-lg p-5 mt-10">
+    <p class="text-slate-300 leading-relaxed">
+      <b>Nothing plans the picture.</b> There's no composition step, no target
+      image, no sense of balance, no retouching and no second pass. The plate is
+      just a record of where six feet happened to be. If one of them looks composed
+      to you, that's you doing the composing.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ THE CIRCUIT ============================ -->
+<section id="circuit" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">03 / The brain</p>
+  <h2 class="section-header text-slate-200 mb-6">The circuit</h2>
+
+  <div class="prose-col space-y-5 text-slate-400 leading-relaxed">
+    <p>
+      The wiring is <b class="text-slate-300">MaleCNS v1.0</b>, the finished
+      connectome of an adult male fruit fly's central nervous system. Roughly
+      <b class="text-slate-300">166,700 neurons</b> and
+      <b class="text-slate-300">125 million synapses</b>, released by FlyEM and HHMI
+      Janelia along with the University of Cambridge, the MRC Laboratory of
+      Molecular Biology and Google Research, under CC BY 4.0.
+    </p>
+    <p>
+      I don't run all of it, and I never say I do. The files come down from the
+      official bucket and get hashed when they load. If a hash fails, the app stops
+      claiming it's running MaleCNS and says so in its own footer.
+    </p>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-6 my-10">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="kicker mb-4">What actually runs</div>
+      <table class="data text-slate-300">
+        <tr><td>Neurons in the subgraph</td><td class="num text-sky-400">7,346</td></tr>
+        <tr><td>Synaptic edges between them</td><td class="num text-sky-400">238,189</td></tr>
+        <tr><td>Cells carrying a true retinotopic column</td><td class="num">1,477</td></tr>
+        <tr><td class="pl-6 text-slate-500">left eye / right eye</td><td class="num text-slate-500">1,135 / 342</td></tr>
+        <tr><td>Descending neurons, brain to nerve cord</td><td class="num">1,306</td></tr>
+        <tr><td class="pl-6 text-slate-500">DNa family, used for steering</td><td class="num text-slate-500">52</td></tr>
+        <tr><td>Leg motor neurons mapped to T1/T2/T3 by side</td><td class="num">327</td></tr>
+        <tr><td>Cells with no incoming edge, so never firing</td><td class="num text-rose-400">10</td></tr>
+      </table>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="kicker mb-4">Model parameters</div>
+      <table class="data text-slate-300">
+        <tr><td>Neuron model</td><td class="num">leaky rate</td></tr>
+        <tr><td>Membrane time constant τ</td><td class="num">80 ms</td></tr>
+        <tr><td>Integration step, capped</td><td class="num">≤ 50 ms</td></tr>
+        <tr><td>Synaptic gain after row normalisation</td><td class="num">0.72</td></tr>
+        <tr><td>Rate ceiling</td><td class="num">8</td></tr>
+        <tr><td>Yaw blend, subgraph vs stand-in</td><td class="num">65% / 35%</td></tr>
+        <tr><td>Colour hold per side</td><td class="num">220 ms</td></tr>
+        <tr><td>Activity panel refresh</td><td class="num">~11 Hz</td></tr>
+      </table>
+      <p class="text-xs text-slate-500 mt-4 leading-relaxed">
+        τ of 80 ms against a 50 ms cap keeps dt/τ at 0.625 or below, so the explicit
+        Euler step stays stable no matter how badly a frame hitches.
+      </p>
+    </div>
+  </div>
+
+  <h3 class="font-display text-xl text-slate-200 mt-12 mb-4">Three honest choices</h3>
+  <div class="prose-col space-y-5 text-slate-400 leading-relaxed">
+    <p>
+      A connectome is a map of connections. Getting from that map to something that
+      actually runs takes a pile of decisions, and those decisions are mine. Three
+      of them matter. I'd rather name them than bury them, because every one is a spot
+      where I could have quietly cheated.
+    </p>
+  </div>
+
+  <div class="space-y-4 my-8">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="flex items-baseline gap-3 mb-2">
+        <span class="tech-badge bg-slate-800 text-sky-400">Choice 1</span>
+        <h4 class="font-display text-slate-200">Scaling the weights</h4>
+      </div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        Published weights are raw synapse counts. The median is 2 and the largest is
+        1,086. The obvious move is to divide the whole table by its maximum, which
+        leaves a mean weight of 0.002 and kills the signal before it can cross a
+        quarter of a million edges. So instead, every cell's inputs get normalised
+        by that cell's own total, then scaled by one global gain.
+        <b class="text-slate-300">That gain has to stay under 1.</b> With normalised
+        rows the recurrent loop multiplies by it on every pass, so at 1.35 every
+        single cell pins to the ceiling. Both yaw pools then read a flat 8 and the
+        fly still doesn't steer. 0.72 sits in the live band.
+      </p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="flex items-baseline gap-3 mb-2">
+        <span class="tech-badge bg-slate-800 text-sky-400">Choice 2</span>
+        <h4 class="font-display text-slate-200">Where the light goes in</h4>
+      </div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        The obvious answer is the photoreceptors, and it doesn't work.
+        <b class="text-slate-300">Not one photoreceptor in this table carries a
+        retinotopic column</b>, so there's no way to say which part of the frame any
+        of them is looking at. Light goes in one stage downstream instead, at the
+        1,477 lamina and medulla cells that do carry
+        <span class="mono text-xs">assignedOlHex1/2</span> coordinates. Each samples
+        its own point of the image, and the two eyes sit slightly offset so there's
+        a left to right difference to steer on. Other people working with this data
+        have run into the same wall. The gap is in the dataset itself.
+      </p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <div class="flex items-baseline gap-3 mb-2">
+        <span class="tech-badge bg-slate-800 text-sky-400">Choice 3</span>
+        <h4 class="font-display text-slate-200">Reading the steering back out</h4>
+      </div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        The motor pools sit three stages downstream and live somewhere around 0.001
+        to 0.01. Any fixed threshold throws that entire signal in the bin. So
+        steering reads as a contrast instead: right minus left, over right plus
+        left, across the DNa pools. That responds to the difference between the two
+        eyes rather than to how loud the circuit happens to be at that moment.
+        Wetness uses a tanh calibrated to the range I actually observed.
+      </p>
+    </div>
+  </div>
+
+  <div class="prose-col callout-ok bg-slate-900/60 rounded-r-lg p-5 my-8">
+    <p class="text-slate-300 leading-relaxed">
+      <b>The circuit was silent for a long time, and I'd rather say so.</b> For a
+      good stretch of this project all three of those were wrong at once. The
+      connectome was genuinely loaded and genuinely stepping, and it contributed
+      nothing but a bit of drag. What gave it away was the panel reading
+      <span class="mono text-xs">yaw 0.00 / 0.00</span> with about ten cells firing.
+      I found it by instrumenting the thing instead of trusting it. Plates made
+      before that fix were painted with a dead circuit, their metadata records a
+      different build, and they aren't mixed in with these fifty-two.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ COLOUR ============================ -->
+<section id="colour" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">04 / Vision</p>
+  <h2 class="section-header text-slate-200 mb-6">Where the colour comes from</h2>
+
+  <div class="prose-col space-y-5 text-slate-400 leading-relaxed">
+    <p>
+      Every colour on every plate came out of the video. Nothing gets picked from a
+      palette, matched against a reference, or corrected afterwards.
+    </p>
+    <p>
+      Twelve rays read the clip each frame, six per eye. They fan around a gaze
+      column that slides with the fly's heading, so a fly mid turn really is looking
+      at a different part of the screen. Each side averages its six samples down to
+      one colour, and that becomes the pigment its three feet are carrying.
+    </p>
+    <p>
+      Two details do most of the visible work.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-5 my-8">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <h4 class="font-display text-slate-200 mb-2">The ink holds for 220 ms</h4>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        Colour follows the clip through a leak with a 220 millisecond time constant
+        rather than snapping to every frame. A foot lays down a rope of one hue
+        instead of averaging everything that flew past it. Back when that constant
+        was 18 milliseconds, plates came out as a tangle of near identical muddy
+        hues. Measurably less colourful, and to the eye it just reads as blur, even
+        though every individual bead was perfectly sharp.
+      </p>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <h4 class="font-display text-slate-200 mb-2">Saturation gets pushed, hue doesn't</h4>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        The sampled colour gets a saturation push before it becomes pigment. That
+        deepens what's already in the clip. It never invents a hue the video didn't
+        have. You can't get magenta out of 1978 brown film stock and I'm not going
+        to fake it. What you get instead is a very committed brown.
+      </p>
+    </div>
+  </div>
+
+  <div class="prose-col callout bg-slate-900/60 rounded-r-lg p-5 my-8">
+    <p class="text-slate-300 leading-relaxed">
+      <b>Why I went back on widening the fan.</b> Spreading the rays wider looks like
+      it should see more of the video. It does, and then it averages it, which drags
+      every sample toward the mean grey of the frame. Measured colourfulness dropped
+      about 16 percent, so I put it back. A narrow fan holding one saturated local
+      colour beats a wide fan reporting the average of the whole screen.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ THE MARKS ============================ -->
+<section id="marks" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">05 / The plate</p>
+  <h2 class="section-header text-slate-200 mb-6">The marks themselves</h2>
+
+  <div class="grid lg:grid-cols-2 gap-10 items-start">
+    <div>
+      <figure>
+        <img src="guide-assets/detail-beads.jpg" alt="A 1000 by 750 pixel crop of a plate at full resolution, showing individual beads of pigment"
+             class="w-full rounded-xl border border-slate-800 modern-shadow">
+        <figcaption>
+          A true 1:1 crop. 1000 by 750 actual pixels out of a 6144 by 4608 plate,
+          with no resampling at all. Individual beads, individual ropes, hard edges.
+          This image is my answer to anyone who asks whether it's blurry.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="space-y-5 text-slate-400 leading-relaxed">
+      <p>
+        Each bead is a radial stamp with a
+        <b class="text-slate-300">fixed 2.6 pixel antialias edge</b>, the same width
+        at every plate size. That one choice is the reason the marks stay sharp. Proportional falloff turns big beads into soft coins, and
+        honestly that's the mechanism behind most generative work that people call
+        blurry.
+      </p>
+      <p>
+        Bead width grows with wetness and with how hard the fly is turning. Opacity
+        grows with wetness too. A foot that just refreshed its pigment writes a fat
+        wet mark, and the rope thins out as it dries. That's why they taper.
+      </p>
+      <p>
+        <b class="text-slate-300">One bead per foot per frame</b>, laid at the new
+        position, skipped entirely if the foot hasn't travelled far enough to earn
+        it.
+      </p>
+      <div class="callout-warn bg-slate-900/60 rounded-r-lg p-4 text-sm">
+        <b class="text-slate-300">I stopped chasing coverage.</b>
+        I tried interpolating extra beads along each foot's path and it worked
+        exactly the way I predicted. Marks nearly tripled and coverage went from 60
+        to 77 percent on the same song. I put it back anyway. The ropes filled in
+        and the plate lost the open beaded texture that makes the walk readable.
+        Denser turned out to be worse.
+      </div>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4 mt-10">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-2xl text-slate-200">6144 × 4608</div>
+      <div class="text-xs text-slate-500 mt-1">plate resolution, 28MP, prints large</div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-2xl text-slate-200">~160/s</div>
+      <div class="text-xs text-slate-500 mt-1">beads laid per second of song</div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+      <div class="stat-number text-2xl text-slate-200">52.4 to 90.1%</div>
+      <div class="text-xs text-slate-500 mt-1">coverage range across the 52</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FILMS ============================ -->
+<section id="films" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">06 / Documentation</p>
+  <h2 class="section-header text-slate-200 mb-6">The films</h2>
+
+  <div class="prose-col space-y-5 text-slate-400 leading-relaxed mb-8">
+    <p>
+      Every plate has a film sitting next to it. The whole playthrough, with the
+      song, the clip on one screen, the live circuit on the other, and the painting
+      building up in between. The plate is the work. The film is the studio document
+      that shows how the work happened.
+    </p>
+    <p>
+      Video comes straight off the WebGL canvas and audio gets tapped out of the Web
+      Audio graph, so picture and sound are from the same run, then they get muxed
+      to H.264 and AAC. The activity panel is drawn into the 3D scene rather than
+      sitting on the page as an overlay, specifically so it survives into the
+      recording.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4">
+    <figure>
+      <img src="guide-assets/stills/stage-1.jpg" alt="Film still, 1983" class="w-full rounded-lg border border-slate-800">
+      <figcaption>1983. The longest clip in the set, and the densest plate.</figcaption>
+    </figure>
+    <figure>
+      <img src="guide-assets/stills/stage-3.jpg" alt="Film still, 2009" class="w-full rounded-lg border border-slate-800">
+      <figcaption>2009. Heavily saturated video, pigment to match.</figcaption>
+    </figure>
+    <figure>
+      <img src="guide-assets/stills/stage-4.jpg" alt="Film still, 2001" class="w-full rounded-lg border border-slate-800">
+      <figcaption>2001. Firelight and dark frames, read faithfully.</figcaption>
+    </figure>
+  </div>
+
+  <h3 class="font-display text-xl text-slate-200 mt-12 mb-4">Two things the films taught me</h3>
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <h4 class="font-display text-slate-200 mb-2">Headless rendering corrupts frames</h4>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        Recording in a headless browser gave me scattered frames where solid objects
+        flashed the wrong colour. It's a driver level fault that turns up when video
+        decode runs alongside WebGL. Every film gets recorded in a real, visible
+        browser window on a real display now. I checked: zero corrupt frames across
+        a full film, against dozens per film headless.
+      </p>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <h4 class="font-display text-slate-200 mb-2">A resized window is a visible jolt</h4>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        If the window manager nudges the browser after recording has started, the
+        camera's aspect ratio changes mid shot and the whole frame jumps. The window
+        gets pinned at launch now, with a settle period before rolling, and an
+        automatic scan checks every finished film for exactly that kind of break.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ GALLERY ============================ -->
+<section id="gallery" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">07 / The collection</p>
+  <h2 class="section-header text-slate-200 mb-3">Fifty-two plates</h2>
+  <p class="prose-col text-slate-400 leading-relaxed mb-8">
+    One per year from 1976 to 2026, plus a second one for 2000. Each made in a
+    single unbroken playthrough by the same build of the instrument. Sorted by
+    year, filter by decade.
+  </p>
+
+  <div class="flex flex-wrap items-center gap-2 mb-8" id="filters">
+    <button class="filter-btn active px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-300" data-dec="all">All 52</button>
+    <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="1970"><span class="filter-dot mr-2" style="background:#f59e0b"></span>1970s</button>
+    <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="1980"><span class="filter-dot mr-2" style="background:#f43f5e"></span>1980s</button>
+    <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="1990"><span class="filter-dot mr-2" style="background:#8b5cf6"></span>1990s</button>
+    <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="2000"><span class="filter-dot mr-2" style="background:#0ea5e9"></span>2000s</button>
+    <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="2010"><span class="filter-dot mr-2" style="background:#10b981"></span>2010s</button>
+    <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="2020"><span class="filter-dot mr-2" style="background:#ec4899"></span>2020s</button>
+  </div>
+
+  <figure class="mb-10">
+    <video src="guide-assets/fifty-two-plates.mp4" autoplay muted loop playsinline
+           class="w-full max-w-3xl rounded-xl border border-slate-800 modern-shadow"></video>
+    <figcaption>
+      All fifty-two in order, twelve a second. Watch the palette move through the
+      decades: seventies browns, the eighties brightening up, the darker nineties,
+      then the saturated modern years. Nothing here is graded or colour matched.
+      Every one of those hues came off a music video.
+    </figcaption>
+  </figure>
+
+  <div id="grid" class="grid gap-5" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))"></div>
+</section>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Plate viewer">
+  <button class="lb-close" aria-label="Close">&times;</button>
+  <button class="lb-nav lb-prev" aria-label="Previous plate"><i class="fa-solid fa-chevron-left"></i></button>
+  <img id="lb-img" alt="">
+  <p class="lb-meta" id="lb-meta"></p>
+  <button class="lb-nav lb-next" aria-label="Next plate"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
+
+<!-- ============================ FAQ ============================ -->
+<section id="faq" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">08 / Questions</p>
+  <h2 class="section-header text-slate-200 mb-10">Things people ask</h2>
+
+  <div class="grid lg:grid-cols-2 gap-x-12 gap-y-4">
+
+    <!-- ---------- artists ---------- -->
+    <div>
+      <h3 class="font-display text-lg text-sky-400 mb-2">If you're here for the art</h3>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Did a fly really make this?</summary>
+        <div class="answer text-slate-400">
+          No living fly was involved and no fly chose anything. What's real is the
+          wiring. It's a published map of which neurons connect to which, taken from
+          an actual fruit fly under an electron microscope. I run that map as a
+          simple dynamical model, it reacts to the video, and what comes out of it
+          steers a walk. The sentence I stamp on every edition is
+          <b class="text-slate-300">"the fly did not compose this"</b> and I mean it
+          literally.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Why do the plates look so different from each other?</summary>
+        <div class="answer text-slate-400">
+          Because the songs do. The only source of colour is the video, so a dark
+          clip makes a dark plate and a neon one makes a neon plate. Length matters
+          just as much as palette. A fourteen minute film lays roughly three times
+          the marks of a three minute one, so it reads dense while the short one
+          stays open and sparse. I thought about normalising all that and decided
+          against it. Flattening it would mean the instrument lying about the songs.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Why is there always cream showing around the edges?</summary>
+        <div class="answer text-slate-400">
+          A fly walking on a sheet doesn't spread itself out evenly. It works the
+          middle and turns back at the edges. There's a soft fence keeping it on the
+          paper, and what you get is a dense centre with some breathing room around
+          it. I could force full bleed coverage, but only by scripting the walk, and
+          that breaks the one rule this project has.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Can you make it draw a flower, or a face?</summary>
+        <div class="answer text-slate-400">
+          I tried, in the only way that stays honest. Rather than scripting the pen I
+          animated a light for the fly to chase, so I'd be leading the animal instead
+          of drawing for it. It tracked the lure properly. But a rose curve reverses
+          direction through its own centre, and no walking fly can take that corner,
+          so the shape smeared. The code is still in the repo, permanently switched
+          off. The conclusion is the good part:
+          <b class="text-slate-300">a walk can't become a drawing without ceasing to
+          be a walk.</b>
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Why does it sometimes look blurry?</summary>
+        <div class="answer text-slate-400">
+          Nearly always the problem is colour. I measured this properly
+          against an early plate I liked. The newer ones actually had higher local
+          contrast but 2.4 times less colourfulness. A tangle of near identical hues
+          reads as mush no matter how crisp each bead is. The fix was holding each
+          colour longer and pushing saturation. I never touched sharpening. The 1:1 crop
+          further up the page is the evidence.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">How big can these print?</summary>
+        <div class="answer text-slate-400">
+          Each plate is 6144 by 4608, which is about 28 megapixels at 4:3. That's
+          roughly 20 by 15 inches at 300 dpi, or a good deal bigger at gallery
+          viewing distance. The marks hold up because the bead edge is a fixed pixel
+          band instead of a proportional fade.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Are these minted, sold, or on a blockchain?</summary>
+        <div class="answer text-slate-400">
+          No. Nothing is minted and nothing is for sale. The metadata file sitting
+          next to each plate uses a familiar shape because it's a convenient way to
+          record provenance, meaning the source clip, the duration, the mark count
+          and the instrument build. It isn't listed anywhere.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Can I pick a song?</summary>
+        <div class="answer text-slate-400">
+          Mechanically yes. The pipeline takes a spreadsheet of songs and turns out a
+          folder per track without me sitting there. The interesting part is that you
+          still can't predict what you'll get. Choosing the song is the only
+          authorial move available to you, and it's a much weaker lever than it
+          feels like.
+        </div>
+      </details>
+    </div>
+
+    <!-- ---------- neuro / AI ---------- -->
+    <div>
+      <h3 class="font-display text-lg text-indigo-400 mb-2">If you're here for the brain</h3>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Is this a simulation of a fly brain?</summary>
+        <div class="answer text-slate-400">
+          No, and the difference matters. A connectome is an anatomical map. It
+          records that A connects to B and with how many synapses. It says nothing
+          about neurotransmitter dynamics, ion channels, neuromodulation or
+          plasticity. What I run is a <b class="text-slate-300">leaky rate model</b>
+          over that graph, where each cell has one scalar activity decaying toward a
+          weighted sum of its inputs with τ of 80 ms. That's a defensible way to let
+          real topology shape a signal. Calling it a brain would be a stretch. People at Janelia have been
+          clear that a genuine functional upload of even a fly is years to decades
+          out, and I'm not going to pretend I've skipped ahead.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Why only 7,346 of 166,700 neurons?</summary>
+        <div class="answer text-slate-400">
+          The subgraph gets built by finding the visual and motor cell types that
+          exist in this annotation table, so photoreceptor, lamina, medulla, the
+          descending families and the motor neuron types, capping each type so no
+          single class dominates, then pulling in the strongest one hop partners of
+          the visual set. It has to run in a browser at 40 fps next to video decode
+          and WebGL, which is the real constraint. This is a documented cut, and the
+          cut is the biggest limitation in the whole project.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Is the connectome actually doing anything?</summary>
+        <div class="answer text-slate-400">
+          It is now. For a long time it wasn't, which is probably the most useful
+          thing I can tell anyone doing this. A connectome can be loaded correctly,
+          stepped correctly, and still contribute nothing at all while every log line
+          looks healthy. I had three separate faults stacked together: weights scaled
+          down to insignificance, light injected at nine cells that couldn't localise
+          it, and a readout threshold sitting above the entire signal range. None of
+          them were visible on their own. Instrument the thing and read the actual
+          numbers. That's the whole reason the activity panel exists.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">How do you handle synaptic weights?</summary>
+        <div class="answer text-slate-400">
+          Per target row normalisation. Each cell's incoming weights get divided by
+          that cell's own input total, then scaled by a global gain of 0.72. The
+          alternative, normalising by the global max, sounds neutral and is
+          catastrophic, because one 1,086 synapse connection against a median of 2
+          crushes everything else to nothing. The gain has to stay below 1. With
+          normalised rows it's effectively a spectral scaling on the recurrent loop,
+          and above 1 the whole population saturates at the ceiling.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Why not inject light at the photoreceptors?</summary>
+        <div class="answer text-slate-400">
+          Because in this table not a single photoreceptor carries a retinotopic
+          column assignment, so there's no principled way to say which pixel any of
+          them sees. Inject anyway and you get a brightness signal with no spatial
+          structure, which means no left to right contrast, which means nothing to
+          steer with. Injection happens one stage downstream at the 1,477 cells that
+          do carry <span class="mono text-xs">assignedOlHex1/2</span>. Other projects
+          have hit this same wall independently. It's a property of the data.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Why is the visual field lopsided, 1,135 left against 342 right?</summary>
+        <div class="answer text-slate-400">
+          Because annotation coverage in the source data is lopsided, and the panel
+          shows that rather than balancing it for looks. It's a real asymmetry and
+          the walk inherits it. I disclose it for the same reason I disclose the
+          silent cell count. A project whose whole stance is "I don't overclaim"
+          doesn't get to quietly tidy up its own inputs.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">Are there dead neurons in there?</summary>
+        <div class="answer text-slate-400">
+          Ten of the 7,346 have no incoming edge anywhere inside the subgraph and get
+          no direct drive, so they never fire. That's the unavoidable cost of cutting
+          a subgraph out of a 166,700 neuron connectome. Their inputs exist in the
+          full animal and got left outside the cut. I leave them in and report the
+          number rather than pruning them, because pruning would hide what the cut
+          costs.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">How much of the movement is really the connectome?</summary>
+        <div class="answer text-slate-400">
+          Steering is blended <b class="text-slate-300">65 percent subgraph, 35
+          percent stand-in</b>, and the rest of the walk, meaning saccade timing,
+          dwell, the edge fence and the gait, is ordinary procedural code the
+          connectome never touches. So the honest summary is that the circuit steers
+          and the scaffolding does the rest. If someone tells you a connectome is
+          autonomously producing complex behaviour, they're either running something
+          far larger than this or they aren't counting their own scaffolding.
+        </div>
+      </details>
+
+      <details class="faq border-slate-800">
+        <summary class="text-slate-200">What would you fix first?</summary>
+        <div class="answer text-slate-400">
+          Widen the cut. Steering currently leans on a small descending population, and
+          more of the real descending pathways would give the walk a richer signal
+          than any parameter sweep ever will.
+          After that, a seeded random source so a plate could be re-derived exactly,
+          and a published on versus off pair, the same song with the circuit live and
+          then bypassed. That negative control is the thing almost nobody in this
+          space publishes.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CLAIMS ============================ -->
+<section class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">09 / Integrity</p>
+  <h2 class="section-header text-slate-200 mb-6">What I claim and what I don't</h2>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <h3 class="font-display text-emerald-400 mb-4">True, and I'll say it</h3>
+      <ul class="space-y-3 text-sm text-slate-400 leading-relaxed">
+        <li>52 abstract plates, 1976 to 2026, one instrument, one unbroken playthrough each.</li>
+        <li>A subgraph of MaleCNS v1.0 with 7,346 neurons and 238,189 edges, from officially hashed files, CC BY 4.0.</li>
+        <li>The colour belongs to the clip. The variation between plates is the work.</li>
+        <li>Light enters at the 1,477 cells carrying a retinotopic column, because no photoreceptor here does.</li>
+        <li>Yaw is a left versus right contrast across descending cells, blended 65 / 35 with a stand-in.</li>
+        <li>Six tarsi stamp. The picture is whatever residue that leaves.</li>
+      </ul>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+      <h3 class="font-display text-rose-400 mb-4">Never said</h3>
+      <table class="data text-slate-400">
+        <tr><td><b class="text-slate-300">"The fly brain", or 166,700 neurons</b></td><td class="text-xs">I run 7,346 and the footer says so.</td></tr>
+        <tr><td><b class="text-slate-300">The fly wanted, learned, enjoyed or composed</b></td><td class="text-xs">None of that is in the model.</td></tr>
+        <tr><td><b class="text-slate-300">The connectome painted it</b></td><td class="text-xs">It steered. Procedural code writes the rest.</td></tr>
+        <tr><td><b class="text-slate-300">What a fly <i>would</i> draw</b></td><td class="text-xs">Unanswerable, and not what this is.</td></tr>
+        <tr><td><b class="text-slate-300">Comparisons across builds</b></td><td class="text-xs">Different builds. Recorded per plate.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="prose-col callout bg-slate-900/60 rounded-r-lg p-5 mt-8">
+    <p class="text-slate-300 leading-relaxed">
+      There's a whole genre of connectome demo where the punchline is "the fly is
+      doing X". Playing a game, running a business, scoring a date. My punchline is
+      <b>"a circuit walked through this song, and this is what the feet left
+      behind"</b>. Here the music video is the thing going in. The fly already has a job. It
+      watches the TV and it walks the sheet.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="portfolio-container px-6 py-12 border-t border-slate-800">
+  <div class="grid md:grid-cols-3 gap-8 text-sm">
+    <div>
+      <div class="kicker mb-3">The claim</div>
+      <p class="text-slate-400 leading-relaxed">
+        A music video is light. A documented circuit walks. One playthrough makes
+        one plate. <b class="text-slate-300">The fly did not compose this.</b>
+      </p>
+    </div>
+    <div>
+      <div class="kicker mb-3">Data credit</div>
+      <p class="text-slate-400 leading-relaxed">
+        MaleCNS v1.0, from FlyEM and HHMI Janelia, the University of Cambridge, the
+        MRC Laboratory of Molecular Biology and Google Research. Used under
+        <a href="https://creativecommons.org/licenses/by/4.0/" class="text-sky-400 hover:text-sky-300">CC BY 4.0</a>.
+      </p>
+    </div>
+    <div>
+      <div class="kicker mb-3">Built with</div>
+      <p class="text-slate-400 leading-relaxed">
+        Three.js, WebGL, Vite, Python, Playwright and ffmpeg. Instrument build
+        <span class="mono text-xs text-slate-500">c546ce0eb977</span> across all 52 plates.
+      </p>
+    </div>
+  </div>
+  <p class="text-xs text-slate-500 mt-10">
+    Nothing here is minted or for sale. Earlier guides are kept exactly as they were,
+    as a record of what the instrument used to be.
+  </p>
+</footer>
+
+<script>
+  // ---- theme toggle ----
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme');
+    var next = cur === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // ---- gallery ----
+  var shown = [];
+  var PLATES = [{"year":1976,"title":"Dancing Queen","artist":"ABBA","plants":38085,"coverage":70.1,"duration":"3:52","url":"https://www.youtube.com/watch?v=xFrGuyw1V8s","img":"guide-assets/plates/1976-dancing-queen-abba.jpg"},{"year":1977,"title":"How Deep Is Your Love","artist":"Bee Gees","plants":40583,"coverage":65,"duration":"3:59","url":"https://www.youtube.com/watch?v=XpqqjU7u5Yc","img":"guide-assets/plates/1977-how-deep-is-your-love-bee-gees.jpg"},{"year":1978,"title":"Rasputin","artist":"Boney M","plants":44840,"coverage":71.4,"duration":"4:29","url":"https://www.youtube.com/watch?v=16y1AkoZkmQ","img":"guide-assets/plates/1978-rasputin-boney-m.jpg"},{"year":1979,"title":"Rock with You","artist":"Michael Jackson","plants":33605,"coverage":67.7,"duration":"3:21","url":"https://www.youtube.com/watch?v=5X-Mrc2l1d0","img":"guide-assets/plates/1979-rock-with-you-michael-jackson.jpg"},{"year":1980,"title":"Ashes to Ashes","artist":"David Bowie","plants":36626,"coverage":60,"duration":"3:36","url":"https://www.youtube.com/watch?v=HyMm4rJemtI","img":"guide-assets/plates/1980-ashes-to-ashes-david-bowie.jpg"},{"year":1981,"title":"Physical","artist":"Olivia Newton-John","plants":37936,"coverage":66.5,"duration":"3:43","url":"https://www.youtube.com/watch?v=vWz9VN40nCA","img":"guide-assets/plates/1981-physical-olivia-newton-john.jpg"},{"year":1982,"title":"Hungry Like the Wolf","artist":"Duran Duran","plants":38131,"coverage":65.6,"duration":"3:42","url":"https://www.youtube.com/watch?v=oJL-lCzEXgI","img":"guide-assets/plates/1982-hungry-like-the-wolf-duran-duran.jpg"},{"year":1983,"title":"Thriller","artist":"Michael Jackson","plants":132313,"coverage":90.1,"duration":"13:41","url":"https://www.youtube.com/watch?v=sOnqjkJTMaA","img":"guide-assets/plates/1983-thriller-michael-jackson.jpg"},{"year":1984,"title":"Girls Just Want to Have Fun","artist":"Cyndi Lauper","plants":44521,"coverage":76.2,"duration":"4:26","url":"https://www.youtube.com/watch?v=PIb6AZdTr-A","img":"guide-assets/plates/1984-girls-just-want-to-have-fun-cyndi-lauper.jpg"},{"year":1985,"title":"Material Girl","artist":"Madonna","plants":47236,"coverage":72.4,"duration":"4:45","url":"https://www.youtube.com/watch?v=6p-lDYPR2P8","img":"guide-assets/plates/1985-material-girl-madonna.jpg"},{"year":1986,"title":"Sledgehammer","artist":"Peter Gabriel","plants":50802,"coverage":73.4,"duration":"5:01","url":"https://www.youtube.com/watch?v=g93mz_eZ5N4","img":"guide-assets/plates/1986-sledgehammer-peter-gabriel.jpg"},{"year":1987,"title":"I Wanna Dance with Somebody","artist":"Whitney Houston","plants":53608,"coverage":79.5,"duration":"5:14","url":"https://www.youtube.com/watch?v=eH3giaIzONA","img":"guide-assets/plates/1987-i-wanna-dance-with-somebody-whitney-houston.jpg"},{"year":1988,"title":"Can I Play With Madness","artist":"Iron Maiden","plants":35677,"coverage":61,"duration":"3:37","url":"https://www.youtube.com/watch?v=Kvqr366Op3k","img":"guide-assets/plates/1988-can-i-play-with-madness-iron-maiden.jpg"},{"year":1989,"title":"One","artist":"Metallica","plants":74867,"coverage":84.4,"duration":"7:44","url":"https://www.youtube.com/watch?v=WM8bTdBs-cw","img":"guide-assets/plates/1989-one-metallica.jpg"},{"year":1990,"title":"Groove Is in the Heart","artist":"Deee-Lite","plants":39285,"coverage":68.9,"duration":"3:53","url":"https://www.youtube.com/watch?v=XU0QQX6DT3g","img":"guide-assets/plates/1990-groove-is-in-the-heart-deee-lite.jpg"},{"year":1991,"title":"Black or White","artist":"Michael Jackson","plants":62657,"coverage":79.5,"duration":"6:22","url":"https://www.youtube.com/watch?v=F2AitTPI5U0","img":"guide-assets/plates/1991-black-or-white-michael-jackson.jpg"},{"year":1992,"title":"November Rain","artist":"Guns N' Roses","plants":93532,"coverage":81.8,"duration":"9:16","url":"https://www.youtube.com/watch?v=8SbUC-UaAxE","img":"guide-assets/plates/1992-november-rain-guns-n-roses.jpg"},{"year":1993,"title":"I'd Do Anything For Love","artist":"Meat Loaf","plants":76009,"coverage":82.9,"duration":"7:40","url":"https://www.youtube.com/watch?v=9X_ViIPA-Gc","img":"guide-assets/plates/1993-i-d-do-anything-for-love-meat-loaf.jpg"},{"year":1994,"title":"Black Hole Sun","artist":"Soundgarden","plants":53374,"coverage":78,"duration":"5:20","url":"https://www.youtube.com/watch?v=3mbBbFH9fAg","img":"guide-assets/plates/1994-black-hole-sun-soundgarden.jpg"},{"year":1995,"title":"Gangsta's Paradise","artist":"Coolio ft. L.V.","plants":41527,"coverage":67.8,"duration":"4:16","url":"https://www.youtube.com/watch?v=fPO76Jlnz6c","img":"guide-assets/plates/1995-gangsta-s-paradise-coolio-ft-l-v.jpg"},{"year":1996,"title":"Tonight, Tonight","artist":"The Smashing Pumpkins","plants":42586,"coverage":69,"duration":"4:18","url":"https://www.youtube.com/watch?v=NOG3eus4ZSo","img":"guide-assets/plates/1996-tonight-tonight-the-smashing-pumpkins.jpg"},{"year":1997,"title":"The Rain (Supa Dupa Fly)","artist":"Missy Elliott","plants":43242,"coverage":65.9,"duration":"4:13","url":"https://www.youtube.com/watch?v=hHcyJPTTn9w","img":"guide-assets/plates/1997-the-rain-supa-dupa-fly-missy-elliott.jpg"},{"year":1998,"title":"Intergalactic","artist":"Beastie Boys","plants":48560,"coverage":76.1,"duration":"4:34","url":"https://www.youtube.com/watch?v=qORYO0atB6g","img":"guide-assets/plates/1998-intergalactic-beastie-boys.jpg"},{"year":1999,"title":"...Baby One More Time","artist":"Britney Spears","plants":38494,"coverage":72.7,"duration":"3:57","url":"https://www.youtube.com/watch?v=C-u5WLJ9Yk4","img":"guide-assets/plates/1999-baby-one-more-time-britney-spears.jpg"},{"year":2000,"title":"Californication","artist":"Red Hot Chili Peppers","plants":53819,"coverage":75.7,"duration":"5:21","url":"https://www.youtube.com/watch?v=YlUKcNNmywk","img":"guide-assets/plates/2000-californication-red-hot-chili-peppers.jpg"},{"year":2000,"title":"One More Time","artist":"Daft Punk","plants":53624,"coverage":82.4,"duration":"5:21","url":"https://www.youtube.com/watch?v=FGBhQbmPwH8","img":"guide-assets/plates/2000-one-more-time-daft-punk.jpg"},{"year":2001,"title":"Sonne","artist":"Rammstein","plants":41905,"coverage":74.4,"duration":"4:12","url":"https://www.youtube.com/watch?v=StZcUAPRRac","img":"guide-assets/plates/2001-sonne-rammstein.jpg"},{"year":2002,"title":"Without Me","artist":"Eminem","plants":49999,"coverage":68.6,"duration":"4:57","url":"https://www.youtube.com/watch?v=YVkUvmDQ3HY","img":"guide-assets/plates/2002-without-me-eminem.jpg"},{"year":2003,"title":"Hey Ya","artist":"OutKast","plants":51409,"coverage":77,"duration":"5:03","url":"https://www.youtube.com/watch?v=PWgvGjAhvIw","img":"guide-assets/plates/2003-hey-ya-outkast.jpg"},{"year":2004,"title":"What You Waiting For?","artist":"Gwen Stefani","plants":40284,"coverage":65.8,"duration":"3:41","url":"https://www.youtube.com/watch?v=RtBPPr_GVUg","img":"guide-assets/plates/2004-what-you-waiting-for-gwen-stefani.jpg"},{"year":2005,"title":"Feel Good Inc","artist":"Gorillaz","plants":44077,"coverage":72.9,"duration":"4:15","url":"https://www.youtube.com/watch?v=HyHNuVaZJ-k","img":"guide-assets/plates/2005-feel-good-inc-gorillaz.jpg"},{"year":2006,"title":"Hips Don't Lie","artist":"Shakira ft. Wyclef Jean","plants":34638,"coverage":67.9,"duration":"3:38","url":"https://www.youtube.com/watch?v=DUT5rEU6pqM","img":"guide-assets/plates/2006-hips-don-t-lie-shakira-ft-wyclef-jean.jpg"},{"year":2007,"title":"D.A.N.C.E.","artist":"Justice","plants":31113,"coverage":52.4,"duration":"3:01","url":"https://www.youtube.com/watch?v=sy1dYFGkPUE","img":"guide-assets/plates/2007-d-a-n-c-e-justice.jpg"},{"year":2008,"title":"Electric Feel","artist":"MGMT","plants":37521,"coverage":68.5,"duration":"3:48","url":"https://www.youtube.com/watch?v=MmZexg8sxyk","img":"guide-assets/plates/2008-electric-feel-mgmt.jpg"},{"year":2009,"title":"Bad Romance","artist":"Lady Gaga","plants":55476,"coverage":76.4,"duration":"5:08","url":"https://www.youtube.com/watch?v=qrO4YZeyl0I","img":"guide-assets/plates/2009-bad-romance-lady-gaga.jpg"},{"year":2010,"title":"California Gurls","artist":"Katy Perry ft. Snoop Dogg","plants":41765,"coverage":69.3,"duration":"3:53","url":"https://www.youtube.com/watch?v=F57P9C4SAW4","img":"guide-assets/plates/2010-california-gurls-katy-perry-ft-snoop-dogg.jpg"},{"year":2011,"title":"Midnight City","artist":"M83","plants":40958,"coverage":67.1,"duration":"4:03","url":"https://www.youtube.com/watch?v=dX3k_QDnzHE","img":"guide-assets/plates/2011-midnight-city-m83.jpg"},{"year":2012,"title":"Gangnam Style","artist":"Psy","plants":44473,"coverage":73.1,"duration":"4:12","url":"https://www.youtube.com/watch?v=9bZkp7q19f0","img":"guide-assets/plates/2012-gangnam-style-psy.jpg"},{"year":2013,"title":"Lose Yourself to Dance","artist":"Daft Punk","plants":39892,"coverage":74.4,"duration":"4:10","url":"https://www.youtube.com/watch?v=NF-kLy44Hls","img":"guide-assets/plates/2013-lose-yourself-to-dance-daft-punk.jpg"},{"year":2014,"title":"Uptown Funk","artist":"Mark Ronson","plants":45510,"coverage":64.3,"duration":"4:30","url":"https://www.youtube.com/watch?v=OPf0YbXqDm0","img":"guide-assets/plates/2014-uptown-funk-mark-ronson.jpg"},{"year":2015,"title":"Hotline Bling","artist":"Drake","plants":50689,"coverage":76.1,"duration":"4:55","url":"https://www.youtube.com/watch?v=uxpDa-c-4Mc","img":"guide-assets/plates/2015-hotline-bling-drake.jpg"},{"year":2016,"title":"Cant Stop the Feeling","artist":"Justin Timberlake","plants":49174,"coverage":70.3,"duration":"4:45","url":"https://www.youtube.com/watch?v=ru0K8uYEZWw","img":"guide-assets/plates/2016-cant-stop-the-feeling-justin-timberlake.jpg"},{"year":2017,"title":"Feels","artist":"Calvin Harris","plants":37575,"coverage":71.1,"duration":"3:42","url":"https://www.youtube.com/watch?v=ozv4q2ov3Mk","img":"guide-assets/plates/2017-feels-calvin-harris.jpg"},{"year":2018,"title":"Rats","artist":"Ghost","plants":43325,"coverage":74.2,"duration":"4:24","url":"https://www.youtube.com/watch?v=C_ijc7A5oAc","img":"guide-assets/plates/2018-rats-ghost.jpg"},{"year":2019,"title":"thank u, next","artist":"Ariana Grande","plants":54850,"coverage":75.6,"duration":"5:30","url":"https://www.youtube.com/watch?v=gl1aHhXnN1k","img":"guide-assets/plates/2019-thank-u-next-ariana-grande.jpg"},{"year":2020,"title":"Blinding Lights","artist":"The Weeknd","plants":41956,"coverage":76.6,"duration":"4:22","url":"https://www.youtube.com/watch?v=4NRXx6U8ABQ","img":"guide-assets/plates/2020-blinding-lights-the-weeknd.jpg"},{"year":2021,"title":"MONTERO Call Me By Your Name","artist":"Lil Nas X","plants":31776,"coverage":61.8,"duration":"3:09","url":"https://www.youtube.com/watch?v=6swmTBVI83k","img":"guide-assets/plates/2021-montero-call-me-by-your-name-lil-nas-x.jpg"},{"year":2022,"title":"Titi Me Pregunto","artist":"Bad Bunny","plants":48323,"coverage":67.9,"duration":"4:50","url":"https://www.youtube.com/watch?v=Cr8K88UcO0s","img":"guide-assets/plates/2022-titi-me-pregunto-bad-bunny.jpg"},{"year":2023,"title":"Paint The Town Red","artist":"Doja Cat","plants":48965,"coverage":73.6,"duration":"4:56","url":"https://www.youtube.com/watch?v=m4_9TFeMfJE","img":"guide-assets/plates/2023-paint-the-town-red-doja-cat.jpg"},{"year":2024,"title":"CHIHIRO","artist":"Billie Eilish","plants":52823,"coverage":69.8,"duration":"5:23","url":"https://www.youtube.com/watch?v=BY_XwvKogC8","img":"guide-assets/plates/2024-chihiro-billie-eilish.jpg"},{"year":2025,"title":"Man I Need","artist":"Olivia Dean","plants":33083,"coverage":64.6,"duration":"3:21","url":"https://www.youtube.com/watch?v=oIv_Y2RPQ_A","img":"guide-assets/plates/2025-man-i-need-olivia-dean.jpg"},{"year":2026,"title":"Confessions II — The Film","artist":"Madonna","plants":104806,"coverage":86.3,"duration":"10:33","url":"https://www.youtube.com/watch?v=yJtckcMHM2g","img":"guide-assets/plates/2026-confessions-ii-the-film-madonna.jpg"}];
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function render(dec) {
+    var grid = document.getElementById('grid');
+    var rows = PLATES.filter(function (p) {
+      return dec === 'all' || Math.floor(p.year / 10) * 10 === +dec;
+    });
+    shown = rows;
+    grid.innerHTML = rows.map(function (p, i) {
+      var d = Math.floor(p.year / 10) * 10;
+      var link = p.url
+        ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener" class="text-xs text-sky-400 hover:text-sky-300">watch the clip <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>'
+        : '';
+      return '' +
+        '<article class="card plate-card d' + d + ' bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">' +
+          '<button class="plate-btn" data-i="' + i + '" aria-label="View ' + esc(p.title) + ' larger">' +
+            '<img src="' + esc(p.img) + '" alt="Plate for ' + esc(p.title) + '" loading="lazy" class="w-full block">' +
+          '</button>' +
+          '<div class="p-4">' +
+            '<div class="flex items-center justify-between mb-1">' +
+              '<span class="type-kicker kicker">' + p.year + '</span>' +
+              '<span class="type-pill tech-badge">' + p.coverage + '% cover</span>' +
+            '</div>' +
+            '<h3 class="font-display text-slate-200 leading-snug">' + esc(p.title) + '</h3>' +
+            '<p class="text-sm text-slate-500 mb-3">' + esc(p.artist) + '</p>' +
+            '<div class="flex items-center justify-between text-xs text-slate-500 mono">' +
+              '<span>' + p.plants.toLocaleString() + ' marks</span>' +
+              '<span>' + esc(p.duration) + '</span>' +
+            '</div>' +
+            (link ? '<div class="mt-3">' + link + '</div>' : '') +
+          '</div>' +
+        '</article>';
+    }).join('');
+  }
+
+  // ---- lightbox: open the 1200px copy, arrow keys and swipe-free nav ----
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img'),
+      lbMeta = document.getElementById('lb-meta'), cur = 0;
+
+  function openLB(i) {
+    if (!shown.length) return;
+    cur = (i + shown.length) % shown.length;
+    var p = shown[cur];
+    lbImg.src = p.img.replace('/plates/', '/large/');
+    lbImg.alt = 'Plate for ' + p.title;
+    lbMeta.textContent = p.year + '  ·  ' + p.title + '  ·  ' + p.artist +
+      '  ·  ' + p.plants.toLocaleString() + ' marks  ·  ' + p.coverage + '% cover  ·  ' + p.duration;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLB() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+
+  document.getElementById('grid').addEventListener('click', function (e) {
+    var btn = e.target.closest('.plate-btn');
+    if (btn) openLB(+btn.dataset.i);
+  });
+  lb.querySelector('.lb-close').addEventListener('click', closeLB);
+  lb.querySelector('.lb-prev').addEventListener('click', function (e) { e.stopPropagation(); openLB(cur - 1); });
+  lb.querySelector('.lb-next').addEventListener('click', function (e) { e.stopPropagation(); openLB(cur + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) closeLB(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLB();
+    if (e.key === 'ArrowRight') openLB(cur + 1);
+    if (e.key === 'ArrowLeft') openLB(cur - 1);
+  });
+
+  // ---- mobile menu ----
+  var navT = document.getElementById('nav-toggle'), navM = document.getElementById('nav-mobile');
+  navT.addEventListener('click', function () {
+    var open = navM.classList.toggle('hidden') === false;
+    navT.setAttribute('aria-expanded', String(open));
+  });
+  navM.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') { navM.classList.add('hidden'); navT.setAttribute('aria-expanded', 'false'); }
+  });
+
+  document.querySelectorAll('#filters .filter-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#filters .filter-btn').forEach(function (x) {
+        x.classList.remove('active');
+        x.classList.add('text-slate-400');
+        x.classList.remove('text-slate-300');
+      });
+      b.classList.add('active');
+      render(b.dataset.dec);
+    });
+  });
+
+  render('all');
+</script>
+</body>
+</html>
