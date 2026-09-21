@@ -194,6 +194,7 @@
       <a href="#films" class="nav-link">Films</a>
       <a href="#gallery" class="nav-link">Gallery</a>
       <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#where" class="nav-link text-sky-400">Collect</a>
     </div>
     <div class="flex items-center gap-1">
       <button id="nav-toggle" aria-label="Menu" aria-expanded="false"
@@ -215,6 +216,7 @@
     <a href="#films" class="nav-link">Films</a>
     <a href="#gallery" class="nav-link">Gallery</a>
     <a href="#faq" class="nav-link">FAQ</a>
+    <a href="#where" class="nav-link text-sky-400">Collect</a>
   </div>
 </nav>
 
@@ -254,6 +256,25 @@
       <div class="stat-number text-3xl text-slate-200">4.2<span class="text-lg text-slate-400">h</span></div>
       <div class="text-xs text-slate-500 mt-1">of music video watched start to finish</div>
     </div>
+  </div>
+
+  <div class="flex flex-wrap gap-3 mb-10">
+    <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425" target="_blank" rel="noopener"
+       class="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-950 font-semibold px-5 h-11 rounded-full text-sm">
+      <i class="fa-solid fa-cube"></i> Collect on Transient
+    </a>
+    <a href="https://www.youtube.com/playlist?list=PLFvdE_Q3WX1c" target="_blank" rel="noopener"
+       class="inline-flex items-center gap-2 border border-slate-700 hover:bg-slate-800 text-slate-300 font-medium px-5 h-11 rounded-full text-sm">
+      <i class="fa-brands fa-youtube"></i> Watch the 52 films
+    </a>
+    <a href="https://open.spotify.com/playlist/53NwYoOqz6ptNPXtlMaloh" target="_blank" rel="noopener"
+       class="inline-flex items-center gap-2 border border-slate-700 hover:bg-slate-800 text-slate-300 font-medium px-5 h-11 rounded-full text-sm">
+      <i class="fa-brands fa-spotify"></i> The source songs
+    </a>
+    <a href="https://along7gallery.xyz/made/flyart/" target="_blank" rel="noopener"
+       class="inline-flex items-center gap-2 border border-slate-700 hover:bg-slate-800 text-slate-300 font-medium px-5 h-11 rounded-full text-sm">
+      <i class="fa-solid fa-image"></i> Gallery
+    </a>
   </div>
 
   <figure>
@@ -721,7 +742,8 @@
   <h2 class="section-header text-slate-200 mb-3">Fifty-two plates</h2>
   <p class="prose-col text-slate-400 leading-relaxed mb-8">
     One per year from 1976 to 2026, plus a second one for 2000. Each made in a
-    single unbroken playthrough by the same build of the instrument. Sorted by
+    single unbroken playthrough by the same build of the instrument. Each carries
+    its own name and has a film showing the circuit that painted it. Sorted by
     year, filter by decade.
   </p>
 
@@ -733,6 +755,11 @@
     <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="2000"><span class="filter-dot mr-2" style="background:#0ea5e9"></span>2000s</button>
     <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="2010"><span class="filter-dot mr-2" style="background:#10b981"></span>2010s</button>
     <button class="filter-btn px-4 py-1.5 rounded-full border border-slate-700 text-sm text-slate-400" data-dec="2020"><span class="filter-dot mr-2" style="background:#ec4899"></span>2020s</button>
+    <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425"
+       target="_blank" rel="noopener"
+       class="ml-auto inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-950 font-semibold px-5 h-9 rounded-full text-sm">
+      <i class="fa-solid fa-cube"></i> Collect on Transient
+    </a>
   </div>
 
   <figure class="mb-10">
@@ -843,10 +870,18 @@
       <details class="faq border-slate-800">
         <summary class="text-slate-200">Are these minted, sold, or on a blockchain?</summary>
         <div class="answer text-slate-400">
-          No. Nothing is minted and nothing is for sale. The metadata file sitting
-          next to each plate uses a familiar shape because it's a convenient way to
-          record provenance, meaning the source clip, the duration, the mark count
-          and the instrument build. It isn't listed anywhere.
+          Yes. All fifty-two are minted on
+          <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425"
+             target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">Transient</a>,
+          one token per plate. What a token holds is the plate itself, the 6144 by
+          4608 image, along with the provenance that was already sitting in the
+          metadata file: the source clip, the runtime, the mark count, the coverage
+          and the instrument build that made it.
+          <br><br>
+          What it doesn't hold: the films are free to watch and always will be, the
+          walk itself isn't on chain, and none of this changes the licence on the
+          underlying data. MaleCNS v1.0 is CC BY 4.0, it stays CC BY 4.0, and that
+          attribution travels with every token.
         </div>
       </details>
 
@@ -1026,9 +1061,76 @@
   </div>
 </section>
 
+<!-- ============================ WHERE IT LIVES ============================ -->
+<section id="where" class="portfolio-container px-6 py-16 border-t border-slate-800">
+  <p class="kicker mb-3">10 / Where this lives</p>
+  <h2 class="section-header text-slate-200 mb-3">Four places</h2>
+  <p class="prose-col text-slate-400 leading-relaxed mb-8">
+    The plates are the work. The films show how each one happened. The songs are
+    what the fly actually watched, in order.
+  </p>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425"
+       target="_blank" rel="noopener"
+       class="card plate-card d2020 bg-slate-900 border border-slate-800 rounded-xl p-6 block">
+      <div class="type-kicker kicker mb-2"><i class="fa-solid fa-cube mr-2"></i>Collect</div>
+      <div class="font-display text-slate-200 text-lg mb-2">Transient</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        All fifty-two minted on Ethereum, one token per plate, each carrying its own
+        marks, coverage and instrument build.
+      </p>
+      <span class="text-xs text-sky-400 mt-3 inline-block">View the collection
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+    </a>
+
+    <a href="https://www.youtube.com/playlist?list=PLFvdE_Q3WX1c" target="_blank" rel="noopener"
+       class="card plate-card d1980 bg-slate-900 border border-slate-800 rounded-xl p-6 block">
+      <div class="type-kicker kicker mb-2"><i class="fa-brands fa-youtube mr-2"></i>Watch</div>
+      <div class="font-display text-slate-200 text-lg mb-2">The 52 films</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        Every playthrough in full, the live circuit on one screen and the plate
+        filling in between them. Chronological, 1976 to 2026.
+      </p>
+      <span class="text-xs text-sky-400 mt-3 inline-block">Open the playlist
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+    </a>
+
+    <a href="https://open.spotify.com/playlist/53NwYoOqz6ptNPXtlMaloh" target="_blank" rel="noopener"
+       class="card plate-card d2010 bg-slate-900 border border-slate-800 rounded-xl p-6 block">
+      <div class="type-kicker kicker mb-2"><i class="fa-brands fa-spotify mr-2"></i>Listen</div>
+      <div class="font-display text-slate-200 text-lg mb-2">The source songs</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        The fifty-two tracks the fly watched, in the order it watched them. The
+        input to the whole collection, as a playlist.
+      </p>
+      <span class="text-xs text-sky-400 mt-3 inline-block">Play on Spotify
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+    </a>
+
+    <a href="https://along7gallery.xyz/made/flyart/" target="_blank" rel="noopener"
+       class="card plate-card d1990 bg-slate-900 border border-slate-800 rounded-xl p-6 block">
+      <div class="type-kicker kicker mb-2"><i class="fa-solid fa-image mr-2"></i>Browse</div>
+      <div class="font-display text-slate-200 text-lg mb-2">The gallery</div>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        The plates on the wall at along7gallery, alongside the rest of the
+        collection.
+      </p>
+      <span class="text-xs text-sky-400 mt-3 inline-block">Visit the gallery
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+    </a>
+  </div>
+
+  <p class="prose-col text-sm text-slate-500 mt-6">
+    Everything is also on the
+    <a href="https://www.youtube.com/channel/UCrXq5Uww4Tn5lERthjeWpww" target="_blank" rel="noopener"
+       class="text-sky-400 hover:text-sky-300">YouTube channel</a>.
+  </p>
+</section>
+
 <!-- ============================ FOOTER ============================ -->
 <footer class="portfolio-container px-6 py-12 border-t border-slate-800">
-  <div class="grid md:grid-cols-3 gap-8 text-sm">
+  <div class="grid md:grid-cols-4 gap-8 text-sm">
     <div>
       <div class="kicker mb-3">The claim</div>
       <p class="text-slate-400 leading-relaxed">
@@ -1051,10 +1153,20 @@
         <span class="mono text-xs text-slate-500">c546ce0eb977</span> across all 52 plates.
       </p>
     </div>
+    <div>
+      <div class="kicker mb-3">Where it lives</div>
+      <p class="text-slate-400 leading-relaxed flex flex-col gap-1">
+        <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">Collect on Transient</a>
+        <a href="https://www.youtube.com/playlist?list=PLFvdE_Q3WX1c" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">The 52 films</a>
+        <a href="https://open.spotify.com/playlist/53NwYoOqz6ptNPXtlMaloh" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">The source songs</a>
+        <a href="https://along7gallery.xyz/made/flyart/" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">along7gallery</a>
+      </p>
+    </div>
   </div>
   <p class="text-xs text-slate-500 mt-10">
-    Nothing here is minted or for sale. Earlier guides are kept exactly as they were,
-    as a record of what the instrument used to be.
+    The fifty-two plates are minted on Transient, one token per plate. The films
+    stay free. Earlier guides are kept exactly as they were, as a record of what
+    the instrument used to be.
   </p>
 </footer>
 
@@ -1069,7 +1181,7 @@
 
   // ---- gallery ----
   var shown = [];
-  var PLATES = [{"year":1976,"title":"Dancing Queen","artist":"ABBA","plants":38085,"coverage":70.1,"duration":"3:52","url":"https://www.youtube.com/watch?v=xFrGuyw1V8s","img":"guide-assets/plates/1976-dancing-queen-abba.jpg"},{"year":1977,"title":"How Deep Is Your Love","artist":"Bee Gees","plants":40583,"coverage":65,"duration":"3:59","url":"https://www.youtube.com/watch?v=XpqqjU7u5Yc","img":"guide-assets/plates/1977-how-deep-is-your-love-bee-gees.jpg"},{"year":1978,"title":"Rasputin","artist":"Boney M","plants":44840,"coverage":71.4,"duration":"4:29","url":"https://www.youtube.com/watch?v=16y1AkoZkmQ","img":"guide-assets/plates/1978-rasputin-boney-m.jpg"},{"year":1979,"title":"Rock with You","artist":"Michael Jackson","plants":33605,"coverage":67.7,"duration":"3:21","url":"https://www.youtube.com/watch?v=5X-Mrc2l1d0","img":"guide-assets/plates/1979-rock-with-you-michael-jackson.jpg"},{"year":1980,"title":"Ashes to Ashes","artist":"David Bowie","plants":36626,"coverage":60,"duration":"3:36","url":"https://www.youtube.com/watch?v=HyMm4rJemtI","img":"guide-assets/plates/1980-ashes-to-ashes-david-bowie.jpg"},{"year":1981,"title":"Physical","artist":"Olivia Newton-John","plants":37936,"coverage":66.5,"duration":"3:43","url":"https://www.youtube.com/watch?v=vWz9VN40nCA","img":"guide-assets/plates/1981-physical-olivia-newton-john.jpg"},{"year":1982,"title":"Hungry Like the Wolf","artist":"Duran Duran","plants":38131,"coverage":65.6,"duration":"3:42","url":"https://www.youtube.com/watch?v=oJL-lCzEXgI","img":"guide-assets/plates/1982-hungry-like-the-wolf-duran-duran.jpg"},{"year":1983,"title":"Thriller","artist":"Michael Jackson","plants":132313,"coverage":90.1,"duration":"13:41","url":"https://www.youtube.com/watch?v=sOnqjkJTMaA","img":"guide-assets/plates/1983-thriller-michael-jackson.jpg"},{"year":1984,"title":"Girls Just Want to Have Fun","artist":"Cyndi Lauper","plants":44521,"coverage":76.2,"duration":"4:26","url":"https://www.youtube.com/watch?v=PIb6AZdTr-A","img":"guide-assets/plates/1984-girls-just-want-to-have-fun-cyndi-lauper.jpg"},{"year":1985,"title":"Material Girl","artist":"Madonna","plants":47236,"coverage":72.4,"duration":"4:45","url":"https://www.youtube.com/watch?v=6p-lDYPR2P8","img":"guide-assets/plates/1985-material-girl-madonna.jpg"},{"year":1986,"title":"Sledgehammer","artist":"Peter Gabriel","plants":50802,"coverage":73.4,"duration":"5:01","url":"https://www.youtube.com/watch?v=g93mz_eZ5N4","img":"guide-assets/plates/1986-sledgehammer-peter-gabriel.jpg"},{"year":1987,"title":"I Wanna Dance with Somebody","artist":"Whitney Houston","plants":53608,"coverage":79.5,"duration":"5:14","url":"https://www.youtube.com/watch?v=eH3giaIzONA","img":"guide-assets/plates/1987-i-wanna-dance-with-somebody-whitney-houston.jpg"},{"year":1988,"title":"Can I Play With Madness","artist":"Iron Maiden","plants":35677,"coverage":61,"duration":"3:37","url":"https://www.youtube.com/watch?v=Kvqr366Op3k","img":"guide-assets/plates/1988-can-i-play-with-madness-iron-maiden.jpg"},{"year":1989,"title":"One","artist":"Metallica","plants":74867,"coverage":84.4,"duration":"7:44","url":"https://www.youtube.com/watch?v=WM8bTdBs-cw","img":"guide-assets/plates/1989-one-metallica.jpg"},{"year":1990,"title":"Groove Is in the Heart","artist":"Deee-Lite","plants":39285,"coverage":68.9,"duration":"3:53","url":"https://www.youtube.com/watch?v=XU0QQX6DT3g","img":"guide-assets/plates/1990-groove-is-in-the-heart-deee-lite.jpg"},{"year":1991,"title":"Black or White","artist":"Michael Jackson","plants":62657,"coverage":79.5,"duration":"6:22","url":"https://www.youtube.com/watch?v=F2AitTPI5U0","img":"guide-assets/plates/1991-black-or-white-michael-jackson.jpg"},{"year":1992,"title":"November Rain","artist":"Guns N' Roses","plants":93532,"coverage":81.8,"duration":"9:16","url":"https://www.youtube.com/watch?v=8SbUC-UaAxE","img":"guide-assets/plates/1992-november-rain-guns-n-roses.jpg"},{"year":1993,"title":"I'd Do Anything For Love","artist":"Meat Loaf","plants":76009,"coverage":82.9,"duration":"7:40","url":"https://www.youtube.com/watch?v=9X_ViIPA-Gc","img":"guide-assets/plates/1993-i-d-do-anything-for-love-meat-loaf.jpg"},{"year":1994,"title":"Black Hole Sun","artist":"Soundgarden","plants":53374,"coverage":78,"duration":"5:20","url":"https://www.youtube.com/watch?v=3mbBbFH9fAg","img":"guide-assets/plates/1994-black-hole-sun-soundgarden.jpg"},{"year":1995,"title":"Gangsta's Paradise","artist":"Coolio ft. L.V.","plants":41527,"coverage":67.8,"duration":"4:16","url":"https://www.youtube.com/watch?v=fPO76Jlnz6c","img":"guide-assets/plates/1995-gangsta-s-paradise-coolio-ft-l-v.jpg"},{"year":1996,"title":"Tonight, Tonight","artist":"The Smashing Pumpkins","plants":42586,"coverage":69,"duration":"4:18","url":"https://www.youtube.com/watch?v=NOG3eus4ZSo","img":"guide-assets/plates/1996-tonight-tonight-the-smashing-pumpkins.jpg"},{"year":1997,"title":"The Rain (Supa Dupa Fly)","artist":"Missy Elliott","plants":43242,"coverage":65.9,"duration":"4:13","url":"https://www.youtube.com/watch?v=hHcyJPTTn9w","img":"guide-assets/plates/1997-the-rain-supa-dupa-fly-missy-elliott.jpg"},{"year":1998,"title":"Intergalactic","artist":"Beastie Boys","plants":48560,"coverage":76.1,"duration":"4:34","url":"https://www.youtube.com/watch?v=qORYO0atB6g","img":"guide-assets/plates/1998-intergalactic-beastie-boys.jpg"},{"year":1999,"title":"...Baby One More Time","artist":"Britney Spears","plants":38494,"coverage":72.7,"duration":"3:57","url":"https://www.youtube.com/watch?v=C-u5WLJ9Yk4","img":"guide-assets/plates/1999-baby-one-more-time-britney-spears.jpg"},{"year":2000,"title":"Californication","artist":"Red Hot Chili Peppers","plants":53819,"coverage":75.7,"duration":"5:21","url":"https://www.youtube.com/watch?v=YlUKcNNmywk","img":"guide-assets/plates/2000-californication-red-hot-chili-peppers.jpg"},{"year":2000,"title":"One More Time","artist":"Daft Punk","plants":53624,"coverage":82.4,"duration":"5:21","url":"https://www.youtube.com/watch?v=FGBhQbmPwH8","img":"guide-assets/plates/2000-one-more-time-daft-punk.jpg"},{"year":2001,"title":"Sonne","artist":"Rammstein","plants":41905,"coverage":74.4,"duration":"4:12","url":"https://www.youtube.com/watch?v=StZcUAPRRac","img":"guide-assets/plates/2001-sonne-rammstein.jpg"},{"year":2002,"title":"Without Me","artist":"Eminem","plants":49999,"coverage":68.6,"duration":"4:57","url":"https://www.youtube.com/watch?v=YVkUvmDQ3HY","img":"guide-assets/plates/2002-without-me-eminem.jpg"},{"year":2003,"title":"Hey Ya","artist":"OutKast","plants":51409,"coverage":77,"duration":"5:03","url":"https://www.youtube.com/watch?v=PWgvGjAhvIw","img":"guide-assets/plates/2003-hey-ya-outkast.jpg"},{"year":2004,"title":"What You Waiting For?","artist":"Gwen Stefani","plants":40284,"coverage":65.8,"duration":"3:41","url":"https://www.youtube.com/watch?v=RtBPPr_GVUg","img":"guide-assets/plates/2004-what-you-waiting-for-gwen-stefani.jpg"},{"year":2005,"title":"Feel Good Inc","artist":"Gorillaz","plants":44077,"coverage":72.9,"duration":"4:15","url":"https://www.youtube.com/watch?v=HyHNuVaZJ-k","img":"guide-assets/plates/2005-feel-good-inc-gorillaz.jpg"},{"year":2006,"title":"Hips Don't Lie","artist":"Shakira ft. Wyclef Jean","plants":34638,"coverage":67.9,"duration":"3:38","url":"https://www.youtube.com/watch?v=DUT5rEU6pqM","img":"guide-assets/plates/2006-hips-don-t-lie-shakira-ft-wyclef-jean.jpg"},{"year":2007,"title":"D.A.N.C.E.","artist":"Justice","plants":31113,"coverage":52.4,"duration":"3:01","url":"https://www.youtube.com/watch?v=sy1dYFGkPUE","img":"guide-assets/plates/2007-d-a-n-c-e-justice.jpg"},{"year":2008,"title":"Electric Feel","artist":"MGMT","plants":37521,"coverage":68.5,"duration":"3:48","url":"https://www.youtube.com/watch?v=MmZexg8sxyk","img":"guide-assets/plates/2008-electric-feel-mgmt.jpg"},{"year":2009,"title":"Bad Romance","artist":"Lady Gaga","plants":55476,"coverage":76.4,"duration":"5:08","url":"https://www.youtube.com/watch?v=qrO4YZeyl0I","img":"guide-assets/plates/2009-bad-romance-lady-gaga.jpg"},{"year":2010,"title":"California Gurls","artist":"Katy Perry ft. Snoop Dogg","plants":41765,"coverage":69.3,"duration":"3:53","url":"https://www.youtube.com/watch?v=F57P9C4SAW4","img":"guide-assets/plates/2010-california-gurls-katy-perry-ft-snoop-dogg.jpg"},{"year":2011,"title":"Midnight City","artist":"M83","plants":40958,"coverage":67.1,"duration":"4:03","url":"https://www.youtube.com/watch?v=dX3k_QDnzHE","img":"guide-assets/plates/2011-midnight-city-m83.jpg"},{"year":2012,"title":"Gangnam Style","artist":"Psy","plants":44473,"coverage":73.1,"duration":"4:12","url":"https://www.youtube.com/watch?v=9bZkp7q19f0","img":"guide-assets/plates/2012-gangnam-style-psy.jpg"},{"year":2013,"title":"Lose Yourself to Dance","artist":"Daft Punk","plants":39892,"coverage":74.4,"duration":"4:10","url":"https://www.youtube.com/watch?v=NF-kLy44Hls","img":"guide-assets/plates/2013-lose-yourself-to-dance-daft-punk.jpg"},{"year":2014,"title":"Uptown Funk","artist":"Mark Ronson","plants":45510,"coverage":64.3,"duration":"4:30","url":"https://www.youtube.com/watch?v=OPf0YbXqDm0","img":"guide-assets/plates/2014-uptown-funk-mark-ronson.jpg"},{"year":2015,"title":"Hotline Bling","artist":"Drake","plants":50689,"coverage":76.1,"duration":"4:55","url":"https://www.youtube.com/watch?v=uxpDa-c-4Mc","img":"guide-assets/plates/2015-hotline-bling-drake.jpg"},{"year":2016,"title":"Cant Stop the Feeling","artist":"Justin Timberlake","plants":49174,"coverage":70.3,"duration":"4:45","url":"https://www.youtube.com/watch?v=ru0K8uYEZWw","img":"guide-assets/plates/2016-cant-stop-the-feeling-justin-timberlake.jpg"},{"year":2017,"title":"Feels","artist":"Calvin Harris","plants":37575,"coverage":71.1,"duration":"3:42","url":"https://www.youtube.com/watch?v=ozv4q2ov3Mk","img":"guide-assets/plates/2017-feels-calvin-harris.jpg"},{"year":2018,"title":"Rats","artist":"Ghost","plants":43325,"coverage":74.2,"duration":"4:24","url":"https://www.youtube.com/watch?v=C_ijc7A5oAc","img":"guide-assets/plates/2018-rats-ghost.jpg"},{"year":2019,"title":"thank u, next","artist":"Ariana Grande","plants":54850,"coverage":75.6,"duration":"5:30","url":"https://www.youtube.com/watch?v=gl1aHhXnN1k","img":"guide-assets/plates/2019-thank-u-next-ariana-grande.jpg"},{"year":2020,"title":"Blinding Lights","artist":"The Weeknd","plants":41956,"coverage":76.6,"duration":"4:22","url":"https://www.youtube.com/watch?v=4NRXx6U8ABQ","img":"guide-assets/plates/2020-blinding-lights-the-weeknd.jpg"},{"year":2021,"title":"MONTERO Call Me By Your Name","artist":"Lil Nas X","plants":31776,"coverage":61.8,"duration":"3:09","url":"https://www.youtube.com/watch?v=6swmTBVI83k","img":"guide-assets/plates/2021-montero-call-me-by-your-name-lil-nas-x.jpg"},{"year":2022,"title":"Titi Me Pregunto","artist":"Bad Bunny","plants":48323,"coverage":67.9,"duration":"4:50","url":"https://www.youtube.com/watch?v=Cr8K88UcO0s","img":"guide-assets/plates/2022-titi-me-pregunto-bad-bunny.jpg"},{"year":2023,"title":"Paint The Town Red","artist":"Doja Cat","plants":48965,"coverage":73.6,"duration":"4:56","url":"https://www.youtube.com/watch?v=m4_9TFeMfJE","img":"guide-assets/plates/2023-paint-the-town-red-doja-cat.jpg"},{"year":2024,"title":"CHIHIRO","artist":"Billie Eilish","plants":52823,"coverage":69.8,"duration":"5:23","url":"https://www.youtube.com/watch?v=BY_XwvKogC8","img":"guide-assets/plates/2024-chihiro-billie-eilish.jpg"},{"year":2025,"title":"Man I Need","artist":"Olivia Dean","plants":33083,"coverage":64.6,"duration":"3:21","url":"https://www.youtube.com/watch?v=oIv_Y2RPQ_A","img":"guide-assets/plates/2025-man-i-need-olivia-dean.jpg"},{"year":2026,"title":"Confessions II — The Film","artist":"Madonna","plants":104806,"coverage":86.3,"duration":"10:33","url":"https://www.youtube.com/watch?v=yJtckcMHM2g","img":"guide-assets/plates/2026-confessions-ii-the-film-madonna.jpg"}];
+  var PLATES = [{"year":1976,"title":"Dancing Queen","artist":"ABBA","plants":38085,"coverage":70.1,"duration":"3:52","url":"https://www.youtube.com/watch?v=xFrGuyw1V8s","img":"guide-assets/plates/1976-dancing-queen-abba.jpg","fly":"Dancing Fly","film":"https://www.youtube.com/watch?v=8-wRvwdMfbA"},{"year":1977,"title":"How Deep Is Your Love","artist":"Bee Gees","plants":40583,"coverage":65,"duration":"3:59","url":"https://www.youtube.com/watch?v=XpqqjU7u5Yc","img":"guide-assets/plates/1977-how-deep-is-your-love-bee-gees.jpg","fly":"How Fly Is Your Love","film":"https://www.youtube.com/watch?v=X7soV92CemI"},{"year":1978,"title":"Rasputin","artist":"Boney M","plants":44840,"coverage":71.4,"duration":"4:29","url":"https://www.youtube.com/watch?v=16y1AkoZkmQ","img":"guide-assets/plates/1978-rasputin-boney-m.jpg","fly":"Rasflytin","film":"https://www.youtube.com/watch?v=9xKDmkhTIFE"},{"year":1979,"title":"Rock with You","artist":"Michael Jackson","plants":33605,"coverage":67.7,"duration":"3:21","url":"https://www.youtube.com/watch?v=5X-Mrc2l1d0","img":"guide-assets/plates/1979-rock-with-you-michael-jackson.jpg","fly":"Fly with You","film":"https://www.youtube.com/watch?v=ucv6J-x7rao"},{"year":1980,"title":"Ashes to Ashes","artist":"David Bowie","plants":36626,"coverage":60,"duration":"3:36","url":"https://www.youtube.com/watch?v=HyMm4rJemtI","img":"guide-assets/plates/1980-ashes-to-ashes-david-bowie.jpg","fly":"Flies to Flies","film":"https://www.youtube.com/watch?v=tu4fbdR5t0Y"},{"year":1981,"title":"Physical","artist":"Olivia Newton-John","plants":37936,"coverage":66.5,"duration":"3:43","url":"https://www.youtube.com/watch?v=vWz9VN40nCA","img":"guide-assets/plates/1981-physical-olivia-newton-john.jpg","fly":"Flysical","film":"https://www.youtube.com/watch?v=FvMiJwsYScc"},{"year":1982,"title":"Hungry Like the Wolf","artist":"Duran Duran","plants":38131,"coverage":65.6,"duration":"3:42","url":"https://www.youtube.com/watch?v=oJL-lCzEXgI","img":"guide-assets/plates/1982-hungry-like-the-wolf-duran-duran.jpg","fly":"Hungry Like the Fly","film":"https://www.youtube.com/watch?v=BTnVEUQ0lAA"},{"year":1983,"title":"Thriller","artist":"Michael Jackson","plants":132313,"coverage":90.1,"duration":"13:41","url":"https://www.youtube.com/watch?v=sOnqjkJTMaA","img":"guide-assets/plates/1983-thriller-michael-jackson.jpg","fly":"Flyller","film":"https://www.youtube.com/watch?v=YxZVe6rYoYY"},{"year":1984,"title":"Girls Just Want to Have Fun","artist":"Cyndi Lauper","plants":44521,"coverage":76.2,"duration":"4:26","url":"https://www.youtube.com/watch?v=PIb6AZdTr-A","img":"guide-assets/plates/1984-girls-just-want-to-have-fun-cyndi-lauper.jpg","fly":"Flies Just Wanna Have Fun","film":"https://www.youtube.com/watch?v=ZWOBQJb29wI"},{"year":1985,"title":"Material Girl","artist":"Madonna","plants":47236,"coverage":72.4,"duration":"4:45","url":"https://www.youtube.com/watch?v=6p-lDYPR2P8","img":"guide-assets/plates/1985-material-girl-madonna.jpg","fly":"Material Fly","film":"https://www.youtube.com/watch?v=4QSjvxCz1kA"},{"year":1986,"title":"Sledgehammer","artist":"Peter Gabriel","plants":50802,"coverage":73.4,"duration":"5:01","url":"https://www.youtube.com/watch?v=g93mz_eZ5N4","img":"guide-assets/plates/1986-sledgehammer-peter-gabriel.jpg","fly":"Flyhammer","film":"https://www.youtube.com/watch?v=LXmSzDCoMuY"},{"year":1987,"title":"I Wanna Dance with Somebody","artist":"Whitney Houston","plants":53608,"coverage":79.5,"duration":"5:14","url":"https://www.youtube.com/watch?v=eH3giaIzONA","img":"guide-assets/plates/1987-i-wanna-dance-with-somebody-whitney-houston.jpg","fly":"I Wanna Fly with Somebody","film":"https://www.youtube.com/watch?v=OaRrGj9ta-k"},{"year":1988,"title":"Can I Play With Madness","artist":"Iron Maiden","plants":35677,"coverage":61,"duration":"3:37","url":"https://www.youtube.com/watch?v=Kvqr366Op3k","img":"guide-assets/plates/1988-can-i-play-with-madness-iron-maiden.jpg","fly":"Can I Play With Flyness","film":"https://www.youtube.com/watch?v=bIv1qzO1Bzs"},{"year":1989,"title":"One","artist":"Metallica","plants":74867,"coverage":84.4,"duration":"7:44","url":"https://www.youtube.com/watch?v=WM8bTdBs-cw","img":"guide-assets/plates/1989-one-metallica.jpg","fly":"One Fly","film":"https://www.youtube.com/watch?v=yQpTGoH92ZE"},{"year":1990,"title":"Groove Is in the Heart","artist":"Deee-Lite","plants":39285,"coverage":68.9,"duration":"3:53","url":"https://www.youtube.com/watch?v=XU0QQX6DT3g","img":"guide-assets/plates/1990-groove-is-in-the-heart-deee-lite.jpg","fly":"Groove Is in the Fly","film":"https://www.youtube.com/watch?v=yKN_RSctzxg"},{"year":1991,"title":"Black or White","artist":"Michael Jackson","plants":62657,"coverage":79.5,"duration":"6:22","url":"https://www.youtube.com/watch?v=F2AitTPI5U0","img":"guide-assets/plates/1991-black-or-white-michael-jackson.jpg","fly":"Black or White or Fly","film":"https://www.youtube.com/watch?v=-5HbUuMsjF8"},{"year":1992,"title":"November Rain","artist":"Guns N' Roses","plants":93532,"coverage":81.8,"duration":"9:16","url":"https://www.youtube.com/watch?v=8SbUC-UaAxE","img":"guide-assets/plates/1992-november-rain-guns-n-roses.jpg","fly":"November Fly","film":"https://www.youtube.com/watch?v=uq2_SluQEIs"},{"year":1993,"title":"I'd Do Anything For Love","artist":"Meat Loaf","plants":76009,"coverage":82.9,"duration":"7:40","url":"https://www.youtube.com/watch?v=9X_ViIPA-Gc","img":"guide-assets/plates/1993-i-d-do-anything-for-love-meat-loaf.jpg","fly":"I'd Do Anything for Fly","film":"https://www.youtube.com/watch?v=dz73mBJAaDM"},{"year":1994,"title":"Black Hole Sun","artist":"Soundgarden","plants":53374,"coverage":78,"duration":"5:20","url":"https://www.youtube.com/watch?v=3mbBbFH9fAg","img":"guide-assets/plates/1994-black-hole-sun-soundgarden.jpg","fly":"Black Hole Fly","film":"https://www.youtube.com/watch?v=1ds0lSJOtKE"},{"year":1995,"title":"Gangsta's Paradise","artist":"Coolio ft. L.V.","plants":41527,"coverage":67.8,"duration":"4:16","url":"https://www.youtube.com/watch?v=fPO76Jlnz6c","img":"guide-assets/plates/1995-gangsta-s-paradise-coolio-ft-l-v.jpg","fly":"Fly's Paradise","film":"https://www.youtube.com/watch?v=SWmV3QJp0p0"},{"year":1996,"title":"Tonight, Tonight","artist":"The Smashing Pumpkins","plants":42586,"coverage":69,"duration":"4:18","url":"https://www.youtube.com/watch?v=NOG3eus4ZSo","img":"guide-assets/plates/1996-tonight-tonight-the-smashing-pumpkins.jpg","fly":"Fly, Fly","film":"https://www.youtube.com/watch?v=_Eer2L3DesE"},{"year":1997,"title":"The Rain (Supa Dupa Fly)","artist":"Missy Elliott","plants":43242,"coverage":65.9,"duration":"4:13","url":"https://www.youtube.com/watch?v=hHcyJPTTn9w","img":"guide-assets/plates/1997-the-rain-supa-dupa-fly-missy-elliott.jpg","fly":"Supa Dupa Fly Fly","film":"https://www.youtube.com/watch?v=DvjP7JTh1zQ"},{"year":1998,"title":"Intergalactic","artist":"Beastie Boys","plants":48560,"coverage":76.1,"duration":"4:34","url":"https://www.youtube.com/watch?v=qORYO0atB6g","img":"guide-assets/plates/1998-intergalactic-beastie-boys.jpg","fly":"Interfly","film":"https://www.youtube.com/watch?v=B4lozYxNksQ"},{"year":1999,"title":"...Baby One More Time","artist":"Britney Spears","plants":38494,"coverage":72.7,"duration":"3:57","url":"https://www.youtube.com/watch?v=C-u5WLJ9Yk4","img":"guide-assets/plates/1999-baby-one-more-time-britney-spears.jpg","fly":"Baby One More Fly","film":"https://www.youtube.com/watch?v=cba43EtW6Hw"},{"year":2000,"title":"Californication","artist":"Red Hot Chili Peppers","plants":53819,"coverage":75.7,"duration":"5:21","url":"https://www.youtube.com/watch?v=YlUKcNNmywk","img":"guide-assets/plates/2000-californication-red-hot-chili-peppers.jpg","fly":"Flynication","film":"https://www.youtube.com/watch?v=b_jkKFPiGmY"},{"year":2000,"title":"One More Time","artist":"Daft Punk","plants":53624,"coverage":82.4,"duration":"5:21","url":"https://www.youtube.com/watch?v=FGBhQbmPwH8","img":"guide-assets/plates/2000-one-more-time-daft-punk.jpg","fly":"One More Fly","film":"https://www.youtube.com/watch?v=u-z7hyX1aic"},{"year":2001,"title":"Sonne","artist":"Rammstein","plants":41905,"coverage":74.4,"duration":"4:12","url":"https://www.youtube.com/watch?v=StZcUAPRRac","img":"guide-assets/plates/2001-sonne-rammstein.jpg","fly":"Fliege","film":"https://www.youtube.com/watch?v=gtyjjTTpNSE"},{"year":2002,"title":"Without Me","artist":"Eminem","plants":49999,"coverage":68.6,"duration":"4:57","url":"https://www.youtube.com/watch?v=YVkUvmDQ3HY","img":"guide-assets/plates/2002-without-me-eminem.jpg","fly":"Without Fly","film":"https://www.youtube.com/watch?v=HUhh86qvPG8"},{"year":2003,"title":"Hey Ya","artist":"OutKast","plants":51409,"coverage":77,"duration":"5:03","url":"https://www.youtube.com/watch?v=PWgvGjAhvIw","img":"guide-assets/plates/2003-hey-ya-outkast.jpg","fly":"Hey Fly","film":"https://www.youtube.com/watch?v=45B2G4hCWl4"},{"year":2004,"title":"What You Waiting For?","artist":"Gwen Stefani","plants":40284,"coverage":65.8,"duration":"3:41","url":"https://www.youtube.com/watch?v=RtBPPr_GVUg","img":"guide-assets/plates/2004-what-you-waiting-for-gwen-stefani.jpg","fly":"What You Flying For","film":"https://www.youtube.com/watch?v=HDs0oQ-7yOw"},{"year":2005,"title":"Feel Good Inc","artist":"Gorillaz","plants":44077,"coverage":72.9,"duration":"4:15","url":"https://www.youtube.com/watch?v=HyHNuVaZJ-k","img":"guide-assets/plates/2005-feel-good-inc-gorillaz.jpg","fly":"Fly Good Inc","film":"https://www.youtube.com/watch?v=_PmqWhqvGdU"},{"year":2006,"title":"Hips Don't Lie","artist":"Shakira ft. Wyclef Jean","plants":34638,"coverage":67.9,"duration":"3:38","url":"https://www.youtube.com/watch?v=DUT5rEU6pqM","img":"guide-assets/plates/2006-hips-don-t-lie-shakira-ft-wyclef-jean.jpg","fly":"Flies Don't Lie","film":"https://www.youtube.com/watch?v=ilnX3SfDHu8"},{"year":2007,"title":"D.A.N.C.E.","artist":"Justice","plants":31113,"coverage":52.4,"duration":"3:01","url":"https://www.youtube.com/watch?v=sy1dYFGkPUE","img":"guide-assets/plates/2007-d-a-n-c-e-justice.jpg","fly":"F.L.Y.","film":"https://www.youtube.com/watch?v=3VZVsL_RxWI"},{"year":2008,"title":"Electric Feel","artist":"MGMT","plants":37521,"coverage":68.5,"duration":"3:48","url":"https://www.youtube.com/watch?v=MmZexg8sxyk","img":"guide-assets/plates/2008-electric-feel-mgmt.jpg","fly":"Electric Fly","film":"https://www.youtube.com/watch?v=I2OundNvcd4"},{"year":2009,"title":"Bad Romance","artist":"Lady Gaga","plants":55476,"coverage":76.4,"duration":"5:08","url":"https://www.youtube.com/watch?v=qrO4YZeyl0I","img":"guide-assets/plates/2009-bad-romance-lady-gaga.jpg","fly":"Fly Romance","film":"https://www.youtube.com/watch?v=5QrDEvZHNJo"},{"year":2010,"title":"California Gurls","artist":"Katy Perry ft. Snoop Dogg","plants":41765,"coverage":69.3,"duration":"3:53","url":"https://www.youtube.com/watch?v=F57P9C4SAW4","img":"guide-assets/plates/2010-california-gurls-katy-perry-ft-snoop-dogg.jpg","fly":"California Flies","film":"https://www.youtube.com/watch?v=93x0yH5_f_w"},{"year":2011,"title":"Midnight City","artist":"M83","plants":40958,"coverage":67.1,"duration":"4:03","url":"https://www.youtube.com/watch?v=dX3k_QDnzHE","img":"guide-assets/plates/2011-midnight-city-m83.jpg","fly":"Midnight Flies","film":"https://www.youtube.com/watch?v=cfiNVJG4FeU"},{"year":2012,"title":"Gangnam Style","artist":"Psy","plants":44473,"coverage":73.1,"duration":"4:12","url":"https://www.youtube.com/watch?v=9bZkp7q19f0","img":"guide-assets/plates/2012-gangnam-style-psy.jpg","fly":"Fly Style","film":"https://www.youtube.com/watch?v=WSamLqSxmeg"},{"year":2013,"title":"Lose Yourself to Dance","artist":"Daft Punk","plants":39892,"coverage":74.4,"duration":"4:10","url":"https://www.youtube.com/watch?v=NF-kLy44Hls","img":"guide-assets/plates/2013-lose-yourself-to-dance-daft-punk.jpg","fly":"Fly Yourself to Dance","film":"https://www.youtube.com/watch?v=ncZ54gXZ1D4"},{"year":2014,"title":"Uptown Funk","artist":"Mark Ronson","plants":45510,"coverage":64.3,"duration":"4:30","url":"https://www.youtube.com/watch?v=OPf0YbXqDm0","img":"guide-assets/plates/2014-uptown-funk-mark-ronson.jpg","fly":"Uptown Fly","film":"https://www.youtube.com/watch?v=x6-f4jOIDew"},{"year":2015,"title":"Hotline Bling","artist":"Drake","plants":50689,"coverage":76.1,"duration":"4:55","url":"https://www.youtube.com/watch?v=uxpDa-c-4Mc","img":"guide-assets/plates/2015-hotline-bling-drake.jpg","fly":"Hotline Fly","film":"https://www.youtube.com/watch?v=btOxecilqIU"},{"year":2016,"title":"Can't Stop the Feeling!","artist":"Justin Timberlake","plants":49174,"coverage":70.3,"duration":"4:45","url":"https://www.youtube.com/watch?v=ru0K8uYEZWw","img":"guide-assets/plates/2016-cant-stop-the-feeling-justin-timberlake.jpg","fly":"Can't Stop This Fly","film":"https://www.youtube.com/watch?v=LABz2QJ6DMo"},{"year":2017,"title":"Feels","artist":"Calvin Harris","plants":37575,"coverage":71.1,"duration":"3:42","url":"https://www.youtube.com/watch?v=ozv4q2ov3Mk","img":"guide-assets/plates/2017-feels-calvin-harris.jpg","fly":"Fleels","film":"https://www.youtube.com/watch?v=p4IbfziK8yI"},{"year":2018,"title":"Rats","artist":"Ghost","plants":43325,"coverage":74.2,"duration":"4:24","url":"https://www.youtube.com/watch?v=C_ijc7A5oAc","img":"guide-assets/plates/2018-rats-ghost.jpg","fly":"Flies","film":"https://www.youtube.com/watch?v=G-45htUVRTE"},{"year":2019,"title":"thank u, next","artist":"Ariana Grande","plants":54850,"coverage":75.6,"duration":"5:30","url":"https://www.youtube.com/watch?v=gl1aHhXnN1k","img":"guide-assets/plates/2019-thank-u-next-ariana-grande.jpg","fly":"fly u, next","film":"https://www.youtube.com/watch?v=eotOix-soms"},{"year":2020,"title":"Blinding Lights","artist":"The Weeknd","plants":41956,"coverage":76.6,"duration":"4:22","url":"https://www.youtube.com/watch?v=4NRXx6U8ABQ","img":"guide-assets/plates/2020-blinding-lights-the-weeknd.jpg","fly":"Blinding Flies","film":"https://www.youtube.com/watch?v=gV18D2i6ywc"},{"year":2021,"title":"MONTERO Call Me By Your Name","artist":"Lil Nas X","plants":31776,"coverage":61.8,"duration":"3:09","url":"https://www.youtube.com/watch?v=6swmTBVI83k","img":"guide-assets/plates/2021-montero-call-me-by-your-name-lil-nas-x.jpg","fly":"Call Me By Your Fly","film":"https://www.youtube.com/watch?v=T2TfvHeVG6g"},{"year":2022,"title":"Tití Me Preguntó","artist":"Bad Bunny","plants":48323,"coverage":67.9,"duration":"4:50","url":"https://www.youtube.com/watch?v=Cr8K88UcO0s","img":"guide-assets/plates/2022-titi-me-pregunto-bad-bunny.jpg","fly":"Una Mosca Me Pregunto","film":"https://www.youtube.com/watch?v=izCBDI6_76E"},{"year":2023,"title":"Paint The Town Red","artist":"Doja Cat","plants":48965,"coverage":73.6,"duration":"4:56","url":"https://www.youtube.com/watch?v=m4_9TFeMfJE","img":"guide-assets/plates/2023-paint-the-town-red-doja-cat.jpg","fly":"Paint the Town Fly","film":"https://www.youtube.com/watch?v=1zpkwV5SRLc"},{"year":2024,"title":"CHIHIRO","artist":"Billie Eilish","plants":52823,"coverage":69.8,"duration":"5:23","url":"https://www.youtube.com/watch?v=BY_XwvKogC8","img":"guide-assets/plates/2024-chihiro-billie-eilish.jpg","fly":"CHIFLYRO","film":"https://www.youtube.com/watch?v=9lGi1Hw_pbs"},{"year":2025,"title":"Man I Need","artist":"Olivia Dean","plants":33083,"coverage":64.6,"duration":"3:21","url":"https://www.youtube.com/watch?v=oIv_Y2RPQ_A","img":"guide-assets/plates/2025-man-i-need-olivia-dean.jpg","fly":"Fly I Need","film":"https://www.youtube.com/watch?v=cEEwo0EvPKs"},{"year":2026,"title":"Confessions II: The Film","artist":"Madonna","plants":104806,"coverage":86.3,"duration":"10:33","url":"https://www.youtube.com/watch?v=yJtckcMHM2g","img":"guide-assets/plates/2026-confessions-ii-the-film-madonna.jpg","fly":"Confessions II The Fly","film":"https://www.youtube.com/watch?v=wyji4G1hO4k"}];
 
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -1083,12 +1195,13 @@
     shown = rows;
     grid.innerHTML = rows.map(function (p, i) {
       var d = Math.floor(p.year / 10) * 10;
-      var link = p.url
-        ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener" class="text-xs text-sky-400 hover:text-sky-300">watch the clip <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>'
-        : '';
+      var links = [];
+      if (p.film) links.push('<a href="' + esc(p.film) + '" target="_blank" rel="noopener" class="text-xs text-sky-400 hover:text-sky-300">watch the film <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>');
+      if (p.url)  links.push('<a href="' + esc(p.url)  + '" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-slate-400">source clip</a>');
+      var link = links.join('<span class="text-slate-700 mx-2">&middot;</span>');
       return '' +
         '<article class="card plate-card d' + d + ' bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">' +
-          '<button class="plate-btn" data-i="' + i + '" aria-label="View ' + esc(p.title) + ' larger">' +
+          '<button class="plate-btn" data-i="' + i + '" aria-label="View ' + esc(p.fly || p.title) + ' larger">' +
             '<img src="' + esc(p.img) + '" alt="Plate for ' + esc(p.title) + '" loading="lazy" class="w-full block">' +
           '</button>' +
           '<div class="p-4">' +
@@ -1096,8 +1209,8 @@
               '<span class="type-kicker kicker">' + p.year + '</span>' +
               '<span class="type-pill tech-badge">' + p.coverage + '% cover</span>' +
             '</div>' +
-            '<h3 class="font-display text-slate-200 leading-snug">' + esc(p.title) + '</h3>' +
-            '<p class="text-sm text-slate-500 mb-3">' + esc(p.artist) + '</p>' +
+            '<h3 class="font-display text-slate-200 leading-snug">' + esc(p.fly || p.title) + '</h3>' +
+            '<p class="text-sm text-slate-500 mb-3">' + esc(p.title) + ' &middot; ' + esc(p.artist) + '</p>' +
             '<div class="flex items-center justify-between text-xs text-slate-500 mono">' +
               '<span>' + p.plants.toLocaleString() + ' marks</span>' +
               '<span>' + esc(p.duration) + '</span>' +
@@ -1118,7 +1231,7 @@
     var p = shown[cur];
     lbImg.src = p.img.replace('/plates/', '/large/');
     lbImg.alt = 'Plate for ' + p.title;
-    lbMeta.textContent = p.year + '  ·  ' + p.title + '  ·  ' + p.artist +
+    lbMeta.textContent = (p.fly ? p.fly + '  ·  ' : '') + p.year + '  ·  ' + p.title + '  ·  ' + p.artist +
       '  ·  ' + p.plants.toLocaleString() + ' marks  ·  ' + p.coverage + '% cover  ·  ' + p.duration;
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
