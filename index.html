@@ -264,10 +264,10 @@
                 </div>
 
                 <div class="hidden md:flex items-center gap-x-8 text-sm">
-                    <a href="#art" class="nav-link text-slate-300 hover:text-white font-medium">Art</a>
                     <a href="#about" class="nav-link text-slate-300 hover:text-white font-medium">About</a>
                     <a href="#skills" class="nav-link text-slate-300 hover:text-white font-medium">Skills</a>
                     <a href="#projects" class="nav-link text-slate-300 hover:text-white font-medium">Projects</a>
+                    <a href="#art" class="nav-link text-slate-300 hover:text-white font-medium">Art</a>
                     <a href="#papers" class="nav-link text-slate-300 hover:text-white font-medium">Papers</a>
                     <a href="#contact" class="nav-link text-slate-300 hover:text-white font-medium">Contact</a>
                 </div>
@@ -296,10 +296,10 @@
 
             <!-- Mobile nav panel (toggled by the hamburger button) -->
             <div id="mobile-menu" class="hidden md:hidden flex-col gap-y-1 px-8 pb-6 border-t border-slate-800 bg-slate-950">
-                <a href="#art" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">Art</a>
                 <a href="#about" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">About</a>
                 <a href="#skills" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">Skills</a>
                 <a href="#projects" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">Projects</a>
+                <a href="#art" class="nav-link text-slate-300 hover:text-white font-medium">Art</a>
                 <a href="#papers" class="nav-link py-3 text-slate-300 hover:text-white font-medium border-b border-slate-900">Papers</a>
                 <a href="#contact" class="nav-link py-3 text-slate-300 hover:text-white font-medium">Contact</a>
             </div>
@@ -355,13 +355,13 @@
                     <a href="https://along7gallery.xyz" target="_blank" rel="noopener"
                        class="slide active absolute inset-0 flex flex-col group" aria-label="along7 gallery, my digital art collection">
                         <div class="flex-1 min-h-0">
-                            <img src="images/clover.jpg" width="892" height="900" decoding="async"
+                            <img src="along7-gallery/art/banner.jpg" width="2400" height="1200" decoding="async"
                                  class="w-full h-full object-cover"
-                                 alt="Clover: a hand-drawn image of me and my dog, a black-and-white border collie puppy in my arms, one of the works I have worn as my profile picture">
+                                 alt="along7gallery: a grid of collected digital artworks behind the gallery's title card, reading The market sells it, the gallery keeps it">
                         </div>
                         <div class="px-4 py-3 text-xs bg-slate-950">
                             <div class="uppercase tracking-widest text-amber-400 font-semibold">along7gallery.xyz</div>
-                            <div class="text-slate-400 mt-0.5">Clover, a hand-drawn image of me and my dog, from my digital art collection. <span class="text-sky-400 group-hover:text-sky-300">Enter the gallery →</span></div>
+                            <div class="text-slate-400 mt-0.5">3,700+ works by 800+ artists, archived from source and replayed from chain. <span class="text-sky-400 group-hover:text-sky-300">Enter the gallery →</span></div>
                         </div>
                     </a>
 
@@ -423,92 +423,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Art: the digital gallery -->
-    <section id="art" class="max-w-screen-2xl mx-auto px-8 pt-16 pb-6">
-        <div class="bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden">
-            <div class="grid md:grid-cols-12 items-stretch">
-                <div class="md:col-span-8 p-8 md:p-10 flex flex-col justify-center">
-                    <div class="uppercase tracking-widest text-xs font-semibold text-amber-400 mb-2">ART</div>
-                    <h2 class="section-header tracking-tighter mb-4">Check out my digital gallery, along7gallery.</h2>
-                    <p class="text-slate-300 mb-4">I collect digital art on the blockchain, and I built the collection a permanent home: <a href="https://along7gallery.xyz" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium">along7gallery.xyz</a>, a self-hosted museum of <b>3,700+ works by 800+ artists across six chains</b>. Every original file is archived from the source the artist declared, every ownership history is replayed from the chain, and nothing on the walls is for sale. It is also the biggest data project on this page: one SQLite database, a Python pipeline with one command per stage, a 5,900-page static site, and 99 automated checks gating every deploy.</p>
-                    <div class="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-slate-400 mb-6">
-                        <div><span class="text-slate-200 font-medium">Artist rooms</span> with bios, statements the artists sent, and their own words kept from X</div>
-                        <div><span class="text-slate-200 font-medium">Stories</span> in my own voice, with the art woven through them</div>
-                        <div><span class="text-slate-200 font-medium">A timeline and a world map</span> of when each work was collected and where its artist lives</div>
-                        <div><span class="text-slate-200 font-medium">A TV channel</span> that plays the whole collection, films and live code included</div>
-                        <div><span class="text-slate-200 font-medium">Provenance on every wall label</span>, mint venue and collecting venue proven from transaction receipts</div>
-                        <div><span class="text-slate-200 font-medium">An open CC0 dataset</span> of the facts, so anyone can cite the record</div>
-                    </div>
-                    <p class="text-slate-400 text-sm mb-6">The picture is <em>Clover</em>, a hand-drawn image of me and my dog, one of the pieces I have worn as a profile picture. The art stays the artists' property; the gallery only keeps it safe.</p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="https://along7gallery.xyz" target="_blank" rel="noopener"
-                           class="inline-flex items-center justify-center gap-x-3 bg-white hover:bg-slate-100 transition-all text-slate-950 font-semibold px-6 h-12 rounded-3xl text-sm">
-                            <span>Visit the gallery</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                        <a href="https://along7gallery.xyz/about/" target="_blank" rel="noopener"
-                           class="inline-flex items-center justify-center gap-x-2 border border-slate-600 hover:bg-slate-800 font-medium px-6 h-12 rounded-3xl text-sm">
-                            <span>About the collector</span>
-                        </a>
-                        <a href="https://along777.github.io/along/along7-gallery/"
-                           class="inline-flex items-center justify-center gap-x-2 border border-slate-600 hover:bg-slate-800 font-medium px-6 h-12 rounded-3xl text-sm">
-                            <span>How it was built</span>
-                        </a>
-                    </div>
-                </div>
-                <a href="https://along7gallery.xyz/stories/a-database-with-good-lighting/" target="_blank" rel="noopener" class="md:col-span-4 block bg-slate-950" aria-label="A Database With Good Lighting, the build story">
-                    <img src="along7-gallery/art/banner.jpg" width="2400" height="1200" loading="lazy" decoding="async"
-                         class="w-full h-full object-cover"
-                         alt="The along7 gallery banner: fifteen artworks in a grid under the gallery's brand plate">
-                </a>
-            </div>
-        </div>
-
-        <!-- Art I made, as opposed to art I collected -->
-        <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-viz mt-6" data-category="art" data-type="viz" data-model="claude">
-            <div class="type-bar"></div>
-            <div class="grid md:grid-cols-12 items-stretch">
-                <a href="https://along777.github.io/along/fly-trace-rave/" class="md:col-span-4 block bg-slate-950" aria-label="Flypaper, how the fly makes art">
-                    <img src="fly-trace-rave/guide-assets/social-card.jpg" width="1200" height="630" loading="lazy" decoding="async"
-                         class="w-full h-full object-cover" alt="A fly walks on paper between two screens, its neural activity on one and a music video on the other">
-                </a>
-                <div class="md:col-span-8 p-6 md:p-8 flex flex-col">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <div class="flex items-center gap-x-2 flex-wrap">
-                                <div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 &bull; ART I MADE &bull; GENERATIVE / CONNECTOME</div>
-                                <span class="type-pill px-2 py-px text-[10px] font-bold rounded">Generative Art</span>
-                            </div>
-                            <h3 class="font-semibold text-xl tracking-tight mt-1">Flypaper: 52 plates, 1976 to 2026</h3>
-                        </div>
-                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
-                    </div>
-
-                    <p class="text-slate-400 text-sm flex-1">A fruit fly connectome watched fifty-two music videos and walked on paper. A 7,346-neuron subgraph of <b>MaleCNS v1.0</b>, the published wiring diagram of an adult male fruit fly, reads each clip through the 1,477 cells carrying real retinotopic coordinates; steering comes out of its descending neurons and six tarsi leave the pigment. One unbroken playthrough makes one plate, 6144&times;4608, and every color came off the video. No palette, no correction, no second pass. One plate for every year from 1976 to 2026, all from a single instrument build. The fly did not compose any of it.</p>
-
-                    <div class="mt-5 flex flex-wrap gap-1.5">
-                        <span class="tech-badge type-badge">MaleCNS v1.0</span>
-                        <span class="tech-badge type-badge">Three.js / WebGL</span>
-                        <span class="tech-badge type-badge">Leaky-rate model</span>
-                        <span class="tech-badge type-badge">Python + Playwright</span>
-                        <span class="tech-badge type-badge">2.55M marks</span>
-                    </div>
-
-                    <div class="mt-auto pt-6 flex flex-wrap items-center justify-between gap-3 text-xs">
-                        <div class="type-tagline font-medium">52 plates &bull; 4.2 h of video &bull; CC BY 4.0 data</div>
-                        <div class="flex items-center gap-x-4">
-                            <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425" target="_blank" rel="noopener" class="text-slate-400 hover:text-slate-300 font-medium">Collect</a>
-                            <a href="https://www.youtube.com/playlist?list=PLFvdE_Q3WX1c" target="_blank" rel="noopener" class="text-slate-400 hover:text-slate-300 font-medium">The films</a>
-                            <a href="https://along777.github.io/along/fly-trace-rave/" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
-                                Read the guide <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- About -->
     <section id="about" class="max-w-screen-2xl mx-auto px-8 pt-20 pb-16">
@@ -1298,6 +1212,92 @@
             <button onclick="resetFilters()" class="mt-4 px-5 py-2 text-sm font-medium rounded-3xl border border-slate-700 bg-slate-900 hover:bg-slate-800">
                 Clear filters
             </button>
+        </div>
+    </section>
+
+    <!-- Art: the digital gallery -->
+    <section id="art" class="max-w-screen-2xl mx-auto px-8 py-20">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden">
+            <div class="grid md:grid-cols-12 items-stretch">
+                <div class="md:col-span-8 p-8 md:p-10 flex flex-col justify-center">
+                    <div class="uppercase tracking-widest text-xs font-semibold text-amber-400 mb-2">DATA ENGINEERING &middot; ART</div>
+                    <h2 class="section-header tracking-tighter mb-4">A 3,700-work museum, built as a data pipeline.</h2>
+                    <p class="text-slate-300 mb-4"><a href="https://along7gallery.xyz" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-medium">along7gallery.xyz</a> is the largest data project on this page: <b>one SQLite database, a Python pipeline with one command per stage, a 5,900-page static site, and 99 automated checks gating every deploy</b>. It holds <b>3,700+ works by 800+ artists across six chains</b>, where every original file is archived from the source the artist declared and every ownership history is replayed from the chain. The subject matter is art I collect. The problem is provenance, archival integrity, and making 3,700 records render as a museum. Nothing on the walls is for sale.</p>
+                    <div class="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-slate-400 mb-6">
+                        <div><span class="text-slate-200 font-medium">Artist rooms</span> with bios, statements the artists sent, and their own words kept from X</div>
+                        <div><span class="text-slate-200 font-medium">Stories</span> in my own voice, with the art woven through them</div>
+                        <div><span class="text-slate-200 font-medium">A timeline and a world map</span> of when each work was collected and where its artist lives</div>
+                        <div><span class="text-slate-200 font-medium">A TV channel</span> that plays the whole collection, films and live code included</div>
+                        <div><span class="text-slate-200 font-medium">Provenance on every wall label</span>, mint venue and collecting venue proven from transaction receipts</div>
+                        <div><span class="text-slate-200 font-medium">An open CC0 dataset</span> of the facts, so anyone can cite the record</div>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6">The art stays the artists' property; the gallery only keeps it safe.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://along7gallery.xyz" target="_blank" rel="noopener"
+                           class="inline-flex items-center justify-center gap-x-3 bg-white hover:bg-slate-100 transition-all text-slate-950 font-semibold px-6 h-12 rounded-3xl text-sm">
+                            <span>Visit the gallery</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="https://along7gallery.xyz/about/" target="_blank" rel="noopener"
+                           class="inline-flex items-center justify-center gap-x-2 border border-slate-600 hover:bg-slate-800 font-medium px-6 h-12 rounded-3xl text-sm">
+                            <span>About the collector</span>
+                        </a>
+                        <a href="https://along777.github.io/along/along7-gallery/"
+                           class="inline-flex items-center justify-center gap-x-2 border border-slate-600 hover:bg-slate-800 font-medium px-6 h-12 rounded-3xl text-sm">
+                            <span>How it was built</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="https://along7gallery.xyz/stories/a-database-with-good-lighting/" target="_blank" rel="noopener" class="md:col-span-4 block bg-slate-950" aria-label="A Database With Good Lighting, the build story">
+                    <img src="along7-gallery/art/banner.jpg" width="2400" height="1200" loading="lazy" decoding="async"
+                         class="w-full h-full object-cover"
+                         alt="The along7 gallery banner: fifteen artworks in a grid under the gallery's brand plate">
+                </a>
+            </div>
+        </div>
+
+        <!-- Art I made, as opposed to art I collected -->
+        <div class="project-card bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden flex flex-col type-viz mt-6" data-category="art" data-type="viz" data-model="claude">
+            <div class="type-bar"></div>
+            <div class="grid md:grid-cols-12 items-stretch">
+                <a href="https://along777.github.io/along/fly-trace-rave/" class="md:col-span-4 block bg-slate-950" aria-label="Flypaper, how the fly makes art">
+                    <img src="fly-trace-rave/guide-assets/social-card.jpg" width="1200" height="630" loading="lazy" decoding="async"
+                         class="w-full h-full object-cover" alt="A fly walks on paper between two screens, its neural activity on one and a music video on the other">
+                </a>
+                <div class="md:col-span-8 p-6 md:p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="flex items-center gap-x-2 flex-wrap">
+                                <div class="uppercase text-[10px] tracking-widest type-kicker font-medium">2026 &bull; ART I MADE &bull; GENERATIVE / CONNECTOME</div>
+                                <span class="type-pill px-2 py-px text-[10px] font-bold rounded">Generative Art</span>
+                            </div>
+                            <h3 class="font-semibold text-xl tracking-tight mt-1">Flypaper: 52 plates, 1976 to 2026</h3>
+                        </div>
+                        <span class="model-chip"><i class="fa-solid fa-robot"></i>Claude</span>
+                    </div>
+
+                    <p class="text-slate-400 text-sm flex-1">A fruit fly connectome watched fifty-two music videos and walked on paper. A 7,346-neuron subgraph of <b>MaleCNS v1.0</b>, the published wiring diagram of an adult male fruit fly, reads each clip through the 1,477 cells carrying real retinotopic coordinates; steering comes out of its descending neurons and six tarsi leave the pigment. One unbroken playthrough makes one plate, 6144&times;4608, and every color came off the video. No palette, no correction, no second pass. One plate for every year from 1976 to 2026, all from a single instrument build. The fly did not compose any of it.</p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                        <span class="tech-badge type-badge">MaleCNS v1.0</span>
+                        <span class="tech-badge type-badge">Three.js / WebGL</span>
+                        <span class="tech-badge type-badge">Leaky-rate model</span>
+                        <span class="tech-badge type-badge">Python + Playwright</span>
+                        <span class="tech-badge type-badge">2.55M marks</span>
+                    </div>
+
+                    <div class="mt-auto pt-6 flex flex-wrap items-center justify-between gap-3 text-xs">
+                        <div class="type-tagline font-medium">52 plates &bull; 4.2 h of video &bull; CC BY 4.0 data</div>
+                        <div class="flex items-center gap-x-4">
+                            <a href="https://www.transient.xyz/nfts/ethereum/0xc1682dcefbd7c65a9c0bfe84e175f0e8f4c46425" target="_blank" rel="noopener" class="text-slate-400 hover:text-slate-300 font-medium">Collect</a>
+                            <a href="https://www.youtube.com/playlist?list=PLFvdE_Q3WX1c" target="_blank" rel="noopener" class="text-slate-400 hover:text-slate-300 font-medium">The films</a>
+                            <a href="https://along777.github.io/along/fly-trace-rave/" class="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-x-1 text-sm">
+                                Read the guide <i class="fa-solid fa-external-link-alt text-xs ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
