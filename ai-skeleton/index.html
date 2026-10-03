@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Talking Skeleton — Porch Laptop + House PC Build Guide</title>
+<style>
+  :root {
+    --bg: #0e0c0a;
+    --bg2: #171410;
+    --card: #1c1814;
+    --ink: #f3e7d3;
+    --muted: #b9a88a;
+    --line: #3a3228;
+    --amber: #e8a23a;
+    --amber2: #c47a18;
+    --good: #8fbf6a;
+    --bad: #d36b4e;
+    --chip: #2a241c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 "Segoe UI", system-ui, sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
+  header.hero {
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(800px 280px at 20% 0%, rgba(232,162,58,.16), transparent 50%),
+      var(--bg2);
+    padding: 36px 32px;
+    border-radius: 18px;
+  }
+  .eyebrow { letter-spacing: .18em; text-transform: uppercase; color: var(--amber); font-size: 12px; font-weight: 700; }
+  h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.1; margin: 8px 0 12px; }
+  h2 { font-size: 26px; margin: 42px 0 12px; color: var(--amber); }
+  h3 { font-size: 18px; margin: 22px 0 8px; }
+  p, li { color: var(--ink); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); max-width: 46em; }
+  a { color: var(--amber); }
+  a:hover { color: #f5c06a; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; }
+  nav.toc a {
+    color: var(--ink); text-decoration: none; border: 1px solid var(--line);
+    background: var(--chip); padding: 6px 10px; border-radius: 999px; font-size: 13px;
+  }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 22px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .stat b { display: block; font-size: 20px; color: var(--amber); }
+  .stat span { color: var(--muted); font-size: 13px; }
+  figure { margin: 18px 0 8px; }
+  figure img { width: 100%; border-radius: 14px; border: 1px solid var(--line); display: block; background: #000; }
+  figcaption { color: var(--muted); font-size: 13px; margin-top: 6px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--amber); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+  .price { white-space: nowrap; font-weight: 700; color: var(--good); }
+  .opt { color: var(--muted); font-size: 13px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin: 12px 0; }
+  .warn { border-left: 4px solid var(--amber); }
+  .good { border-left: 4px solid var(--good); }
+  .bad { border-left: 4px solid var(--bad); }
+  .build-src { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  section.super {
+    margin-top: 48px;
+    border: 1px solid var(--amber2);
+    border-radius: 18px;
+    padding: 28px 30px;
+    background:
+      radial-gradient(700px 260px at 80% 0%, rgba(211,107,78,.18), transparent 55%),
+      radial-gradient(600px 240px at 10% 100%, rgba(232,162,58,.14), transparent 55%),
+      var(--bg2);
+    box-shadow: 0 0 40px rgba(232,162,58,.08);
+  }
+  section.super h2 { margin-top: 0; }
+  section.super .eyebrow { color: var(--bad); }
+  .super-total { font-size: 20px; font-weight: 700; color: var(--amber); margin-top: 16px; }
+  pre, code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  pre {
+    background: #0a0908; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; overflow-x: auto; font-size: 13px; line-height: 1.45; color: #f0ddb8;
+  }
+  ol.steps { padding-left: 22px; }
+  ol.steps li { margin: 10px 0; }
+  .check li { margin: 6px 0; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 13px; }
+  footer a { color: var(--muted); }
+  @media (max-width: 760px) {
+    .stats, .grid2 { grid-template-columns: 1fr 1fr; }
+    header.hero { padding: 22px 16px; }
+  }
+  @media (max-width: 520px) { .stats { grid-template-columns: 1fr 1fr; } .grid2 { grid-template-columns: 1fr; } }
+  @media print {
+    body { background: #fff; color: #111; }
+    header.hero, .card, table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Halloween 2026 · Local network build · Research verified Sept 21, 2026</div>
+    <h1>AI Talking Skeleton</h1>
+    <p class="lead">Porch laptop is the hidden receiver. House PC is the brain. The skeleton just stands there looking expensive. People have shipped this exact architecture — their lessons are baked in below.</p>
+    <div class="stats">
+      <div class="stat"><b>$165–280</b><span>new parts if you already own PCs</span></div>
+      <div class="stat"><b>~2–6 s</b><span>full reply on an RTX 3060-class GPU</span></div>
+      <div class="stat"><b>$0 / night</b><span>everything local — no cloud, no subscription</span></div>
+      <div class="stat"><b>No jaw year 1</b><span>voice + vision is the wow</span></div>
+    </div>
+    <nav class="toc">
+      <a href="#arch">Architecture</a>
+      <a href="#proof">Proven builds</a>
+      <a href="#buy">Shopping list</a>
+      <a href="#place">Porch layout</a>
+      <a href="#soft">Software</a>
+      <a href="#latency">Latency</a>
+      <a href="#prompt">Personality</a>
+      <a href="#build">Build steps</a>
+      <a href="#test">Test night</a>
+      <a href="#fix">Fixes</a>
+      <a href="#next">Next level</a>
+      <a href="#super">Super mode</a>
+    </nav>
+  </header>
+
+  <h2 id="arch">How this build works</h2>
+  <p>You already have the expensive part: a strong PC and a spare laptop. Buy a cheap skeleton, a loud speaker, a mic, and a camera. Plug those into the laptop. The laptop only captures and plays. The PC on your LAN does vision, speech-to-text, the character, and text-to-speech.</p>
+
+  <figure>
+    <img src="img/architecture.jpg" alt="Architecture diagram: porch I/O to house PC brain" />
+    <figcaption>Keep kid audio and photos on your LAN. Do not stream the porch to the public internet.</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Porch laptop</h3>
+      <ul>
+        <li>USB webcam</li>
+        <li>USB / clip mic</li>
+        <li>Speaker</li>
+        <li>Mute / kill hotkey</li>
+        <li>Sends one photo + a short audio clip</li>
+        <li>Plays the reply</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>House PC</h3>
+      <ul>
+        <li>Detect person in the frame</li>
+        <li>Describe costume in one line</li>
+        <li>Transcribe what they said</li>
+        <li>Write a 1–2 sentence reply</li>
+        <li>Generate voice audio</li>
+        <li>Send the wav/mp3 back</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card warn">
+    <strong>Do not plug the mic and speaker into the webcam.</strong> Plug webcam, mic, and speaker into the <em>laptop</em>. The webcam is only an eye.
+  </div>
+
+  <h2 id="proof">People have actually built this</h2>
+  <p>This is not a fantasy project. Six documented builds use this same loop, and their post-mortems are the most valuable part of this guide.</p>
+
+  <div class="card good">
+    <h3>Mr. Bones — Docker's pirate skeleton (Oct 2025)</h3>
+    <p>The closest match to this build: a Raspberry Pi 5 + USB mic on the porch, a Windows gaming PC (RTX 5070) on the LAN running the LLM. Their headline numbers: <strong>cloud GPT averaged 4.5 s per reply; local Llama 3.1 8B got it to 1.5 s</strong> — "a huge difference when a kid is standing there waiting for the skeleton to talk." They also found GPT-4 only "nominally better" at staying in character than the local 8B model, and their biggest speed win was <strong>chunking LLM output into TTS</strong> so audio starts before the sentence finishes.</p>
+    <p class="build-src"><a href="https://www.docker.com/blog/talking-skeleton-docker-llm/">Write-up</a> · <a href="https://github.com/mikegcoleman/pirate">Code (github.com/mikegcoleman/pirate)</a></p>
+  </div>
+
+  <div class="card">
+    <h3>Offline VLM Skelly — the "waves of kids" lesson (2025)</h3>
+    <p>A fully-local build (Ollama + Gemma 27B + Piper on a LAN box) done local specifically because "capturing images of children and sending them to external APIs introduces significant risks." Their Halloween-night failure: <strong>kids arrive in waves of 10+</strong>, and a one-at-a-time photo → VLM → TTS pipeline collapsed; they abandoned automation mid-night. Plan one reply per <em>group</em>, not per kid.</p>
+    <p class="build-src"><a href="https://hackersvanguard.com/overwhelming-animatronics-powered-by-local-vlm/">Write-up (hackersvanguard.com)</a></p>
+  </div>
+
+  <div class="card">
+    <h3>Halloweave — costume detection validated (Oct 2024)</h3>
+    <p>Motion detect → vision model describes the costume → custom spooky greeting → TTS. Real-world costume ID accuracy was <strong>~65%</strong> (nailed a shark and an Eeyore). Good enough to feel like magic; the personality prompt covers the misses.</p>
+    <p class="build-src"><a href="https://github.com/altryne/halloweave">Code (github.com/altryne/halloweave)</a> · <a href="https://wandb.ai/wandb_fc/halloweave/reports/Hacking-a-skeleton-to-detect-kids-costumes-and-greet-them-with-a-custom-spooky-message--VmlldzoxMDAzOTkyMw">W&amp;B report</a></p>
+  </div>
+
+  <div class="card">
+    <h3>JackGPT — "the voice is half the character" (2023–2026)</h3>
+    <p>Multi-year yard skeleton. Two lessons: a stock-assistant voice killed the character until they switched to a real character voice, and latency drove a full rebuild — <strong>7 s replies read as broken; ~1 s reads as alive</strong>. Also the source of this guide's weather warning: their first build wasn't even morning-dew proof.</p>
+    <p class="build-src"><a href="https://scarelabs.com/meet-jackgpt-the-worlds-first-conversational-ai-halloween-skeleton/">Write-up (scarelabs.com)</a></p>
+  </div>
+
+  <div class="card">
+    <h3>Adafruit costume detector (Oct 2025, re-run Sept 2026)</h3>
+    <p>Vendor-documented version of the same loop: Pi 5 + NoIR camera in a printed skull, OpenCV person detect → vision LLM writes "a kind hearted corny dad joke about the costume" → Piper TTS. Steal their prompt framing.</p>
+    <p class="build-src"><a href="https://learn.adafruit.com/raspberry-pi-halloween-costume-detector/overview">Guide (learn.adafruit.com)</a></p>
+  </div>
+
+  <div class="card">
+    <h3>Hack Skellington — $150 all-in with servos (2023)</h3>
+    <p>Posable skeleton, camera in the eye socket, face recognition to greet repeat visitors by name, servo head/jaw/arm — <strong>~$150 total, half of it the skeleton</strong>, "less than a couple hundred lines of code." Proof the year-2 servo tier is cheap; their gotcha: power servos from a separate 5V supply, not the board.</p>
+    <p class="build-src"><a href="https://hackaday.com/2023/10/29/2023-halloween-hackfest-hack-skellington-is-the-life-of-the-party/">Hackaday</a> · <a href="https://github.com/viam-labs/hack-skellington">Code</a></p>
+  </div>
+
+  <div class="card warn">
+    <h3>Or just buy it? The commercial options (and why not)</h3>
+    <ul>
+      <li><strong><a href="https://nextfriend.ai/products/bone-daddy">Bone Daddy</a></strong> — $499 + $7.99/mo (or $79.99/yr) <em>plus</em> per-reply credit packs. Requires Wi‑Fi + active subscription to speak at all, and it's rated indoor / dry-covered-area only.</li>
+      <li><strong><a href="https://frightmaps.com/features/ai-skelly">FrightMaps AI Skelly</a></strong> — iOS app ($7.99–19.99/mo for 15–70 voice minutes) that makes Home Depot's Ultra Skelly conversational via cloud Claude + ElevenLabs. Note: it stores "what visitors said to your Skelly" in the cloud — kids' speech, retention unspecified.</li>
+      <li><strong><a href="https://www.homedepot.com/p/Home-Accents-Holiday-12-FT-Giant-Sized-Skelly-with-LifeEyes-LCD-Eyes-24SV24386/328196728">Home Depot 12‑ft Skelly</a></strong> — $299 (classic) / $379 (new 2026 app-controlled: servo head+jaw, voice-changer "live mode" mic — a human intercom, not AI).</li>
+    </ul>
+    <p>Your DIY build beats all three on price per year, works without internet, and never uploads a child's face or voice. That's the pitch.</p>
+  </div>
+
+  <h2 id="buy">Shopping list</h2>
+  <p class="muted">Prices checked Sept 21, 2026 against live store pages and search listings; Amazon/Home Depot prices swing ±$5 week to week. Skip anything you already own. The speaker is the item haunt builders on Halloween Forum consistently say they cheaped out on and regretted. <strong>Party City no longer exists as a store</strong> — its ~700 locations closed in Feb 2025; ignore any guide that sends you there.</p>
+
+  <table>
+    <thead>
+      <tr><th>Item</th><th>Buy</th><th>Why / notes</th><th>Est.</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Poseable skeleton (5–5.6 ft)</td>
+        <td><a href="https://www.homedepot.com/p/Joyfy-5-6-ft-White-Halloween-Posable-Body-Skeleton-Made-of-Plastic-16025/330617226">Joyfy 5.6 ft — Home Depot, $59.98</a> (quality pick, 4.8★, indoor/outdoor). Budget: <a href="https://www.walmart.com/c/kp/pose-n-stay-skeleton">Walmart Pose‑N‑Stay generics, $42–47</a>. Name brand: Crazy Bonez ~$73; <a href="https://www.spirithalloween.com/product/5-ft-pose-n-stay-skeleton/31902.uts">Spirit Halloween 5 ft, $89.99</a>.</td>
+        <td>Body. Hollow plastic skull is easy to stuff. Props thin out mid‑October — buy early.</td>
+        <td class="price">$42–90</td>
+      </tr>
+      <tr>
+        <td>Speaker</td>
+        <td><a href="https://camelcamelcamel.com/product/B01MTB55WH">Anker Soundcore 2 — ~$30 on sale</a> (12W, IPX7, <strong>has aux‑in</strong>). Louder: <a href="https://www.soundcore.com/products/motion-300-speaker-a3135011">Soundcore Motion 300</a>, 30W, ~$60–80 (buy the Amazon listing; soundcore.com is sold out).</td>
+        <td>Laptop speakers will not reach the street. <strong>Avoid JBL Flip 6/7 here</strong> — no aux jack, Bluetooth only, and wired beats Bluetooth on a crowded porch.</td>
+        <td class="price">$30–80</td>
+      </tr>
+      <tr>
+        <td>USB webcam</td>
+        <td>Day: <a href="https://www.amazon.com/Microphone-NexiGo-Computer-110-degree-Conferencing/dp/B088TSR6YJ">NexiGo N60 1080p, $27.99</a>. Night: <a href="https://www.amazon.com/ELP-100fps-Infrared-Security-Housing/dp/B0BHW95L37">ELP IR day/night cam, ~$35–75</a>. Eye‑socket: <a href="https://www.arducam.com/ub020201-arducam-1080p-low-light-wdr-usb-camera-module-with-metal-case-2mp-1-2-8-cmos-imx291-160-degree-ultra-wide-angle-mini-uvc-webcam-board-with-microphones.html">Arducam IMX291 low‑light board cam, ~$30–40</a> (plug‑and‑play UVC).</td>
+        <td>One snapshot of costumes is enough. The low‑light Arducam sensor matters — your porch at 8pm is dark.</td>
+        <td class="price">$28–75</td>
+      </tr>
+      <tr>
+        <td>Microphone</td>
+        <td><a href="https://www.amazon.com/Lavalier-Microphone-Cardioid-Condenser-Computer/dp/B077VNGVL2">FIFINE K053 USB lavalier, $17.99</a> + <a href="https://www.amazon.com/VELKPRO-Windscreen-Microphone-Protection-Lavalier/dp/B0BHHRBG77">foam windscreen 10‑pack, ~$7</a>.</td>
+        <td>Wind and leaves false‑trigger speech‑to‑text. Cardioid + foam + distance from the speaker.</td>
+        <td class="price">$25</td>
+      </tr>
+      <tr>
+        <td>Weather tote</td>
+        <td><a href="https://www.homedepot.com/p/HDX-12-Gal-Tough-Storage-Flip-Top-Tote-in-Black-with-Yellow-Lid-999-12G-FLP-HDX/328026906">HDX 12‑gal flip‑top tote — Home Depot, $6–9</a>.</td>
+        <td>Water‑resistant, not sealed — good: sealed tubs condense. Forum consensus: <strong>overnight dew kills more electronics than storms</strong>.</td>
+        <td class="price">$6–9</td>
+      </tr>
+      <tr>
+        <td>Cables / odds</td>
+        <td><a href="https://www.homedepot.com/p/HDX-25-ft-16-3-Light-Duty-Indoor-Outdoor-Extension-Cord-Orange-HD-277-509/202523959">HDX 25 ft outdoor cord, $8–15</a> · <a href="https://www.amazon.com/Amazon-Basics-Speaker-Subwoofer-Gold-Plated/dp/B00NO73Q84">3.5mm aux, $5–9</a> · <a href="https://www.amazon.com/Professional-Gaffer-Power-Non-Reflective-Multipurpose/dp/B00GZE3UJ8">gaffer tape, $10–20</a> · <a href="https://www.amazon.com/5mm-Round-Top-Diffused-Red/dp/B017TR8Q48">diffused red LEDs, &lt;$10</a> · powered USB hub $20–35 (careful: the popular Anker slim 4‑port is data‑only, not powered).</td>
+        <td>Wired audio beats flaky Bluetooth. GFCI outlet. If cams + mic hang off one port, the hub must be externally powered.</td>
+        <td class="price">$45–80</td>
+      </tr>
+      <tr>
+        <td colspan="3"><strong>Typical new spend</strong> (you already have PC + laptop) — floor ~$165 with all budget picks on sale</td>
+        <td class="price">$165–280</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="opt">Skip year one: servos, moving jaw, Raspberry Pi, and every commercial AI prop (Bone Daddy = $499 + subscription + per-reply credits). Forum consensus is cheap servos are loud and lip‑sync eats the month. The jaw has a proven cheap path in year 2 — see <a href="#next">Next level</a>.</p>
+
+  <div class="grid2">
+    <figure>
+      <img src="img/skeleton-porch.jpg" alt="Life-size poseable skeleton on a front porch" />
+      <figcaption>The body. Pose one arm waving. Stake or weight the feet if it is windy.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/loud-speaker.jpg" alt="Loud portable speaker" />
+      <figcaption>Get something louder than a phone speaker. Hide it in the ribs or at the feet, aimed at the walkway.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/tiny-usb-cam.jpg" alt="Tiny USB webcam with cable" />
+      <figcaption>A tiny low-light USB module hides in an eye socket. A normal USB webcam on the railing also works.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/lav-mic.jpg" alt="USB clip-on lavalier microphone" />
+      <figcaption>Clip-on USB mic plus foam. Tape it in the jaw or on the collar bones, not next to the speaker.</figcaption>
+    </figure>
+  </div>
+
+  <h2 id="place">Porch layout</h2>
+  <figure>
+    <img src="img/skull-cam.jpg" alt="Skeleton skull with camera in one eye and red LED in the other" />
+    <figcaption>One eye = camera. Other eye = cheap red LED. Mic near the mouth, not in the speaker box.</figcaption>
+  </figure>
+  <figure>
+    <img src="img/laptop-tote.jpg" alt="Laptop hidden in a plastic tote beside skeleton legs" />
+    <figcaption>Laptop in a tote under the roof. Crack the lid for heat. Cables out a small hole toward the skeleton.</figcaption>
+  </figure>
+
+  <div class="card">
+    <h3>Physical placement</h3>
+    <ul>
+      <li><strong>Skeleton</strong> on the porch, facing the walkway, slightly off the door so kids do not trip.</li>
+      <li><strong>Camera</strong> aimed at where kids stand, not straight into faces at 6 inches. Railing height is fine if the eye socket is a pain.</li>
+      <li><strong>Mic</strong> at skull height with foam. Distance from speaker: as far as the cables allow.</li>
+      <li><strong>Speaker</strong> in the ribcage or on the floor behind a pumpkin, pointed out.</li>
+      <li><strong>Laptop</strong> in the tote, plugged into indoor power via GFCI. Never on wet concrete.</li>
+      <li><strong>Nightly:</strong> pull the electronics inside or bag the tote. Halloween Forum's collective scar tissue: "almost no Halloween animatronic is waterproof" and cumulative dew is the killer, not rain.</li>
+    </ul>
+  </div>
+
+  <h2 id="soft">Software stack (local on your LAN, Sept 2026 edition)</h2>
+  <p>You do not need a special Halloween app — every layer has a boring local tool with an HTTP API. This table reflects what's actually fastest/best as of September 2026; the biggest change from older guides: <strong>Whisper is no longer the default STT</strong>, and TTS got dramatically better.</p>
+
+  <table>
+    <thead>
+      <tr><th>Job</th><th>Pick (2026)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Person in frame? (laptop)</td>
+        <td><a href="https://docs.ultralytics.com/models/yolo26">YOLO26n</a></td>
+        <td>~39 ms/frame on plain CPU, NMS-free. MediaPipe works too but YOLO handles costumes at night better.</td>
+      </tr>
+      <tr>
+        <td>What are they wearing? (PC)</td>
+        <td><a href="https://ollama.com/library/qwen3-vl:2b">Qwen3‑VL 2B via Ollama</a> or <a href="https://moondream.ai/models">Moondream 2</a></td>
+        <td>~0.5–1.5 s for a one-line costume description; ~2 GB VRAM. Run it <em>in parallel</em> with STT — it's free wall-clock.</td>
+      </tr>
+      <tr>
+        <td>Speech to text</td>
+        <td><a href="https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3">NVIDIA Parakeet TDT 0.6B v3</a></td>
+        <td>Beats Whisper large-v3 on accuracy at ¼ the size, ~4 GB VRAM, a 4 s clip transcribes in tens of ms. Fallbacks: faster-whisper <code>small</code> (GPU) or <a href="https://github.com/moonshine-ai/moonshine">Moonshine</a> (CPU — built for short clips, no Whisper 30 s padding penalty).</td>
+      </tr>
+      <tr>
+        <td>Character reply</td>
+        <td>Qwen3.5‑9B or Llama 3.1 8B, Q4, via Ollama / llama.cpp</td>
+        <td>Docker's build proved GPT‑4 is only "nominally better" in character than a local 8B. 8 GB VRAM: qwen3.5:9b Q4 (6.6 GB). 24 GB: gpt‑oss:20b if you want extra wit. <strong>Disable thinking mode</strong> (Qwen3.x defaults to it) or replies blow the latency budget.</td>
+      </tr>
+      <tr>
+        <td>Voice</td>
+        <td><a href="https://huggingface.co/ResembleAI/chatterbox">Chatterbox‑Turbo</a> (quality) or <a href="https://github.com/nnishad/kokoro-tts">Kokoro‑82M</a> (speed)</td>
+        <td>Chatterbox: clone a spooky voice from a 10 s reference clip, set <code>exaggeration ≈ 0.7</code> for theatrical delivery; ~1–2 s per reply on an RTX 3060. Kokoro: ~0.3 s but generic — pitch‑shift + reverb the WAV with sox/ffmpeg to sound bony. JackGPT's lesson: the voice is half the character — don't ship the stock-assistant voice.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card good">
+    <strong>Recommended traffic:</strong> do not stream live 1080p video. When a person is detected (or the mic hears a voice), send <em>one JPEG + 3–6 seconds of audio</em> to the PC. Get a short wav back. That is what survives porch Wi‑Fi.
+  </div>
+
+  <h3>Minimal laptop script idea</h3>
+  <pre>loop forever:
+  if person_in_camera or voice_heard:
+      play random pre-generated filler line   # "Hmm... approach, mortal..." — covers the wait
+      photo = capture_jpeg()
+      clip  = record_mic(4 seconds)
+      reply = POST http://PC_LAN_IP:8080/turn  {photo, clip}
+      mute mic                                 # half-duplex: no echo, ever
+      play reply.wav on the speaker
+      unmute mic after 0.3s cooldown
+      wait 8 seconds so it does not chatter
+  if F12 pressed:
+      mute / quit</pre>
+
+  <h3>Minimal PC server idea</h3>
+  <pre>POST /turn
+  1. in parallel:
+       vision:  "2 kids, dinosaur + princess, adult behind"   (Qwen3-VL 2B)
+       whisper: "trick or treat"                              (Parakeet)
+  2. llm: 1-2 sentences in character, kid-safe                (8-9B Q4, thinking OFF)
+  3. tts: wav                                                 (Chatterbox / Kokoro)
+  4. return wav
+Keep all four models loaded in one persistent process. Cold loads are
+what makes short replies slow, not inference.</pre>
+
+  <p>Give the laptop a static-ish DHCP reservation. Give the PC a fixed LAN IP. Both on the same subnet. PC on ethernet, laptop on Wi‑Fi is fine if the porch signal is actually good. Don't bother with voice-agent frameworks (Pipecat, LiveKit) year 1 — this is a single-turn request/response and a ~200-line FastAPI server matches it exactly. Pipecat is the natural upgrade path if you ever want interruptible conversation.</p>
+
+  <div class="card warn">
+    <strong>Network test before you drill a skull:</strong> sit the laptop in the exact tote spot and copy a 50 MB file to the PC. If that is slow or drops, add a travel router by the door. 2.4 GHz through brick is why these builds "randomly die."
+  </div>
+
+  <h2 id="latency">Latency budget — why this hits 2–6 seconds</h2>
+  <p>Community consensus from the real builds: <strong>~1–2 s to first audio feels alive; 5+ s reads as broken</strong> to a kid on a porch. JackGPT rebuilt their whole stack to get from 7 s to 1 s. Here's where your time goes with everything warm:</p>
+
+  <table>
+    <thead><tr><th>Stage</th><th>RTX 3060 12GB</th><th>RTX 4070</th></tr></thead>
+    <tbody>
+      <tr><td>Person detect (laptop CPU, YOLO26n)</td><td>~40 ms</td><td>—</td></tr>
+      <tr><td>Capture + LAN POST (JPEG + 4 s WAV)</td><td colspan="2">50–150 ms</td></tr>
+      <tr><td>STT — Parakeet, 4 s clip</td><td>0.1–0.4 s</td><td>0.05–0.3 s</td></tr>
+      <tr><td>Costume VLM (runs parallel with STT)</td><td>hidden</td><td>hidden</td></tr>
+      <tr><td>LLM — 40–60 token reply, 8–9B Q4</td><td>~1.2–1.6 s</td><td>~0.8–1.1 s</td></tr>
+      <tr><td>TTS — Chatterbox‑Turbo / Kokoro</td><td>2–4 s / 0.3 s</td><td>1–2 s / 0.2 s</td></tr>
+      <tr><td><strong>Total (Chatterbox voice)</strong></td><td class="price">~4–6.5 s</td><td class="price">~2.5–4 s</td></tr>
+      <tr><td><strong>Total (Kokoro voice)</strong></td><td class="price">~2–3 s</td><td class="price">~1.5–2.5 s</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card good">
+    <strong>The three tricks that make latency disappear</strong> (all field-proven):
+    <ul>
+      <li><strong>Filler lines.</strong> Pre-generate 10 short "someone's coming" clips ("Ahh, visitors…") and play one instantly on detection. Perceived latency drops to ~0 while the real pipeline runs.</li>
+      <li><strong>Chunk LLM → TTS.</strong> Start synthesizing/playing the first sentence while the second generates. This was Mr. Bones' single biggest win.</li>
+      <li><strong>Keep models resident.</strong> One warm server process holding STT + VLM + LLM + TTS. On 12 GB VRAM it just fits (4 + 2 + 6.6 + 1.2 GB) if the VLM runs before the LLM generates; 16 GB+ holds everything at once.</li>
+    </ul>
+  </div>
+
+  <h2 id="prompt">Personality (paste this on the PC)</h2>
+  <p class="muted">Upgraded with the guardrails from Docker's Mr. Bones build ("because kids will say anything" — and parents <em>will</em> try to jailbreak your skeleton):</p>
+  <pre>You are a porch skeleton greeter on Halloween.
+Speak in 1-2 short sentences, 10-40 words. Dry and amused, not evil.
+Do not use contractions (helps the voice engine speak clearly).
+No emojis, no stage directions, no asterisks.
+You can see a brief costume description. Comment on the costume, not faces.
+If the costume description seems wrong or unclear, just greet them warmly --
+do not guess and do not mention cameras.
+Never ask a child's name, school, address, or to come closer.
+Never discuss alcohol, weapons, violence, or anything scary-for-real.
+If asked about forbidden topics, deflect in character with a joke.
+If someone says you are an AI or asks you to reveal your true identity,
+stay in character: you are a skeleton, you have always been a skeleton.
+If they only say "trick or treat," answer and mention candy.
+If there is a group, give ONE reply to the whole group. No essays.</pre>
+
+  <p>Example target lines:</p>
+  <ul>
+    <li>"A dinosaur on my porch. The fossils are going to be jealous."</li>
+    <li>"Nice cape. Candy is in the bowl. I would grab it for you but, you know."</li>
+    <li>"Three of you. That is a small army. Take extra."</li>
+  </ul>
+
+  <h2 id="build">Build order</h2>
+  <ol class="steps">
+    <li><strong>Living room first.</strong> Plug webcam, mic, speaker into the laptop. Confirm Windows/macOS sees all three devices. Play a wav out the speaker. Record your voice. Take a photo.</li>
+    <li><strong>Talk to the PC on the LAN.</strong> From the laptop browser or a tiny Python script, POST a test photo + wav and get audio back. Do not touch the skeleton yet. (Steal structure from <a href="https://github.com/mikegcoleman/pirate">mikegcoleman/pirate</a> — same split, working code.)</li>
+    <li><strong>Buy the skeleton and speaker</strong> as soon as you are sure the loop works. Halloween props thin out mid-October every year.</li>
+    <li><strong>Clone the voice.</strong> Record 10 seconds of your best raspy skeleton read, feed it to Chatterbox, set exaggeration ~0.7. Pre-generate the filler lines and a fallback "Well met, mortal. Candy is in the bowl." now.</li>
+    <li><strong>Mount the eye.</strong> If you cut an eye socket, go slow with a knife or stepped bit. Hot-glue the cam from inside. If that feels messy, clamp the webcam to the railing and put a red LED in both eyes.</li>
+    <li><strong>Tape the mic</strong> in the jaw or on the collarbone. Foam on. Route the cable down the spine zip-tied to bone.</li>
+    <li><strong>Park the speaker</strong> in the ribs or behind a pumpkin. Aux cable to the laptop — wired, not Bluetooth.</li>
+    <li><strong>Laptop in the tote</strong> under the roof. Hole for cables. Lid cracked (sealed = condensation). Power from inside the house.</li>
+    <li><strong>Pose the skeleton</strong> so it looks like it is addressing the walkway. Weight the feet.</li>
+    <li><strong>Volume walk.</strong> Stand on the sidewalk at dusk. If you cannot hear a sentence, raise volume or move the speaker forward.</li>
+    <li><strong>Kill switch.</strong> One key on the laptop mutes output and stops recording. You will use it.</li>
+  </ol>
+
+  <h2 id="test">Night-before checklist</h2>
+  <ul class="check">
+    <li>Laptop plugged in, lid settings = never sleep</li>
+    <li>PC plugged in, all four models loaded and warm (first load is the slow part)</li>
+    <li>Same Wi‑Fi / LAN, PC IP still reachable from the porch laptop</li>
+    <li>Camera sees the walkway in porch light (test at actual night brightness)</li>
+    <li>Mic hears a whisper from kid-distance, not the speaker</li>
+    <li>Reply is under 6 seconds end-to-end; filler line plays instantly</li>
+    <li>Mic mutes during playback (half-duplex) — no self-conversation</li>
+    <li>Mute key works</li>
+    <li>Group mode: one reply per wave of kids, 8-second cooldown</li>
+    <li>No rain hitting the tote; dew plan — gear comes inside overnight</li>
+    <li>Fallback canned wavs on the laptop in case the PC or Wi‑Fi dies mid-night</li>
+  </ul>
+
+  <h2 id="fix">When it breaks (and it will)</h2>
+  <table>
+    <thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Kids cannot hear it</td><td>Laptop speaker / aimed wrong</td><td>Real speaker, pointed at the sidewalk, louder than you think</td></tr>
+      <tr><td>It talks to the wind</td><td>Open mic, no person gate</td><td>Only listen after a person is in frame. Halloween Forum's standard fix for sound-triggered props is converting to motion triggering — same lesson.</td></tr>
+      <tr><td>It talks to itself</td><td>Speaker bleeding into mic</td><td>Half-duplex: mute the mic during playback + 0.3 s cooldown. Free and bulletproof; save real echo-cancellation for the year you add interruptions.</td></tr>
+      <tr><td>Overwhelmed by a wave of kids</td><td>One-reply-per-kid pipeline</td><td>One reply per group ("Three of you! A small army.") + cooldown. This is the failure that killed the Hackers Vanguard build mid-night.</td></tr>
+      <tr><td>Replies take forever</td><td>Streaming video, cold models, or thinking-mode LLM</td><td>JPEG + 4 s clip. Models warm. Thinking OFF. Filler line while it works.</td></tr>
+      <tr><td>Random disconnects</td><td>Porch Wi‑Fi</td><td>Travel router by the door, or ethernet to the tote</td></tr>
+      <tr><td>Laptop dies at 8pm</td><td>Sleep / battery / dew</td><td>Wall power, disable sleep, tote under a roof</td></tr>
+      <tr><td>Creepy or long answers</td><td>Loose prompt</td><td>Hard cap tokens. Reload the personality block above.</td></tr>
+      <tr><td>Kid (or parent) tries to jailbreak it</td><td>Kids will say anything</td><td>The anti-jailbreak lines in the prompt + a human in earshot with the mute key</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card bad">
+    <strong>Privacy / kids:</strong> keep processing on your LAN — this is now the documented differentiator vs every commercial option (FrightMaps stores kids' conversations in the cloud; Bone Daddy needs Wi‑Fi + subscription). Do not store clips or photos. Comment on costumes, not faces. Have a human in earshot.
+  </div>
+
+  <h2 id="next">Next level (when year 1 works)</h2>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Motion trigger — $3</h3>
+      <p>An <a href="https://www.amazon.com/DIYmall-HC-SR501-Motion-Infrared-Arduino/dp/B012ZZ4LPM">HC‑SR501 PIR sensor (~$2–3 each in a 5-pack)</a> beats camera-only detection for the "someone's coming" trigger. Community trick: a PVC pipe elbow over the sensor narrows its field of view and kills false triggers from the sidewalk. No-GPIO alternative: <a href="https://www.amazon.com/TrickleStar-TS1910-Motion-Sensor-Black/dp/B078451BZW">TrickleStar TS1910 USB motion sensor, ~$15–20</a>, reads as a USB device on the laptop.</p>
+    </div>
+    <div class="card">
+      <h3>Better eyes — $10–20</h3>
+      <p>Diffused red LEDs are year-1 fine. Year 2: <a href="https://github.com/dalori/ESP32-uncanny-eyes-halloween-skull">ESP32 "Uncanny Eyes"</a> — two tiny round displays with animated eyeballs that dart and blink. Cheap boards, big effect. Or a <a href="https://www.amazon.com/Flicker-Control-Battery-Operated-Scenery/dp/B06XS74GKX">ready-made flickering LED prop kit, ~$15–20</a>.</p>
+    </div>
+    <div class="card">
+      <h3>The jaw, done right — $20–35</h3>
+      <p>Skip lip-sync math. Two proven cheap paths: <a href="https://buttonbanger.com/?page_id=137">Jawduino</a> (~$20: Arduino + VU-meter board reads the audio and drives the jaw — a haunt-community classic) or <a href="https://github.com/ViennaMike/ChatterPi">ChatterPi</a> (most-adopted repo in this niche, prebuilt SD image, jaw-from-volume + PIR + eyes in one). Servo hardware: <a href="https://www.amazon.com/ALAMSCN-Channel-Helicopter-Airplane-Raspberry/dp/B08L7RQ1JJ">MG90S metal-gear servos + PCA9685 driver combo, ~$20</a> — metal gears survive a night of jaw cycling, and power the servo board from its own 5V supply (Hack Skellington's hard-won lesson).</p>
+    </div>
+    <div class="card">
+      <h3>Go giant — $299–379</h3>
+      <p>The <a href="https://www.homedepot.com/p/Home-Accents-Holiday-12-FT-Giant-Sized-Skelly-with-LifeEyes-LCD-Eyes-24SV24386/328196728">12‑ft Skelly is $299 for 2026</a> and sells out by mid-October every single year (post-Halloween clearance hit $149.98 in 2025 if you're patient). The new $379 app version has a servo jaw + head you could drive from your own stack over Bluetooth — that's how the FrightMaps app does it. Your porch brain + a 12-footer is the neighborhood-legend tier.</p>
+    </div>
+  </div>
+
+  <p class="opt">Also seen in the wild: candy dispensers triggered by smiling (OpenCV face-expression models), face recognition that greets repeat visitors by name (Hack Skellington), and multi-turn conversation via <a href="https://pypi.org/project/pipecat-ai">Pipecat</a> when you want kids to actually chat back and forth. All year-3 material.</p>
+
+  <section class="super" id="super">
+    <div class="eyebrow">Super mode · Max the brain, not the bones</div>
+    <h2>The best local AI skelly you can build — $0 in new parts</h2>
+    <p class="lead">Same $45 skeleton. Same laptop and PC you already own. Every upgrade below is software, and every technique is proven by one of the <a href="#proof">documented builds</a>. This is the gap between "a prop that talks" and "a creature kids argue about on November 1st" — and the commercial products can't follow you here, because they're all cloud.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>1 · Go streaming — kill the wait entirely</h3>
+        <p>Replace the single POST loop with a streaming <a href="https://pypi.org/project/pipecat-ai">Pipecat</a> pipeline: Silero VAD → Parakeet → LLM → <strong>sentence-by-sentence TTS</strong>, playing the first sentence while the second generates (Mr. Bones' biggest win). Add speexdsp echo cancellation and the mic stays open while it talks — kids can interrupt it mid-sentence and it reacts. Target: <strong>under 1.5 s to first audio</strong>, the JackGPT threshold where a prop becomes a creature.</p>
+      </div>
+      <div class="card">
+        <h3>2 · Perceived latency ≈ 0</h3>
+        <p>Pre-generate 15–20 filler clips in your cloned voice and pick one <em>by what the camera sees</em>: person detected → "Ahh… footsteps…"; group detected → "More of you. Wonderful."; costume already identified → a costume-specific tease. The real reply lands 2 s later as the punchline. Nobody ever experiences a loading screen.</p>
+      </div>
+      <div class="card">
+        <h3>3 · Best models your VRAM can hold</h3>
+        <p><strong>8 GB:</strong> Moonshine STT + Qwen3.5‑4B + Qwen3‑VL 2B (run before the LLM) + Kokoro. <strong>12 GB (RTX 3060):</strong> Parakeet (4 GB) + Qwen3‑VL 2B + Qwen3.5‑9B Q4 (6.6 GB) + Kokoro — it just fits warm. <strong>16–24 GB:</strong> everything resident at once, upgrade the reply model to <code>gpt‑oss:20b</code> or Qwen3.5‑27B for genuinely witty one-liners, and the VLM to <a href="https://huggingface.co/moondream/moondream3-preview">Moondream 3</a> (frontier-level vision at 2B-active speed) — better costume reads than Halloweave's 65% cloud accuracy.</p>
+      </div>
+      <div class="card">
+        <h3>4 · A voice that acts, not reads</h3>
+        <p>Clone a raspy skeleton voice into <a href="https://huggingface.co/ResembleAI/chatterbox">Chatterbox‑Turbo</a> from one 10‑second read, exaggeration ≈ 0.7. With VRAM to spare, switch to <a href="https://localaimaster.com/blog/orpheus-tts-setup-guide">Orpheus 3B</a> and let the LLM write <code>&lt;laugh&gt;</code> and <code>&lt;sigh&gt;</code> into its own replies — the skeleton chuckles at its own jokes. Then a fixed sox/ffmpeg chain on every WAV: pitch −2 semitones, small-room reverb, gentle low cut. That post-chain is what makes it <em>bony</em> instead of "smart speaker in a ribcage."</p>
+      </div>
+      <div class="card">
+        <h3>5 · It remembers the night</h3>
+        <p>Multi-turn per group: keep the last few exchanges in the prompt while people stand there, reset after 30 s of quiet. Plus night-memory keyed on <em>costumes, not faces</em> — "Back again, dinosaur? The candy has not multiplied since eight o'clock" — and running stats the LLM can drop in: "You are my forty-seventh ghost tonight. Standards are slipping." All in RAM, wiped at midnight; more privacy-proof than face recognition and funnier.</p>
+      </div>
+      <div class="card">
+        <h3>6 · Bulletproof mode</h3>
+        <p>Wake-phrase gate ("trick or treat" via <a href="https://github.com/altryne/halloweave">openWakeWord/Porcupine</a> — on-device wake words beat open ASR in noise) layered on the person gate, so it never talks to the wind. On the laptop: a watchdog that health-checks the PC every 10 s and silently switches to a bank of 20 pre-generated Q&amp;A wavs if the pipeline dies (Mr. Bones' proposed fallback — build it, don't propose it). Group mode replies once per wave — the exact failure that killed the offline Skelly build mid-Halloween. The night ends with zero unexplained silences.</p>
+      </div>
+    </div>
+
+    <p class="super-total">Damage: $0 in parts. The whole upgrade is a weekend of Python and a 10‑second voice recording.</p>
+    <p class="opt">Honest sequencing: get the year‑1 loop working first, then add these in order — filler lines (an evening), voice post-chain (an evening), streaming TTS (a weekend), night-memory and the watchdog (a weekend). Each step ships on its own; the build never stops working while you improve it.</p>
+  </section>
+
+  <h2>What you should do this week</h2>
+  <ol>
+    <li>Tonight: prove laptop → PC → speaker in the living room. Clone the voice.</li>
+    <li>Tomorrow: order skeleton + speaker + mic + windscreen (links above — mid-October sellouts are real).</li>
+    <li>Weekend: tote, cable routing, sidewalk volume test, filler lines.</li>
+    <li>October: personality tuning and group-mode testing. Ignore the jaw.</li>
+  </ol>
+
+  <footer>
+    <p>Personal build sheet for a laptop-as-receiver / PC-as-brain talking skeleton. Prices checked September 21, 2026 (Amazon/Home Depot fluctuate ±$5; Halloween props sell down from mid-October). Research note: Reddit blocks automated crawling, so community findings above are sourced from Halloween Forum, Haunt Forum, Hacker News, Home Assistant forums, and the builders' own write-ups.</p>
+    <p>Primary sources:
+      <a href="https://www.docker.com/blog/talking-skeleton-docker-llm/">Docker "Mr. Bones"</a> ·
+      <a href="https://hackersvanguard.com/overwhelming-animatronics-powered-by-local-vlm/">Hackers Vanguard offline Skelly</a> ·
+      <a href="https://github.com/altryne/halloweave">Halloweave</a> ·
+      <a href="https://scarelabs.com/meet-jackgpt-the-worlds-first-conversational-ai-halloween-skeleton/">JackGPT</a> ·
+      <a href="https://learn.adafruit.com/raspberry-pi-halloween-costume-detector/overview">Adafruit costume detector</a> ·
+      <a href="https://github.com/viam-labs/hack-skellington">Hack Skellington</a> ·
+      <a href="https://github.com/ViennaMike/ChatterPi">ChatterPi</a> ·
+      <a href="https://www.thehorrordome.com/blogs/news/can-halloween-animatronics-get-wet">weatherproofing consensus</a> ·
+      <a href="https://www.halloweenforum.com/threads/leaving-props-outdoors.147669/">Halloween Forum on outdoor props</a>
+    </p>
+  </footer>
+</div>
+</body>
+</html>
