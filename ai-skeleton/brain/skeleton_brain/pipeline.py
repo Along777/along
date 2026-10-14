@@ -103,12 +103,15 @@ def build_user_message(description: str, transcript: str, meta: TurnMeta,
 
 class Brain:
     def __init__(self, cfg: Config, llm, stt: SttEngine, tts: TtsEngine, fx: VoiceFx,
-                 persona_dir: Path, deflect_lines: list[str]):
+                 persona_dir: Path, deflect_lines: list[str], friendly_lines: list[str] | None = None):
         self.cfg, self.llm, self.stt, self.tts, self.fx = cfg, llm, stt, tts, fx
         self.persona = (persona_dir / "persona.txt").read_text(encoding="utf-8").strip()
         self.vision_prompt = (persona_dir / "vision_prompt.txt").read_text(encoding="utf-8").strip()
         self.filter = TextFilter(load_blocklist(persona_dir / "blocklist.txt"), deflect_lines)
         self.fallback_lines = deflect_lines
+        # a blocked reply to a plain statement gets a friendly line, not a question-dodge
+        self.friendly_lines = friendly_lines or deflect_lines
+        self.last_raw = ""
         self._stt_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="stt")
         self._tts_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="tts")
         self.turn_times_ms: list[float] = []
@@ -144,10 +147,14 @@ class Brain:
                                timeout=self.cfg.ollama.reply_timeout_s + 1),
                 self.cfg.ollama.reply_timeout_s)
         except asyncio.TimeoutError:
-            return random.choice(self.fallback_lines), "canned_timeout"
+            return random.choice(self.friendly_lines), "canned_timeout"
         except Exception:
-            return random.choice(self.fallback_lines), "canned_error"
-        return self.filter.clean(text)
+            return random.choice(self.friendly_lines), "canned_error"
+        self.last_raw = text
+        spoken, source = self.filter.clean(text)
+        if source != "llm" and not _is_question(transcript):
+            spoken = random.choice(self.friendly_lines)
+        return spoken, source
 
     async def speak(self, text: str, *, fx: bool = True) -> tuple[np.ndarray, int]:
         loop = asyncio.get_running_loop()
@@ -180,6 +187,8 @@ class Brain:
         else:
             vision = _const(meta.costume_hint or "")  # "" = no photo at all, not an unclear one
         description, transcript = await asyncio.gather(vision, timed("stt", self.transcribe(audio_in, sr_in)))
+        if description.strip().lower().rstrip(".") == "nobody" and meta.group_size > 0:
+            description = "unclear"  # the porch saw someone; a bad frame must not tell the model nobody is there
 
         reply_text, source = await timed("llm", self.reply(description, transcript, meta))
         if source == "llm":
@@ -200,6 +209,7 @@ class Brain:
             "description": description,
             "heard": bool(transcript),
             "transcript": transcript if meta.debug else None,
+            "blocked_reply": self.last_raw if (meta.debug and source == "canned_blocked") else None,
             "audio": {"format": "wav", "sample_rate": sr, "b64": base64.b64encode(wav).decode("ascii")},
             "duration_s": round(len(audio) / sr, 2),
             "timings_ms": timings,
@@ -214,3 +224,10 @@ class Brain:
 
 async def _const(v):
     return v
+
+
+def _is_question(text: str) -> bool:
+    t = (text or "").strip().lower()
+    return t.endswith("?") or t.split(" ", 1)[0] in {
+        "what", "who", "where", "when", "why", "how", "are", "is", "do", "does", "did", "can", "could",
+        "will", "would", "should", "have", "has"}

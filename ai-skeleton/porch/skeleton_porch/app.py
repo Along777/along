@@ -296,6 +296,8 @@ class PorchApp:
             if self.debug and r.get("transcript") is not None:
                 self.marks.setdefault(a.turn_id, {})["heard"] = r["transcript"]
                 self.log(f'heard: "{r["transcript"]}" | saw: "{r.get("description")}"')
+            if r.get("blocked_reply"):
+                self.log(f'filter blocked: "{r["blocked_reply"]}"')
         except Exception as e:
             self.log(f"turn {a.turn_id} failed: {e}")
             self.last_turn = {"at": stamp(), "turn": a.turn_id, "error": str(e)}

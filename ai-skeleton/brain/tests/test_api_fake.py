@@ -79,6 +79,13 @@ def test_group_memory_reaches_the_prompt():
     assert "Very practical." in msg and "Do not repeat" in msg and "Here is your candy" not in msg
 
 
+def test_question_detection_for_canned_lines():
+    from skeleton_brain.pipeline import _is_question
+
+    assert _is_question("are you real") and _is_question("Where do you live?") and _is_question("what?")
+    assert not _is_question("yeah") and not _is_question("trick or treat") and not _is_question("")
+
+
 def test_rejects_bad_inputs(client):
     assert client.post("/turn", data={"meta": "{not json"}).status_code == 400
     r = client.post("/turn", files={"photo": ("p.jpg", b"GIF89a....", "image/jpeg")})

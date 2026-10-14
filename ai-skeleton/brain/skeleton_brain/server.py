@@ -102,7 +102,7 @@ class State:
                         raise RuntimeError(f"model {m} is not pulled - run: ollama pull {m}")
                 if not llm.caps[cfg.ollama.vision_model].vision:
                     raise RuntimeError(f"{cfg.ollama.vision_model} has no vision capability")
-            self.brain = Brain(cfg, llm, stt, tts, fx, persona_dir, lines.get("deflect", []))
+            self.brain = Brain(cfg, llm, stt, tts, fx, persona_dir, lines.get("deflect", []), lines.get("fallback", []))
             await self.warm(first=True)
             version = bank_version(lines_text, tts.name, cfg.fx)
             await asyncio.to_thread(self.bank.load_or_render, version, lines, self.brain.speak_sync, self.log)
