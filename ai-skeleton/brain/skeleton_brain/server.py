@@ -227,6 +227,22 @@ def create_app(cfg: Config, fake: bool = False, cache_root: Path | None = None) 
                 traceback.print_exc()
                 return JSONResponse({"error": "internal", "detail": f"{type(e).__name__}: {e}"}, status_code=500)
 
+    @app.post("/warm")
+    async def warm(photo: UploadFile = File(...)):
+        """Run the vision model once on a frame of the porch's real size. The first image at a new
+        size is several seconds slower (one-time setup in the model); this keeps that off a real turn."""
+        if not state.ready or state.brain is None:
+            return not_ready()
+        if state.lock.locked():
+            return JSONResponse({"error": "busy"}, status_code=503)
+        data = await photo.read()
+        if not data or len(data) > cfg.limits.max_photo_bytes or data[:2] != b"\xff\xd8":
+            return JSONResponse({"error": "bad_photo"}, status_code=400)
+        async with state.lock:
+            t = time.perf_counter()
+            await state.brain.describe(data)
+        return {"ok": True, "vision_ms": round((time.perf_counter() - t) * 1000)}
+
     @app.get("/fillers")
     async def fillers():
         if not state.ready:

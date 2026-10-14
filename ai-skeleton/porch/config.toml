@@ -43,8 +43,8 @@ start_ms = 120                # this much loud audio in a row starts an utteranc
 min_speech_ms = 200           # an utterance needs this much loud audio in total, or it was a bang/gust
 end_silence_ms = 700          # this much quiet ends it
 max_utterance_s = 5.0
-no_speech_s = 3.0             # nobody spoke: reply to the costume (first turn) or stop listening
-min_threshold_dbfs = -50.0
+no_speech_s = 4.0             # nobody spoke: reply to the costume (first turn) or stop listening
+min_threshold_dbfs = -60.0     # the lav mic is quiet: the skeleton's own voice reaches only about -47 dB in it
 floor_margin_db = 10.0        # speech must be this far above the room's noise floor
 preroll_ms = 300
 

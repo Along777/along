@@ -37,6 +37,13 @@ class BrainClient:
             raise BrainError(f"HTTP {r.status_code}: {r.text[:200]}")
         return r.json()
 
+    def warm(self, jpeg: bytes, timeout: float = 60.0) -> dict | None:
+        try:
+            r = requests.post(f"{self.url}/warm", files={"photo": ("warm.jpg", jpeg, "image/jpeg")}, timeout=timeout)
+            return r.json() if r.ok else None
+        except (requests.RequestException, ValueError):
+            return None
+
     def speak(self, text: str, timeout: float = 30.0) -> bytes:
         r = requests.post(f"{self.url}/speak", json={"text": text}, timeout=timeout)
         r.raise_for_status()

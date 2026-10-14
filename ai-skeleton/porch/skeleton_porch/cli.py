@@ -25,6 +25,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--text", default="Trick or treat, I am a pirate.")
     v = sub.add_parser("record-voice", help="record a voice reference for cloning (Phase 2)")
     v.add_argument("--seconds", type=float, default=15.0)
+    sub.add_parser("mictest", help="guided mic test (quiet, normal, soft, 2 m away); saves a log to porch/logs/tests")
     sub.add_parser("stats", help="latency + sources from porch/logs/turns.jsonl")
     sub.add_parser("fetch-models", help="download the person-detector weights (once)")
     a = p.parse_args(argv)
@@ -58,9 +59,114 @@ def main(argv: list[str] | None = None) -> int:
         return selftest_turn(cfg, a.text)
     if a.cmd == "record-voice":
         return record_voice(cfg, a.seconds)
+    if a.cmd == "mictest":
+        return mictest(cfg)
     if a.cmd == "stats":
         return stats()
     return 2
+
+
+def mictest(cfg) -> int:
+    """Measure the mic the way the porch hears it, ask the brain what it understood, and save it all."""
+    from datetime import datetime
+
+    import numpy as np
+    import sounddevice as sd
+
+    from .audio import SR_IN, EnergyVad, _extra, dbfs, find_device
+    from .brain_client import BrainClient
+    from .fillers import float_to_wav
+
+    dev = find_device(cfg.audio.mic, "input", cfg.audio.host_api)
+    out = PORCH_DIR / "logs" / "tests"
+    out.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    client = BrainClient(cfg.brain.url, 30)
+    h = client.health()
+    brain_ok = bool(h and h.get("ready"))
+    frame = SR_IN * cfg.vad.frame_ms // 1000
+    print(f"mic:   {dev['name']} ({dev['api']})")
+    print(f"brain: {'ready' if brain_ok else 'NOT reachable - no transcripts'} at {cfg.brain.url}")
+    print("Stop the porch first if it is running. Recordings stay on this laptop (porch/logs/tests).")
+    phases = [
+        ("quiet", "Stay quiet - this measures the room", 4.0),
+        ("normal", "Say 'trick or treat' twice in your normal voice, from about 1 m (where kids will stand)", 5.0),
+        ("soft", "Say it again quietly, like a shy kid, from the same spot", 5.0),
+        ("far", "Step back to about 2 m and say it in your normal voice", 5.0),
+    ]
+    log = {"when": stamp, "mic": dev["name"], "min_threshold_dbfs": cfg.vad.min_threshold_dbfs,
+           "floor_margin_db": cfg.vad.floor_margin_db, "phases": {}}
+    floor = None
+    for key, prompt, secs in phases:
+        try:
+            input(f"\n>> {prompt}.\n   Press Enter, then start. Recording {secs:.0f} s ...")
+        except EOFError:
+            time.sleep(1)
+        x = sd.rec(int(secs * SR_IN), samplerate=SR_IN, channels=1, dtype="float32", device=dev["index"],
+                   extra_settings=_extra(dev["api"]))
+        sd.wait()
+        x = x[:, 0].copy()
+        levels = sorted(dbfs(x[i:i + frame]) for i in range(0, len(x) - frame + 1, frame))
+        p10, p90, peak = levels[len(levels) // 10], levels[int(len(levels) * 0.9)], levels[-1]
+        if key == "quiet":
+            floor = float(np.median(levels))
+        vad = EnergyVad(cfg.vad)
+        vad.warmup = 0
+        if floor is not None:
+            vad.floor_db = floor
+        thr = vad.threshold_db
+        events = []
+        for i in range(0, len(x) - frame + 1, frame):
+            events += vad.feed(x[i:i + frame], i / SR_IN)
+        utts = [e.audio for e in events if e.kind == "end"]
+        if vad.in_speech and vad.utt:  # still talking when the take ended
+            utts.append(np.concatenate(vad.utt))
+        wav = out / f"mictest-{stamp}-{key}.wav"
+        wav.write_bytes(float_to_wav(x, SR_IN))
+        res = {"room_p10_db": round(p10, 1), "loud_p90_db": round(p90, 1), "peak_db": round(peak, 1),
+               "threshold_db": round(thr, 1), "wav": wav.name}
+        print(f"   room {p10:.0f} dB | loud parts {p90:.0f} dB | peak {peak:.0f} dB | speech threshold {thr:.0f} dB")
+        if key != "quiet":
+            res.update({"detected": bool(utts), "margin_db": round(p90 - thr, 1)})
+            heard = None
+            if brain_ok:
+                clip = utts[0] if utts else x
+                try:
+                    r = client.turn({"turn_id": f"mictest-{key}", "debug": True}, None,
+                                    float_to_wav(clip[: int(6 * SR_IN)], SR_IN))
+                    heard = r.get("transcript")
+                except Exception as e:
+                    heard = f"(brain error: {e})"
+            res["heard"] = heard
+            print(f"   counted as speech: {'YES' if utts else 'NO'} (loud parts {p90 - thr:+.0f} dB vs threshold)")
+            if heard is not None:
+                print(f"   the brain heard: {heard!r}")
+        log["phases"][key] = res
+
+    n = log["phases"].get("normal", {})
+    tips = []
+    if not n.get("detected"):
+        tips.append("Your normal voice did NOT count as speech. Raise the mic: Settings > System > Sound > Input > "
+                    f"'{dev['name']}' > Volume near 100 (and not muted), or move the mic closer to where kids talk.")
+    elif n.get("margin_db", 0) < 6:
+        tips.append("Normal speech only just clears the threshold. More mic volume or a closer mic would make it reliable.")
+    if n.get("heard") is not None and "trick" not in str(n.get("heard")).lower():
+        tips.append("The brain could not make out 'trick or treat' - the mic is too quiet, too far, or muffled.")
+    if floor is not None and n.get("loud_p90_db") is not None:
+        suggest = round(max(floor + 8, n["loud_p90_db"] - 12))
+        if suggest < cfg.vad.min_threshold_dbfs - 2:
+            tips.append(f"Try in porch/config.local.toml:  [vad]  min_threshold_dbfs = {suggest}")
+        log["suggested_min_threshold_dbfs"] = suggest
+    if not tips:
+        tips.append("Mic looks good: speech clears the threshold with room to spare and the brain understood it.")
+    log["tips"] = tips
+    path = out / f"mictest-{stamp}.json"
+    path.write_text(json.dumps(log, indent=1), encoding="utf-8")
+    print("\n== Result")
+    for t in tips:
+        print(f" - {t}")
+    print(f"\nlog: {path}")
+    return 0
 
 
 def preview(cfg) -> int:

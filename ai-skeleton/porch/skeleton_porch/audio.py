@@ -184,6 +184,7 @@ class Player:
         self.finished: collections.deque = collections.deque(maxlen=50)
         self.underflows = 0
         self.gain_db = gain_db
+        self.silent = False  # "pause speaker": clips still run on time (the mic gate still works), but inaudibly
         amp = 10 ** (keepalive_dbfs / 20) if keepalive_dbfs < 0 else 0.0
         rng = np.random.default_rng(7)
         self.noise = (rng.standard_normal(self.sr) * amp).astype(np.float32) if amp else None
@@ -244,7 +245,7 @@ class Player:
                     self.cur = None
             if filled:
                 self.audible_until = time.monotonic() + filled / self.sr + float(self.stream.latency)
-        out *= self.gain
+        out *= 0.0 if self.silent else self.gain
         if self.noise is not None:
             idx = (np.arange(frames) + self.noise_pos) % len(self.noise)
             out += self.noise[idx]

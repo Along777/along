@@ -56,6 +56,7 @@ class PorchApp:
         self.cam_counts: collections.deque = collections.deque(maxlen=40)
         self.poke_flag = False
         self.spk_fallback = False
+        self.paused = {"camera": False, "mic": False, "speaker": False}
         self.stop = threading.Event()
         self.camera = None
         self.detector = None
@@ -124,12 +125,28 @@ class PorchApp:
         if self.fillers.count() == 0:
             self.log("WARNING: no greeting/fallback lines yet - start the brain once so they sync")
 
+    def _warm_brain(self) -> None:
+        """Send one real camera frame so the brain's first visitor photo is not its slow first image."""
+        if self.camera is None:
+            return
+        for _ in range(20):  # the camera may need a moment for its first frame
+            frame, _ = self.camera.latest()
+            if frame is not None:
+                r = self.client.warm(self.camera.jpeg(frame))
+                if r:
+                    self.log(f"brain warmed with a real frame ({r.get('vision_ms')} ms)")
+                return
+            time.sleep(0.5)
+
     def _health_loop(self) -> None:
+        threading.Thread(target=self._warm_brain, name="warm", daemon=True).start()
         while not self.stop.wait(self.cfg.brain.health_interval_s):
             h = self.client.health()
             ok = bool(h and h.get("ready"))
             if ok != self.brain_ok:
                 self.log(f"brain {'back' if ok else 'DOWN - fallback lines only'}")
+                if ok:
+                    threading.Thread(target=self._warm_brain, name="warm", daemon=True).start()
             self.health, self.brain_ok = h, ok
             if ok and h.get("fillers_version") and h["fillers_version"] != self.fillers.version:
                 try:
@@ -143,6 +160,12 @@ class PorchApp:
         period = 1.0 / max(0.5, self.cfg.detector.fps)
         while not self.stop.is_set():
             t0 = time.monotonic()
+            if self.paused["camera"]:  # keep the camera streaming (re-opens can wedge the Arducam), just ignore it
+                with self.lock:
+                    self.people_hist.clear()
+                    self.last_boxes = []
+                time.sleep(0.2)
+                continue
             frame, ft = self.camera.latest()
             if frame is not None and t0 - ft < 2.0:
                 boxes = self.detector.detect(frame)
@@ -186,8 +209,9 @@ class PorchApp:
                     done = None
                 muted = self.control.muted
                 busy = self.player.busy(now, margin=self.cfg.audio.tail_margin_s)
-                self.mic.set_open(not busy and not muted)
-                cam_ok = self.camera is not None and self.camera.ok(now)
+                self.mic.set_open(not busy and not muted and not self.paused["mic"])
+                # a paused camera counts as no camera: the skeleton then starts a turn when it hears a voice
+                cam_ok = self.camera is not None and self.camera.ok(now) and not self.paused["camera"]
                 poke, self.poke_flag = self.poke_flag, False
                 obs = Obs(now=now, people=self.people_now(now) if cam_ok else 0, camera_ok=cam_ok,
                           audio_busy=busy, speech_started=speech_started, speech_dropped=speech_dropped,
@@ -298,6 +322,7 @@ class PorchApp:
         except Exception:
             pass
         self.player = Player(dev, self.cfg.audio.keepalive_dbfs, gain)
+        self.player.silent = self.paused["speaker"]
         self.player.start()
         self.spk_fallback = fallback
         self.log(f"speaker {'reopened' if dead else 'back'}: {dev['name']}")
@@ -348,7 +373,8 @@ class PorchApp:
                "active": bool(self.player.stream.active), "underflows": self.player.underflows}
         return {
             "state": self.fsm.state.value, "state_for_s": round(now - self.fsm.since, 1) if self.fsm.since else None,
-            "muted": self.control.muted, "turns": self.turns_total, "group_turns": self.fsm.turns,
+            "muted": self.control.muted, "paused": dict(self.paused),
+            "turns": self.turns_total, "group_turns": self.fsm.turns,
             "camera": cam, "mic": mic, "speaker": spk,
             "brain": {"url": self.cfg.brain.url, "ok": self.brain_ok, "health": self.health},
             "last_turn": self.last_turn, "last_reply": self.last_reply,
@@ -362,7 +388,7 @@ class PorchApp:
         """The latest camera frame with person boxes and the watch zone, small enough for a phone."""
         import cv2
 
-        if self.camera is None:
+        if self.camera is None or self.paused["camera"]:
             return None
         frame, _ = self.camera.latest()
         if frame is None:
@@ -385,6 +411,16 @@ class PorchApp:
     def poke(self) -> None:
         self.poke_flag = True
         self.log("dashboard: greet me now")
+
+    def set_paused(self, what: str, on: bool) -> bool:
+        if what not in self.paused:
+            return False
+        if self.paused[what] != on:
+            self.paused[what] = on
+            if what == "speaker":
+                self.player.silent = on
+            self.log(f"dashboard: {what} {'PAUSED' if on else 'resumed'}")
+        return True
 
     def say(self, category: str) -> bool:
         x = self.fillers.pick(category)

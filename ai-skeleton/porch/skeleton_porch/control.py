@@ -2,6 +2,7 @@
 
 GET  /            dashboard (dashboard.html)        GET /status     everything, as JSON
 GET  /frame.jpg   live camera frame with boxes      POST /mute  /unmute  /test  /poke  /gain?d=3  /say?cat=greet
+                                                    POST /pause?what=camera|mic|speaker&on=1|0
 The camera frame is served from memory only and never saved.
 """
 from __future__ import annotations
@@ -81,6 +82,12 @@ class Control:
                     ctl.app.say("test")
                 elif u.path == "/poke":
                     ctl.app.poke()
+                elif u.path == "/pause":
+                    what = q.get("what", [""])[0]
+                    on = q.get("on", ["1"])[0] not in ("0", "false", "no")
+                    if not ctl.app.set_paused(what, on):
+                        self._send(400, b'{"error":"what must be camera, mic or speaker"}', "application/json")
+                        return
                 elif u.path == "/say":
                     cat = q.get("cat", [""])[0]
                     if cat not in SAY_OK:

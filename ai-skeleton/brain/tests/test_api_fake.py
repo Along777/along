@@ -79,6 +79,13 @@ def test_fillers_manifest_and_download(client):
     assert client.get("/fillers/nope.wav").status_code == 404
 
 
+def test_warm(client):
+    photo = TEST_IMAGE.read_bytes() if TEST_IMAGE.is_file() else b"\xff\xd8\xff\xe0" + b"0" * 100
+    r = client.post("/warm", files={"photo": ("w.jpg", photo, "image/jpeg")})
+    assert r.status_code == 200 and r.json()["ok"]
+    assert client.post("/warm", files={"photo": ("w.jpg", b"GIF89a", "image/jpeg")}).status_code == 400
+
+
 def test_speak(client):
     r = client.post("/speak", json={"text": "Testing, testing."})
     assert r.status_code == 200 and r.headers["content-type"] == "audio/wav"

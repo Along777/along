@@ -47,13 +47,20 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 #mute.isMuted { background: var(--ok); color: var(--bg); }
 .row { display: flex; gap: 8px; flex-wrap: wrap; }
 .row button { flex: 1 1 auto; }
+.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.tg { display: grid; gap: 3px; text-align: left; padding: 12px 14px; min-width: 0; }
+.tg b { font-size: 16px; }
+.tg span { font-size: 12px; color: var(--muted); }
+.tg.paused { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 16%, var(--panel2)); }
+.tg.paused span { color: var(--warn); font-weight: 700; }
+.card.is-paused > :not(h2) { opacity: .4; }
 .alerts { display: flex; flex-wrap: wrap; gap: 8px; }
 .alert { border-radius: 8px; padding: 8px 12px; font-weight: 600; border: 1px solid; }
 .alert.warn { color: var(--warn); border-color: var(--warn); }
 .alert.bad { color: var(--bad); border-color: var(--bad); }
 
 /* component cards */
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
 @media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
 .card h2 { margin: 0; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
@@ -68,7 +75,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .hint { color: var(--muted); font-size: 13px; margin: 0; }
 .camwrap { position: relative; background: #000; border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 100%; }
 .camwrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.camwrap .none { position: absolute; inset: 0; display: grid; place-items: center; color: #9aa7b4; font-size: 14px; padding: 16px; text-align: center; }
+.camwrap .none { position: absolute; inset: 0; display: grid; place-items: center; color: #9aa7b4; font-size: 15px; padding: 16px; text-align: center; background: #000; }
 
 /* mic meter */
 .meter { position: relative; height: 34px; background: var(--meter); border-radius: 8px; overflow: hidden; }
@@ -128,6 +135,12 @@ body.offline #down { display: block; }
     </div>
   </section>
 
+  <section class="controls" aria-label="Pause or resume each part">
+    <button class="tg" type="button" data-what="camera"><b>Camera</b><span>on</span></button>
+    <button class="tg" type="button" data-what="mic"><b>Microphone</b><span>on</span></button>
+    <button class="tg" type="button" data-what="speaker"><b>Speaker</b><span>on</span></button>
+  </section>
+
   <section class="grid">
     <article class="card" id="camCard">
       <h2>Camera <span class="pill" id="camPill">&ndash;</span> <span class="dev" id="camName"></span></h2>
@@ -141,7 +154,7 @@ body.offline #down { display: block; }
       <p class="hint" id="camHint">A person counts when the green box is inside the yellow zone and at least a quarter of the picture tall.</p>
     </article>
 
-    <article class="card">
+    <article class="card" id="micCard">
       <h2>Microphone <span class="pill" id="micPill">&ndash;</span> <span class="dev" id="micName"></span></h2>
       <div class="meter" aria-label="Microphone level"><div class="fill" id="micFill"></div><div class="tick floor" id="micFloor"></div><div class="tick thr" id="micThr"></div></div>
       <div class="scale"><span>-90 dB</span><span>-60</span><span>-30</span><span>0</span></div>
@@ -154,7 +167,7 @@ body.offline #down { display: block; }
       <p class="hint" id="micHint">&nbsp;</p>
     </article>
 
-    <article class="card">
+    <article class="card" id="spkCard">
       <h2>Speaker <span class="pill" id="spkPill">&ndash;</span> <span class="dev" id="spkName"></span></h2>
       <div class="stats">
         <div class="stat"><div class="l">Playing</div><div class="v" id="playing">&ndash;</div></div>
@@ -225,9 +238,21 @@ body.offline #down { display: block; }
     document.body.classList.remove("offline");
     muted = s.muted;
     var cam = s.camera || {};
+    var paused = s.paused || {};
     var d = DESC[s.state] || [s.state, ""];
     var big = d[0];
-    if (s.state === "idle" && cam.ok === false) big = "Camera off: waiting for a voice";
+    if (s.state === "idle" && (cam.ok === false || paused.camera)) {
+      big = paused.mic ? "Camera and mic paused: press Greet me now" : "Camera " + (paused.camera ? "paused" : "off") + ": talk to start a turn";
+    }
+    ["camera", "mic", "speaker"].forEach(function (w) {
+      var b = document.querySelector('.tg[data-what="' + w + '"]');
+      b.classList.toggle("paused", !!paused[w]);
+      b.querySelector("span").textContent = paused[w] ? "PAUSED - tap to resume" : "on - tap to pause";
+      b.dataset.on = paused[w] ? "1" : "0";
+    });
+    $("camCard").classList.toggle("is-paused", !!paused.camera);
+    $("micCard").classList.toggle("is-paused", !!paused.mic);
+    $("spkCard").classList.toggle("is-paused", !!paused.speaker);
     set("stateBig", big);
     set("stateSub", d[1] + (s.state_for_s != null ? "  (" + Math.round(s.state_for_s) + " s)" : ""));
     $("stateBox").classList.toggle("muted", s.muted);
@@ -247,7 +272,9 @@ body.offline #down { display: block; }
 
     // camera
     set("camName", (cam.name || "") + (cam.mode ? " · " + cam.mode : ""));
-    if (cam.ok) pill("camPill", cam.people > 0 ? "ok" : "", cam.people > 0 ? "SEES SOMEONE" : "WATCHING");
+    set("camNone", paused.camera ? "Camera paused" : "No picture yet");
+    if (paused.camera) pill("camPill", "warn", "PAUSED");
+    else if (cam.ok) pill("camPill", cam.people > 0 ? "ok" : "", cam.people > 0 ? "SEES SOMEONE" : "WATCHING");
     else pill("camPill", "bad", cam.stuck ? "STUCK" : "NO PICTURE");
     set("people", cam.people != null ? cam.people : "–");
     set("fps", cam.fps != null ? cam.fps : "–");
@@ -266,12 +293,15 @@ body.offline #down { display: block; }
     set("micThrV", Math.round(mic.threshold_db) + " dB");
     set("micUtt", mic.last_utterance_s ? mic.last_utterance_s + " s" : "–");
     if (s.muted) pill("micPill", "", "MUTED");
+    else if (paused.mic) pill("micPill", "warn", "PAUSED");
     else if (!mic.open) pill("micPill", "", "OFF WHILE TALKING");
     else if (mic.speaking) pill("micPill", "ok", "HEARING SPEECH");
     else if (mic.warming) pill("micPill", "warn", "LEARNING THE ROOM");
     else pill("micPill", "ok", "LISTENING");
     var mh = "";
-    if (s.state === "idle" && cam.ok) mh = "The mic is on, but speech only counts after the greeting, or while visitors are still here.";
+    if (paused.mic) mh = "Paused: speech is ignored. The skeleton can still greet and comment on costumes.";
+    else if (s.state === "idle" && (paused.camera || cam.ok === false)) mh = "Camera paused: just talk. Speech starts a turn.";
+    else if (s.state === "idle" && cam.ok) mh = "The mic is on, but speech only counts after the greeting, or while visitors are still here.";
     else if (s.state === "listen") mh = "Speak now. Green means loud enough.";
     else if (!mic.open) mh = "Off on purpose while the skeleton talks, so it never hears itself.";
     set("micHint", mh || " ");
@@ -279,7 +309,8 @@ body.offline #down { display: block; }
     // speaker
     var spk = s.speaker;
     set("spkName", spk.name);
-    pill("spkPill", spk.active ? (spk.fallback ? "warn" : "ok") : "bad", spk.active ? (spk.fallback ? "FALLBACK" : "READY") : "STOPPED");
+    if (paused.speaker) pill("spkPill", "warn", "PAUSED");
+    else pill("spkPill", spk.active ? (spk.fallback ? "warn" : "ok") : "bad", spk.active ? (spk.fallback ? "FALLBACK" : "READY") : "STOPPED");
     set("playing", spk.playing || "silence");
     set("gain", (spk.gain_db > 0 ? "+" : "") + spk.gain_db + " dB");
     set("keep", spk.keepalive_db != null ? spk.keepalive_db + " dB" : "off");
@@ -356,6 +387,9 @@ body.offline #down { display: block; }
     next.src = "/frame.jpg?t=" + Date.now();
   }
   $("mute").addEventListener("click", function () { post(muted ? "/unmute" : "/mute"); });
+  document.querySelectorAll(".tg").forEach(function (b) {
+    b.addEventListener("click", function () { post("/pause?what=" + b.dataset.what + "&on=" + (b.dataset.on === "1" ? "0" : "1")); });
+  });
   $("poke").addEventListener("click", function () { post("/poke"); });
   $("test").addEventListener("click", function () { post("/test"); });
   document.querySelectorAll("[data-say]").forEach(function (b) { b.addEventListener("click", function () { post("/say?cat=" + b.dataset.say); }); });

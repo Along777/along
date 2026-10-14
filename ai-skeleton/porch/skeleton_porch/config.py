@@ -56,8 +56,8 @@ class Vad:
     min_speech_ms: int = 200
     end_silence_ms: int = 700
     max_utterance_s: float = 5.0
-    no_speech_s: float = 3.0
-    min_threshold_dbfs: float = -50.0
+    no_speech_s: float = 4.0
+    min_threshold_dbfs: float = -60.0
     floor_margin_db: float = 10.0
     preroll_ms: int = 300
 
