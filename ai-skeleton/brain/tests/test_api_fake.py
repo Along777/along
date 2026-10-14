@@ -93,11 +93,13 @@ def test_misheard_trick_or_treat_is_fixed():
 
     # real mishearings from the live tests and the mic test
     for heard in ["Dricker tree.", "trigger treat", "trick a tree", "Trick or tree!", "tricky treat",
-                  "Tree.", "Treat!", "or treat"]:  # clipped: the kid started while the skeleton was talking
+                  "Tree.", "Treat!", "or treat",  # clipped: the kid started while the skeleton was talking
+                  "Check the tree.", "the tree", "tree please"]:  # heard live: Aaron says it hears 'tree' a lot
         assert normalize_heard(heard) == "trick or treat", heard
     assert normalize_heard("happy hollow ween") == "happy halloween"
     # real sentences are never touched
-    for said in ["Are you real?", "Check the time.", "Do you like my shirt?", "Hello, how are you?", "street", ""]:
+    for said in ["Are you real?", "Check the time.", "Do you like my shirt?", "Hello, how are you?", "street",
+                 "Do you like my tree costume?", ""]:
         assert normalize_heard(said) == said, said
 
 

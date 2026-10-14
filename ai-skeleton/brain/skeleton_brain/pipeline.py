@@ -246,6 +246,9 @@ def normalize_heard(text: str) -> str:
         return text
     if plain in _CLIPPED_TRICK_OR_TREAT:
         return "trick or treat"
+    words = plain.split()
+    if len(words) <= 3 and any(w in ("tree", "trees", "treat", "treats") for w in words):
+        return "trick or treat"  # "the tree", "check the tree", "tree please": at a porch, it is trick or treat
     for phrase in _KID_PHRASES:
         if difflib.SequenceMatcher(None, plain, phrase).ratio() >= 0.6:
             return phrase
