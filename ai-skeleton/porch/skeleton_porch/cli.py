@@ -99,7 +99,7 @@ def preview(cfg) -> int:
 def selftest_turn(cfg, text: str) -> int:
     import base64
 
-    from .audio import Player, find_device, resample
+    from .audio import Player, pick_speaker, resample
     from .brain_client import BrainClient
     from .camera import Camera
     from .fillers import float_to_wav, wav_to_float
@@ -128,7 +128,10 @@ def selftest_turn(cfg, text: str) -> int:
     print(json.dumps({k: v for k, v in res.items() if k != "audio"}, indent=1))
     print(f"round trip {rt:.0f} ms (brain {res['timings_ms'].get('total')} ms)")
     audio, asr = wav_to_float(base64.b64decode(res["audio"]["b64"]))
-    p = Player(find_device(cfg.audio.speaker, "output", cfg.audio.host_api), cfg.audio.keepalive_dbfs, cfg.audio.gain_db)
+    dev, fallback = pick_speaker(cfg.audio.speaker, cfg.audio.host_api)
+    if fallback:
+        print(f"speaker '{cfg.audio.speaker}' not connected - playing on {dev['name']}")
+    p = Player(dev, cfg.audio.keepalive_dbfs, cfg.audio.gain_db)
     p.start()
     p.play(audio, asr, "reply")
     while p.busy():

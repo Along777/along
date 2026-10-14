@@ -19,7 +19,13 @@ def test_strips_stage_directions_emoji_and_labels():
 
 def test_expands_contractions_keeping_case():
     text, _ = make().clean("It's a fine night. I'm glad you're here, don't be shy.")
-    assert text == "It is a fine night. I am glad you are here, do not be shy."
+    assert text == "It's a fine night. I am glad you are here, do not be shy."
+
+
+def test_ambiguous_s_is_left_alone():
+    # seen from qwen3-vl:8b: "it's seen" means "it has seen", not "it is seen"
+    text, _ = make().clean("Your eye patch looks like it’s seen better days, matey.")
+    assert "it's seen" in text and "it is seen" not in text
 
 
 def test_clamps_to_whole_sentences():
@@ -42,9 +48,16 @@ def test_blocklist_swaps_in_canned_line():
 
 def test_never_asks_for_names_or_closer():
     for bad in ["What is your name, little one?", "Come closer, friend.", "Where do you live?",
-                "As an AI, I cannot do that.", "My camera sees a pirate."]:
+                "As an AI, I cannot do that.", "My camera sees a pirate.",
+                "Come on in, no need to knock twice.", "Step inside, traveler."]:
         _, src = make().clean(bad)
         assert src == "canned_blocked", bad
+
+
+def test_no_costume_roasts():
+    # seen from qwen3-vl:8b in the persona eval
+    for mean in ["I have seen better costumes... but never worse.", "You are not stupid, mortal."]:
+        assert make().clean(mean)[1] == "canned_blocked", mean
 
 
 def test_assistant_speak_is_out_of_character():

@@ -43,10 +43,10 @@ if command -v uv >/dev/null 2>&1; then ok "$(uv --version)"; else err "uv not in
 
 say "Python environment (brain)"
 if uv sync --project "$BRAIN" "$@"; then ok "brain environment ready"; else err "uv sync failed"; fi
-read -r VISION REPLY < <(uv run --project "$BRAIN" python -c \
-  "from skeleton_brain import config; c=config.load(); print(c.ollama.vision_model, c.ollama.reply_model)" 2>/dev/null)
-VISION=${VISION:-qwen3-vl:8b-instruct}; REPLY=${REPLY:-$VISION}
-echo "   vision model: $VISION   reply model: $REPLY"
+read -r VISION REPLY PORT < <(uv run --project "$BRAIN" python -c \
+  "from skeleton_brain import config; c=config.load(); print(c.ollama.vision_model, c.ollama.reply_model, c.server.port)" 2>/dev/null)
+VISION=${VISION:-qwen3-vl:8b-instruct}; REPLY=${REPLY:-$VISION}; PORT=${PORT:-8080}
+echo "   vision model: $VISION   reply model: $REPLY   port: $PORT"
 
 say "Ollama"
 if ! command -v ollama >/dev/null 2>&1; then
@@ -88,11 +88,11 @@ fi
 say "Network"
 if systemctl is-active --quiet ufw 2>/dev/null; then
   SUBNET=$(ip -o -f inet addr show scope global | awk '{print $4}' | head -n1)
-  warn "ufw firewall is on - let the porch in:  sudo ufw allow from ${SUBNET:-192.168.1.0/24} to any port 8080 proto tcp"
+  warn "ufw firewall is on - let the porch in:  sudo ufw allow from ${SUBNET:-192.168.1.0/24} to any port $PORT proto tcp"
 fi
 IP=$(hostname -I 2>/dev/null | awk '{print $1}')
 echo "   this machine: $(hostname)  ${IP:-?}"
-echo "   porch setting:  [brain] url = \"http://${IP:-<this-ip>}:8080\"   (give this machine a DHCP reservation)"
+echo "   porch setting:  [brain] url = \"http://${IP:-<this-ip>}:$PORT\"   (give this machine a DHCP reservation)"
 
 say "Doctor"
 if [ ${#FAILED[@]} -eq 0 ]; then

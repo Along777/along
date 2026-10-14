@@ -14,7 +14,7 @@ import threading
 import time
 from datetime import datetime
 
-from .audio import Mic, Player, find_device
+from .audio import Mic, Player, find_device, pick_speaker
 from .brain_client import BrainClient
 from .camera import Camera
 from .config import PORCH_DIR, Config
@@ -63,10 +63,13 @@ class PorchApp:
     def start(self) -> None:
         cfg = self.cfg
         mic_dev = find_device(cfg.audio.mic, "input", cfg.audio.host_api)
-        spk_dev = find_device(cfg.audio.speaker, "output", cfg.audio.host_api)
+        spk_dev, self.spk_fallback = pick_speaker(cfg.audio.speaker, cfg.audio.host_api)
         self.log(f"mic: {mic_dev['name']} | speaker: {spk_dev['name']} ({spk_dev['api']})")
+        if self.spk_fallback:
+            self.log(f"SPEAKER '{cfg.audio.speaker}' NOT CONNECTED - using {spk_dev['name']} until it is back")
         self.player = Player(spk_dev, cfg.audio.keepalive_dbfs, cfg.audio.gain_db)
         self.player.start()
+        self.spk_checked = time.monotonic()
         self.mic = Mic(mic_dev, cfg.vad)
         self.mic.start()
         try:
@@ -186,6 +189,7 @@ class PorchApp:
                     self.log(f"{prev.value:>8} -> {self.fsm.state.value:<8} people={obs.people}")
                 for a in actions:
                     self._execute(a, now, utt)
+                self._speaker_watch(now, busy)
                 if self.preview:
                     self._show_preview(obs)
                 time.sleep(max(0.0, TICK_S - (time.monotonic() - now)))
@@ -257,6 +261,31 @@ class PorchApp:
         self.results.put(out)
 
     # -- helpers --------------------------------------------------------------------
+    def _speaker_watch(self, now: float, busy: bool) -> None:
+        """Every 5 s while quiet: reopen a dead output stream, or switch back to the real speaker."""
+        if busy or now - self.spk_checked < 5.0:
+            return
+        self.spk_checked = now
+        dead = not self.player.stream.active
+        if not (dead or self.spk_fallback):
+            return
+        try:
+            dev, fallback = pick_speaker(self.cfg.audio.speaker, self.cfg.audio.host_api)
+        except Exception as e:
+            self.log(f"no speaker at all: {e}")
+            return
+        if not dead and fallback:
+            return  # still waiting for the real speaker
+        gain = self.player.gain_db
+        try:
+            self.player.close()
+        except Exception:
+            pass
+        self.player = Player(dev, self.cfg.audio.keepalive_dbfs, gain)
+        self.player.start()
+        self.spk_fallback = fallback
+        self.log(f"speaker {'reopened' if dead else 'back'}: {dev['name']}")
+
     def _log_turn(self, row: dict) -> None:
         try:
             self.log_path.parent.mkdir(parents=True, exist_ok=True)

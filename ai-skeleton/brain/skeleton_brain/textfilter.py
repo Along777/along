@@ -16,6 +16,7 @@ MAX_WORDS = 40
 _ASKS_AND_SELF = [
     r"what(?:'s| is) your name", r"\byour name\b", r"where do you live", r"what school",
     r"which school", r"\byour (?:home )?address\b", r"come closer", r"\bcome here\b",
+    r"\bcome (?:on )?in(?:side)?\b", r"\bstep (?:inside|in)\b",  # never invite a child in
     r"\bas an ai\b", r"\bi am an ai\b", r"\bi'm an ai\b", r"language model",
     r"artificial intelligence", r"\bchatbot\b", r"\bcamera\b",
     # assistant-speak breaks character: swap for an in-character deflection
@@ -23,14 +24,14 @@ _ASKS_AND_SELF = [
     r"\bi(?:'m| am) (?:sorry|afraid),? but\b", r"\bi(?:'m| am) here to help\b", r"\bassistant\b",
 ]
 
+# Only the unambiguous ones. "'s" (is/has) and "'d" (would/had) stay as written:
+# "it's seen better days" must not become "it is seen better days", and Kokoro says them fine.
 _CONTRACTIONS = {
-    "can't": "cannot", "won't": "will not", "shan't": "shall not", "ain't": "is not",
-    "i'm": "I am", "i've": "I have", "i'll": "I will", "i'd": "I would",
-    "you're": "you are", "you've": "you have", "you'll": "you will", "you'd": "you would",
-    "we're": "we are", "we've": "we have", "we'll": "we will", "we'd": "we would",
-    "they're": "they are", "they've": "they have", "they'll": "they will", "they'd": "they would",
-    "he's": "he is", "she's": "she is", "it's": "it is", "that's": "that is",
-    "there's": "there is", "here's": "here is", "what's": "what is", "who's": "who is",
+    "can't": "cannot", "won't": "will not", "shan't": "shall not",
+    "i'm": "I am", "i've": "I have", "i'll": "I will",
+    "you're": "you are", "you've": "you have", "you'll": "you will",
+    "we're": "we are", "we've": "we have", "we'll": "we will",
+    "they're": "they are", "they've": "they have", "they'll": "they will",
     "let's": "let us", "isn't": "is not", "aren't": "are not", "wasn't": "was not",
     "weren't": "were not", "don't": "do not", "doesn't": "does not", "didn't": "did not",
     "haven't": "have not", "hasn't": "has not", "hadn't": "had not", "couldn't": "could not",

@@ -150,6 +150,17 @@ def find_device(want: str, kind: str, host_api: str) -> dict:
     return pref[0]
 
 
+def pick_speaker(want: str, host_api: str) -> tuple[dict, bool]:
+    """(device, is_fallback). A Bluetooth speaker that dropped out must not silence the porch:
+    fall back to the Windows default output and let the caller switch back when it returns."""
+    try:
+        return find_device(want, "output", host_api), False
+    except DeviceNotFound:
+        if not want:
+            raise
+        return find_device("", "output", host_api), True
+
+
 def _extra(api: str):
     import sounddevice as sd
 

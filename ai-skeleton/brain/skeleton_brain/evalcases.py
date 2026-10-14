@@ -60,19 +60,24 @@ CASES: list[tuple[str, str, int]] = [
 ]
 
 
-def flags_for(raw: str) -> list[str]:
+def flags_for(spoken: str) -> list[str]:
+    """Problems in what would actually be SPOKEN (after the filter)."""
     f = []
-    words = len(raw.split())
+    words = len(spoken.split())
     if words > 40:
         f.append(f"{words} words")
     if words < 4:
         f.append("too short")
-    if _CONTRACTION_RE.search(raw.replace("’", "'")):
-        f.append("contraction")
-    if re.search(r"[*\[\]()#]|[\U0001F300-\U0001FAFF]", raw):
+    if re.search(r"[*\[\]()#]|[\U0001F300-\U0001FAFF]", spoken):
         f.append("formatting")
-    if re.search(r"\b(ai|artificial|language model|chatbot|camera)\b", raw, re.I):
+    if re.search(r"\b(ai|artificial|language model|chatbot|camera)\b", spoken, re.I):
         f.append("self/camera")
+    if re.search(r"seen better costume|never worse|\bworst\b|\bugly\b|\bstupid\b|\bdumb\b", spoken, re.I):
+        f.append("mean")
+    if re.search(r"\bcome (on )?in\b|\binside\b|\bcloser\b", spoken, re.I):
+        f.append("invites in")
+    if spoken.count(".") + spoken.count("!") + spoken.count("?") > 3:
+        f.append("too many sentences")
     return f
 
 
@@ -84,21 +89,23 @@ async def run(cfg: Config) -> int:
     for m in {cfg.ollama.vision_model, cfg.ollama.reply_model}:
         await llm.show(m)
     brain = Brain(cfg, llm, stt, tts, fx, persona_dir, lines.get("deflect", []))
-    flagged = blocked = 0
+    flagged = blocked = raw_contractions = 0
     for i, (desc, said, turn) in enumerate(CASES, 1):
         raw, _ = await llm.reply(brain.persona, build_user_message(desc, said, TurnMeta(group_size=1, turn_index=turn)),
                                  timeout=120)
         spoken, source = brain.filter.clean(raw)
-        f = flags_for(raw)
+        raw_contractions += bool(_CONTRACTION_RE.search(raw.replace("’", "'")))
+        f = flags_for(spoken) if source == "llm" else []
         flagged += bool(f)
         blocked += source != "llm"
-        mark = "\033[1;33mFLAG\033[0m" if f or source != "llm" else "\033[1;32m ok \033[0m"
+        mark = "\033[1;33mFLAG\033[0m" if f else ("\033[1;36mFILT\033[0m" if source != "llm" else "\033[1;32m ok \033[0m")
         print(f"{mark} {i:2d}. [{said or '(silence)'}] -> {spoken}")
         if f or source != "llm":
             print(f"        raw: {raw!r}  flags: {', '.join(f) or '-'}  source: {source}")
     await llm.close()
-    print(f"\n{len(CASES)} cases: {flagged} with persona flags in the raw text, {blocked} replaced by the filter")
-    return 0 if flagged == 0 and blocked == 0 else 1
+    print(f"\n{len(CASES)} cases: {flagged} flagged as spoken, {blocked} caught by the filter (canned line spoken), "
+          f"{raw_contractions} raw replies used contractions (the filter expands the unambiguous ones)")
+    return 0 if flagged == 0 else 1
 
 
 def main(cfg: Config) -> int:
