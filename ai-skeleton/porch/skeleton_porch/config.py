@@ -86,6 +86,18 @@ class Debug:
 
 
 @dataclass(frozen=True)
+class Jaw:
+    enabled: bool = False
+    port: str = ""            # "" = find the Nano's CH340 USB port automatically
+    closed_deg: int = 90      # servo angle with the jaw shut (calibrate with: skeleton-porch jawtest)
+    open_deg: int = 60        # servo angle with the jaw fully open
+    delay_s: float = 0.2      # Bluetooth plays late: move the jaw this much later
+    gate_db: float = -45.0    # quieter than this: jaw shut
+    full_db: float = -18.0    # this loud or louder: jaw fully open
+    relax_after_s: float = 0.4  # silent this long: let go of the servo (rubber band holds it shut)
+
+
+@dataclass(frozen=True)
 class Log:
     conversations: bool = True  # text only: what was heard and said (never photos or audio)
 
@@ -101,6 +113,7 @@ class Config:
     control: Control = field(default_factory=Control)
     debug: Debug = field(default_factory=Debug)
     log: Log = field(default_factory=Log)
+    jaw: Jaw = field(default_factory=Jaw)
 
     def path(self, p: str) -> Path:
         q = Path(p)

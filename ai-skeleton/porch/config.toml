@@ -67,3 +67,13 @@ save_captures = false         # writes photos + clips to porch/debug/ -- living-
 
 [log]
 conversations = true          # porch/logs/conversations/DATE.jsonl: what was heard and said, TEXT ONLY
+
+[jaw]                         # servo jaw on an Arduino Nano (jaw/jaw.ino); turn on in config.local.toml
+enabled = false
+port = ""                     # "" = find the Nano's CH340 USB port automatically
+closed_deg = 90               # calibrate both angles with: skeleton-porch jawtest
+open_deg = 60
+delay_s = 0.2                 # Bluetooth plays late: move the jaw this much later
+gate_db = -45.0               # quieter than this: jaw shut
+full_db = -18.0               # this loud or louder: jaw fully open
+relax_after_s = 0.4           # silent this long: let go of the servo (a rubber band holds the jaw shut)

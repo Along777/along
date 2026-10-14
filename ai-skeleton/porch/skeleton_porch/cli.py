@@ -26,6 +26,8 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("record-voice", help="record a voice reference for cloning (Phase 2)")
     v.add_argument("--seconds", type=float, default=15.0)
     sub.add_parser("mictest", help="guided mic test (quiet, normal, soft, 2 m away); saves a log to porch/logs/tests")
+    j = sub.add_parser("jawtest", help="servo jaw: hold one angle (--angle) to calibrate, or sweep + talk")
+    j.add_argument("--angle", type=int, help="hold this servo angle (0-180) for 4 s, to find closed/open")
     sub.add_parser("stats", help="latency + sources from porch/logs/turns.jsonl")
     sub.add_parser("fetch-models", help="download the person-detector weights (once)")
     a = p.parse_args(argv)
@@ -61,9 +63,65 @@ def main(argv: list[str] | None = None) -> int:
         return record_voice(cfg, a.seconds)
     if a.cmd == "mictest":
         return mictest(cfg)
+    if a.cmd == "jawtest":
+        return jawtest(cfg, a.angle)
     if a.cmd == "stats":
         return stats()
     return 2
+
+
+def jawtest(cfg, angle: int | None) -> int:
+    """Calibrate and check the servo jaw (works whether or not [jaw] enabled is set)."""
+    from .audio import Player, pick_speaker
+    from .fillers import LocalFillers
+    from .jaw import RELAX, Jaw
+
+    j = cfg.jaw
+    try:
+        jaw = Jaw(j)
+    except Exception as e:
+        print(f"jaw not found: {e}")
+        return 1
+    print(f"jaw controller on {jaw.port}")
+
+    def hold(deg: int, seconds: float) -> None:
+        end = time.monotonic() + seconds
+        while time.monotonic() < end:  # resend so the board's 0.5 s quiet rule does not relax it
+            jaw.send(deg)
+            time.sleep(0.2)
+
+    if angle is not None:
+        deg = max(0, min(180, angle))
+        print(f"holding {deg} degrees for 4 s - is the jaw shut / open the way you want?")
+        hold(deg, 4.0)
+        jaw.close()
+        print("set closed_deg / open_deg under [jaw] in porch/config.local.toml")
+        return 0
+
+    print(f"sweeping 3 times: closed {j.closed_deg} -> open {j.open_deg}")
+    for _ in range(3):
+        hold(j.open_deg, 0.5)
+        hold(j.closed_deg, 0.5)
+    jaw.send(RELAX)
+    fill = LocalFillers(PORCH_DIR / "cache" / "fillers")
+    line = fill.pick("greet") if fill.load_latest() else None
+    if line:
+        print(f'talking: "{line[2]}" (the jaw should move with the words)')
+        dev, _ = pick_speaker(cfg.audio.speaker, cfg.audio.host_api)
+        p = Player(dev, cfg.audio.keepalive_dbfs, cfg.audio.gain_db)
+        p.on_block = jaw.feed
+        p.start()
+        time.sleep(0.3)
+        p.play(line[0], line[1], "greet")
+        while p.busy():
+            time.sleep(0.05)
+        time.sleep(1.0)
+        p.close()
+    else:
+        print("(no saved lines yet - run the porch with the brain up once, then jawtest again)")
+    jaw.close()
+    print("Jaw early or late vs the voice? Change delay_s under [jaw] (Bluetooth: about 0.15-0.3).")
+    return 0
 
 
 def mictest(cfg) -> int:

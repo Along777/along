@@ -60,6 +60,7 @@ class PorchApp:
         self.stop = threading.Event()
         self.camera = None
         self.detector = None
+        self.jaw = None
         self.log_path = PORCH_DIR / "logs" / "turns.jsonl"
 
     def log(self, msg: str) -> None:
@@ -78,6 +79,15 @@ class PorchApp:
         self.player = Player(spk_dev, cfg.audio.keepalive_dbfs, cfg.audio.gain_db)
         self.player.start()
         self.spk_checked = time.monotonic()
+        if cfg.jaw.enabled:
+            try:
+                from .jaw import Jaw
+
+                self.jaw = Jaw(cfg.jaw, self.log)
+                self.player.on_block = self.jaw.feed
+                self.log(f"jaw on {self.jaw.port} (closed {cfg.jaw.closed_deg} / open {cfg.jaw.open_deg} deg)")
+            except Exception as e:
+                self.log(f"JAW OFF ({e})")
         self.mic = Mic(mic_dev, cfg.vad)
         self.mic.start()
         try:
@@ -335,6 +345,7 @@ class PorchApp:
             pass
         self.player = Player(dev, self.cfg.audio.keepalive_dbfs, gain)
         self.player.silent = self.paused["speaker"]
+        self.player.on_block = self.jaw.feed if self.jaw else None
         self.player.start()
         self.spk_fallback = fallback
         self.log(f"speaker {'reopened' if dead else 'back'}: {dev['name']}")
@@ -392,7 +403,8 @@ class PorchApp:
         spk = {"name": self.player.device["name"], "fallback": self.spk_fallback,
                "playing": self.player.playing_tag(), "gain_db": round(self.player.gain_db, 1),
                "keepalive_db": self.cfg.audio.keepalive_dbfs if self.player.noise is not None else None,
-               "active": bool(self.player.stream.active), "underflows": self.player.underflows}
+               "active": bool(self.player.stream.active), "underflows": self.player.underflows,
+               "jaw": self.jaw.port if self.jaw else ("off" if self.cfg.jaw.enabled else None)}
         return {
             "state": self.fsm.state.value, "state_for_s": round(now - self.fsm.since, 1) if self.fsm.since else None,
             "muted": self.control.muted, "paused": dict(self.paused),
@@ -483,7 +495,7 @@ class PorchApp:
         self.stop.set()
         self.log("stopping")
         for fn in (lambda: self.control.stop(), lambda: self.mic.close(), lambda: self.player.close(),
-                   lambda: self.camera and self.camera.close(), allow_sleep):
+                   lambda: self.camera and self.camera.close(), lambda: self.jaw and self.jaw.close(), allow_sleep):
             try:
                 fn()
             except Exception:

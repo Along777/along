@@ -185,6 +185,7 @@ class Player:
         self.underflows = 0
         self.gain_db = gain_db
         self.silent = False  # "pause speaker": clips still run on time (the mic gate still works), but inaudibly
+        self.on_block = None  # e.g. the jaw: called with (time the block is heard, the block) for every block
         amp = 10 ** (keepalive_dbfs / 20) if keepalive_dbfs < 0 else 0.0
         rng = np.random.default_rng(7)
         self.noise = (rng.standard_normal(self.sr) * amp).astype(np.float32) if amp else None
@@ -255,6 +256,11 @@ class Player:
             if filled:
                 self.audible_until = time.monotonic() + filled / self.sr + float(self.stream.latency)
         out *= 0.0 if self.silent else self.gain
+        if self.on_block is not None:  # before the keep-alive noise: the jaw follows the voice only
+            try:
+                self.on_block(time.monotonic() + float(self.stream.latency), out)
+            except Exception:
+                pass
         if self.noise is not None:
             idx = (np.arange(frames) + self.noise_pos) % len(self.noise)
             out += self.noise[idx]
