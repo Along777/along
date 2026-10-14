@@ -76,7 +76,7 @@ def flags_for(spoken: str) -> list[str]:
         f.append("mean")
     if re.search(r"\bcome (on )?in\b|\binside\b|\bcloser\b", spoken, re.I):
         f.append("invites in")
-    if spoken.count(".") + spoken.count("!") + spoken.count("?") > 3:
+    if len(re.findall(r"[.!?]+(?=\s|$)", spoken)) > 3:  # "..." mid-sentence is one pause, not three sentences
         f.append("too many sentences")
     return f
 

@@ -60,20 +60,36 @@ and what is verified vs. not. Deadline: **Halloween, Sat 2026-10-31.**
 - The SoundCore 2 shows a 16 kHz **"Headset (SoundCore 2)"** input — its hands-free mic. Never open it:
   Windows would drop the speaker to phone-call quality. Config pins the mic to "USB PnP".
 
-## 3. Verified vs. not (as of 2026-10-13, laptop only)
+## 3. The workstation as set up (2026-10-13)
 
-Verified on the laptop:
-- brain + porch unit tests pass (14 + 22);
-- `serve --fake` boots, renders 32 lines, `/health` ready; the porch doctor syncs them;
-- real Parakeet int8 transcribes Kokoro speech word-perfectly in ~0.3 s;
-- Kokoro int8 runs ~2.4 s per line on this CPU, effects 70-90 ms;
-- the voice sample plays on the SoundCore;
-- YOLO26n is 28 ms/frame at 416 px;
-- the Arducam delivers 1280x720 at about 10 fps.
+- Host `along-MS-7E59`, user `along`, **192.168.1.39** (not reserved in the router yet), RTX 5090,
+  NVIDIA driver 595.99, Ollama 0.32.9. Repo at `~/ai/along`, branch `ai-skeleton-build`.
+- The brain serves on **port 8765** (`brain/config.local.toml` there): Open WebUI already owns 8080.
+  Open WebUI is a way to load other models into the same Ollama — nobody uses it on Halloween night.
+- Proton VPN and Cloudflare WARP run there too; neither blocks LAN traffic (8765 and 22 reachable).
+- SSH from the laptop: `ssh skelly` (key `~/.ssh/id_ed25519`, config in `~/.ssh/config`). In PowerShell,
+  `$(...)` inside a double-quoted remote command is evaluated locally — run SSH from bash with single quotes.
+- Deploy: push, then `ssh skelly 'cd ~/ai/along && git pull --ff-only && systemctl --user restart skeleton-brain'`.
+
+## 4. Verified vs. not
+
+Verified (2026-10-13):
+- Unit tests: brain 17, porch 22.
+- Laptop: real Parakeet int8 transcribes word-perfectly (~0.3 s). Kokoro int8 takes ~2.4 s/line on the laptop CPU.
+  YOLO26n runs at 28 ms/frame at 416 px. The voice sample plays on the SoundCore.
+- Laptop Ollama path with `qwen3-vl:2b-instruct`: caps, describe (0.8 s warm), reply (~1 s).
+- **5090 end to end from the laptop:** STT 87 ms, reply 349 ms, TTS 871 ms. Brain total 1.3 s, round trip 1.5 s.
+  `qwen3-vl:8b-instruct` sits 100% in VRAM (5.5 GB).
+- **Persona eval on the 5090:**
+  - Before tuning, the model roasted costumes ("seen better costumes... never worse") and invited a kid
+    to "come on in". The contraction expander also produced "it is seen".
+  - After tuning: 36/40 were clean as spoken, 3 were caught by the filter (canned line), 1 was a false flag (fixed).
 
 Not yet verified:
-- Arducam image quality in the porch light. The first snapshots were almost black: dark room or covered lens?
+- **The Arducam is unreliable.** After some opens it sticks in YUY2 at 1 fps with all-black frames (in every
+  mode, even the default). Only a USB re-plug brought it back. `camera.py` now reopens a black or stalled stream,
+  but a stuck device may still need the re-plug. Suspect USB selective suspend; try a port directly on the laptop.
 - Mic levels with real speech at kid distance.
 - The full `run` loop with a person in view.
-- The laptop smoke brain with `qwen3-vl:2b-instruct`, which needs RAM freed first.
-- Anything on the workstation: Phase 2.
+- Speaker fallback/return when the SoundCore drops out. Seen tonight: the SoundCore went to "Unknown" when it
+  turned itself off.
