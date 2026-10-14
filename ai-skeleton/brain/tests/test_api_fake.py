@@ -97,7 +97,7 @@ def test_misheard_trick_or_treat_is_fixed():
         assert normalize_heard(heard) == "trick or treat", heard
     assert normalize_heard("happy hollow ween") == "happy halloween"
     # real sentences are never touched
-    for said in ["Are you real?", "Check the time.", "Do you like my shirt?", "Hello, how are you?", "treat", ""]:
+    for said in ["Are you real?", "Check the time.", "Do you like my shirt?", "Hello, how are you?", "street", ""]:
         assert normalize_heard(said) == said, said
 
 
