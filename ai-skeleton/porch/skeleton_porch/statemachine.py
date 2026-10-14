@@ -243,7 +243,7 @@ class Fsm:
                 self.wave_since = None
             if self.armed:
                 self._go(S.IDLE, o.now)
-            elif self.wave_since is not None and o.now - self.wave_since >= cfg.arrive_s:
+            elif self.wave_since is not None and o.now - self.wave_since >= cfg.new_wave_s:
                 self._new_group(o.now, o.people)  # a bigger wave arrived: greet them
                 acts.append(Say("greet"))
                 self._go(S.GREET, o.now)

@@ -56,6 +56,7 @@ thinking_after_s = 1.2        # play a "thinking" filler only if the reply is sl
 max_turns = 4                 # replies per group before it goes quiet (still_here resets)
 still_here_s = 60.0
 new_wave_extra = 1            # this many more people than the greeted group = a new wave
+new_wave_s = 1.5              # ...for this long (a reflection or a flicker of the detector is not a new wave)
 
 [control]
 port = 8081

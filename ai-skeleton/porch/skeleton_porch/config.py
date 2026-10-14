@@ -71,6 +71,7 @@ class Behavior:
     max_turns: int = 4
     still_here_s: float = 60.0
     new_wave_extra: int = 1
+    new_wave_s: float = 1.5
 
 
 @dataclass(frozen=True)

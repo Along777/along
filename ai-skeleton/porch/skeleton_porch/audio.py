@@ -209,6 +209,15 @@ class Player:
         with self.lock:
             self.q.append((x, tag))
 
+    def cut(self, tag: str, fade_s: float = 0.08) -> None:
+        """Fade out a playing clip with this tag (and drop queued ones), e.g. a thinking filler once the reply is in."""
+        with self.lock:
+            self.q = collections.deque(item for item in self.q if item[1] != tag)
+            if self.cur is not None and self.cur_tag == tag:
+                end = min(len(self.cur), self.pos + int(fade_s * self.sr))
+                tail = self.cur[self.pos:end] * np.linspace(1, 0, end - self.pos, dtype=np.float32)
+                self.cur = np.concatenate([self.cur[:self.pos], tail])
+
     def flush(self) -> None:
         with self.lock:
             self.q.clear()

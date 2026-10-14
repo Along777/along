@@ -206,6 +206,7 @@ def test_new_wave_gets_greeted():
     r.run(8.1)
     assert r.fsm.state == S.LINGER
     r.people = 4
+    assert not any(isinstance(a, Say) for a in r.run(1.0))  # a short flicker is not a new wave
     acts = r.run(0.7)
     assert any(isinstance(a, Say) and a.category == "greet" for a in acts)
 

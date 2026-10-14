@@ -67,6 +67,18 @@ def test_no_photo_means_no_costume_talk():
     assert build_user_message("a pirate", "", TurnMeta()).startswith("Costumes: a pirate")
 
 
+def test_group_memory_reaches_the_prompt():
+    from skeleton_brain.pipeline import GroupMemory, TurnMeta, build_user_message
+
+    mem = GroupMemory()
+    mem.add("g1", "trick or treat", "Here is your candy, mortal.")
+    mem.add("g1", "do you like my shirt", "Very practical.")
+    mem.add("g1", "what?", "Nothing, friend.")
+    assert len(mem.get("g1")) == 2 and mem.get("g2") == [] and mem.get("") == []
+    msg = build_user_message("a pirate", "that makes no sense", TurnMeta(turn_index=3), mem.get("g1"))
+    assert "Very practical." in msg and "Do not repeat" in msg and "Here is your candy" not in msg
+
+
 def test_rejects_bad_inputs(client):
     assert client.post("/turn", data={"meta": "{not json"}).status_code == 400
     r = client.post("/turn", files={"photo": ("p.jpg", b"GIF89a....", "image/jpeg")})

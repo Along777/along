@@ -244,6 +244,7 @@ class PorchApp:
             self.log(f'say [{a.category}] "{x[2]}"')
         elif isinstance(a, PlayReply):
             o = a.outcome
+            self.player.cut("thinking")  # the answer is here: do not make them wait out the filler
             self.player.play(o.audio, o.sr, tag="reply")
             self.last_reply = o.reply_text
             self.turns_total += 1
@@ -285,7 +286,8 @@ class PorchApp:
 
     def _turn_worker(self, a: SubmitTurn, jpeg, wav, t_submit: float) -> None:
         meta = {"turn_id": str(a.turn_id), "group_size": a.group_size, "turn_index": a.turn_index,
-                "costume_hint": a.costume_hint, "debug": self.debug}
+                "costume_hint": a.costume_hint, "debug": self.debug,
+                "group_id": f"{a.photo_since:.3f}"}  # one id per group: keys the brain's short memory
         try:
             r = self.client.turn(meta, jpeg, wav)
             audio, sr = wav_to_float(base64.b64decode(r["audio"]["b64"]))

@@ -29,6 +29,7 @@ class TurnMeta:
     turn_index: int = 0
     costume_hint: str | None = None
     debug: bool = False
+    group_id: str = ""   # same for every turn with one group of visitors; keys the short memory
 
     @classmethod
     def from_dict(cls, d: dict) -> "TurnMeta":
@@ -38,7 +39,34 @@ class TurnMeta:
             turn_index=max(0, min(int(d.get("turn_index", 0) or 0), 50)),
             costume_hint=(str(d["costume_hint"])[:200] if d.get("costume_hint") else None),
             debug=bool(d.get("debug", False)),
+            group_id=str(d.get("group_id", ""))[:64],
         )
+
+
+class GroupMemory:
+    """The last few exchanges with the current group, so follow-ups make sense and jokes do not repeat.
+    RAM only, a few lines per group, forgotten after 15 minutes."""
+
+    KEEP = 2
+    TTL_S = 900
+
+    def __init__(self):
+        self.groups: dict[str, tuple[float, list[tuple[str, str]]]] = {}
+
+    def get(self, gid: str) -> list[tuple[str, str]]:
+        self._prune()
+        return list(self.groups.get(gid, (0, []))[1]) if gid else []
+
+    def add(self, gid: str, heard: str, said: str) -> None:
+        if not gid:
+            return
+        _, past = self.groups.get(gid, (0, []))
+        self.groups[gid] = (time.time(), (past + [(heard, said)])[-self.KEEP:])
+
+    def _prune(self) -> None:
+        now = time.time()
+        for gid in [g for g, (t, _) in self.groups.items() if now - t > self.TTL_S]:
+            del self.groups[gid]
 
 
 class FakeLlm:
@@ -53,13 +81,19 @@ class FakeLlm:
         return "What a splendid costume. Happy Halloween, traveler.", {}
 
 
-def build_user_message(description: str, transcript: str, meta: TurnMeta) -> str:
+def build_user_message(description: str, transcript: str, meta: TurnMeta,
+                       history: list[tuple[str, str]] | None = None) -> str:
     if description:
         lines = [f"Costumes: {description}"]
     else:  # no photo this turn (camera off or paused): answer what they said, do not invent a costume
         lines = ["You cannot see them right now. Do not mention or guess a costume; answer what they said."]
     if meta.group_size:
         lines.append(f"People at the door: {meta.group_size}")
+    if history:
+        lines.append("Earlier with these visitors:")
+        for heard, said in history:
+            lines.append(f'  they said "{heard or "(nothing)"}", you said "{said}"')
+        lines.append("Answer what they say now. Do not repeat an earlier joke or topic.")
     lines.append(f'They said: "{transcript}"' if transcript else "They said nothing yet.")
     if meta.turn_index > 0:
         lines.append("You already greeted them; this is a follow-up. Do not greet again.")
@@ -78,6 +112,7 @@ class Brain:
         self._stt_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="stt")
         self._tts_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="tts")
         self.turn_times_ms: list[float] = []
+        self.memory = GroupMemory()
 
     # -- stages ---------------------------------------------------------------
     async def describe(self, jpeg: bytes) -> str:
@@ -102,9 +137,10 @@ class Brain:
             return ""
 
     async def reply(self, description: str, transcript: str, meta: TurnMeta) -> tuple[str, str]:
+        history = self.memory.get(meta.group_id)
         try:
             text, _ = await asyncio.wait_for(
-                self.llm.reply(self.persona, build_user_message(description, transcript, meta),
+                self.llm.reply(self.persona, build_user_message(description, transcript, meta, history),
                                timeout=self.cfg.ollama.reply_timeout_s + 1),
                 self.cfg.ollama.reply_timeout_s)
         except asyncio.TimeoutError:
@@ -146,6 +182,8 @@ class Brain:
         description, transcript = await asyncio.gather(vision, timed("stt", self.transcribe(audio_in, sr_in)))
 
         reply_text, source = await timed("llm", self.reply(description, transcript, meta))
+        if source == "llm":
+            self.memory.add(meta.group_id, transcript, reply_text)
         try:
             audio, sr = await timed("tts", self.speak(reply_text))
         except Exception:
