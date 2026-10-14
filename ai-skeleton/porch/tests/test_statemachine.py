@@ -78,7 +78,7 @@ def test_full_turn_with_thinking_filler_then_follow_up():
     r.to_listen()
     sub = r.submit()
     assert sub.with_photo and sub.turn_index == 0 and sub.group_size == 2 and sub.clip is not None
-    acts = r.run(0.9)
+    acts = r.run(CFG.thinking_after_s + 0.1)
     assert [a.category for a in acts if isinstance(a, Say)] == ["thinking"]
     assert not [a for a in r.run(1.0) if isinstance(a, Say)]  # only once
     acts = r.tick(turn_done=TurnOutcome(sub.turn_id, True, UTT, 24000, "a pirate", "Arr."))

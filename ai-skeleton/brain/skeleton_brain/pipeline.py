@@ -54,13 +54,16 @@ class FakeLlm:
 
 
 def build_user_message(description: str, transcript: str, meta: TurnMeta) -> str:
-    lines = [f"Costumes: {description or 'unclear'}"]
+    if description:
+        lines = [f"Costumes: {description}"]
+    else:  # no photo this turn (camera off or paused): answer what they said, do not invent a costume
+        lines = ["You cannot see them right now. Do not mention or guess a costume; answer what they said."]
     if meta.group_size:
         lines.append(f"People at the door: {meta.group_size}")
     lines.append(f'They said: "{transcript}"' if transcript else "They said nothing yet.")
     if meta.turn_index > 0:
         lines.append("You already greeted them; this is a follow-up. Do not greet again.")
-    lines.append("Reply now, in character, in 1-2 short sentences.")
+    lines.append("Reply now, in character, in one short sentence.")
     return "\n".join(lines)
 
 
@@ -139,7 +142,7 @@ class Brain:
         if photo:
             vision = timed("vision", self.describe(photo))
         else:
-            vision = _const(meta.costume_hint or "unclear")
+            vision = _const(meta.costume_hint or "")  # "" = no photo at all, not an unclear one
         description, transcript = await asyncio.gather(vision, timed("stt", self.transcribe(audio_in, sr_in)))
 
         reply_text, source = await timed("llm", self.reply(description, transcript, meta))

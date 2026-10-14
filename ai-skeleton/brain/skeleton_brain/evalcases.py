@@ -64,7 +64,7 @@ def flags_for(spoken: str) -> list[str]:
     """Problems in what would actually be SPOKEN (after the filter)."""
     f = []
     words = len(spoken.split())
-    if words > 40:
+    if words > 25:
         f.append(f"{words} words")
     if words < 4:
         f.append("too short")

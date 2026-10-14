@@ -17,7 +17,7 @@ num_ctx = 4096                 # same on every call, or Ollama reloads the model
 describe_timeout_s = 2.5
 reply_timeout_s = 3.0
 describe_max_tokens = 48
-reply_max_tokens = 90
+reply_max_tokens = 50          # one short sentence; shorter replies also mean less voice time
 reply_temperature = 0.8
 warm_interval_s = 30           # re-warm if the model got evicted
 

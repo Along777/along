@@ -4,16 +4,16 @@
 
 # Plays the moment a group arrives (mic closed). Invites them to talk.
 greet = [
-  "Well, well. Visitors at my door. Speak up, travelers.",
-  "Halt, who goes there? Let me have a look at you.",
+  "Well, well. Visitors. Speak up, travelers.",
+  "Halt! Who goes there?",
   "Good evening, mortals. Welcome to my porch.",
   "Oh good, company. It gets lonely being a skeleton.",
-  "Greetings, friends. I have been standing here for one hundred years. What brings you by?",
+  "Greetings, friends. What brings you by?",
   "Step right up, travelers. Do not mind the bones.",
-  "Welcome, welcome. Mind the cobwebs. Who do we have here?",
-  "Evening, friends. Speak up, I am a little hard of hearing. I have no ears.",
-  "Ah, visitors. Tell me, what brings you to my humble porch?",
-  "Who dares approach the skeleton? Speak, friends.",
+  "Welcome! Who do we have here?",
+  "Evening, friends. Speak up, I have no ears.",
+  "Ah, visitors. What brings you to my porch?",
+  "Who dares approach the skeleton?",
 ]
 
 # Plays only if the reply is slow (over about 0.8 seconds). Keep each one short.

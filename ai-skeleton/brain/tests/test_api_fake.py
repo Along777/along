@@ -59,6 +59,14 @@ def test_turn_photo_only_and_follow_up_hint(client):
     assert body["heard"] is False and body["description"] == "a pirate"
 
 
+def test_no_photo_means_no_costume_talk():
+    from skeleton_brain.pipeline import TurnMeta, build_user_message
+
+    msg = build_user_message("", "hello, how are you?", TurnMeta())
+    assert "Costumes:" not in msg and "cannot see" in msg and "hello, how are you?" in msg
+    assert build_user_message("a pirate", "", TurnMeta()).startswith("Costumes: a pirate")
+
+
 def test_rejects_bad_inputs(client):
     assert client.post("/turn", data={"meta": "{not json"}).status_code == 400
     r = client.post("/turn", files={"photo": ("p.jpg", b"GIF89a....", "image/jpeg")})

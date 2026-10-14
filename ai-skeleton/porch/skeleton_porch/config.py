@@ -54,7 +54,7 @@ class Vad:
     frame_ms: int = 30
     start_ms: int = 120
     min_speech_ms: int = 200
-    end_silence_ms: int = 700
+    end_silence_ms: int = 550
     max_utterance_s: float = 5.0
     no_speech_s: float = 4.0
     min_threshold_dbfs: float = -60.0
@@ -67,7 +67,7 @@ class Behavior:
     arrive_s: float = 0.5
     empty_rearm_s: float = 3.0
     cooldown_s: float = 8.0
-    thinking_after_s: float = 0.8
+    thinking_after_s: float = 1.2
     max_turns: int = 4
     still_here_s: float = 60.0
     new_wave_extra: int = 1

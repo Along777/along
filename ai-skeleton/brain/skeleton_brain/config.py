@@ -28,7 +28,7 @@ class Ollama:
     describe_timeout_s: float = 2.5
     reply_timeout_s: float = 3.0
     describe_max_tokens: int = 48
-    reply_max_tokens: int = 90
+    reply_max_tokens: int = 50
     reply_temperature: float = 0.8
     warm_interval_s: float = 30.0
 

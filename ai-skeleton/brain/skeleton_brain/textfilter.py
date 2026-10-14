@@ -10,7 +10,7 @@ import random
 import re
 from pathlib import Path
 
-MAX_WORDS = 40
+MAX_WORDS = 25  # porch replies must be short: every word is more voice time and more waiting
 
 # Phrases that must never reach the speaker, whatever the model wrote.
 _ASKS_AND_SELF = [

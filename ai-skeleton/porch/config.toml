@@ -41,7 +41,7 @@ tail_margin_s = 0.3           # wait after playback before the mic opens; use 0.
 frame_ms = 30
 start_ms = 120                # this much loud audio in a row starts an utterance (clicks are shorter)
 min_speech_ms = 200           # an utterance needs this much loud audio in total, or it was a bang/gust
-end_silence_ms = 700          # this much quiet ends it
+end_silence_ms = 550          # this much quiet ends it (shorter = snappier, too short cuts kids off mid-pause)
 max_utterance_s = 5.0
 no_speech_s = 4.0             # nobody spoke: reply to the costume (first turn) or stop listening
 min_threshold_dbfs = -60.0     # the lav mic is quiet: the skeleton's own voice reaches only about -47 dB in it
@@ -52,7 +52,7 @@ preroll_ms = 300
 arrive_s = 0.5                # a person must stay this long before the greeting
 empty_rearm_s = 3.0           # an empty scene this long means the group has left
 cooldown_s = 8.0
-thinking_after_s = 0.8        # play a "thinking" filler if the reply takes longer than this
+thinking_after_s = 1.2        # play a "thinking" filler only if the reply is slower than this
 max_turns = 4                 # replies per group before it goes quiet (still_here resets)
 still_here_s = 60.0
 new_wave_extra = 1            # this many more people than the greeted group = a new wave
