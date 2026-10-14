@@ -19,6 +19,7 @@ _ASKS_AND_SELF = [
     r"\bcome (?:on )?in(?:side)?\b", r"\bstep (?:inside|in)\b",  # never invite a child in
     r"\bas an ai\b", r"\bi am an ai\b", r"\bi'm an ai\b", r"language model",
     r"artificial intelligence", r"\bchatbot\b", r"\bcamera\b", r"\bchat ?gpt\b", r"\bgpt\b", r"\bopenai\b",
+    r"\bai\b",  # the skeleton never talks about AI at all, not even to deny it
     # assistant-speak breaks character: swap for an in-character deflection
     r"\b(?:cannot|can't|can not|unable to) (?:assist|help) with\b", r"\bthat request\b",
     r"\bi(?:'m| am) (?:sorry|afraid),? but\b", r"\bi(?:'m| am) here to help\b", r"\bassistant\b",

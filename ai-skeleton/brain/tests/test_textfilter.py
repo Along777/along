@@ -50,7 +50,8 @@ def test_never_asks_for_names_or_closer():
     for bad in ["What is your name, little one?", "Come closer, friend.", "Where do you live?",
                 "As an AI, I cannot do that.", "My camera sees a pirate.",
                 "Come on in, no need to knock twice.", "Step inside, traveler.",
-                "I am a porch skeleton, though my bones do run ChatGPT's jokes."]:
+                "I am a porch skeleton, though my bones do run ChatGPT's jokes.",
+                "Just bones and a little Halloween magic, friend, no AI here."]:
         _, src = make().clean(bad)
         assert src == "canned_blocked", bad
 
