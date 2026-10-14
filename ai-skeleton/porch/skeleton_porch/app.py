@@ -143,9 +143,11 @@ class PorchApp:
         while not self.stop.wait(self.cfg.brain.health_interval_s):
             h = self.client.health()
             ok = bool(h and h.get("ready"))
-            if ok != self.brain_ok:
-                self.log(f"brain {'back' if ok else 'DOWN - fallback lines only'}")
-                if ok:
+            restarted = bool(ok and self.health and (h.get("uptime_s") or 0) < (self.health.get("uptime_s") or 0))
+            if ok != self.brain_ok or restarted:
+                self.log("brain restarted" if restarted and ok == self.brain_ok else
+                         f"brain {'back' if ok else 'DOWN - fallback lines only'}")
+                if ok:  # a fresh brain has not seen our photo size yet
                     threading.Thread(target=self._warm_brain, name="warm", daemon=True).start()
             self.health, self.brain_ok = h, ok
             if ok and h.get("fillers_version") and h["fillers_version"] != self.fillers.version:
