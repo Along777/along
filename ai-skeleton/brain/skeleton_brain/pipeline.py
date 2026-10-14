@@ -189,6 +189,7 @@ class Brain:
         else:
             vision = _const(meta.costume_hint or "")  # "" = no photo at all, not an unclear one
         description, transcript = await asyncio.gather(vision, timed("stt", self.transcribe(audio_in, sr_in)))
+        transcript = normalize_heard(transcript)
         if description.strip().lower().rstrip(".") == "nobody" and meta.group_size > 0:
             description = "unclear"  # the porch saw someone; a bad frame must not tell the model nobody is there
 
@@ -226,6 +227,24 @@ class Brain:
 
 async def _const(v):
     return v
+
+
+_KID_PHRASES = ["trick or treat", "happy halloween"]
+
+
+def normalize_heard(text: str) -> str:
+    """Speech-to-text mishears kids ("trigger treat", "dricker tree"). A short phrase that is spelled
+    almost like a classic porch line becomes that line. Long sentences are left alone."""
+    import difflib
+    import re as _re
+
+    plain = _re.sub(r"[^a-z ]", "", (text or "").lower()).strip()
+    if not plain or len(plain.split()) > 4:
+        return text
+    for phrase in _KID_PHRASES:
+        if difflib.SequenceMatcher(None, plain, phrase).ratio() >= 0.6:
+            return phrase
+    return text
 
 
 def _is_question(text: str) -> bool:

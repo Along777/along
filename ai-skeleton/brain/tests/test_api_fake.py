@@ -88,6 +88,18 @@ def test_group_memory_reaches_the_prompt():
     assert "Very practical." in msg and "Do not repeat" in msg and "Here is your candy" not in msg
 
 
+def test_misheard_trick_or_treat_is_fixed():
+    from skeleton_brain.pipeline import normalize_heard
+
+    # real mishearings from the live tests and the mic test
+    for heard in ["Dricker tree.", "trigger treat", "trick a tree", "Trick or tree!", "tricky treat"]:
+        assert normalize_heard(heard) == "trick or treat", heard
+    assert normalize_heard("happy hollow ween") == "happy halloween"
+    # real sentences are never touched
+    for said in ["Are you real?", "Check the time.", "Do you like my shirt?", "Hello, how are you?", "treat", ""]:
+        assert normalize_heard(said) == said, said
+
+
 def test_question_detection_for_canned_lines():
     from skeleton_brain.pipeline import _is_question
 
