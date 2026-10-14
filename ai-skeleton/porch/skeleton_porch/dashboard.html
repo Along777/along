@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Porch Skeleton</title>
+<style>
+/* Control-room layout: state + kill switch first, then one card per component, then the event log.
+   Dark by default (it is read at night, on a phone); light when the device asks for it. */
+:root {
+  --bg: #0a0e13; --panel: #111821; --panel2: #17202b; --ink: #e6edf3; --muted: #8a97a6; --line: #223041;
+  --accent: #7cc7f2; --ok: #4ade80; --warn: #fbbf24; --bad: #f87171; --idle: #64748b;
+  --meter: #1d2836; --mute-bg: #b91c1c; --mute-ink: #ffffff;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f3f5f8; --panel: #ffffff; --panel2: #f6f8fa; --ink: #0f1722; --muted: #566273; --line: #d7dee7;
+    --accent: #0369a1; --ok: #15803d; --warn: #b45309; --bad: #b91c1c; --idle: #64748b; --meter: #e6ebf1;
+    --mute-bg: #b91c1c; --mute-ink: #ffffff; color-scheme: light;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(--font); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 40px; display: grid; gap: 16px; }
+.num { font-variant-numeric: tabular-nums; }
+button { font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2); color: var(--ink); padding: 10px 14px; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* top: state + kill switch */
+.top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: stretch; }
+@media (max-width: 720px) { .top { grid-template-columns: minmax(0, 1fr); } }
+.state { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 6px; min-width: 0; }
+.state .k { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.state .big { font-size: clamp(22px, 4vw, 30px); font-weight: 700; line-height: 1.15; }
+.state .sub { color: var(--muted); }
+.state.muted { border-color: var(--bad); }
+.state.muted .big { color: var(--bad); }
+.flow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.flow span { font: 12px/1 var(--mono); padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
+.flow span.on { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 700; }
+.kill { display: grid; gap: 8px; align-content: start; min-width: 220px; }
+#mute { background: var(--mute-bg); color: var(--mute-ink); border: 0; font-size: 22px; font-weight: 800; padding: 18px; letter-spacing: .04em; }
+#mute.isMuted { background: var(--ok); color: var(--bg); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row button { flex: 1 1 auto; }
+.alerts { display: flex; flex-wrap: wrap; gap: 8px; }
+.alert { border-radius: 8px; padding: 8px 12px; font-weight: 600; border: 1px solid; }
+.alert.warn { color: var(--warn); border-color: var(--warn); }
+.alert.bad { color: var(--bad); border-color: var(--bad); }
+
+/* component cards */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.card h2 { margin: 0; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.card h2 .dev { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pill { font: 700 11px/1 var(--font); letter-spacing: .08em; padding: 5px 8px; border-radius: 999px; color: var(--bg); background: var(--idle); white-space: nowrap; }
+.pill.ok { background: var(--ok); } .pill.warn { background: var(--warn); } .pill.bad { background: var(--bad); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+.stat { background: var(--panel2); border-radius: 10px; padding: 8px 10px; min-width: 0; }
+.stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.stat .v { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat .v.huge { font-size: 30px; }
+.hint { color: var(--muted); font-size: 13px; margin: 0; }
+.camwrap { position: relative; background: #000; border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 100%; }
+.camwrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.camwrap .none { position: absolute; inset: 0; display: grid; place-items: center; color: #9aa7b4; font-size: 14px; padding: 16px; text-align: center; }
+
+/* mic meter */
+.meter { position: relative; height: 34px; background: var(--meter); border-radius: 8px; overflow: hidden; }
+.meter .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--idle); transition: width .12s linear; }
+.meter .fill.loud { background: var(--ok); }
+.meter .tick { position: absolute; top: 0; bottom: 0; width: 3px; }
+.meter .tick.floor { background: var(--muted); }
+.meter .tick.thr { background: var(--warn); }
+.scale { display: flex; justify-content: space-between; font: 11px var(--mono); color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+/* brain */
+.models { display: grid; gap: 4px; font: 13px/1.4 var(--mono); }
+.models div { display: flex; justify-content: space-between; gap: 10px; }
+.models span:last-child { color: var(--muted); text-align: right; overflow-wrap: anywhere; }
+.tbar { display: flex; height: 26px; border-radius: 6px; overflow: hidden; background: var(--meter); }
+.tbar span { display: grid; place-items: center; font: 600 11px var(--font); color: var(--bg); white-space: nowrap; overflow: hidden; min-width: 0; }
+.qa { display: grid; gap: 6px; }
+.qa div { display: grid; grid-template-columns: 4.2em minmax(0, 1fr); gap: 8px; }
+.qa b { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; padding-top: 2px; }
+.qa span { overflow-wrap: anywhere; }
+
+.log { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; min-width: 0; }
+.log h2 { margin: 0 0 8px; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; }
+.log ol { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow: auto; font: 13px/1.5 var(--mono); }
+.log li { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 8px; padding: 2px 0; border-bottom: 1px dashed var(--line); }
+.log li time { color: var(--muted); }
+.log li span { overflow-wrap: anywhere; }
+footer { color: var(--muted); font-size: 12px; }
+#down { display: none; }
+body.offline #down { display: block; }
+@media (prefers-reduced-motion: reduce) { .meter .fill { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="alerts" id="alerts"><div class="alert bad" id="down">The porch is not answering. Is the porch program still running on the laptop?</div></div>
+
+  <section class="top">
+    <div class="state" id="stateBox">
+      <div class="k">Porch skeleton &middot; now</div>
+      <div class="big" id="stateBig">Loading&hellip;</div>
+      <div class="sub" id="stateSub">&nbsp;</div>
+      <div class="flow" id="flow">
+        <span data-s="idle">waiting</span><span data-s="greet">greet</span><span data-s="listen">listen</span>
+        <span data-s="think">think</span><span data-s="speak">speak</span><span data-s="cooldown">rest</span>
+        <span data-s="linger">still here</span><span data-s="muted">muted</span>
+      </div>
+    </div>
+    <div class="kill">
+      <button id="mute" type="button">MUTE</button>
+      <div class="row">
+        <button id="poke" type="button" title="Act as if someone just arrived: greet, then listen">Greet me now</button>
+        <button id="test" type="button">Test line</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <article class="card" id="camCard">
+      <h2>Camera <span class="pill" id="camPill">&ndash;</span> <span class="dev" id="camName"></span></h2>
+      <div class="camwrap"><img id="cam" alt="Live view from the porch camera with person boxes"><div class="none" id="camNone">No picture yet</div></div>
+      <div class="stats">
+        <div class="stat"><div class="l">People in view</div><div class="v huge" id="people">&ndash;</div></div>
+        <div class="stat"><div class="l">Frames / s</div><div class="v" id="fps">&ndash;</div></div>
+        <div class="stat"><div class="l">Brightness</div><div class="v" id="bright">&ndash;</div></div>
+        <div class="stat"><div class="l">Detector</div><div class="v" id="det">&ndash;</div></div>
+      </div>
+      <p class="hint" id="camHint">A person counts when the green box is inside the yellow zone and at least a quarter of the picture tall.</p>
+    </article>
+
+    <article class="card">
+      <h2>Microphone <span class="pill" id="micPill">&ndash;</span> <span class="dev" id="micName"></span></h2>
+      <div class="meter" aria-label="Microphone level"><div class="fill" id="micFill"></div><div class="tick floor" id="micFloor"></div><div class="tick thr" id="micThr"></div></div>
+      <div class="scale"><span>-90 dB</span><span>-60</span><span>-30</span><span>0</span></div>
+      <div class="legend"><span><i style="background:var(--muted)"></i>room noise</span><span><i style="background:var(--warn)"></i>speech must pass this</span><span><i style="background:var(--ok)"></i>your voice (green = loud enough)</span></div>
+      <div class="stats">
+        <div class="stat"><div class="l">Level</div><div class="v" id="micLevel">&ndash;</div></div>
+        <div class="stat"><div class="l">Threshold</div><div class="v" id="micThrV">&ndash;</div></div>
+        <div class="stat"><div class="l">Last speech</div><div class="v" id="micUtt">&ndash;</div></div>
+      </div>
+      <p class="hint" id="micHint">&nbsp;</p>
+    </article>
+
+    <article class="card">
+      <h2>Speaker <span class="pill" id="spkPill">&ndash;</span> <span class="dev" id="spkName"></span></h2>
+      <div class="stats">
+        <div class="stat"><div class="l">Playing</div><div class="v" id="playing">&ndash;</div></div>
+        <div class="stat"><div class="l">Volume</div><div class="v" id="gain">&ndash;</div></div>
+        <div class="stat"><div class="l">Keep-alive</div><div class="v" id="keep">&ndash;</div></div>
+      </div>
+      <div class="row">
+        <button type="button" data-gain="-3">Vol &minus;</button>
+        <button type="button" data-gain="3">Vol +</button>
+      </div>
+      <div class="row">
+        <button type="button" data-say="greet">Greeting</button>
+        <button type="button" data-say="thinking">Thinking</button>
+        <button type="button" data-say="fallback">Fallback</button>
+      </div>
+      <p class="hint" id="spkHint">The skeleton's own lines play from the laptop, so these work even if the brain is down.</p>
+    </article>
+
+    <article class="card">
+      <h2>Brain <span class="pill" id="brainPill">&ndash;</span> <span class="dev" id="brainUrl"></span></h2>
+      <div class="models" id="models"></div>
+      <div>
+        <div class="hint" style="margin-bottom:6px">Last turn, in milliseconds</div>
+        <div class="tbar" id="tbar"><span style="flex:1;color:var(--muted)">no turn yet</span></div>
+      </div>
+      <div class="qa">
+        <div><b>Saw</b><span id="saw">&ndash;</span></div>
+        <div><b>Heard</b><span id="heard">&ndash;</span></div>
+        <div><b>Said</b><span id="said">&ndash;</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="l">Turns tonight</div><div class="v" id="turns">0</div></div>
+        <div class="stat"><div class="l">Brain p50 / p90</div><div class="v" id="p">&ndash;</div></div>
+        <div class="stat"><div class="l">Speech &rarr; reply</div><div class="v" id="lat">&ndash;</div></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="log">
+    <h2>What happened</h2>
+    <ol id="events"></ol>
+  </section>
+
+  <footer id="foot">The camera view stays on your home network and is never saved (unless debug captures are on).</footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var DESC = {
+    idle: ["Waiting for someone to step into view", "It greets a person who stays in view for half a second. Talking alone does not start it."],
+    greet: ["Greeting", "Microphone off while the skeleton talks."],
+    listen: ["Listening: speak now", "It stops listening after 0.7 s of quiet, or 5 s of talking."],
+    think: ["Thinking", "The brain is looking at the photo and what was said."],
+    speak: ["Speaking", "Microphone off while the skeleton talks."],
+    cooldown: ["Resting", "A short pause so it does not chatter."],
+    linger: ["Visitors still here", "Speak to it again to start another turn."],
+    muted: ["Muted", "Silent until you unmute."]
+  };
+  var MIN = -90;
+  function pct(db) { return Math.max(0, Math.min(100, (db - MIN) / -MIN * 100)); }
+  function set(id, v) { var el = $(id); if (el && el.textContent !== String(v)) el.textContent = v; }
+  function pill(id, cls, text) { var el = $(id); el.className = "pill " + cls; el.textContent = text; }
+  function post(path) { return fetch(path, { method: "POST" }).catch(function () {}); }
+
+  var muted = false, lastEventsKey = "";
+  function render(s) {
+    document.body.classList.remove("offline");
+    muted = s.muted;
+    var cam = s.camera || {};
+    var d = DESC[s.state] || [s.state, ""];
+    var big = d[0];
+    if (s.state === "idle" && cam.ok === false) big = "Camera off: waiting for a voice";
+    set("stateBig", big);
+    set("stateSub", d[1] + (s.state_for_s != null ? "  (" + Math.round(s.state_for_s) + " s)" : ""));
+    $("stateBox").classList.toggle("muted", s.muted);
+    document.querySelectorAll("#flow span").forEach(function (sp) { sp.classList.toggle("on", sp.dataset.s === s.state); });
+    var m = $("mute"); m.textContent = s.muted ? "UNMUTE" : "MUTE"; m.classList.toggle("isMuted", s.muted);
+
+    var alerts = [];
+    if (s.on_battery) alerts.push(["warn", "Laptop is on battery (" + s.power.replace("battery ", "") + "). Plug it in."]);
+    if (!s.brain.ok) alerts.push(["bad", "Brain not ready: the skeleton only says its saved lines."]);
+    if (cam.stuck) alerts.push(["bad", "Camera stuck in its black-frame mode: unplug it and plug it back in."]);
+    else if (cam.ok === false) alerts.push(["bad", "Camera has no picture."]);
+    if (s.speaker.fallback) alerts.push(["warn", "Bluetooth speaker not connected: playing on " + s.speaker.name + "."]);
+    if (s.debug) alerts.push(["warn", "Debug captures are on: photos and clips are saved on the laptop."]);
+    var box = $("alerts");
+    box.querySelectorAll(".alert.dyn").forEach(function (e) { e.remove(); });
+    alerts.forEach(function (a) { var e = document.createElement("div"); e.className = "alert dyn " + a[0]; e.textContent = a[1]; box.appendChild(e); });
+
+    // camera
+    set("camName", (cam.name || "") + (cam.mode ? " · " + cam.mode : ""));
+    if (cam.ok) pill("camPill", cam.people > 0 ? "ok" : "", cam.people > 0 ? "SEES SOMEONE" : "WATCHING");
+    else pill("camPill", "bad", cam.stuck ? "STUCK" : "NO PICTURE");
+    set("people", cam.people != null ? cam.people : "–");
+    set("fps", cam.fps != null ? cam.fps : "–");
+    set("bright", cam.brightness != null ? cam.brightness + " / 255" : "–");
+    set("det", cam.detector_ms != null ? cam.detector_ms + " ms" : "–");
+    if (cam.brightness != null && cam.brightness < 20) set("camHint", "Very dark picture. Point the camera at the doorway with some light, or check the lens.");
+
+    // mic
+    var mic = s.mic;
+    set("micName", mic.name);
+    $("micFill").style.width = pct(mic.level_db) + "%";
+    $("micFill").classList.toggle("loud", mic.level_db > mic.threshold_db);
+    $("micFloor").style.left = pct(mic.floor_db) + "%";
+    $("micThr").style.left = pct(mic.threshold_db) + "%";
+    set("micLevel", Math.round(mic.level_db) + " dB");
+    set("micThrV", Math.round(mic.threshold_db) + " dB");
+    set("micUtt", mic.last_utterance_s ? mic.last_utterance_s + " s" : "–");
+    if (s.muted) pill("micPill", "", "MUTED");
+    else if (!mic.open) pill("micPill", "", "OFF WHILE TALKING");
+    else if (mic.speaking) pill("micPill", "ok", "HEARING SPEECH");
+    else if (mic.warming) pill("micPill", "warn", "LEARNING THE ROOM");
+    else pill("micPill", "ok", "LISTENING");
+    var mh = "";
+    if (s.state === "idle" && cam.ok) mh = "The mic is on, but speech only counts after the greeting, or while visitors are still here.";
+    else if (s.state === "listen") mh = "Speak now. Green means loud enough.";
+    else if (!mic.open) mh = "Off on purpose while the skeleton talks, so it never hears itself.";
+    set("micHint", mh || " ");
+
+    // speaker
+    var spk = s.speaker;
+    set("spkName", spk.name);
+    pill("spkPill", spk.active ? (spk.fallback ? "warn" : "ok") : "bad", spk.active ? (spk.fallback ? "FALLBACK" : "READY") : "STOPPED");
+    set("playing", spk.playing || "silence");
+    set("gain", (spk.gain_db > 0 ? "+" : "") + spk.gain_db + " dB");
+    set("keep", spk.keepalive_db != null ? spk.keepalive_db + " dB" : "off");
+
+    // brain
+    var h = s.brain.health || {};
+    set("brainUrl", s.brain.url);
+    if (s.brain.ok) pill("brainPill", "ok", "READY");
+    else if (h.warming) pill("brainPill", "warn", "WARMING");
+    else pill("brainPill", "bad", h.error ? "ERROR" : "DOWN");
+    var rows = [];
+    var e = h.engines || {};
+    if (e.vlm) rows.push(["sees + replies", e.vlm + (e.llm && e.llm !== e.vlm ? " / " + e.llm : "")]);
+    if (e.stt) rows.push(["hears", e.stt]);
+    if (e.tts) rows.push(["speaks", e.tts]);
+    ((h.ollama || {}).loaded || []).forEach(function (m) { rows.push(["in GPU", m.name + "  " + (m.vram_mb / 1024).toFixed(1) + " GB" + (m.vram_mb >= m.size_mb ? " (100%)" : " (partly on CPU)")]); });
+    if (h.gpu) rows.push(["GPU", h.gpu.name + "  " + h.gpu.util_pct + "% busy, " + (h.gpu.mem_used_mb / 1024).toFixed(1) + "/" + (h.gpu.mem_total_mb / 1024).toFixed(0) + " GB, " + h.gpu.temp_c + " °C"]);
+    if (h.error) rows.push(["error", h.error]);
+    if (!rows.length) rows.push(["", s.brain.ok ? "" : "no answer from " + s.brain.url]);
+    var mk = rows.map(function (r) { return r[0] + "|" + r[1]; }).join(";");
+    var models = $("models");
+    if (models.dataset.k !== mk) {
+      models.dataset.k = mk; models.textContent = "";
+      rows.forEach(function (r) { var dv = document.createElement("div"); var a = document.createElement("span"); a.textContent = r[0]; var b = document.createElement("span"); b.textContent = r[1]; dv.appendChild(a); dv.appendChild(b); models.appendChild(dv); });
+    }
+    var st = h.stats || {};
+    set("p", st.p50_ms ? st.p50_ms + " / " + st.p90_ms + " ms" : "–");
+    set("turns", s.turns);
+    set("lat", s.p50_ms ? (s.p50_ms / 1000).toFixed(1) + " s" : "–");
+    var lt = s.last_turn || {};
+    if (lt.error) { set("said", "turn failed: " + lt.error); }
+    else if (lt.turn) {
+      set("saw", lt.saw || "–");
+      set("heard", lt.heard != null ? (lt.heard || "(nothing)") : "(hidden unless debug is on)");
+      set("said", (lt.reply || "–") + (lt.source && lt.source !== "llm" ? "  [" + lt.source + "]" : ""));
+      var t = lt.timings || {}, key = lt.turn + "-" + t.total;
+      var bar = $("tbar");
+      if (bar.dataset.k !== key) {
+        bar.dataset.k = key; bar.textContent = "";
+        var hear = Math.max(t.vision || 0, t.stt || 0), net = Math.max(0, (lt.roundtrip_ms || 0) - (t.total || 0));
+        [["look + listen", hear, "var(--accent)"], ["reply", t.llm || 0, "var(--warn)"], ["voice", t.tts || 0, "var(--ok)"], ["Wi-Fi", net, "var(--idle)"]].forEach(function (p) {
+          if (!p[1]) return;
+          var sp = document.createElement("span"); sp.style.flex = String(p[1]); sp.style.background = p[2];
+          sp.textContent = p[0] + " " + p[1]; sp.title = p[0] + ": " + p[1] + " ms"; bar.appendChild(sp);
+        });
+      }
+    }
+
+    // events
+    var ev = s.events || [], k = ev.length ? ev[ev.length - 1].t + ev[ev.length - 1].msg + ev.length : "";
+    if (k !== lastEventsKey) {
+      lastEventsKey = k;
+      var ol = $("events"); ol.textContent = "";
+      ev.slice().reverse().forEach(function (x) {
+        var li = document.createElement("li"); var tm = document.createElement("time"); tm.textContent = x.t;
+        var sp = document.createElement("span"); sp.textContent = x.msg; li.appendChild(tm); li.appendChild(sp); ol.appendChild(li);
+      });
+    }
+    set("foot", "Lines cached: " + s.lines + " · power: " + s.power + " · The camera view stays on your home network and is never saved" + (s.debug ? " (debug captures ARE on)." : "."));
+  }
+
+  function poll() {
+    fetch("/status", { cache: "no-store" }).then(function (r) { return r.json(); }).then(render)
+      .catch(function () { document.body.classList.add("offline"); })
+      .finally(function () { setTimeout(poll, 500); });
+  }
+  var img = $("cam"), loading = false;
+  function frame() {
+    if (loading || document.hidden) { setTimeout(frame, 700); return; }
+    loading = true;
+    var next = new Image();
+    next.onload = function () { img.src = next.src; $("camNone").style.display = "none"; loading = false; setTimeout(frame, 700); };
+    next.onerror = function () { $("camNone").style.display = "grid"; loading = false; setTimeout(frame, 1500); };
+    next.src = "/frame.jpg?t=" + Date.now();
+  }
+  $("mute").addEventListener("click", function () { post(muted ? "/unmute" : "/mute"); });
+  $("poke").addEventListener("click", function () { post("/poke"); });
+  $("test").addEventListener("click", function () { post("/test"); });
+  document.querySelectorAll("[data-say]").forEach(function (b) { b.addEventListener("click", function () { post("/say?cat=" + b.dataset.say); }); });
+  document.querySelectorAll("[data-gain]").forEach(function (b) { b.addEventListener("click", function () { post("/gain?d=" + b.dataset.gain); }); });
+  poll(); frame();
+})();
+</script>
+</body>
+</html>

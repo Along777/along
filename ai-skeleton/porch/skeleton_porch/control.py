@@ -1,51 +1,28 @@
-"""The kill switch: a phone page on the LAN (the laptop sits in a tote outside) plus F12.
+"""The porch dashboard and kill switch, served on the LAN (the laptop sits in a tote outside), plus F12.
 
-GET  /          the page            GET /status   JSON
-POST /mute      POST /unmute        POST /test    POST /gain?d=3 (or -3)
+GET  /            dashboard (dashboard.html)        GET /status     everything, as JSON
+GET  /frame.jpg   live camera frame with boxes      POST /mute  /unmute  /test  /poke  /gain?d=3  /say?cat=greet
+The camera frame is served from memory only and never saved.
 """
 from __future__ import annotations
 
 import json
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import Callable
+from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Skeleton</title>
-<style>
-:root{color-scheme:dark}body{margin:0;padding:16px;font:16px/1.4 system-ui,sans-serif;background:#111;color:#eee}
-h1{font-size:20px;margin:0 0 12px}button{width:100%;padding:22px;margin:6px 0;font-size:22px;border:0;border-radius:12px;color:#fff}
-#mute{background:#b3261e}#unmute{background:#1e7d32}.row{display:flex;gap:8px}.row button{background:#333;font-size:18px;padding:16px}
-#st{background:#1c1c1c;border-radius:12px;padding:12px;margin-top:10px;white-space:pre-wrap;font-size:14px}
-.big{font-size:26px;font-weight:700;margin:8px 0}
-</style></head><body>
-<h1>Porch skeleton</h1><div class="big" id="state">...</div>
-<button id="mute" onclick="post('mute')">MUTE</button>
-<button id="unmute" onclick="post('unmute')">Unmute</button>
-<div class="row"><button onclick="post('gain?d=-3')">Vol -</button><button onclick="post('test')">Test line</button>
-<button onclick="post('gain?d=3')">Vol +</button></div>
-<div id="st">loading...</div>
-<script>
-async function post(p){try{await fetch('/'+p,{method:'POST'});}catch(e){}tick();}
-async function tick(){try{const s=await (await fetch('/status')).json();
-document.getElementById('state').textContent=s.muted?'MUTED':('live - '+s.state);
-document.getElementById('state').style.color=s.muted?'#ff6b6b':'#7ee787';
-document.getElementById('st').textContent=
-'people: '+s.people+'\\nbrain: '+(s.brain_ok?'ok':'DOWN')+'\\nvolume: '+s.gain_db+' dB\\nlast reply: '+(s.last_reply||'-')+
-'\\nturns tonight: '+s.turns+'   reply p50: '+(s.p50_ms??'-')+' ms\\npower: '+s.power;}
-catch(e){document.getElementById('state').textContent='porch not answering';}}
-tick();setInterval(tick,2000);
-</script></body></html>"""
+PAGE = (Path(__file__).with_name("dashboard.html")).read_text(encoding="utf-8")
+SAY_OK = {"greet", "thinking", "fallback", "no_hear", "still_here", "test"}
 
 
 class Control:
-    def __init__(self, port: int, status: Callable[[], dict], on_test: Callable[[], None],
-                 on_gain: Callable[[float], None], log=print):
+    def __init__(self, port: int, app, log=print):
         self.port = port
+        self.app = app
         self.muted = False
         self.lock = threading.Lock()
-        self.status, self.on_test, self.on_gain, self.log = status, on_test, on_gain, log
+        self.log = log
         self.server: ThreadingHTTPServer | None = None
         self.listener = None
 
@@ -75,33 +52,54 @@ class Control:
 
             def do_GET(self):
                 path = urlparse(self.path).path
-                if path == "/":
-                    self._send(200, PAGE.encode(), "text/html; charset=utf-8")
-                elif path == "/status":
-                    self._send(200, json.dumps(ctl.status()).encode(), "application/json")
-                else:
-                    self._send(404, b"not found", "text/plain")
+                try:
+                    if path == "/":
+                        self._send(200, PAGE.encode(), "text/html; charset=utf-8")
+                    elif path == "/status":
+                        self._send(200, json.dumps(ctl.app.status(), default=str).encode(), "application/json")
+                    elif path == "/frame.jpg":
+                        jpg = ctl.app.frame_jpeg()
+                        if jpg:
+                            self._send(200, jpg, "image/jpeg")
+                        else:
+                            self._send(204, b"", "image/jpeg")
+                    else:
+                        self._send(404, b"not found", "text/plain")
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
+                except Exception as e:  # never let a dashboard bug touch the porch loop
+                    self._send(500, json.dumps({"error": f"{type(e).__name__}: {e}"}).encode(), "application/json")
 
             def do_POST(self):
                 u = urlparse(self.path)
+                q = parse_qs(u.query)
                 if u.path == "/mute":
-                    ctl.set_muted(True, "phone")
+                    ctl.set_muted(True, "dashboard")
                 elif u.path == "/unmute":
-                    ctl.set_muted(False, "phone")
+                    ctl.set_muted(False, "dashboard")
                 elif u.path == "/test":
-                    ctl.on_test()
+                    ctl.app.say("test")
+                elif u.path == "/poke":
+                    ctl.app.poke()
+                elif u.path == "/say":
+                    cat = q.get("cat", [""])[0]
+                    if cat not in SAY_OK:
+                        self._send(400, b'{"error":"unknown category"}', "application/json")
+                        return
+                    ctl.app.say(cat)
                 elif u.path == "/gain":
                     try:
-                        d = float(parse_qs(u.query).get("d", ["0"])[0])
+                        d = float(q.get("d", ["0"])[0])
                     except ValueError:
                         d = 0.0
-                    ctl.on_gain(max(-6.0, min(6.0, d)))
+                    ctl.app.change_gain(max(-6.0, min(6.0, d)))
                 else:
                     self._send(404, b"not found", "text/plain")
                     return
                 self._send(200, b'{"ok":true}', "application/json")
 
         self.server = ThreadingHTTPServer(("0.0.0.0", self.port), H)
+        self.server.daemon_threads = True
         threading.Thread(target=self.server.serve_forever, name="control-http", daemon=True).start()
 
     def start_hotkey(self, key_name: str) -> bool:

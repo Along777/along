@@ -63,16 +63,30 @@ class Camera:
         self.thread = threading.Thread(target=self._run, name="camera", daemon=True)
         self.thread.start()
 
+    def _fourcc(self) -> str:
+        v = int(self.cap.get(cv2.CAP_PROP_FOURCC))
+        return "".join(chr((v >> 8 * i) & 0xFF) for i in range(4))
+
     def _open(self) -> None:
         self.index, self.name = find_camera(self.cfg)
         backend = cv2.CAP_DSHOW if sys.platform == "win32" else cv2.CAP_ANY
         self.cap = cv2.VideoCapture(self.index, backend)
         if not self.cap.isOpened():
             raise RuntimeError(f"could not open {self.name} (index {self.index}) - is another app using it?")
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc(*"MJPG"))
+        # MJPG only. The Arducam's uncompressed YUY2 modes return empty frames at 1 fps, and once it has
+        # been switched to YUY2 it stays there until it is unplugged. DirectShow can quietly fall back to
+        # YUY2 when the size is set, so set MJPG, then the size, then MJPG again, and check what stuck.
+        mjpg = cv2.VideoWriter.fourcc(*"MJPG")
+        self.cap.set(cv2.CAP_PROP_FOURCC, mjpg)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.cfg.width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cfg.height)
-        self.cap.set(cv2.CAP_PROP_FPS, self.cfg.fps)
+        if self._fourcc() != "MJPG":
+            self.cap.set(cv2.CAP_PROP_FOURCC, mjpg)
+        if self.cfg.fps:
+            self.cap.set(cv2.CAP_PROP_FPS, self.cfg.fps)
+        self.mode = (f"{self._fourcc()} {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x"
+                     f"{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
+        self.stuck_format = self._fourcc() != "MJPG"
 
     def _reopen(self) -> None:
         self.reopens += 1

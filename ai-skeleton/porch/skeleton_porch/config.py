@@ -22,7 +22,7 @@ class Camera:
     index: int = -1
     width: int = 1280
     height: int = 720
-    fps: int = 30
+    fps: int = 0
     rotate: int = 0
     flip: bool = False
     photo_max_side: int = 768

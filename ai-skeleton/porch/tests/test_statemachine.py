@@ -221,6 +221,16 @@ def test_still_here_after_a_minute():
     assert any(isinstance(a, Say) and a.category == "still_here" for a in acts)
 
 
+def test_poke_greets_even_with_nobody_in_view():
+    r = Rig()
+    acts = r.tick(poke=True)
+    assert [a.category for a in acts if isinstance(a, Say)] == ["greet"]
+    r.tick()  # greeting done (rig audio not busy) -> listen
+    assert r.fsm.state == S.LISTEN
+    sub = r.submit()
+    assert sub.with_photo and sub.group_size == 1
+
+
 def test_camera_down_is_voice_triggered():
     r = Rig()
     r.camera_ok = False

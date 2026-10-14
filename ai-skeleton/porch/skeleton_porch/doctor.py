@@ -48,6 +48,10 @@ def run(cfg: Config, listen_s: float = 4.0) -> int:
     cam = None
     try:
         cam = Camera(cfg.camera)
+        print(f"   mode: {cam.mode}")
+        if cam.stuck_format:
+            r.line("fail", f"{cam.name} refused MJPG and is stuck in {cam.mode} (black frames) - unplug it, "
+                           "plug it back in, and run the doctor again")
         t0 = time.monotonic()
         while cam.latest()[0] is None and time.monotonic() - t0 < 6:
             time.sleep(0.05)

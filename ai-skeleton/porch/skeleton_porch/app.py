@@ -49,15 +49,22 @@ class PorchApp:
         self.last_boxes: list = []
         self.det_ms: collections.deque = collections.deque(maxlen=50)
         self.last_reply = ""
+        self.last_turn: dict = {}
         self.turns_total = 0
         self.lat_ms: collections.deque = collections.deque(maxlen=50)
+        self.events: collections.deque = collections.deque(maxlen=80)
+        self.cam_counts: collections.deque = collections.deque(maxlen=40)
+        self.poke_flag = False
+        self.spk_fallback = False
         self.stop = threading.Event()
         self.camera = None
         self.detector = None
         self.log_path = PORCH_DIR / "logs" / "turns.jsonl"
 
     def log(self, msg: str) -> None:
-        print(f"[{stamp()}] {msg}", flush=True)
+        s = stamp()
+        self.events.append((s, msg))
+        print(f"[{s}] {msg}", flush=True)
 
     # -- startup --------------------------------------------------------------------
     def start(self) -> None:
@@ -77,14 +84,16 @@ class PorchApp:
             from .detector import PersonDetector
 
             self.detector = PersonDetector(cfg.detector, cfg.path(cfg.detector.model))
-            self.log(f"camera: {self.camera.name}; detector ready")
+            self.log(f"camera: {self.camera.name} ({self.camera.mode}); detector ready")
+            if self.camera.stuck_format:
+                self.log("CAMERA STUCK in its black-frame mode - unplug it and plug it back in")
             threading.Thread(target=self._detect_loop, name="detector", daemon=True).start()
         except Exception as e:
             self.log(f"CAMERA OFF ({e}) - running voice-triggered")
             self.camera = None
         self._refresh_brain()
         threading.Thread(target=self._health_loop, name="health", daemon=True).start()
-        self.control = Control(cfg.control.port, self.status, self.test_line, self.change_gain, self.log)
+        self.control = Control(cfg.control.port, self, self.log)
         try:
             self.control.start_http()
             self.log(f"phone page: http://<this-laptop-ip>:{cfg.control.port}/")
@@ -179,10 +188,11 @@ class PorchApp:
                 busy = self.player.busy(now, margin=self.cfg.audio.tail_margin_s)
                 self.mic.set_open(not busy and not muted)
                 cam_ok = self.camera is not None and self.camera.ok(now)
+                poke, self.poke_flag = self.poke_flag, False
                 obs = Obs(now=now, people=self.people_now(now) if cam_ok else 0, camera_ok=cam_ok,
                           audio_busy=busy, speech_started=speech_started, speech_dropped=speech_dropped,
                           utterance=utt.audio if utt else None, turn_done=done,
-                          brain_ok=self.brain_ok, muted=muted)
+                          brain_ok=self.brain_ok, muted=muted, poke=poke)
                 prev = self.fsm.state
                 actions = self.fsm.tick(obs)
                 if self.fsm.state != prev:
@@ -217,6 +227,10 @@ class PorchApp:
             if m.get("t_speech_end"):
                 row["speech_end_to_reply_ms"] = round((now - m["t_speech_end"]) * 1000)
                 self.lat_ms.append(row["speech_end_to_reply_ms"])
+            self.last_turn = {"at": stamp(), "turn": o.turn_id, "reply": o.reply_text, "source": o.source,
+                              "saw": o.description, "heard": m.get("heard"), "timings": o.timings,
+                              "roundtrip_ms": row["roundtrip_ms"],
+                              "speech_end_to_reply_ms": row.get("speech_end_to_reply_ms")}
             if self.debug:
                 row["reply"] = o.reply_text
                 row["description"] = o.description
@@ -252,9 +266,11 @@ class PorchApp:
             out = TurnOutcome(a.turn_id, True, audio, sr, r.get("description"), r.get("reply_text", ""),
                               r.get("source", ""), r.get("timings_ms", {}))
             if self.debug and r.get("transcript") is not None:
+                self.marks.setdefault(a.turn_id, {})["heard"] = r["transcript"]
                 self.log(f'heard: "{r["transcript"]}" | saw: "{r.get("description")}"')
         except Exception as e:
             self.log(f"turn {a.turn_id} failed: {e}")
+            self.last_turn = {"at": stamp(), "turn": a.turn_id, "error": str(e)}
             out = TurnOutcome(a.turn_id, False)
         if a.turn_id in self.cancelled:
             return
@@ -304,19 +320,81 @@ class PorchApp:
             base.with_suffix(".wav").write_bytes(wav)
 
     def status(self) -> dict:
+        """Everything the dashboard shows, in one poll."""
+        now = time.monotonic()
         ac, pct = power_status()
         lat = sorted(self.lat_ms)
-        return {"state": self.fsm.state.value, "muted": self.control.muted,
-                "people": self.people_now(time.monotonic()) if self.camera else None,
-                "brain_ok": self.brain_ok, "gain_db": round(self.player.gain_db, 1),
-                "last_reply": self.last_reply, "turns": self.turns_total,
-                "p50_ms": lat[len(lat) // 2] if lat else None,
-                "power": ("mains" if ac else "BATTERY") + (f" {pct}%" if pct is not None else "")}
+        cam: dict = {"ok": False}
+        if self.camera is not None:
+            frame, ft = self.camera.latest()
+            self.cam_counts.append((now, self.camera.count))
+            old = next(((t, c) for t, c in self.cam_counts if now - t <= 3.0), None)
+            fps = (self.camera.count - old[1]) / (now - old[0]) if old and now - old[0] > 0.5 else None
+            dms = sorted(self.det_ms)
+            cam = {"ok": self.camera.ok(now), "name": self.camera.name, "mode": self.camera.mode,
+                   "stuck": self.camera.stuck_format, "fps": round(fps, 1) if fps is not None else None,
+                   "frame_age_s": round(now - ft, 1) if frame is not None else None,
+                   "brightness": round(float(frame[::8, ::8].mean())) if frame is not None else None,
+                   "people": self.people_now(now), "detector_ms": round(dms[len(dms) // 2]) if dms else None,
+                   "reopens": self.camera.reopens, "min_box_height": self.cfg.detector.min_box_height}
+        vad = self.mic.vad
+        mic = {"name": self.mic.device["name"], "level_db": round(self.mic.peak_db(), 1),
+               "floor_db": round(vad.floor_db, 1), "threshold_db": round(vad.threshold_db, 1),
+               "open": self.mic.open, "speaking": vad.in_speech, "warming": vad.warmup > 0,
+               "last_utterance_s": round(self.mic.last_utterance_s, 1), "overflows": self.mic.overflows}
+        spk = {"name": self.player.device["name"], "fallback": self.spk_fallback,
+               "playing": self.player.playing_tag(), "gain_db": round(self.player.gain_db, 1),
+               "keepalive_db": self.cfg.audio.keepalive_dbfs if self.player.noise is not None else None,
+               "active": bool(self.player.stream.active), "underflows": self.player.underflows}
+        return {
+            "state": self.fsm.state.value, "state_for_s": round(now - self.fsm.since, 1) if self.fsm.since else None,
+            "muted": self.control.muted, "turns": self.turns_total, "group_turns": self.fsm.turns,
+            "camera": cam, "mic": mic, "speaker": spk,
+            "brain": {"url": self.cfg.brain.url, "ok": self.brain_ok, "health": self.health},
+            "last_turn": self.last_turn, "last_reply": self.last_reply,
+            "p50_ms": lat[len(lat) // 2] if lat else None, "debug": self.debug,
+            "lines": self.fillers.count(), "lines_version": self.fillers.version,
+            "power": ("mains" if ac else "battery") + (f" {pct}%" if pct is not None else ""), "on_battery": ac is False,
+            "events": [{"t": t, "msg": m} for t, m in list(self.events)[-40:]],
+        }
+
+    def frame_jpeg(self) -> bytes | None:
+        """The latest camera frame with person boxes and the watch zone, small enough for a phone."""
+        import cv2
+
+        if self.camera is None:
+            return None
+        frame, _ = self.camera.latest()
+        if frame is None:
+            return None
+        img = frame.copy()
+        h, w = img.shape[:2]
+        x0, y0, x1, y1 = self.cfg.detector.roi
+        cv2.rectangle(img, (int(x0 * w), int(y0 * h)), (int(x1 * w) - 1, int(y1 * h) - 1), (255, 190, 60), 2)
+        with self.lock:
+            boxes = list(self.last_boxes)
+        for b in boxes:
+            cv2.rectangle(img, (int(b.x0), int(b.y0)), (int(b.x1), int(b.y1)), (60, 220, 60), 3)
+            cv2.putText(img, f"person {b.conf:.2f}", (int(b.x0) + 4, int(b.y0) + 24),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (60, 220, 60), 2)
+        s = 640 / w
+        img = cv2.resize(img, (640, int(h * s)), interpolation=cv2.INTER_AREA)
+        ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 70])
+        return buf.tobytes() if ok else None
+
+    def poke(self) -> None:
+        self.poke_flag = True
+        self.log("dashboard: greet me now")
+
+    def say(self, category: str) -> bool:
+        x = self.fillers.pick(category)
+        if x:
+            self.player.play(x[0], x[1], tag=category)
+            self.log(f'dashboard: play [{category}] "{x[2]}"')
+        return x is not None
 
     def test_line(self) -> None:
-        x = self.fillers.pick("test")
-        if x:
-            self.player.play(x[0], x[1], tag="test")
+        self.say("test")
 
     def change_gain(self, d: float) -> None:
         self.player.gain_db = max(-24.0, min(12.0, self.player.gain_db + d))

@@ -264,6 +264,8 @@ class Mic:
         self.q: queue.Queue = queue.Queue(maxsize=2000)
         self.open = False
         self.level_db = -120.0
+        self.levels: collections.deque = collections.deque(maxlen=200)  # (t, dBFS) per 30 ms frame, for meters
+        self.last_utterance_s = 0.0
         self.overflows = 0
         self.dropped = 0
         self.stream = sd.InputStream(device=device["index"], samplerate=SR_IN, channels=1, dtype="float32",
@@ -298,8 +300,18 @@ class Mic:
             except queue.Empty:
                 return events
             self.level_db = dbfs(frame)
+            self.levels.append((t, self.level_db))
             if self.open:
-                events += self.vad.feed(frame, t)
+                for e in self.vad.feed(frame, t):
+                    if e.kind == "end" and e.audio is not None:
+                        self.last_utterance_s = len(e.audio) / SR_IN
+                    events.append(e)
+
+    def peak_db(self, window_s: float = 0.3) -> float:
+        """Loudest frame in the last window (what a level meter should show)."""
+        now = time.monotonic()
+        vals = [lv for t, lv in list(self.levels) if now - t <= window_s]
+        return max(vals) if vals else -120.0
 
     def record(self, seconds: float) -> np.ndarray:
         """Blocking raw capture for the doctor (drains the live queue first)."""

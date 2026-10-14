@@ -28,6 +28,23 @@ from .tts import FakeTts, KokoroOnnx
 TEST_IMAGE = BRAIN_DIR.parent / "img" / "skeleton-porch.jpg"
 
 
+def gpu_now() -> dict | None:
+    """One nvidia-smi reading for the dashboard; None without an NVIDIA GPU."""
+    import shutil
+    import subprocess
+
+    if not shutil.which("nvidia-smi"):
+        return None
+    try:
+        out = subprocess.run(["nvidia-smi", "--query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu",
+                              "--format=csv,noheader,nounits"], capture_output=True, text=True, timeout=5).stdout
+        name, util, used, total, temp = [s.strip() for s in out.splitlines()[0].split(",")]
+        return {"name": name, "util_pct": int(float(util)), "mem_used_mb": int(float(used)),
+                "mem_total_mb": int(float(total)), "temp_c": int(float(temp))}
+    except Exception:
+        return None
+
+
 def build_engines(cfg: Config, fake: bool):
     if fake or cfg.stt.engine == "fake":
         stt = FakeStt()
@@ -53,6 +70,14 @@ class State:
         self.ollama: OllamaClient | None = None
         self.ollama_version: str | None = None
         self.bank = FillerBank(cache_root or BRAIN_DIR / "cache" / "fillers")
+        self._gpu: tuple[float, dict | None] = (0.0, None)
+
+    async def gpu(self) -> dict | None:
+        t, g = self._gpu
+        if time.time() - t > 5:  # nvidia-smi takes ~50 ms; the porch polls every few seconds
+            g = await asyncio.to_thread(gpu_now)
+            self._gpu = (time.time(), g)
+        return g
 
     async def boot(self) -> None:
         try:
@@ -135,6 +160,8 @@ class State:
                               "llm": self.cfg.ollama.reply_model if not self.fake else "fake",
                               "stt": self.brain.stt.name, "tts": self.brain.tts.name}
             out["stats"] = self.brain.stats()
+        if not self.fake:
+            out["gpu"] = await self.gpu()
         if self.ollama:
             loaded = await self.ollama.loaded()
             out["ollama"] = {"version": self.ollama_version, "loaded": [

@@ -13,9 +13,9 @@ turn_timeout_s = 6.0          # past this, play a fallback line instead
 [camera]
 name = "Arducam"              # part of the camera's Windows name; "" = first camera
 index = -1                    # >= 0 forces an OpenCV index and ignores name
-width = 1280
+width = 1280                  # always MJPG (the Arducam's YUY2 modes give black frames)
 height = 720
-fps = 30
+fps = 0                       # 0 = leave the camera's own rate (asking for one can renegotiate the format)
 rotate = 0                    # 0 / 90 / 180 / 270, for a camera mounted sideways
 flip = false                  # mirror left-right
 photo_max_side = 768          # the photo sent to the brain

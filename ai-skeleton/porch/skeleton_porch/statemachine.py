@@ -50,6 +50,7 @@ class Obs:
     turn_done: TurnOutcome | None = None
     brain_ok: bool = True
     muted: bool = False
+    poke: bool = False              # dashboard "Greet me now": act as if a group just arrived
 
 
 # -- actions --------------------------------------------------------------------------
@@ -163,6 +164,11 @@ class Fsm:
             self.armed = True
 
         st = self.state
+        if o.poke and st in (S.IDLE, S.LINGER):
+            self._new_group(o.now, max(1, o.people))
+            acts.append(Say("greet"))
+            self._go(S.GREET, o.now)
+            return acts
         if st == S.IDLE:
             if o.camera_ok:
                 if self.armed and self.present_since is not None and o.now - self.present_since >= cfg.arrive_s:
