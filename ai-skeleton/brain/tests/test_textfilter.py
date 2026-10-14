@@ -47,6 +47,12 @@ def test_never_asks_for_names_or_closer():
         assert src == "canned_blocked", bad
 
 
+def test_assistant_speak_is_out_of_character():
+    # seen from qwen3-vl:2b on "do you want a beer"
+    raw = "I'm sorry, but I can't assist with that request. I'm a skeleton, and I'm here to help."
+    assert make().clean(raw)[1] == "canned_blocked"
+
+
 def test_allowed_halloween_words_pass():
     for ok in ["A vampire! I am glad I have no blood to spare.", "Arr, a fearsome pirate. Take some candy.",
                "Boo to you too, little ghost."]:

@@ -44,25 +44,49 @@ def to_jpeg(frame: np.ndarray, max_side: int, quality: int) -> bytes:
 
 
 class Camera:
+    """Self-healing: a stream that stops, or turns all-black (seen on the Arducam after a
+    re-plug: 1 fps of pure zeros), is closed and reopened, found again by name."""
+
+    STUCK_BLACK = 15      # all-zero frames in a row
+    STUCK_FAILS = 40      # failed reads in a row (~2 s)
+
     def __init__(self, cfg: CameraCfg):
         self.cfg = cfg
-        self.index, self.name = find_camera(cfg)
-        backend = cv2.CAP_DSHOW if sys.platform == "win32" else cv2.CAP_ANY
-        self.cap = cv2.VideoCapture(self.index, backend)
-        if not self.cap.isOpened():
-            raise RuntimeError(f"could not open {self.name} (index {self.index}) - is another app using it?")
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc(*"MJPG"))
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, cfg.width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cfg.height)
-        self.cap.set(cv2.CAP_PROP_FPS, cfg.fps)
         self.lock = threading.Lock()
         self.frame: np.ndarray | None = None
         self.t = 0.0
         self.count = 0
         self.fails = 0
+        self.reopens = 0
+        self._open()
         self._stop = threading.Event()
         self.thread = threading.Thread(target=self._run, name="camera", daemon=True)
         self.thread.start()
+
+    def _open(self) -> None:
+        self.index, self.name = find_camera(self.cfg)
+        backend = cv2.CAP_DSHOW if sys.platform == "win32" else cv2.CAP_ANY
+        self.cap = cv2.VideoCapture(self.index, backend)
+        if not self.cap.isOpened():
+            raise RuntimeError(f"could not open {self.name} (index {self.index}) - is another app using it?")
+        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc(*"MJPG"))
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.cfg.width)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cfg.height)
+        self.cap.set(cv2.CAP_PROP_FPS, self.cfg.fps)
+
+    def _reopen(self) -> None:
+        self.reopens += 1
+        try:
+            self.cap.release()
+        except Exception:
+            pass
+        while not self._stop.is_set():
+            time.sleep(1.0)
+            try:
+                self._open()
+                return
+            except Exception:
+                continue  # unplugged: keep trying once a second
 
     def _fix(self, f: np.ndarray) -> np.ndarray:
         r = self.cfg.rotate % 360
@@ -75,12 +99,25 @@ class Camera:
         return cv2.flip(f, 1) if self.cfg.flip else f
 
     def _run(self) -> None:
+        failed = black = 0
         while not self._stop.is_set():
             ok, f = self.cap.read()
             if not ok or f is None:
                 self.fails += 1
+                failed += 1
+                if failed >= self.STUCK_FAILS:
+                    self._reopen()
+                    failed = 0
                 time.sleep(0.05)
                 continue
+            failed = 0
+            if not f[::16, ::16].any():  # every sampled pixel exactly zero: a stuck stream, not a dark night
+                black += 1
+                if black >= self.STUCK_BLACK:
+                    self._reopen()
+                    black = 0
+                continue
+            black = 0
             f = self._fix(f)
             with self.lock:
                 self.frame, self.t = f, time.monotonic()

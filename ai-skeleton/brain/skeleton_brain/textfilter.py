@@ -18,6 +18,9 @@ _ASKS_AND_SELF = [
     r"which school", r"\byour (?:home )?address\b", r"come closer", r"\bcome here\b",
     r"\bas an ai\b", r"\bi am an ai\b", r"\bi'm an ai\b", r"language model",
     r"artificial intelligence", r"\bchatbot\b", r"\bcamera\b",
+    # assistant-speak breaks character: swap for an in-character deflection
+    r"\b(?:cannot|can't|can not|unable to) (?:assist|help) with\b", r"\bthat request\b",
+    r"\bi(?:'m| am) (?:sorry|afraid),? but\b", r"\bi(?:'m| am) here to help\b", r"\bassistant\b",
 ]
 
 _CONTRACTIONS = {
