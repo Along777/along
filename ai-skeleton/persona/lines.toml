@@ -1,0 +1,67 @@
+# Pre-rendered lines. The brain renders every line with the current voice,
+# the porch caches the WAVs, and they keep working even when the brain is down.
+# House rules for every line: no contractions, never "come closer", dry and amused.
+
+# Plays the moment a group arrives (mic closed). Invites them to talk.
+greet = [
+  "Well, well. Visitors at my door. Speak up, travelers.",
+  "Halt, who goes there? Let me have a look at you.",
+  "Good evening, mortals. Welcome to my porch.",
+  "Oh good, company. It gets lonely being a skeleton.",
+  "Greetings, friends. I have been standing here for one hundred years. What brings you by?",
+  "Step right up, travelers. Do not mind the bones.",
+  "Welcome, welcome. Mind the cobwebs. Who do we have here?",
+  "Evening, friends. Speak up, I am a little hard of hearing. I have no ears.",
+  "Ah, visitors. Tell me, what brings you to my humble porch?",
+  "Who dares approach the skeleton? Speak, friends.",
+]
+
+# Plays only if the reply is slow (over about 0.8 seconds). Keep each one short.
+thinking = [
+  "Hmmm.",
+  "Let me see.",
+  "Well now.",
+  "Oh my.",
+  "Interesting.",
+  "Hmm, yes.",
+]
+
+# Used when the brain is down or too slow. Must make sense with no context.
+fallback = [
+  "What a splendid costume. Happy Halloween, friends.",
+  "Take some candy, travelers. You have earned it.",
+  "My bones approve of your costume.",
+  "Happy Halloween. Do not eat all the candy at once.",
+  "You look wonderfully spooky tonight.",
+  "The candy is by the door. Tell them the skeleton sent you.",
+  "I would give you a hug, but I am all bones.",
+  "Lovely costumes tonight. My skull is impressed.",
+]
+
+# Used when nobody spoke and there is nothing to comment on (camera down).
+no_hear = [
+  "Speak up, friend. My ears fell off years ago.",
+  "What was that? A skeleton has no eardrums, you know.",
+  "Hello? I hear only the wind whistling through my ribs.",
+  "Say that again, traveler. Louder, for the skeleton.",
+]
+
+# The same group has been standing here a while.
+still_here = [
+  "Still here? The candy is by the door, friends.",
+  "You are welcome to stay, but I do not blink.",
+  "Lovely to see you again. Happy Halloween.",
+]
+
+# Phone page "test line" button and the doctor's speaker check.
+test = [
+  "Testing, testing. This is your porch skeleton speaking.",
+]
+
+# Brain-side canned replies when a generated reply fails the safety filter.
+deflect = [
+  "Ha. I am just a humble skeleton. Let us talk about your costume instead.",
+  "My skull is empty, I know nothing about that. Have some candy.",
+  "I am a skeleton. I have always been a skeleton. Happy Halloween.",
+  "That is a question for the living. I am only here for the costumes.",
+]

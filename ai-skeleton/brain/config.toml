@@ -1,0 +1,54 @@
+# Brain settings. Put per-machine overrides in config.local.toml (same folder,
+# gitignored) -- only the keys you change, e.g.
+#   [ollama]
+#   vision_model = "qwen3-vl:2b-instruct"
+
+[server]
+host = "0.0.0.0"
+port = 8080
+
+[ollama]
+url = "http://127.0.0.1:11434"
+# One model for both jobs keeps a single model warm. The plain qwen3-vl tags are
+# the *thinking* variants -- always name the -instruct tag.
+vision_model = "qwen3-vl:8b-instruct"
+reply_model = "qwen3-vl:8b-instruct"
+num_ctx = 4096                 # same on every call, or Ollama reloads the model
+describe_timeout_s = 2.5
+reply_timeout_s = 3.0
+describe_max_tokens = 48
+reply_max_tokens = 90
+reply_temperature = 0.8
+warm_interval_s = 30           # re-warm if the model got evicted
+
+[stt]
+engine = "parakeet"            # parakeet | fake
+model = "nemo-parakeet-tdt-0.6b-v3"
+model_dir = "models/parakeet-tdt-0.6b-v3"
+quantization = "int8"
+timeout_s = 2.0
+
+[tts]
+engine = "kokoro"              # kokoro | fake
+model = "models/kokoro/kokoro-v1.0.int8.onnx"
+voices = "models/kokoro/voices-v1.0.bin"
+voice = "bm_george"
+lang = "en-gb"
+speed = 0.95
+timeout_s = 4.0
+
+[fx]
+enabled = true
+highpass_hz = 110.0
+pitch_semitones = -2.0
+reverb_room = 0.18
+reverb_wet = 0.12
+target_rms_dbfs = -20.0
+limiter_db = -1.0
+
+[persona]
+dir = "../persona"
+
+[limits]
+max_photo_bytes = 1000000
+max_clip_seconds = 6.0

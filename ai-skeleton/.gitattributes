@@ -1,0 +1,22 @@
+# Code authored on Windows (core.autocrlf=true) but run on Linux: pin line endings.
+*.py       text eol=lf
+*.sh       text eol=lf
+*.toml     text eol=lf
+*.txt      text eol=lf
+*.md       text eol=lf
+*.lock     text eol=lf
+*.service  text eol=lf
+*.json     text eol=lf
+*.html     text eol=lf
+
+# Windows PowerShell 5.1 scripts: CRLF, and keep them ASCII-only.
+*.ps1      text eol=crlf
+
+# Never let git touch binaries.
+*.wav      binary
+*.jpg      binary
+*.jpeg     binary
+*.png      binary
+*.onnx     binary
+*.pt       binary
+*.bin      binary

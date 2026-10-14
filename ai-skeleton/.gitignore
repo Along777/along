@@ -1,0 +1,23 @@
+# This folder is published by GitHub Pages: keep everything below out of git.
+
+# environments + caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# machine-specific config (IPs, device names)
+config.local.toml
+
+# downloaded models + rendered audio
+*/models/
+*/cache/
+*.onnx
+*.pt
+*.bin
+
+# voice references, debug captures (kid photos/audio), logs
+*/voices/
+*/debug/
+*/logs/
+*.wav

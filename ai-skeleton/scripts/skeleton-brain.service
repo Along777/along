@@ -1,0 +1,13 @@
+# Template: scripts/setup_brain.sh copies this to ~/.config/systemd/user/ with @ROOT@ filled in.
+[Unit]
+Description=AI porch skeleton - the brain
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash @ROOT@/scripts/run_brain.sh
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

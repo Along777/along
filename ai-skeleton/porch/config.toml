@@ -1,0 +1,65 @@
+# Porch settings. Put per-machine overrides in config.local.toml (same folder,
+# gitignored) -- only the keys you change, e.g.
+#   [brain]
+#   url = "http://192.168.1.50:8080"
+#   [audio]
+#   speaker = "Soundcore"
+
+[brain]
+url = "http://127.0.0.1:8080"
+health_interval_s = 10.0
+turn_timeout_s = 6.0          # past this, play a fallback line instead
+
+[camera]
+name = "Arducam"              # part of the camera's Windows name; "" = first camera
+index = -1                    # >= 0 forces an OpenCV index and ignores name
+width = 1280
+height = 720
+fps = 30
+rotate = 0                    # 0 / 90 / 180 / 270, for a camera mounted sideways
+flip = false                  # mirror left-right
+photo_max_side = 768          # the photo sent to the brain
+jpeg_quality = 85
+
+[detector]
+model = "models/yolo26n.pt"
+imgsz = 416
+fps = 5.0
+conf = 0.35
+min_box_height = 0.25         # ignore people smaller than this fraction of the frame (sidewalk)
+roi = [0.0, 0.0, 1.0, 1.0]    # watch zone: x0, y0, x1, y1 as fractions of the frame
+
+[audio]
+host_api = "Windows WASAPI"
+mic = "USB PnP"               # part of the mic's name (the lav mic). Never the speaker's hands-free mic.
+speaker = ""                  # part of the speaker's name; "" = Windows default output
+keepalive_dbfs = -65.0        # faint noise so a Bluetooth speaker never sleeps; 0 = off
+gain_db = 0.0
+tail_margin_s = 0.3           # wait after playback before the mic opens; use 0.5 for Bluetooth
+
+[vad]
+frame_ms = 30
+start_ms = 120                # this much loud audio in a row starts an utterance (clicks are shorter)
+min_speech_ms = 200           # an utterance needs this much loud audio in total, or it was a bang/gust
+end_silence_ms = 700          # this much quiet ends it
+max_utterance_s = 5.0
+no_speech_s = 3.0             # nobody spoke: reply to the costume (first turn) or stop listening
+min_threshold_dbfs = -50.0
+floor_margin_db = 10.0        # speech must be this far above the room's noise floor
+preroll_ms = 300
+
+[behavior]
+arrive_s = 0.5                # a person must stay this long before the greeting
+empty_rearm_s = 3.0           # an empty scene this long means the group has left
+cooldown_s = 8.0
+thinking_after_s = 0.8        # play a "thinking" filler if the reply takes longer than this
+max_turns = 4                 # replies per group before it goes quiet (still_here resets)
+still_here_s = 60.0
+new_wave_extra = 1            # this many more people than the greeted group = a new wave
+
+[control]
+port = 8081
+hotkey = "f12"
+
+[debug]
+save_captures = false         # writes photos + clips to porch/debug/ -- living-room tests only

@@ -1,0 +1,47 @@
+# One word or phrase per line, matched case-insensitively on word boundaries.
+# A generated reply containing any of these is swapped for a canned "deflect" line.
+# Keep it focused: costumes like pirates and vampires are fine to talk about.
+
+# profanity
+fuck
+shit
+bitch
+bastard
+asshole
+damn
+crap
+piss
+
+# adult topics
+sex
+sexy
+naked
+kiss
+
+# alcohol and drugs
+beer
+wine
+vodka
+whiskey
+booze
+drunk
+alcohol
+drug
+drugs
+weed
+cocaine
+cigarette
+
+# real violence ("blood" stays allowed: "I am glad I have no blood, vampire" is a fine joke)
+kill
+killed
+killing
+murder
+gun
+guns
+shoot
+shooting
+stab
+knife
+suicide
+hurt you
