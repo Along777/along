@@ -86,6 +86,11 @@ class Debug:
 
 
 @dataclass(frozen=True)
+class Log:
+    conversations: bool = True  # text only: what was heard and said (never photos or audio)
+
+
+@dataclass(frozen=True)
 class Config:
     brain: Brain = field(default_factory=Brain)
     camera: Camera = field(default_factory=Camera)
@@ -95,6 +100,7 @@ class Config:
     behavior: Behavior = field(default_factory=Behavior)
     control: Control = field(default_factory=Control)
     debug: Debug = field(default_factory=Debug)
+    log: Log = field(default_factory=Log)
 
     def path(self, p: str) -> Path:
         q = Path(p)

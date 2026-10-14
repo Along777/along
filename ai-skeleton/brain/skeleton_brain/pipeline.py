@@ -30,6 +30,7 @@ class TurnMeta:
     costume_hint: str | None = None
     debug: bool = False
     group_id: str = ""   # same for every turn with one group of visitors; keys the short memory
+    want_text: bool = False  # return what was heard (for the porch's text-only conversation log)
 
     @classmethod
     def from_dict(cls, d: dict) -> "TurnMeta":
@@ -40,6 +41,7 @@ class TurnMeta:
             costume_hint=(str(d["costume_hint"])[:200] if d.get("costume_hint") else None),
             debug=bool(d.get("debug", False)),
             group_id=str(d.get("group_id", ""))[:64],
+            want_text=bool(d.get("want_text", False)),
         )
 
 
@@ -208,7 +210,7 @@ class Brain:
             "source": source,
             "description": description,
             "heard": bool(transcript),
-            "transcript": transcript if meta.debug else None,
+            "transcript": transcript if (meta.debug or meta.want_text) else None,
             "blocked_reply": self.last_raw if (meta.debug and source == "canned_blocked") else None,
             "audio": {"format": "wav", "sample_rate": sr, "b64": base64.b64encode(wav).decode("ascii")},
             "duration_s": round(len(audio) / sr, 2),

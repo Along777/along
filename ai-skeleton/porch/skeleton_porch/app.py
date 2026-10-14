@@ -258,6 +258,10 @@ class PorchApp:
                               "saw": o.description, "heard": m.get("heard"), "timings": o.timings,
                               "roundtrip_ms": row["roundtrip_ms"],
                               "speech_end_to_reply_ms": row.get("speech_end_to_reply_ms")}
+            if self.cfg.log.conversations:
+                self._log_conversation({"t": row["t"], "group": m.get("group"), "turn": o.turn_id,
+                                        "heard": m.get("heard"), "saw": o.description, "said": o.reply_text,
+                                        "source": o.source, "ms": row["roundtrip_ms"]})
             if self.debug:
                 row["reply"] = o.reply_text
                 row["description"] = o.description
@@ -287,14 +291,16 @@ class PorchApp:
     def _turn_worker(self, a: SubmitTurn, jpeg, wav, t_submit: float) -> None:
         meta = {"turn_id": str(a.turn_id), "group_size": a.group_size, "turn_index": a.turn_index,
                 "costume_hint": a.costume_hint, "debug": self.debug,
+                "want_text": self.cfg.log.conversations or self.debug,
                 "group_id": f"{a.photo_since:.3f}"}  # one id per group: keys the brain's short memory
         try:
             r = self.client.turn(meta, jpeg, wav)
             audio, sr = wav_to_float(base64.b64decode(r["audio"]["b64"]))
             out = TurnOutcome(a.turn_id, True, audio, sr, r.get("description"), r.get("reply_text", ""),
                               r.get("source", ""), r.get("timings_ms", {}))
-            if self.debug and r.get("transcript") is not None:
-                self.marks.setdefault(a.turn_id, {})["heard"] = r["transcript"]
+            if r.get("transcript") is not None:
+                m = self.marks.setdefault(a.turn_id, {})
+                m["heard"], m["group"] = r["transcript"], meta["group_id"]
                 self.log(f'heard: "{r["transcript"]}" | saw: "{r.get("description")}"')
             if r.get("blocked_reply"):
                 self.log(f'filter blocked: "{r["blocked_reply"]}"')
@@ -332,6 +338,16 @@ class PorchApp:
         self.player.start()
         self.spk_fallback = fallback
         self.log(f"speaker {'reopened' if dead else 'back'}: {dev['name']}")
+
+    def _log_conversation(self, row: dict) -> None:
+        """Text only (what was heard, seen in words, and said): never photos or audio."""
+        try:
+            d = PORCH_DIR / "logs" / "conversations"
+            d.mkdir(parents=True, exist_ok=True)
+            with open(d / f"{datetime.now():%Y-%m-%d}.jsonl", "a", encoding="utf-8") as f:
+                f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        except OSError:
+            pass
 
     def _log_turn(self, row: dict) -> None:
         try:

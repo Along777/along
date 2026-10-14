@@ -64,3 +64,6 @@ hotkey = "f12"
 
 [debug]
 save_captures = false         # writes photos + clips to porch/debug/ -- living-room tests only
+
+[log]
+conversations = true          # porch/logs/conversations/DATE.jsonl: what was heard and said, TEXT ONLY

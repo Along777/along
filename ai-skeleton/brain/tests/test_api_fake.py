@@ -52,6 +52,15 @@ def test_turn_with_photo_and_clip(client):
     assert set(body["timings_ms"]) >= {"vision", "stt", "llm", "tts", "total"}
 
 
+def test_transcript_only_when_asked(client):
+    def turn(meta):
+        r = client.post("/turn", data={"meta": json.dumps(meta)}, files={"clip": ("c.wav", speech_wav(), "audio/wav")})
+        return r.json()["transcript"]
+
+    assert turn({}) is None
+    assert turn({"want_text": True}) == "trick or treat"
+
+
 def test_turn_photo_only_and_follow_up_hint(client):
     r = client.post("/turn", data={"meta": json.dumps({"turn_index": 1, "costume_hint": "a pirate"})})
     assert r.status_code == 200

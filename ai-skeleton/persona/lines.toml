@@ -13,7 +13,7 @@ greet = [
   "Welcome! Who do we have here?",
   "Evening, friends. Speak up, I have no ears.",
   "Ah, visitors. What brings you to my porch?",
-  "Who dares approach the skeleton?",
+  "Evening, mortals. Mister Bones, at your service.",
 ]
 
 # Plays only if the reply is slow (over about 0.8 seconds). Keep each one short.

@@ -344,7 +344,7 @@ body.offline #down { display: block; }
     if (lt.error) { set("said", "turn failed: " + lt.error); }
     else if (lt.turn) {
       set("saw", lt.saw || "–");
-      set("heard", lt.heard != null ? (lt.heard || "(nothing)") : "(hidden unless debug is on)");
+      set("heard", lt.heard != null ? (lt.heard || "(nothing)") : "(text log is off)");
       set("said", (lt.reply || "–") + (lt.source && lt.source !== "llm" ? "  [" + lt.source + "]" : ""));
       var t = lt.timings || {}, key = lt.turn + "-" + t.total;
       var bar = $("tbar");
