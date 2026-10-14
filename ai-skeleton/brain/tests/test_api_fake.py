@@ -92,7 +92,8 @@ def test_misheard_trick_or_treat_is_fixed():
     from skeleton_brain.pipeline import normalize_heard
 
     # real mishearings from the live tests and the mic test
-    for heard in ["Dricker tree.", "trigger treat", "trick a tree", "Trick or tree!", "tricky treat"]:
+    for heard in ["Dricker tree.", "trigger treat", "trick a tree", "Trick or tree!", "tricky treat",
+                  "Tree.", "Treat!", "or treat"]:  # clipped: the kid started while the skeleton was talking
         assert normalize_heard(heard) == "trick or treat", heard
     assert normalize_heard("happy hollow ween") == "happy halloween"
     # real sentences are never touched

@@ -230,6 +230,9 @@ async def _const(v):
 
 
 _KID_PHRASES = ["trick or treat", "happy halloween"]
+# the mic opens only after the skeleton finishes talking, so a kid who starts early gets clipped:
+# "trick or treat" arrives as just "tree" or "treat"
+_CLIPPED_TRICK_OR_TREAT = {"tree", "treat", "treats", "trick", "tricks", "trick treat", "or treat", "a treat"}
 
 
 def normalize_heard(text: str) -> str:
@@ -241,6 +244,8 @@ def normalize_heard(text: str) -> str:
     plain = _re.sub(r"[^a-z ]", "", (text or "").lower()).strip()
     if not plain or len(plain.split()) > 4:
         return text
+    if plain in _CLIPPED_TRICK_OR_TREAT:
+        return "trick or treat"
     for phrase in _KID_PHRASES:
         if difflib.SequenceMatcher(None, plain, phrase).ratio() >= 0.6:
             return phrase
