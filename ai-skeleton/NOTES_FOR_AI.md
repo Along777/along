@@ -62,14 +62,16 @@ and what is verified vs. not. Deadline: **Halloween, Sat 2026-10-31.**
 
 ## 3. The workstation as set up (2026-10-13)
 
-- Host `along-MS-7E59`, user `along`, **192.168.1.39** (not reserved in the router yet), RTX 5090,
-  NVIDIA driver 595.99, Ollama 0.32.9. Repo at `~/ai/along`, branch `ai-skeleton-build`.
-- The brain serves on **port 8765** (`brain/config.local.toml` there): Open WebUI already owns 8080.
-  Open WebUI is a way to load other models into the same Ollama — nobody uses it on Halloween night.
-- Proton VPN and Cloudflare WARP run there too; neither blocks LAN traffic (8765 and 22 reachable).
-- SSH from the laptop: `ssh skelly` (key `~/.ssh/id_ed25519`, config in `~/.ssh/config`). In PowerShell,
-  `$(...)` inside a double-quoted remote command is evaluated locally — run SSH from bash with single quotes.
-- Deploy: push, then `ssh skelly 'cd ~/ai/along && git pull --ff-only && systemctl --user restart skeleton-brain'`.
+This repo is public: host names, usernames, addresses and network details live only in the machines'
+gitignored `config.local.toml` files and the operator's private notes, never here.
+
+- RTX 5090 workstation, NVIDIA driver 595.x, Ollama 0.32.x. Repo at `~/ai/along`, branch `ai-skeleton-build`.
+- The brain serves on a non-default port set in its `brain/config.local.toml`, because another local LLM web
+  UI already owns 8080 there. That UI shares the same Ollama — nobody uses it on Halloween night.
+- VPN clients run on the workstation; they do not block LAN traffic to the brain or SSH.
+- The laptop reaches the brain through an SSH alias in its own `~/.ssh/config`. In PowerShell, `$(...)` inside a
+  double-quoted remote command is evaluated locally — run SSH from bash with single quotes.
+- Deploy: push, then `ssh <brain> 'cd ~/ai/along && git pull --ff-only && systemctl --user restart skeleton-brain'`.
 
 ## 4. Verified vs. not
 
