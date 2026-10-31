@@ -86,7 +86,7 @@ def flags_for(spoken: str) -> list[str]:
         f.append("too short")
     if re.search(r"[*\[\]()#]|[\U0001F300-\U0001FAFF]", spoken):
         f.append("formatting")
-    if re.search(r"\b(ai|artificial|language model|chatbot|camera)\b", spoken, re.I):
+    if re.search(r"\b(ai|artificial|language model|chatbot|cameras?)\b", spoken, re.I):
         f.append("self/camera")
     if re.search(r"seen better costume|never worse|\bworst\b|\bugly\b|\bstupid\b|\bdumb\b", spoken, re.I):
         f.append("mean")

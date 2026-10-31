@@ -9,6 +9,7 @@ import asyncio
 import base64
 import random
 import time
+from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
@@ -119,6 +120,9 @@ class Brain:
         self._tts_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="tts")
         self.turn_times_ms: list[float] = []
         self.memory = GroupMemory()
+        # the same reply comes up again and again ("Treat, of course! ..."): keep its voice ready
+        self._voice: OrderedDict[tuple[str, bool], tuple[np.ndarray, int]] = OrderedDict()
+        self.voice_hits = 0
 
     # -- stages ---------------------------------------------------------------
     async def describe(self, jpeg: bytes) -> str:
@@ -160,11 +164,20 @@ class Brain:
         return spoken, source
 
     async def speak(self, text: str, *, fx: bool = True) -> tuple[np.ndarray, int]:
+        key = (text, fx)
+        hit = self._voice.get(key)
+        if hit is not None:  # the voice is deterministic: same text, same audio
+            self._voice.move_to_end(key)
+            self.voice_hits += 1
+            return hit
         loop = asyncio.get_running_loop()
         audio, sr = await asyncio.wait_for(loop.run_in_executor(self._tts_pool, self.tts.synth, text),
                                            self.cfg.tts.timeout_s)
         if fx:
             audio = await loop.run_in_executor(self._tts_pool, self.fx, audio, sr)
+        self._voice[key] = (audio, sr)
+        if len(self._voice) > 128:
+            self._voice.popitem(last=False)
         return audio, sr
 
     def speak_sync(self, text: str) -> tuple[np.ndarray, int]:
