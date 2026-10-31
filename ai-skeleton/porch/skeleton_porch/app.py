@@ -20,7 +20,7 @@ from .camera import Camera
 from .config import PORCH_DIR, Config
 from .control import Control
 from .fillers import LocalFillers, float_to_wav, wav_to_float
-from .power import allow_sleep, keep_awake, power_status
+from .power import allow_sleep, keep_awake, power_status, ram_free_mb
 from .statemachine import CancelTurn, Flush, Fsm, Obs, PlayReply, Say, SubmitTurn, TurnOutcome
 
 TICK_S = 0.05
@@ -62,6 +62,8 @@ class PorchApp:
         self.detector = None
         self.jaw = None
         self.log_path = PORCH_DIR / "logs" / "turns.jsonl"
+        self.counts: collections.Counter = collections.Counter()  # AI-process counters for the telemetry log
+        self.last_filler_t = 0.0
 
     def log(self, msg: str) -> None:
         s = stamp()
@@ -104,6 +106,7 @@ class PorchApp:
             self.camera = None
         self._refresh_brain()
         threading.Thread(target=self._health_loop, name="health", daemon=True).start()
+        threading.Thread(target=self._telemetry_loop, name="telemetry", daemon=True).start()
         self.control = Control(cfg.control.port, self, self.log)
         try:
             self.control.start_http()
@@ -252,6 +255,9 @@ class PorchApp:
                 return
             self.player.play(x[0], x[1], tag=a.category)
             self.log(f'say [{a.category}] "{x[2]}"')
+            self.counts[f"say_{a.category}"] += 1
+            if a.category == "thinking":
+                self.last_filler_t = now
         elif isinstance(a, PlayReply):
             o = a.outcome
             self.player.cut("thinking")  # the answer is here: do not make them wait out the filler
@@ -264,6 +270,8 @@ class PorchApp:
             if m.get("t_speech_end"):
                 row["speech_end_to_reply_ms"] = round((now - m["t_speech_end"]) * 1000)
                 self.lat_ms.append(row["speech_end_to_reply_ms"])
+            row.update(self._turn_numbers(o, m, now))
+            self.counts[f"reply_{o.source or 'unknown'}"] += 1
             self.last_turn = {"at": stamp(), "turn": o.turn_id, "reply": o.reply_text, "source": o.source,
                               "saw": o.description, "heard": m.get("heard"), "timings": o.timings,
                               "roundtrip_ms": row["roundtrip_ms"],
@@ -286,7 +294,11 @@ class PorchApp:
                     jpeg = self.camera.jpeg(f)
             wav = float_to_wav(a.clip, 16000) if a.clip is not None else None
             t_end = (utt.t - self.cfg.vad.end_silence_ms / 1000) if (utt and a.clip is not None) else None
-            self.marks[a.turn_id] = {"t_submit": now, "t_speech_end": t_end}
+            self.marks[a.turn_id] = {"t_submit": now, "t_speech_end": t_end, "group": f"{a.photo_since:.3f}",
+                                     "turn_index": a.turn_index, "group_size": a.group_size,
+                                     "people": self.people_now(now) if self.camera is not None else None,
+                                     "photo_kb": round(len(jpeg) / 1024) if jpeg else 0,
+                                     "speech_s": round(len(a.clip) / 16000, 2) if a.clip is not None else 0.0}
             if self.debug:
                 self._save_debug(a.turn_id, jpeg, wav)
             speech = f"{len(a.clip) / 16000:.1f}s" if a.clip is not None else "none"
@@ -294,6 +306,7 @@ class PorchApp:
             threading.Thread(target=self._turn_worker, args=(a, jpeg, wav, now), daemon=True).start()
         elif isinstance(a, CancelTurn):
             self.cancelled.add(a.turn_id)
+            self.counts["timeouts"] += 1
             self.log(f"turn {a.turn_id} timed out - fallback line")
         elif isinstance(a, Flush):
             self.player.flush()
@@ -315,6 +328,7 @@ class PorchApp:
             if r.get("blocked_reply"):
                 self.log(f'filter blocked: "{r["blocked_reply"]}"')
         except Exception as e:
+            self.counts["turn_errors"] += 1
             self.log(f"turn {a.turn_id} failed: {e}")
             self.last_turn = {"at": stamp(), "turn": a.turn_id, "error": str(e)}
             out = TurnOutcome(a.turn_id, False)
@@ -359,6 +373,41 @@ class PorchApp:
                 f.write(json.dumps(row, ensure_ascii=False) + "\n")
         except OSError:
             pass
+
+    def _turn_numbers(self, o, m: dict, now: float) -> dict:
+        """AI-process numbers for one reply: counts and timings only, never words, photos or audio."""
+        g = (self.health or {}).get("gpu") or {}
+        heard = m.get("heard")
+        return {"group": m.get("group"), "turn_in_group": m.get("turn_index"), "group_size": m.get("group_size"),
+                "people": m.get("people"), "photo_kb": m.get("photo_kb"), "speech_s": m.get("speech_s"),
+                "heard_words": len(heard.split()) if heard else (0 if heard is not None else None),
+                "reply_words": len((o.reply_text or "").split()),
+                "filler": self.last_filler_t >= m.get("t_submit", now),
+                "gpu_util": g.get("util_pct"), "gpu_temp_c": g.get("temp_c"), "gpu_mem_mb": g.get("mem_used_mb")}
+
+    def _telemetry_loop(self) -> None:
+        """Once a minute: how the machines are doing (numbers only) -> logs/telemetry/<date>.jsonl."""
+        while not self.stop.wait(60.0):
+            try:
+                s = self.status()
+                h = s["brain"]["health"] or {}
+                g = h.get("gpu") or {}
+                cam, mic, spk = s["camera"], s["mic"], s["speaker"]
+                row = {"t": datetime.now().isoformat(timespec="seconds"), "state": s["state"], "muted": s["muted"],
+                       "people": cam.get("people"), "cam_fps": cam.get("fps"), "det_ms": cam.get("detector_ms"),
+                       "brightness": cam.get("brightness"), "cam_reopens": cam.get("reopens"),
+                       "mic_floor_db": mic["floor_db"], "mic_overflows": mic["overflows"],
+                       "spk_underflows": spk["underflows"], "jaw": spk["jaw"],
+                       "brain_ok": s["brain"]["ok"], "brain_uptime_s": h.get("uptime_s"),
+                       "gpu_util": g.get("util_pct"), "gpu_temp_c": g.get("temp_c"), "gpu_mem_mb": g.get("mem_used_mb"),
+                       "turns": s["turns"], "p50_ms": s["p50_ms"], "power": s["power"], "ram_free_mb": ram_free_mb(),
+                       "counts": dict(self.counts)}
+                d = PORCH_DIR / "logs" / "telemetry"
+                d.mkdir(parents=True, exist_ok=True)
+                with open(d / f"{datetime.now():%Y-%m-%d}.jsonl", "a", encoding="utf-8") as f:
+                    f.write(json.dumps(row) + "\n")
+            except Exception as e:  # telemetry must never take the porch down
+                print(f"telemetry: {e}", flush=True)
 
     def _log_turn(self, row: dict) -> None:
         try:

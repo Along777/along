@@ -67,6 +67,7 @@ class Fx:
 @dataclass(frozen=True)
 class Persona:
     dir: str = "../persona"
+    wizard: str = "the Wizard of this house"  # fills {wizard} in persona.txt; set the real title in config.local.toml
 
 
 @dataclass(frozen=True)

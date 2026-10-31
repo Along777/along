@@ -107,7 +107,8 @@ class Brain:
     def __init__(self, cfg: Config, llm, stt: SttEngine, tts: TtsEngine, fx: VoiceFx,
                  persona_dir: Path, deflect_lines: list[str], friendly_lines: list[str] | None = None):
         self.cfg, self.llm, self.stt, self.tts, self.fx = cfg, llm, stt, tts, fx
-        self.persona = (persona_dir / "persona.txt").read_text(encoding="utf-8").strip()
+        self.persona = ((persona_dir / "persona.txt").read_text(encoding="utf-8").strip()
+                        .replace("{wizard}", cfg.persona.wizard))
         self.vision_prompt = (persona_dir / "vision_prompt.txt").read_text(encoding="utf-8").strip()
         self.filter = TextFilter(load_blocklist(persona_dir / "blocklist.txt"), deflect_lines)
         self.fallback_lines = deflect_lines

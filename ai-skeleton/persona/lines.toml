@@ -14,6 +14,8 @@ greet = [
   "Evening, friends. Speak up, I have no ears.",
   "Ah, visitors. What brings you to my porch?",
   "Evening, mortals. Mister Bones, at your service.",
+  "The Wizard's spell has woken me. Welcome, mortals!",
+  "Awake again! The Wizard's magic never misses Halloween.",
 ]
 
 # Plays only if the reply is slow (over about 0.8 seconds). Keep each one short.

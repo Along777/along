@@ -353,6 +353,32 @@ def stats() -> int:
     print(f"end of speech -> reply queued: p50 {pct(lat, .5)} ms, p90 {pct(lat, .9)} ms (n={len(lat)})")
     print(f"porch round trip:             p50 {pct(rtt, .5)} ms, p90 {pct(rtt, .9)} ms")
     print(f"brain time:                   p50 {pct(brain, .5)} ms, p90 {pct(brain, .9)} ms")
+    for part in ("stt", "vision", "llm", "tts", "fx"):
+        ms = [r["brain_ms"][part] for r in rows if r.get("brain_ms", {}).get(part)]
+        if ms:
+            print(f"  {part:<6} p50 {pct(ms, .5)} ms, p90 {pct(ms, .9)} ms, slowest {max(ms)} ms")
+    words = [r["reply_words"] for r in rows if "reply_words" in r]
+    if words:
+        print(f"words spoken in replies: {sum(words)} (avg {sum(words) / len(words):.1f} per reply)")
+    fills = [r["filler"] for r in rows if "filler" in r]
+    if fills:
+        print(f"replies slow enough to need a 'thinking' filler: {sum(fills)}/{len(fills)}")
+    groups = {r["group"] for r in rows if r.get("group")}
+    if groups:
+        print(f"groups talked to: {len(groups)}; most turns with one group: "
+              f"{max(sum(1 for r in rows if r.get('group') == g) for g in groups)}")
+    temps = [r["gpu_temp_c"] for r in rows if r.get("gpu_temp_c") is not None]
+    if temps:
+        print(f"5090 temperature at reply time: {min(temps)}-{max(temps)} C")
+    tele = sorted((PORCH_DIR / "logs" / "telemetry").glob("*.jsonl")) if (PORCH_DIR / "logs" / "telemetry").exists() else []
+    if tele:
+        beats = [json.loads(line) for line in tele[-1].read_text(encoding="utf-8").splitlines() if line.strip()]
+        if beats:
+            last = beats[-1]
+            ram = [b["ram_free_mb"] for b in beats if b.get("ram_free_mb") is not None]
+            print(f"heartbeats in {tele[-1].name}: {len(beats)} minutes; counters {last.get('counts')}")
+            if ram:
+                print(f"laptop free RAM: lowest {min(ram)} MB")
     return 0
 
 
