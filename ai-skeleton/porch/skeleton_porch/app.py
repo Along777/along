@@ -69,6 +69,14 @@ class PorchApp:
         s = stamp()
         self.events.append((s, msg))
         print(f"[{s}] {msg}", flush=True)
+        if self.cfg.log.conversations:  # same consent as the conversation log: text only, never photos or audio
+            try:
+                d = PORCH_DIR / "logs" / "events"
+                d.mkdir(parents=True, exist_ok=True)
+                with open(d / f"{datetime.now():%Y-%m-%d}.log", "a", encoding="utf-8") as f:
+                    f.write(f"[{s}] {msg}\n")
+            except OSError:
+                pass
 
     # -- startup --------------------------------------------------------------------
     def start(self) -> None:

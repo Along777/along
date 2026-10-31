@@ -72,6 +72,30 @@ class GroupMemory:
             del self.groups[gid]
 
 
+class CostumeLog:
+    """Costumes seen earlier tonight, in the vision model's own words, so Mister Bones can say
+    "my third witch tonight". Text only, RAM only, one entry per group, forgotten after 3 hours."""
+
+    KEEP = 12
+    TTL_S = 3 * 3600
+
+    def __init__(self):
+        self.items: list[tuple[float, str, str]] = []  # (time, group_id, description)
+
+    def add(self, gid: str, description: str) -> None:
+        d = description.strip()
+        if not d or d.lower().rstrip(".") in ("unclear", "nobody"):
+            return
+        if gid and any(g == gid for _, g, _ in self.items):
+            return
+        self.items = (self.items + [(time.time(), gid, d[:120])])[-self.KEEP:]
+
+    def recent(self, gid: str, n: int = 8) -> list[str]:
+        """Up to n costumes from other groups, oldest first."""
+        now = time.time()
+        return [d for t, g, d in self.items if now - t <= self.TTL_S and not (gid and g == gid)][-n:]
+
+
 class FakeLlm:
     """Stands in for Ollama in tests and porch development."""
 
@@ -85,13 +109,15 @@ class FakeLlm:
 
 
 def build_user_message(description: str, transcript: str, meta: TurnMeta,
-                       history: list[tuple[str, str]] | None = None) -> str:
+                       history: list[tuple[str, str]] | None = None, seen: list[str] | None = None) -> str:
     if description:
         lines = [f"Costumes: {description}"]
     else:  # no photo this turn (camera off or paused): answer what they said, do not invent a costume
         lines = ["You cannot see them right now. Do not mention or guess a costume; answer what they said."]
     if meta.group_size:
         lines.append(f"People at the door: {meta.group_size}")
+    if seen:
+        lines.append("Costumes you saw earlier tonight, oldest first: " + "; ".join(seen))
     if history:
         lines.append("Earlier with these visitors:")
         for heard, said in history:
@@ -120,6 +146,7 @@ class Brain:
         self._tts_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="tts")
         self.turn_times_ms: list[float] = []
         self.memory = GroupMemory()
+        self.costumes = CostumeLog()
         # the same reply comes up again and again ("Treat, of course! ..."): keep its voice ready
         self._voice: OrderedDict[tuple[str, bool], tuple[np.ndarray, int]] = OrderedDict()
         self.voice_hits = 0
@@ -150,7 +177,8 @@ class Brain:
         history = self.memory.get(meta.group_id)
         try:
             text, _ = await asyncio.wait_for(
-                self.llm.reply(self.persona, build_user_message(description, transcript, meta, history),
+                self.llm.reply(self.persona, build_user_message(description, transcript, meta, history,
+                                                                self.costumes.recent(meta.group_id)),
                                timeout=self.cfg.ollama.reply_timeout_s + 1),
                 self.cfg.ollama.reply_timeout_s)
         except asyncio.TimeoutError:
@@ -206,6 +234,8 @@ class Brain:
         transcript = normalize_heard(transcript)
         if description.strip().lower().rstrip(".") == "nobody" and meta.group_size > 0:
             description = "unclear"  # the porch saw someone; a bad frame must not tell the model nobody is there
+        if photo:
+            self.costumes.add(meta.group_id, description)  # for later groups: recent() skips this one
 
         reply_text, source = await timed("llm", self.reply(description, transcript, meta))
         if source == "llm":

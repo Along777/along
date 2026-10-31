@@ -29,6 +29,8 @@ def main(argv: list[str] | None = None) -> int:
     j = sub.add_parser("jawtest", help="servo jaw: hold one angle (--angle) to calibrate, or sweep + talk")
     j.add_argument("--angle", type=int, help="hold this servo angle (0-180) for 4 s, to find closed/open")
     sub.add_parser("stats", help="latency + sources from porch/logs/turns.jsonl")
+    st = sub.add_parser("story", help="readable diary of a night: what he saw, heard and said (from logs/events)")
+    st.add_argument("--date", help="YYYY-MM-DD (default: the latest event log)")
     sub.add_parser("fetch-models", help="download the person-detector weights (once)")
     a = p.parse_args(argv)
     if sys.platform == "win32":
@@ -67,7 +69,63 @@ def main(argv: list[str] | None = None) -> int:
         return jawtest(cfg, a.angle)
     if a.cmd == "stats":
         return stats()
+    if a.cmd == "story":
+        return story(a.date)
     return 2
+
+
+def story(date: str | None) -> int:
+    """Turn logs/events/<date>.log into a readable diary: logs/story-<date>.txt (text only, as logged)."""
+    import re
+
+    d = PORCH_DIR / "logs" / "events"
+    logs = sorted(d.glob("*.log")) if d.exists() else []
+    if date:
+        logs = [x for x in logs if x.stem == date]
+    if not logs:
+        print("no event log yet (the porch writes logs/events/<date>.log while it runs)")
+        return 1
+    src = logs[-1]
+    line_re = re.compile(r"^\[(\d\d:\d\d):\d\d\] (.*)$")
+    out: list[str] = []
+    n = {"visits": 0, "replies": 0, "heard": 0, "trick": 0, "jokes": 0}
+    last_saw = None
+    for raw in src.read_text(encoding="utf-8").splitlines():
+        m = line_re.match(raw)
+        if not m:
+            continue
+        t, msg = m.groups()
+        if (g := re.match(r"\s*\w+ -> greet\s+people=(\d+)", msg)):
+            n["visits"] += 1
+            last_saw = None
+            out.append(f"\n{t}  Visitors ({g.group(1)} in view)")
+        elif (g := re.match(r'say \[(greet|still_here)\] "(.*)"$', msg)):
+            out.append(f'        Mister Bones: "{g.group(2)}"')
+        elif (g := re.match(r'heard: "(.*)" \| saw: "(.*)"$', msg)):
+            heard, saw = g.groups()
+            n["heard"] += bool(heard)
+            n["trick"] += "trick or treat" in heard.lower()
+            n["jokes"] += "joke" in heard.lower()
+            if saw != last_saw:  # follow-ups reuse the first look: show it once per visit
+                out.append(f"        saw:   {saw}")
+                last_saw = saw
+            out.append(f'        heard: {chr(34) + heard + chr(34) if heard else "(nothing said)"}')
+        elif (g := re.match(r'reply \((\w+), brain \d+ ms, round trip (\d+) ms\): "(.*)"$', msg)):
+            n["replies"] += 1
+            src_tag = "" if g.group(1) == "llm" else f", {g.group(1)}"
+            out.append(f'        said:  "{g.group(3)}"   ({int(g.group(2)) / 1000:.1f} s{src_tag})')
+        elif re.match(r"(MUTED|unmuted|brain DOWN|brain back|brain restarted|SPEAKER|stopping|porch running|"
+                      r"dashboard: greet|CAMERA|JAW OFF)", msg):
+            out.append(f"{t}  -- {msg}")
+    head = [f"Mister Bones - the night of {src.stem}",
+            "What he saw (costume descriptions), heard and said. Text only: no photos or audio were kept.",
+            f"{n['visits']} visits, {n['replies']} replies, {n['heard']} times someone spoke to him "
+            f"({n['trick']} x trick or treat, {n['jokes']} joke requests)."]
+    dest = PORCH_DIR / "logs" / f"story-{src.stem}.txt"
+    dest.write_text("\n".join(head + out) + "\n", encoding="utf-8")
+    print("\n".join(head))
+    print(f"-> {dest}")
+    return 0
 
 
 def jawtest(cfg, angle: int | None) -> int:
